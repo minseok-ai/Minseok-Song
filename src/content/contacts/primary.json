@@ -1,0 +1,19 @@
+{
+  "title": "Primary contact channels",
+  "channels": [
+    {
+      "label": "Email",
+      "value": "replace@example.com",
+      "href": "mailto:replace@example.com",
+      "copyable": true,
+      "visible": true
+    },
+    {
+      "label": "LinkedIn",
+      "value": "Add LinkedIn",
+      "href": "https://www.linkedin.com/",
+      "copyable": false,
+      "visible": true
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "title": "Projects",
+  "navLabel": "Projects",
+  "description": "Editable project index backed by project content entries.",
+  "order": 3,
+  "path": "/projects",
+  "layoutType": "projectIndex",
+  "status": "draft",
+  "hidden": false,
+  "hero": {
+    "eyebrow": "03 / Projects",
+    "title": "Projects",
+    "subtitle": "Add project entries without changing renderer code."
+  },
+  "blocks": []
+}

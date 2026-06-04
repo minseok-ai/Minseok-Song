@@ -1,0 +1,16 @@
+{
+  "title": "Contacts",
+  "navLabel": "Contacts",
+  "description": "Contact page shell backed by contact channel entries.",
+  "order": 5,
+  "path": "/contacts",
+  "layoutType": "contact",
+  "status": "draft",
+  "hidden": false,
+  "hero": {
+    "eyebrow": "05 / Contacts",
+    "title": "Contacts",
+    "subtitle": "Add, hide, or reorder contact channels from the content contract."
+  },
+  "blocks": []
+}

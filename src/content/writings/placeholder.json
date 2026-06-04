@@ -1,0 +1,10 @@
+{
+  "title": "Writing placeholder",
+  "summary": "Initial empty writing entry for schema validation only.",
+  "order": 1,
+  "status": "draft",
+  "hidden": true,
+  "date": "YYYY-MM-DD",
+  "tags": ["Placeholder"],
+  "body": "Replace this from the admin writing layer later."
+}

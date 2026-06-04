@@ -1,0 +1,121 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { visibleNavigationItems } from '../config/navigation';
+
+const pages = await getCollection('pages');
+const pagesById = new Map(pages.map((entry) => [entry.id, entry.data]));
+const nav = visibleNavigationItems();
+---
+
+<Layout title="Minseok Song | Layer 0-1 Foundation">
+	<main class="contract-page">
+		<section class="hero">
+			<p class="micro">Layer 0 / Layer 1</p>
+			<h1>Content contract foundation</h1>
+			<p>
+				This screen verifies the baseline project foundation and content
+				contract. Full visual design, renderers, interactions, admin UI, and
+				Git-backed publishing are intentionally deferred.
+			</p>
+		</section>
+
+		<section class="nav-contract" aria-label="Navigation contract">
+			{nav.map((item) => {
+				const page = pagesById.get(item.contentEntry);
+				return (
+					<a class="contract-row" href={item.path}>
+						<span class="num">{item.num}</span>
+						<span class="label">{item.label}</span>
+						<span class="meta">{item.layoutType}</span>
+						<span class="status">{page?.status ?? 'missing'}</span>
+					</a>
+				);
+			})}
+		</section>
+
+		<section class="notes">
+			<p>
+				About includes a <code>deckEmbed</code> block now, so Canva or PPT-like
+				embeds can be edited later as structured data instead of hand-written
+				iframes.
+			</p>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.contract-page {
+		min-height: 100vh;
+		padding: 72px clamp(20px, 5vw, 72px);
+	}
+
+	.hero {
+		max-width: 880px;
+		margin-bottom: 56px;
+	}
+
+	.micro,
+	.meta,
+	.status,
+	.num {
+		font-size: 12px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: rgba(246, 247, 251, 0.58);
+	}
+
+	h1 {
+		margin: 0 0 20px;
+		font-size: clamp(44px, 8vw, 92px);
+		line-height: 0.98;
+		letter-spacing: -0.04em;
+	}
+
+	p {
+		max-width: 720px;
+		color: rgba(246, 247, 251, 0.72);
+		font-size: 18px;
+		line-height: 1.6;
+	}
+
+	.nav-contract {
+		border-top: 1px solid rgba(246, 247, 251, 0.22);
+		max-width: 1040px;
+	}
+
+	.contract-row {
+		display: grid;
+		grid-template-columns: 72px 1fr 180px 120px;
+		gap: 24px;
+		align-items: baseline;
+		padding: 22px 0;
+		border-bottom: 1px solid rgba(246, 247, 251, 0.12);
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.label {
+		font-size: clamp(24px, 4vw, 42px);
+		letter-spacing: -0.03em;
+	}
+
+	.notes {
+		margin-top: 40px;
+	}
+
+	code {
+		color: #8ad8ff;
+	}
+
+	@media (max-width: 720px) {
+		.contract-row {
+			grid-template-columns: 56px 1fr;
+		}
+
+		.meta,
+		.status {
+			grid-column: 2;
+		}
+	}
+</style>

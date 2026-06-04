@@ -1,0 +1,16 @@
+{
+  "title": "A1trategize",
+  "summary": "Flagship product entry placeholder. Keep the existing app separate and link to it from A1 Firms.",
+  "order": 1,
+  "status": "draft",
+  "hidden": false,
+  "year": "2026",
+  "tags": ["A1 Firms", "AI Strategy", "Product"],
+  "links": [
+    {
+      "label": "Open app",
+      "href": "https://app.a1trategize.com"
+    }
+  ],
+  "visual": "console"
+}

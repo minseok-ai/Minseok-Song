@@ -1,0 +1,78 @@
+{
+  "title": "About",
+  "navLabel": "About",
+  "description": "Editable Notion-style portfolio page for the person behind the site.",
+  "order": 1,
+  "path": "/about",
+  "layoutType": "profile",
+  "status": "draft",
+  "hidden": false,
+  "hero": {
+    "eyebrow": "01 / Profile",
+    "title": "About Minseok Song",
+    "subtitle": "This page is seeded as editable blocks, not fixed code."
+  },
+  "blocks": [
+    {
+      "id": "about-intent",
+      "type": "callout",
+      "title": "Editing principle",
+      "body": "Replace, reorder, hide, or publish these blocks from the admin layer when it is added.",
+      "tone": "quiet"
+    },
+    {
+      "id": "about-lead",
+      "type": "text",
+      "title": "Lead",
+      "body": "Write the personal introduction here.",
+      "variant": "lead"
+    },
+    {
+      "id": "portfolio-deck",
+      "type": "deckEmbed",
+      "title": "Portfolio deck",
+      "provider": "canva",
+      "src": "https://www.canva.com/design/placeholder/view?embed",
+      "aspectRatio": "16/9",
+      "caption": "Replace this with a Canva, Google Slides, Figma, PDF, or approved deck embed URL.",
+      "fallbackUrl": "https://www.canva.com/",
+      "allowFullscreen": true
+    },
+    {
+      "id": "timeline",
+      "type": "timeline",
+      "title": "Timeline",
+      "events": [
+        {
+          "date": "YYYY",
+          "title": "Milestone title",
+          "body": "Milestone description."
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "type": "stats",
+      "title": "Signals",
+      "stats": [
+        {
+          "label": "Focus",
+          "value": "A1",
+          "description": "Replace with your own metric."
+        }
+      ]
+    },
+    {
+      "id": "links",
+      "type": "link",
+      "title": "References",
+      "links": [
+        {
+          "label": "Add link",
+          "href": "https://example.com",
+          "description": "Replace with a real external profile or artifact."
+        }
+      ]
+    }
+  ]
+}
