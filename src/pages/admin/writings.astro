@@ -2,8 +2,17 @@
 import WritingEditor from "../../components/admin/WritingEditor";
 import Layout from "../../layouts/Layout.astro";
 import { siteConfig } from "../../config/site";
+import { readAdminSession } from "../../lib/auth/admin";
 import { writingEntries } from "../../lib/content/registry";
 import "../../styles/admin.css";
+
+const session = readAdminSession(Astro.cookies, import.meta.env);
+
+if (!session) {
+  return Astro.redirect(
+    `/admin/login?next=${encodeURIComponent(Astro.url.pathname)}`
+  );
+}
 
 const initialWritings = writingEntries
   .sort((a, b) => a.data.order - b.data.order)
@@ -11,6 +20,11 @@ const initialWritings = writingEntries
     id: entry.id,
     data: entry.data
   }));
+
+const sessionLabel =
+  session.provider === "github"
+    ? `Signed in with GitHub as @${session.username}`
+    : `Signed in as ${session.username}`;
 ---
 
 <Layout
@@ -23,8 +37,14 @@ const initialWritings = writingEntries
       <div>
         <p class="micro-label">Admin / Writings</p>
         <h1>Writing desk</h1>
+        <span class="admin-session-label">{sessionLabel}</span>
       </div>
-      <a href="/writings">Public index</a>
+      <nav class="admin-head-actions" aria-label="Admin actions">
+        <a href="/writings">Public index</a>
+        <form method="post" action="/api/admin/logout">
+          <button type="submit">Logout</button>
+        </form>
+      </nav>
     </header>
 
     <WritingEditor client:load initialWritings={initialWritings} />

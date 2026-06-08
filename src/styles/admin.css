@@ -14,7 +14,7 @@
 
 .admin-head h1 {
   margin: 8px 0 0;
-  font-size: clamp(3rem, 8vw, 6.4rem);
+  font-size: 5.8rem;
   font-weight: 900;
   letter-spacing: 0;
   line-height: 0.94;
@@ -34,6 +34,155 @@
   font-weight: 850;
   text-decoration: none;
   text-transform: uppercase;
+}
+
+.admin-session-label {
+  display: block;
+  margin-top: 10px;
+  color: var(--color-ink-muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.admin-head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: 10px;
+}
+
+.admin-head-actions form {
+  margin: 0;
+}
+
+.admin-head-actions button {
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  background: transparent;
+  color: var(--color-ink);
+  font-size: 13px;
+  font-weight: 850;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.admin-login-shell {
+  min-height: calc(100svh - var(--header-height));
+  display: grid;
+  place-items: center;
+}
+
+.admin-login-panel {
+  width: min(100%, 620px);
+  display: grid;
+  gap: 24px;
+  padding: 36px;
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-panel);
+}
+
+.admin-login-panel h1 {
+  margin: 0;
+  font-size: 3.4rem;
+  line-height: 0.98;
+}
+
+.admin-login-panel p {
+  margin: 0;
+  color: var(--color-ink-soft);
+  line-height: 1.65;
+}
+
+.admin-login-form {
+  display: grid;
+  gap: 14px;
+}
+
+.admin-login-options {
+  display: grid;
+  gap: 10px;
+}
+
+.github-login-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-card);
+  color: var(--color-paper);
+  background: var(--color-ink);
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.github-login-button[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.admin-login-options small {
+  color: var(--color-ink-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.admin-login-form label {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-login-form span {
+  color: var(--color-ink-muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.admin-login-form input {
+  min-height: 48px;
+  width: 100%;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  background: var(--color-field);
+  color: var(--color-ink);
+  padding: 0 14px;
+}
+
+.admin-login-form button {
+  min-height: 48px;
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-card);
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-login-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.admin-auth-message {
+  padding: 12px 14px;
+  border: 1px solid var(--color-line);
+  color: var(--color-ink-soft);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.admin-auth-message[data-state="error"] {
+  border-color: color-mix(in srgb, #ef4444 48%, var(--color-line));
+  color: #fca5a5;
+}
+
+.admin-auth-message[data-state="saved"] {
+  border-color: color-mix(in srgb, var(--color-green) 54%, var(--color-line));
+  color: var(--color-green);
 }
 
 .admin-editor {
@@ -310,7 +459,7 @@ input[type="file"] {
 
 .writing-preview h2 {
   margin: 0;
-  font-size: clamp(2rem, 6vw, 4rem);
+  font-size: 3.8rem;
   font-weight: 900;
   letter-spacing: 0;
   line-height: 0.98;
@@ -454,6 +603,10 @@ input[type="file"] {
 }
 
 @media (max-width: 1180px) {
+  .admin-head h1 {
+    font-size: 4.5rem;
+  }
+
   .editor-layout {
     grid-template-columns: 1fr;
   }
@@ -481,6 +634,12 @@ input[type="file"] {
     align-items: start;
   }
 
+  .admin-head h1,
+  .admin-login-panel h1,
+  .writing-preview h2 {
+    font-size: 2.8rem;
+  }
+
   .command-buttons,
   .block-toolbar,
   .block-actions {
@@ -489,5 +648,136 @@ input[type="file"] {
 
   .block-adders {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.admin-login-shell {
+  align-items: start;
+  min-height: calc(100svh - var(--header-height));
+  padding-top: clamp(72px, 10vh, 128px);
+}
+
+.admin-login-panel {
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 680px);
+  gap: 22px;
+  padding: clamp(34px, 4.6vw, 52px);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-card);
+  background:
+    linear-gradient(135deg, rgba(248, 247, 242, 0.055), transparent 42%),
+    rgba(7, 8, 10, 0.68);
+  box-shadow:
+    inset 0 0 0 1px rgba(248, 247, 242, 0.09),
+    0 28px 90px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(24px) saturate(112%);
+}
+
+.admin-login-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, transparent, rgba(126, 167, 216, 0.08), transparent),
+    linear-gradient(180deg, rgba(248, 247, 242, 0.045), transparent 34%);
+  mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+  pointer-events: none;
+}
+
+.admin-login-panel .micro-label {
+  color: rgba(248, 247, 242, 0.54);
+}
+
+.admin-login-panel h1 {
+  max-width: 560px;
+  font-family: var(--font-serif);
+  font-size: clamp(2.35rem, 4.35vw, 3.45rem);
+  font-weight: 600;
+  line-height: 1.06;
+}
+
+.admin-login-panel p {
+  max-width: 560px;
+  color: rgba(248, 247, 242, 0.66);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.admin-login-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-login-meta span {
+  min-height: 28px;
+  padding: 7px 10px;
+  border: 1px solid rgba(248, 247, 242, 0.1);
+  border-radius: var(--radius-card);
+  color: rgba(248, 247, 242, 0.58);
+  background: rgba(248, 247, 242, 0.032);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.admin-auth-message {
+  border-color: rgba(248, 247, 242, 0.1);
+  border-radius: var(--radius-card);
+  background: rgba(248, 247, 242, 0.035);
+}
+
+.admin-auth-message[data-state="error"] {
+  border-color: rgba(216, 192, 126, 0.22);
+  color: #d8c07e;
+  background: rgba(216, 192, 126, 0.055);
+}
+
+.github-login-button {
+  min-height: 46px;
+  border: 1px solid rgba(248, 247, 242, 0.82);
+  color: #050505;
+  background: rgba(248, 247, 242, 0.9);
+  font-size: 14px;
+  font-weight: 850;
+  transition:
+    border-color var(--motion-fast) ease,
+    background var(--motion-fast) ease,
+    transform var(--motion-fast) ease;
+}
+
+.github-login-button:hover {
+  border-color: var(--color-ink);
+  background: var(--color-ink);
+  transform: translateY(-1px);
+}
+
+.github-login-button[aria-disabled="true"] {
+  border-color: rgba(248, 247, 242, 0.11);
+  color: rgba(248, 247, 242, 0.38);
+  background: rgba(248, 247, 242, 0.055);
+  opacity: 1;
+}
+
+.admin-login-options small {
+  color: rgba(248, 247, 242, 0.46);
+}
+
+@media (max-width: 760px) {
+  .admin-login-shell {
+    padding-top: 48px;
+  }
+
+  .admin-login-panel {
+    padding: 28px;
+  }
+
+  .admin-login-panel h1 {
+    font-size: clamp(2rem, 9vw, 2.55rem);
   }
 }

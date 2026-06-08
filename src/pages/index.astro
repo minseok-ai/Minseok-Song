@@ -9,27 +9,27 @@ const a1Firms = pageEntriesById.get("a1-firms");
 
 const surfaceMeta = {
   about: {
-    accent: "#8ab4f8",
+    accent: "#8aa8dc",
     glyph: "MS",
     line: "Person"
   },
   "a1-firms": {
-    accent: "#fbbc04",
+    accent: "#d6b545",
     glyph: "A1",
     line: "Firm"
   },
   projects: {
-    accent: "#34a853",
+    accent: "#6fa765",
     glyph: "PX",
     line: "Work"
   },
   writings: {
-    accent: "#f28b82",
+    accent: "#c98278",
     glyph: "WR",
     line: "Notes"
   },
   contacts: {
-    accent: "#a78bfa",
+    accent: "#947bd4",
     glyph: "CO",
     line: "Reach"
   }
@@ -67,6 +67,12 @@ const signalLoop = [
     copy: "Keep the reasoning trace visible so the firm gets sharper over time."
   }
 ];
+
+const focusStats = [
+  ["Domain", "Strategy systems"],
+  ["Product", "A1trategize"],
+  ["Mode", "Research to operating surface"]
+];
 ---
 
 <Layout
@@ -79,9 +85,7 @@ const signalLoop = [
       <div class="hero-copy-panel">
         <p class="micro-label">Minseok Song / A1 Firms</p>
         <h1>
-          Strategy systems for
-          <span>AI-native</span>
-          firms.
+          Strategy systems for AI-native firms.
         </h1>
         <p>
           A public operating layer for A1trategize, selected work, field notes,
@@ -93,47 +97,23 @@ const signalLoop = [
         </div>
       </div>
 
-      <div class="signal-lab" aria-hidden="true">
-        <div class="lab-grid"></div>
-        <svg class="signal-lines" viewBox="0 0 620 520">
-          <path class="line-blue" d="M72 338 C154 252, 228 380, 318 262 S486 158, 556 246" />
-          <path class="line-green" d="M62 212 C164 134, 244 198, 318 166 S458 104, 580 128" />
-          <path class="line-red" d="M88 408 C190 436, 244 336, 350 374 S486 442, 572 330" />
-          <circle cx="72" cy="338" r="7" />
-          <circle cx="318" cy="262" r="10" />
-          <circle cx="556" cy="246" r="7" />
-          <circle cx="318" cy="166" r="7" />
-          <circle cx="350" cy="374" r="8" />
-        </svg>
-        <div class="lab-card card-brief">
-          <span>01</span>
-          <strong>Brief</strong>
-        </div>
-        <div class="lab-card card-model">
-          <span>02</span>
-          <strong>Model</strong>
-        </div>
-        <div class="lab-card card-firm">
-          <span>03</span>
-          <strong>A1</strong>
-        </div>
-        <div class="lab-card card-ship">
-          <span>04</span>
-          <strong>Ship</strong>
-        </div>
-        <div class="lab-core">
-          <span>A1</span>
-        </div>
-      </div>
+      <aside class="hero-brief" aria-label="Current focus">
+        <p class="micro-label">Current focus</p>
+        <h2>{a1Firms?.hero?.title ?? "A1trategize"}</h2>
+        <p>
+          The working product remains separate. This site explains the context,
+          proof, writing, and product memory around it.
+        </p>
+        <dl>
+          {focusStats.map(([label, value]) => (
+            <div>
+              <dt>{label}</dt>
+              <dd>{value}</dd>
+            </div>
+          ))}
+        </dl>
+      </aside>
 
-      <nav class="hero-index" aria-label="Quick site sections">
-        {sectionCards.map((item) => (
-          <a href={item.path} style={`--accent: ${item.meta.accent};`}>
-            <span>{item.num}</span>
-            <strong>{item.label}</strong>
-          </a>
-        ))}
-      </nav>
     </section>
 
     <section class="loop-section" aria-label="Operating loop">
@@ -195,36 +175,13 @@ const signalLoop = [
   </section>
 </Layout>
 
-<script is:inline>
-  const lab = document.querySelector(".signal-lab");
-
-  if (lab && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    lab.addEventListener("pointermove", (event) => {
-      const rect = lab.getBoundingClientRect();
-      const x = (event.clientX - rect.left) / rect.width - 0.5;
-      const y = (event.clientY - rect.top) / rect.height - 0.5;
-      lab.style.setProperty("--tilt-x", `${(y * -6).toFixed(2)}deg`);
-      lab.style.setProperty("--tilt-y", `${(x * 8).toFixed(2)}deg`);
-      lab.style.setProperty("--shift-x", `${(x * 18).toFixed(1)}px`);
-      lab.style.setProperty("--shift-y", `${(y * 18).toFixed(1)}px`);
-    });
-
-    lab.addEventListener("pointerleave", () => {
-      lab.style.removeProperty("--tilt-x");
-      lab.style.removeProperty("--tilt-y");
-      lab.style.removeProperty("--shift-x");
-      lab.style.removeProperty("--shift-y");
-    });
-  }
-</script>
-
 <style>
   .home-page {
     --paper: #050505;
     --ink: #f8f7f2;
     --muted: rgba(248, 247, 242, 0.62);
     --line: rgba(248, 247, 242, 0.16);
-    background: var(--paper);
+    background: transparent;
     color: var(--ink);
   }
 
@@ -852,6 +809,428 @@ const signalLoop = [
 
     .product-band h2 {
       font-size: 3.1rem;
+    }
+  }
+</style>
+
+
+
+
+
+<style>
+  .home-page {
+    --paper: #050505;
+    --ink: #f8f7f2;
+    --muted: rgba(248, 247, 242, 0.64);
+    --faint: rgba(248, 247, 242, 0.42);
+    --line: rgba(248, 247, 242, 0.14);
+    background: transparent;
+  }
+
+  .hero-system {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 440px);
+    grid-template-rows: auto auto;
+    gap: clamp(34px, 6vw, 92px);
+    min-height: auto;
+    padding-top: clamp(72px, 10vw, 136px);
+    padding-bottom: 34px;
+    overflow: visible;
+  }
+
+  .hero-system::before {
+    right: var(--space-page);
+    background: rgba(248, 247, 242, 0.2);
+    opacity: 1;
+  }
+
+  .hero-copy-panel {
+    align-self: end;
+    max-width: 820px;
+  }
+
+  .hero-copy-panel h1 {
+    max-width: 720px;
+    margin: 20px 0 24px;
+    color: var(--ink);
+    font-family: var(--font-serif);
+    font-size: clamp(2.6rem, 3.7vw, 3.8rem);
+    font-weight: 600;
+    line-height: 1.08;
+  }
+
+  .hero-copy-panel h1 span {
+    display: inline;
+    color: inherit;
+    background: none;
+  }
+
+  .hero-copy-panel p:not(.micro-label) {
+    max-width: 660px;
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.72;
+  }
+
+  .primary-action,
+  .secondary-action {
+    border-radius: var(--radius-card);
+  }
+
+  .hero-brief {
+    align-self: end;
+    display: grid;
+    gap: 18px;
+    padding: 0 0 4px;
+    border-top: 1px solid var(--line);
+  }
+
+  .hero-brief .micro-label {
+    margin-top: 18px;
+  }
+
+  .hero-brief h2 {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(1.85rem, 3vw, 3rem);
+    font-weight: 600;
+    line-height: 1.08;
+  }
+
+  .hero-brief p {
+    max-width: 410px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .hero-brief dl {
+    display: grid;
+    gap: 0;
+    margin: 8px 0 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .hero-brief dl div {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    gap: 18px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hero-brief dt,
+  .hero-brief dd {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .hero-brief dt {
+    color: var(--faint);
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .hero-brief dd {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  .hero-index {
+    gap: 0;
+    margin-top: 34px;
+  }
+
+  .hero-index a {
+    border-right: 1px solid var(--line);
+  }
+
+  .hero-index a:last-child {
+    border-right: 0;
+  }
+
+  .loop-section,
+  .surface-index {
+    gap: 28px;
+    padding-top: clamp(74px, 10vw, 120px);
+    padding-bottom: clamp(70px, 9vw, 106px);
+  }
+
+  .section-head {
+    align-items: start;
+    border-bottom-color: var(--line);
+  }
+
+  .section-head h2 {
+    max-width: 760px;
+    color: var(--muted);
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+  }
+
+  .loop-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .loop-grid article {
+    min-height: 210px;
+    padding: 24px 22px 22px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .loop-grid h3 {
+    margin: 52px 0 12px;
+    font-size: clamp(1.55rem, 2.3vw, 2.2rem);
+    font-weight: 760;
+    line-height: 1.05;
+  }
+
+  .surface-grid {
+    grid-template-columns: 1fr;
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
+  .surface-card,
+  .surface-card:nth-child(1),
+  .surface-card:nth-child(2),
+  .surface-card:nth-child(n + 3) {
+    grid-column: auto;
+  }
+
+  .surface-card {
+    display: grid;
+    grid-template-columns: 70px minmax(0, 1fr) auto;
+    gap: clamp(18px, 4vw, 54px);
+    align-items: center;
+    min-height: 132px;
+    padding: 28px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    background: transparent;
+  }
+
+  .surface-card::after,
+  .surface-glyph {
+    display: none;
+  }
+
+  .surface-card small {
+    color: var(--faint);
+  }
+
+  .surface-card h3 {
+    margin: 8px 0 8px;
+    font-size: clamp(1.85rem, 3.1vw, 2.75rem);
+    font-weight: 760;
+    line-height: 1.05;
+  }
+
+  .surface-card p {
+    max-width: 700px;
+    color: var(--muted);
+  }
+
+  .surface-command {
+    align-self: center;
+    justify-self: end;
+    color: var(--faint);
+  }
+
+  .surface-card:hover {
+    color: var(--ink);
+    background: transparent;
+    transform: none;
+  }
+
+  .surface-card:hover p,
+  .surface-card:hover .surface-command,
+  .surface-card:hover .surface-num {
+    color: var(--muted);
+  }
+
+  .product-band {
+    grid-template-columns: minmax(0, 0.9fr) minmax(280px, 0.8fr) auto;
+    padding-top: 46px;
+    padding-bottom: 96px;
+  }
+
+  .product-band h2 {
+    font-size: clamp(2.15rem, 4.3vw, 4.1rem);
+    font-family: var(--font-serif);
+    font-weight: 600;
+  }
+
+  @media (max-width: 1180px) {
+    .hero-system,
+    .product-band {
+      grid-template-columns: 1fr;
+    }
+
+    .loop-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 820px) {
+    .hero-system {
+      gap: 34px;
+      padding-top: 52px;
+    }
+
+    .hero-copy-panel h1 {
+      font-size: clamp(2.25rem, 9vw, 2.85rem);
+    }
+
+    .hero-index,
+    .loop-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-index a {
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .surface-card {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      min-height: 0;
+      padding: 24px 0;
+    }
+
+    .surface-command {
+      justify-self: start;
+    }
+
+    .section-head {
+      display: grid;
+    }
+  }
+</style>
+<style>
+  .surface-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+
+  .surface-card,
+  .surface-card:nth-child(1),
+  .surface-card:nth-child(2),
+  .surface-card:nth-child(n + 3) {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column: auto;
+    align-content: space-between;
+    gap: 22px;
+    min-height: 330px;
+    padding: 24px;
+    overflow: hidden;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    background:
+      linear-gradient(145deg, color-mix(in srgb, var(--accent) 13%, transparent), transparent 48%),
+      #050505;
+    text-decoration: none;
+  }
+
+  .surface-card:nth-child(1),
+  .surface-card:nth-child(2) {
+    grid-column: span 3;
+  }
+
+  .surface-card:nth-child(n + 3) {
+    grid-column: span 2;
+  }
+
+  .surface-card::after {
+    content: "";
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    display: block;
+    width: 162px;
+    height: 112px;
+    border-top: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    opacity: 0.13;
+    transform: skewY(-8deg);
+  }
+
+  .surface-glyph {
+    position: absolute;
+    top: 20px;
+    right: 22px;
+    display: block;
+    color: var(--accent);
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1;
+    opacity: 0.86;
+  }
+
+  .surface-card small {
+    color: var(--accent);
+  }
+
+  .surface-card h3 {
+    margin: 10px 0 12px;
+    font-size: 3rem;
+    font-weight: 900;
+    line-height: 0.98;
+  }
+
+  .surface-card p {
+    max-width: 470px;
+    color: rgba(248, 247, 242, 0.64);
+  }
+
+  .surface-command {
+    align-self: auto;
+    justify-self: start;
+    color: rgba(248, 247, 242, 0.58);
+  }
+
+  .surface-card:hover {
+    color: var(--ink);
+    background:
+      linear-gradient(145deg, color-mix(in srgb, var(--accent) 18%, transparent), transparent 44%),
+      #050505;
+    transform: translateY(-2px);
+  }
+
+  .surface-card:hover p,
+  .surface-card:hover .surface-command,
+  .surface-card:hover .surface-num {
+    color: rgba(248, 247, 242, 0.64);
+  }
+
+  @media (max-width: 820px) {
+    .surface-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .surface-card:nth-child(1),
+    .surface-card:nth-child(2),
+    .surface-card:nth-child(n + 3) {
+      grid-column: auto;
+    }
+
+    .surface-card {
+      min-height: 278px;
+    }
+
+    .surface-card h3 {
+      font-size: 2.35rem;
     }
   }
 </style>

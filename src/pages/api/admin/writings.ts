@@ -1,5 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import type { APIRoute } from "astro";
+import { readAdminSession } from "../../../lib/auth/admin";
 import { writingSchema } from "../../../lib/schemas/content";
 
 const writingDirectory = new URL("../../../content/writings/", import.meta.url);
@@ -16,7 +17,18 @@ const slugify = (value: string) => {
   return slug || `writing-${Date.now()}`;
 };
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
+  const session = readAdminSession(cookies, import.meta.env);
+
+  if (!session) {
+    return Response.json(
+      {
+        error: "Admin authentication is required."
+      },
+      { status: 401 }
+    );
+  }
+
   if (!import.meta.env.DEV) {
     return Response.json(
       {

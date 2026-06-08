@@ -196,6 +196,10 @@ export const projectSchema = z.object({
       href: z.string().min(1)
     })
   ).default([]),
+  cover: z.object({
+    src: z.string().min(1),
+    alt: z.string().default("")
+  }).optional(),
   visual: z.enum(["graph", "deck", "console", "paper", "blank"]).default("blank")
 });
 

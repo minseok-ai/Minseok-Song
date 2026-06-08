@@ -6,34 +6,67 @@ import { siteConfig } from "../config/site";
 const {
   title = "Minseok Song | A1 Firms",
   description = "Layered site foundation for Minseok Song and A1 Firms.",
-  headerNote = "Personal site / V0.1"
+  headerNote = "Personal site / V0.1",
+  image = siteConfig.defaultImage,
+  type = "website",
+  noindex = false
 } = Astro.props;
 
 const nav = visibleNavigationItems();
 const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+const siteUrl = (import.meta.env.SITE_URL || siteConfig.url).replace(/\/$/, "");
+const canonicalUrl = new URL(Astro.url.pathname, `${siteUrl}/`).toString();
+const imageUrl = new URL(image, `${siteUrl}/`).toString();
+const shouldNoindex = noindex || pathname.startsWith("/admin");
+const locale = siteConfig.defaultLocale === "ko" ? "ko_KR" : siteConfig.defaultLocale;
 const currentYear = new Date().getFullYear();
+const faviconVersion = "20260609";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteConfig.name,
+  url: siteUrl,
+  description: siteConfig.description,
+  inLanguage: siteConfig.defaultLocale
+};
 ---
 
 <!doctype html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050505" />
+    <link rel="icon" type="image/svg+xml" href={`/favicon.svg?v=${faviconVersion}`} />
+    <link rel="icon" href={`/favicon.ico?v=${faviconVersion}`} />
+    <link rel="shortcut icon" href={`/favicon.ico?v=${faviconVersion}`} />
+    <link rel="apple-touch-icon" href={`/A1Firm-logo.png?v=${faviconVersion}`} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" type="application/rss+xml" title={`${siteConfig.name} writings`} href="/rss.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <meta name="description" content={description} />
+    <meta name="robots" content={shouldNoindex ? "noindex,nofollow" : "index,follow"} />
     <meta name="generator" content={Astro.generator} />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:locale" content={locale} />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={imageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
     <title>{title}</title>
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
     <div class="site-shell">
       <header class="site-header">
         <a class="brand-lockup" href="/" aria-label="Minseok Song home">
-          <img class="brand-logo" src="/A1Firm.png" alt="" width="44" height="44" />
-          <span>
-            <strong>{siteConfig.name}</strong>
-            <small>A1 Firms</small>
-          </span>
+          <span class="brand-wordmark">{siteConfig.name}</span>
         </a>
 
         <nav class="numbered-nav" aria-label="Primary navigation">
@@ -53,7 +86,16 @@ const currentYear = new Date().getFullYear();
           })}
         </nav>
 
-        <p class="header-note">{headerNote}</p>
+        <div class="header-utility">
+          <p class="header-note">{headerNote}</p>
+          <a class="login-link" href="/admin/login" aria-label="Admin login">
+            <picture>
+              <source srcset="/A1Firm-logo.webp" type="image/webp" />
+              <img class="utility-logo" src="/A1Firm-logo.png" alt="" width="28" height="28" />
+            </picture>
+            <span>Login</span>
+          </a>
+        </div>
       </header>
 
       <main class="site-main">

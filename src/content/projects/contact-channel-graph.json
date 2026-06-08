@@ -1,7 +1,7 @@
 {
   "title": "Contact Channel Graph",
   "summary": "A design note on replacing generic contact cards with a graph of intent-specific channels and response modes.",
-  "order": 3,
+  "order": 4,
   "status": "draft",
   "hidden": false,
   "year": "2026",

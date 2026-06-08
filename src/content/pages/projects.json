@@ -1,7 +1,7 @@
 {
   "title": "Projects",
   "navLabel": "Projects",
-  "description": "Project essays, build logs, and implementation notes.",
+  "description": "Portfolio notes, build logs, research artifacts, and selected project writing.",
   "order": 3,
   "path": "/projects",
   "layoutType": "projectIndex",
@@ -9,8 +9,8 @@
   "hidden": false,
   "hero": {
     "eyebrow": "03 / Projects",
-    "title": "Project Journal",
-    "subtitle": "A1trategize is now the A1 Firm product surface. Projects is for build notes, implementation essays, and case-study drafts."
+    "title": "Portfolio",
+    "subtitle": "A structured shelf for project posts, decks, experiments, and selected artifacts."
   },
   "blocks": []
 }
