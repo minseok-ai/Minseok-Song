@@ -1,0 +1,16 @@
+{
+  "title": "A1 Firms Site Architecture",
+  "summary": "A build note on separating the public site, product surface, project journal, newsletter, and contact graph into distinct operating roles.",
+  "order": 1,
+  "status": "draft",
+  "hidden": false,
+  "year": "2026",
+  "tags": ["Architecture", "Astro", "Product Surface"],
+  "links": [
+    {
+      "label": "Draft note",
+      "href": "/projects"
+    }
+  ],
+  "visual": "paper"
+}

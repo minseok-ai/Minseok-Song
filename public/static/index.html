@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko" data-design="nnfc">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-store">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta name="description" content="A1trategize — AI 기반 멀티 도메인 컨설팅 플랫폼">
+  <title>A1trategize — Multi-Domain AI Consulting</title>
+
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+  <link rel="stylesheet" href="/static/style.css?v=20260526-sidebar-align">
+</head>
+
+<body>
+  <div class="app-layout">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-columns">
+        <div class="sidebar-rail">
+          <div class="brand-lockup" id="brand-lockup" role="button" tabindex="0" aria-label="사이드바 펼치기" title="사이드바 펼치기">
+            <span class="brand-logo-mark" id="brand-logo-mark" aria-hidden="true">
+              <img id="brand-logo-img" src="/static/NNFC.png" alt="" />
+            </span>
+          </div>
+          <button class="sidebar-toggle" id="sidebar-toggle" type="button" onclick="toggleSidebar()" aria-label="사이드바 접기" aria-expanded="true" title="사이드바 접기">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="4" y1="6" x2="20" y2="6"></line>
+              <line x1="4" y1="12" x2="20" y2="12"></line>
+              <line x1="4" y1="18" x2="20" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="sidebar-main">
+          <div class="sidebar-head">
+            <div class="sidebar-brand-text">
+              <h2>A1trategize</h2>
+              <div class="brand-sub" id="brand-sub">Strategy &amp; Intelligence</div>
+            </div>
+          </div>
+
+          <div id="tracker-container" class="tracker-container" hidden></div>
+
+          <div class="sidebar-panel">
+      <div class="sidebar-section theme-section">
+        <div class="theme-switch-wrapper" role="group" aria-label="워크스페이스">
+          <button class="theme-btn active" data-theme="nnfc" type="button" onclick="switchThemeUI('nnfc')">
+            <span class="theme-icon" data-icon="mode-nnfc"></span>
+            <span>NNFC</span>
+          </button>
+          <button class="theme-btn" data-theme="mckinsey" type="button" onclick="switchThemeUI('mckinsey')">
+            <span class="theme-icon" data-icon="theme-a1"></span>
+            <span>A1 Firm</span>
+          </button>
+        </div>
+      </div>
+
+      <details class="sidebar-advanced" id="sidebar-advanced">
+        <summary class="sidebar-advanced-summary">
+          <span class="sidebar-advanced-copy">
+            <span class="sidebar-advanced-title">고급 설정</span>
+            <span class="sidebar-advanced-hint">LLM 모델</span>
+          </span>
+          <span class="sidebar-advanced-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="sidebar-advanced-body" id="model-config"></div>
+      </details>
+
+      <div class="sidebar-section saved-sessions-section">
+        <div class="sidebar-section-title">저장된 세션</div>
+        <button class="sidebar-action-btn" type="button" onclick="startNewConsultation(true)">새 상담</button>
+        <div class="session-history-list" id="session-history">
+          <div class="session-history-empty">저장된 세션이 없습니다.</div>
+        </div>
+      </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content" id="main-content">
+      <img src="/static/NNFC.png" alt="National Nanofab Center" class="partner-logo" id="nnfc-logo" width="180" height="40" />
+      <img src="/static/A1Firm.png" alt="A1trategize" class="partner-logo" id="A1Firm-logo" width="180" height="40" />
+
+      <div class="mvp-badge">MVP Testing</div>
+
+      <div id="mobile-pipeline-tracker" class="mobile-pipeline-tracker" hidden aria-label="파이프라인 진행"></div>
+
+      <section class="hero" id="hero-section">
+        <h1 id="hero-title">A1trategize at NNFC</h1>
+        <p class="subtitle" id="hero-subtitle">Strategic Intelligence, Delivered by AI</p>
+      </section>
+
+      <section class="input-section" id="input-section">
+        <div class="mode-context" id="mode-context" aria-live="polite">
+          <span class="mode-context-icon" id="mode-context-icon" aria-hidden="true"></span>
+          <div class="mode-context-copy">
+            <span class="mode-context-label" id="mode-context-label">컨설팅 모드</span>
+            <span class="mode-context-desc" id="mode-context-desc">입력창 하단에서 모드를 변경할 수 있습니다.</span>
+          </div>
+        </div>
+        <div class="input-card">
+          <textarea id="topic-input" rows="6" aria-describedby="mode-context-desc"></textarea>
+          <div class="prompt-mode-dock" id="prompt-mode-dock" aria-label="컨설팅 모드 선택"></div>
+          <div class="input-actions">
+            <button class="toggle-icon-btn is-hidden" id="equip-toggle-btn" type="button" onclick="toggleEquipBrowser()" title="NNFC 장비 카탈로그 열기">
+              <span class="ui-icon" data-icon="database"></span>
+            </button>
+            <button class="submit-icon-btn" id="submit-btn" type="button" onclick="startPipeline()" title="상담 요청">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="prompt-suggestions" id="prompt-suggestions" aria-label="추천 입력"></div>
+      </section>
+
+      <section id="equip-browser-section" class="equip-browser-section is-hidden">
+        <div id="equip-browser" class="equip-browser is-hidden">
+          <div class="equip-section">
+            <div class="equip-toolbar">
+              <input type="text" class="equip-search" id="equip-search" placeholder="장비명, 제작사, 모델명 검색..." oninput="filterEquipment()">
+              <div id="equip-cat-filters" class="equip-cat-filters"></div>
+            </div>
+            <div class="equip-count" id="equip-count"></div>
+            <div class="equip-grid" id="equip-grid"></div>
+          </div>
+        </div>
+      </section>
+
+      <div id="equip-modal-overlay" class="equip-modal-overlay is-hidden" onclick="closeEquipModal(event)">
+        <div class="equip-modal" onclick="event.stopPropagation()">
+          <div class="equip-modal-header">
+            <div>
+              <span class="equip-badge" id="modal-category"></span>
+              <h2 id="modal-equip-name"></h2>
+            </div>
+            <button class="equip-modal-close" type="button" onclick="closeEquipModal()" aria-label="닫기">&times;</button>
+          </div>
+          <div class="equip-modal-body">
+            <div class="equip-detail-grid">
+              <div class="equip-detail-section">
+                <h3>기본 정보</h3>
+                <div id="modal-basic-info"></div>
+              </div>
+              <div class="equip-detail-section">
+                <h3>지원 사양</h3>
+                <div id="modal-specs"></div>
+              </div>
+            </div>
+            <div class="equip-detail-section equip-detail-section--spaced">
+              <h3>사용 가능 가스</h3>
+              <div class="equip-tag-list" id="modal-gases"></div>
+            </div>
+            <div class="equip-detail-section equip-detail-section--spaced">
+              <h3>원문 스펙</h3>
+              <div class="equip-raw-specs" id="modal-raw-specs"></div>
+            </div>
+            <div class="equip-ai-section">
+              <div class="equip-ai-section-header">
+                <h3>AI 공정 및 안전 가이드</h3>
+                <button class="equip-ai-btn" id="ai-guide-btn" type="button" onclick="requestAIGuide()">AI 분석 생성</button>
+              </div>
+              <div id="ai-guide-result"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-log" id="event-log"></div>
+
+      <div class="live-controls is-hidden" id="live-controls">
+        <label class="auto-follow-control" for="auto-follow-toggle">
+          <input type="checkbox" id="auto-follow-toggle" checked>
+          <span>자동 스크롤</span>
+        </label>
+      </div>
+      <div class="live-output" id="live-output"></div>
+
+      <div id="results-section" class="is-hidden"></div>
+
+      <footer class="footer">
+        <p>A1trategize &copy; 2026 | Patent Pending: KR 10-2026-0009508</p>
+        <p>AI 생성 보고서에는 오류가 있을 수 있습니다. 중요한 데이터는 반드시 독립적으로 검증하세요.</p>
+      </footer>
+    </main>
+  </div>
+
+  <script src="/static/app.js?v=20260526-sidebar-align"></script>
+</body>
+
+</html>

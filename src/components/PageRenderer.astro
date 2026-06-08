@@ -1,0 +1,1063 @@
+---
+import BlockRenderer from "./BlockRenderer.astro";
+
+const {
+  page,
+  navItem,
+  projects = [],
+  writings = [],
+  contactEntries = []
+} = Astro.props;
+
+const hero = page.hero ?? {
+  eyebrow: `${navItem.num} / ${navItem.label}`,
+  title: page.title,
+  subtitle: page.description
+};
+
+const visibleBlocks = (page.blocks ?? []).filter((block) => !block.hidden);
+const timelineBlock = visibleBlocks.find((block) => block.type === "timeline");
+const leadBlock = visibleBlocks.find(
+  (block) => block.type === "text" && block.variant === "lead"
+);
+const calloutBlock = visibleBlocks.find((block) => block.type === "callout");
+const statBlock = visibleBlocks.find((block) => block.type === "stats");
+
+const projectNotes = projects
+  .filter((entry) => entry.id !== "a1trategize" && !entry.data.hidden)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const newsletterEntries = writings
+  .filter((entry) => !entry.data.hidden)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const visibleChannels = contactEntries.flatMap((entry) =>
+  entry.data.channels.filter((channel) => channel.visible)
+);
+
+const contactNodePositions = [
+  { x: 50, y: 16 },
+  { x: 84, y: 34 },
+  { x: 78, y: 76 },
+  { x: 22, y: 76 },
+  { x: 16, y: 34 },
+  { x: 50, y: 90 }
+];
+
+const contactNodes = visibleChannels.map((channel, index) => ({
+  ...channel,
+  ...(contactNodePositions[index % contactNodePositions.length] ?? contactNodePositions[0])
+}));
+
+const articleTags = ["Source", "Crawl", "Review", "Publish"];
+---
+
+<section class={`page-frame section-page page-${page.layoutType}`}>
+  {page.layoutType === "profile" && (
+    <>
+      <div class="page-kicker">
+        <span>{hero.eyebrow ?? `${navItem.num} / ${navItem.label}`}</span>
+        <i></i>
+        <strong>Self interview</strong>
+      </div>
+
+      <section class="about-hero">
+        <figure class="identity-figure" aria-label="Minseok Song identity diagram">
+          <div class="identity-orbit">
+            <span class="orbit-node node-a"></span>
+            <span class="orbit-node node-b"></span>
+            <span class="orbit-node node-c"></span>
+            <strong>MS</strong>
+            <small>A1 Firms</small>
+          </div>
+          <figcaption>
+            <span>Fig. 00 — Self</span>
+            <span>Strategy · AI · Operating Systems</span>
+          </figcaption>
+        </figure>
+
+        <div class="about-statement">
+          <svg viewBox="0 0 620 120" aria-hidden="true">
+            <polyline
+              points="18,84 108,46 188,70 274,42 370,68 470,36 600,54"
+              fill="none"
+              stroke="currentColor"
+              stroke-dasharray="2 8"
+            />
+            {[18, 108, 188, 274, 370, 470, 600].map((x, index) => (
+              <circle cx={x} cy={[84, 46, 70, 42, 68, 36, 54][index]} r={index === 0 || index === 6 ? 6 : 4} />
+            ))}
+          </svg>
+          <blockquote>
+            "{calloutBlock?.body ??
+              "A1 Firms is organized around one practical question: how can ambiguous strategy work become clearer decisions, better tools, and repeatable operating habits?"}"
+          </blockquote>
+        </div>
+      </section>
+
+      <section class="about-thesis">
+        <aside class="sticky-timeline">
+          <span class="micro-label">Timeline / Sticky</span>
+          <ol>
+            {(timelineBlock?.events ?? [
+              {
+                date: "Now",
+                title: "A1 Firms foundation",
+                body: "Design, product, and operating systems are being composed into one public surface."
+              }
+            ]).map((event, index) => (
+              <li class={index === 0 ? "is-current" : ""}>
+                <span>{event.date}</span>
+                <strong>{event.title}</strong>
+                {event.body && <small>{event.body}</small>}
+              </li>
+            ))}
+          </ol>
+        </aside>
+
+        <article class="thesis-copy">
+          <p class="micro-label">§ 1 — The Operating Question</p>
+          <h1>{hero.title}</h1>
+          <p class="lead-copy">
+            {leadBlock?.body ??
+              "I build structured ways to turn ambiguous strategic questions into usable systems, product surfaces, and durable operating habits."}
+          </p>
+          <div class="essay-columns">
+            <p>
+              A1 is not framed as a portfolio of disconnected work. It is a
+              public operating layer for strategy, software, research, and the
+              habits that make those things repeatable.
+            </p>
+            <p>
+              The site should therefore behave less like a brochure and more
+              like a map: where the person, the firm, the product, the writing,
+              and the contact surface each have a distinct role.
+            </p>
+          </div>
+          {statBlock && (
+            <dl class="signal-strip">
+              {statBlock.stats.map((stat) => (
+                <div>
+                  <dt>{stat.label}</dt>
+                  <dd>{stat.value}</dd>
+                  {stat.description && <p>{stat.description}</p>}
+                </div>
+              ))}
+            </dl>
+          )}
+        </article>
+      </section>
+    </>
+  )}
+
+  {page.layoutType === "projectIndex" && (
+    <>
+      <div class="page-kicker">
+        <span>{hero.eyebrow ?? `${navItem.num} / ${navItem.label}`}</span>
+        <i></i>
+        <strong>Project journal</strong>
+      </div>
+
+      <section class="index-hero split-hero">
+        <h1>Project notes are written like build logs.</h1>
+        <p>
+          A1trategize now belongs to A1 Firm as the product surface. This index
+          is for project essays: what was built, what changed, what should be
+          remembered, and what deserves a proper case note later.
+        </p>
+      </section>
+
+      <section class="project-console">
+        <div class="composer-panel">
+          <span class="micro-label">Draft desk</span>
+          <h2>Write a project article, then ship it as a public note.</h2>
+          <div class="composer-grid" aria-hidden="true">
+            <span>Title</span>
+            <strong>Architecture note / experiment / teardown</strong>
+            <span>Evidence</span>
+            <strong>Links, screenshots, metrics, decisions</strong>
+            <span>Status</span>
+            <strong>Draft → Reviewed → Published</strong>
+          </div>
+        </div>
+
+        <div class="project-ledger">
+          {projectNotes.length > 0 ? (
+            projectNotes.map((project, index) => (
+              <article class="project-row">
+                <span class="row-index">{String(index + 1).padStart(2, "0")}</span>
+                <div>
+                  <small>{project.data.year ?? "Draft"} · {project.data.status}</small>
+                  <h2>{project.data.title}</h2>
+                  <p>{project.data.summary}</p>
+                </div>
+                <div class="tag-column">
+                  {project.data.tags.map((tag) => <span>{tag}</span>)}
+                </div>
+                {project.data.links[0] && (
+                  <a href={project.data.links[0].href}>{project.data.links[0].label} →</a>
+                )}
+              </article>
+            ))
+          ) : (
+            <article class="empty-ledger">
+              <span class="micro-label">No project notes yet</span>
+              <h2>A1trategize has been moved out of Projects.</h2>
+              <p>
+                Add project essays to <code>src/content/projects</code> when the
+                writing layer is connected.
+              </p>
+            </article>
+          )}
+        </div>
+      </section>
+    </>
+  )}
+
+  {page.layoutType === "writingIndex" && (
+    <>
+      <div class="page-kicker">
+        <span>{hero.eyebrow ?? `${navItem.num} / ${navItem.label}`}</span>
+        <i></i>
+        <strong>Newsletter desk</strong>
+      </div>
+
+      <section class="index-hero newsletter-hero">
+        <h1>Reviewed articles, crawled sources, and short editorial signals.</h1>
+        <p>
+          Writings is not a loose essay shelf. It is the newsletter surface:
+          find a worthwhile article, crawl the full text, review the argument,
+          then publish a concise Korean note with source trace intact.
+        </p>
+        <a class="admin-entry-link" href="/admin/writings">Open writing desk</a>
+      </section>
+
+      <section class="newsletter-instrument">
+        <div class="pipeline-meter">
+          {articleTags.map((tag, index) => (
+            <div>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{tag}</strong>
+            </div>
+          ))}
+        </div>
+        <div class="newsletter-list">
+          {newsletterEntries.length > 0 ? (
+            newsletterEntries.map((writing, index) => (
+              <a class="newsletter-row" href={`/writings/${writing.id}`}>
+                <span>{String(index + 1).padStart(3, "0")}</span>
+                <time>{writing.data.date ?? "Draft"}</time>
+                <strong>{writing.data.title}</strong>
+                <em>{writing.data.tags[0] ?? "Review"}</em>
+                <small>{writing.data.summary}</small>
+                <b>→</b>
+              </a>
+            ))
+          ) : (
+            <div class="empty-ledger">
+              <span class="micro-label">Newsletter pending</span>
+              <h2>Connect crawler output to publish reviewed briefs here.</h2>
+              <p>Each issue should keep source, crawl, review, and final note separate.</p>
+            </div>
+          )}
+        </div>
+      </section>
+    </>
+  )}
+
+  {page.layoutType === "contact" && (
+    <>
+      <div class="page-kicker">
+        <span>{hero.eyebrow ?? `${navItem.num} / ${navItem.label}`}</span>
+        <i></i>
+        <strong>Open node</strong>
+      </div>
+
+      <div class="availability-strip" aria-hidden="true">
+        <span>Available for · Strategy · AI Product · Research · Collaboration ·</span>
+        <span>Available for · Strategy · AI Product · Research · Collaboration ·</span>
+      </div>
+
+      <section class="contact-hero">
+        <div class="contact-copy">
+          <h1>Open to specific, serious product conversations.</h1>
+          <p>
+            Send a short note with context, the decision you are trying to make,
+            and the artifact you want to build. Short, concrete messages get
+            answered fastest.
+          </p>
+          <small>Response mode · Korean or English · project-first</small>
+        </div>
+
+        <div class="channel-graph">
+          <span class="micro-label">Channel graph</span>
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            {contactNodes.map((node) => (
+              <>
+                <line x1="50" y1="52" x2={node.x} y2={node.y} />
+                <circle cx={node.x} cy={node.y} r="1.6" />
+              </>
+            ))}
+            <circle class="core-node" cx="50" cy="52" r="2.3" />
+          </svg>
+          <div class="graph-labels">
+            {contactNodes.map((node) => (
+              <button
+                type="button"
+                data-copy={node.copyable ? node.value : undefined}
+                style={`left: ${node.x}%; top: ${node.y}%;`}
+              >
+                {node.label}
+              </button>
+            ))}
+          </div>
+          <small>Click a copyable node or open the channel below.</small>
+        </div>
+      </section>
+
+      <section class="contact-ledger">
+        {visibleChannels.map((channel) => (
+          <a href={channel.href ?? "#"} data-copy={channel.copyable ? channel.value : undefined}>
+            <span>{channel.label}</span>
+            <strong>{channel.value}</strong>
+            <small>{channel.copyable ? "click to copy" : "click to open"}</small>
+            <b>→</b>
+          </a>
+        ))}
+      </section>
+    </>
+  )}
+
+  {page.layoutType === "product" && (
+    <div class="block-stack">
+      {visibleBlocks.map((block) => <BlockRenderer block={block} />)}
+    </div>
+  )}
+</section>
+
+<script is:inline>
+  document.addEventListener("click", async (event) => {
+    const trigger = event.target.closest("[data-copy]");
+    if (!trigger) return;
+
+    const value = trigger.getAttribute("data-copy");
+    if (!value) return;
+
+    event.preventDefault();
+
+    try {
+      await navigator.clipboard.writeText(value);
+      trigger.setAttribute("data-copied", "true");
+      window.setTimeout(() => trigger.removeAttribute("data-copied"), 1400);
+    } catch {
+      trigger.removeAttribute("data-copied");
+    }
+  });
+</script>
+
+<style>
+  .section-page {
+    display: grid;
+    gap: 72px;
+  }
+
+  .page-kicker {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--color-ink-muted);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .page-kicker i {
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--color-line-strong);
+  }
+
+  .page-kicker strong {
+    color: var(--color-ink);
+  }
+
+  .about-hero {
+    display: grid;
+    grid-template-columns: minmax(300px, 0.85fr) minmax(0, 1.35fr);
+    gap: 72px;
+    align-items: end;
+    min-height: 650px;
+  }
+
+  .identity-figure {
+    display: grid;
+    gap: 22px;
+    margin: 0;
+  }
+
+  .identity-orbit {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: min(520px, 100%);
+    aspect-ratio: 1;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 48% 42%, rgba(248, 247, 242, 0.1), transparent 34%),
+      #050505;
+    outline: 1px solid var(--color-line);
+    outline-offset: 12px;
+  }
+
+  .identity-orbit strong {
+    font-size: 6rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .identity-orbit small {
+    margin-top: 86px;
+    color: var(--color-ink-muted);
+    font-size: 12px;
+    font-weight: 800;
+    position: absolute;
+    text-transform: uppercase;
+  }
+
+  .orbit-node {
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    border: 1px solid var(--color-ink);
+    border-radius: 50%;
+    background: var(--color-paper);
+  }
+
+  .node-a {
+    top: 20%;
+    right: 22%;
+  }
+
+  .node-b {
+    bottom: 23%;
+    left: 18%;
+  }
+
+  .node-c {
+    right: 17%;
+    bottom: 18%;
+    background: var(--color-ink);
+  }
+
+  .identity-figure figcaption {
+    display: grid;
+    gap: 8px;
+    color: var(--color-ink-muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .about-statement {
+    display: grid;
+    gap: 28px;
+  }
+
+  .about-statement svg {
+    width: min(680px, 100%);
+    height: auto;
+    color: var(--color-ink-soft);
+  }
+
+  .about-statement circle {
+    fill: var(--color-paper);
+    stroke: currentColor;
+  }
+
+  .about-statement blockquote {
+    margin: 0;
+    max-width: 820px;
+    font-size: 3.15rem;
+    font-weight: 900;
+    line-height: 1.22;
+  }
+
+  .about-thesis {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 88px;
+    align-items: start;
+  }
+
+  .sticky-timeline {
+    position: sticky;
+    top: calc(var(--header-height) + 32px);
+  }
+
+  .sticky-timeline ol {
+    display: grid;
+    gap: 0;
+    margin: 24px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sticky-timeline li {
+    position: relative;
+    display: grid;
+    gap: 5px;
+    padding: 0 0 28px 26px;
+    color: var(--color-ink-muted);
+  }
+
+  .sticky-timeline li::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    background: var(--color-paper);
+  }
+
+  .sticky-timeline li::after {
+    content: "";
+    position: absolute;
+    top: 18px;
+    bottom: 2px;
+    left: 5px;
+    width: 1px;
+    background: var(--color-line);
+  }
+
+  .sticky-timeline li.is-current {
+    color: var(--color-ink);
+  }
+
+  .sticky-timeline li.is-current::before {
+    background: var(--color-ink);
+  }
+
+  .sticky-timeline span,
+  .sticky-timeline strong,
+  .sticky-timeline small {
+    display: block;
+  }
+
+  .sticky-timeline span {
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .sticky-timeline small {
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .thesis-copy {
+    border-left: 1px solid var(--color-line-strong);
+    padding-left: 32px;
+  }
+
+  .thesis-copy h1,
+  .index-hero h1,
+  .contact-copy h1 {
+    margin: 0;
+    max-width: 960px;
+    font-size: 6.4rem;
+    font-weight: 900;
+    line-height: 0.98;
+  }
+
+  .contact-copy h1 {
+    max-width: 640px;
+    font-size: 5.15rem;
+  }
+
+  .lead-copy {
+    margin: 32px 0 0;
+    max-width: 820px;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.28;
+  }
+
+  .essay-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+    margin-top: 42px;
+    color: var(--color-ink-soft);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .signal-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 44px 0 0;
+    border-top: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .signal-strip div {
+    padding: 22px;
+    border-right: 1px solid var(--color-line);
+  }
+
+  .signal-strip div:last-child {
+    border-right: 0;
+  }
+
+  .signal-strip dt {
+    color: var(--color-ink-muted);
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .signal-strip dd {
+    margin: 8px 0 0;
+    font-size: 2.6rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .signal-strip p {
+    margin: 8px 0 0;
+    color: var(--color-ink-muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .index-hero {
+    display: grid;
+    gap: 28px;
+  }
+
+  .split-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 0.64fr);
+    align-items: end;
+  }
+
+  .index-hero p,
+  .contact-copy p {
+    margin: 0;
+    max-width: 640px;
+    color: var(--color-ink-soft);
+    font-size: 20px;
+    line-height: 1.65;
+  }
+
+  .project-console {
+    display: grid;
+    gap: 28px;
+  }
+
+  .composer-panel {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.75fr) minmax(0, 1fr);
+    gap: 32px;
+    padding: 32px 0;
+    border-top: 1px solid var(--color-line-strong);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .composer-panel h2 {
+    margin: 0;
+    font-size: 2.7rem;
+    line-height: 1.05;
+  }
+
+  .composer-grid {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .composer-grid span,
+  .composer-grid strong {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--color-line);
+    font-size: 13px;
+  }
+
+  .composer-grid span {
+    color: var(--color-ink-muted);
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .project-ledger,
+  .newsletter-list,
+  .contact-ledger {
+    display: grid;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .project-row {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr) minmax(180px, 0.35fr) 112px;
+    gap: 28px;
+    align-items: start;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .row-index,
+  .project-row small,
+  .newsletter-row span,
+  .newsletter-row time,
+  .newsletter-row em,
+  .contact-ledger span,
+  .contact-ledger small {
+    color: var(--color-ink-muted);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .project-row h2 {
+    margin: 0 0 10px;
+    font-size: 2rem;
+    line-height: 1.15;
+  }
+
+  .project-row p,
+  .empty-ledger p {
+    margin: 0;
+    color: var(--color-ink-soft);
+    line-height: 1.65;
+  }
+
+  .project-row a,
+  .contact-ledger a {
+    text-decoration: none;
+  }
+
+  .tag-column {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+
+  .tag-column span,
+  .pipeline-meter div,
+  .newsletter-row em {
+    border: 1px solid var(--color-line);
+    padding: 6px 8px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .empty-ledger {
+    padding: 32px 0;
+  }
+
+  .empty-ledger h2 {
+    margin: 8px 0 10px;
+    font-size: 2.2rem;
+  }
+
+  .newsletter-hero {
+    max-width: 1120px;
+  }
+
+  .admin-entry-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    min-height: 44px;
+    padding: 0 18px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-card);
+    color: var(--color-ink);
+    background: rgba(248, 247, 242, 0.06);
+    font-size: 13px;
+    font-weight: 850;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      background var(--motion-fast) ease,
+      border-color var(--motion-fast) ease,
+      transform var(--motion-fast) ease;
+  }
+
+  .admin-entry-link:hover {
+    border-color: var(--color-accent);
+    background: var(--color-accent-soft);
+    transform: translateY(-1px);
+  }
+
+  .newsletter-instrument {
+    display: grid;
+    gap: 24px;
+  }
+
+  .pipeline-meter {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border: 1px solid var(--color-line);
+  }
+
+  .pipeline-meter div {
+    display: grid;
+    gap: 12px;
+    min-height: 112px;
+    padding: 18px;
+    border: 0;
+    border-right: 1px solid var(--color-line);
+  }
+
+  .pipeline-meter div:last-child {
+    border-right: 0;
+  }
+
+  .pipeline-meter span {
+    color: var(--color-ink-muted);
+    font-size: 12px;
+  }
+
+  .pipeline-meter strong {
+    align-self: end;
+    font-size: 1.45rem;
+  }
+
+  .newsletter-row {
+    display: grid;
+    grid-template-columns: 64px 104px minmax(180px, 0.55fr) 96px minmax(0, 1fr) 28px;
+    gap: 24px;
+    align-items: center;
+    min-height: 86px;
+    border-bottom: 1px solid var(--color-line);
+    text-decoration: none;
+  }
+
+  .newsletter-row strong {
+    font-size: 1.75rem;
+  }
+
+  .newsletter-row small {
+    color: var(--color-ink-soft);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .availability-strip {
+    display: flex;
+    gap: 48px;
+    overflow: hidden;
+    padding: 16px 0;
+    border-top: 1px solid var(--color-line-strong);
+    border-bottom: 1px solid var(--color-line-strong);
+    color: var(--color-ink-muted);
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .availability-strip span {
+    flex: 0 0 auto;
+  }
+
+  .contact-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 0.88fr) minmax(480px, 1fr);
+    gap: 72px;
+    align-items: center;
+  }
+
+  .contact-copy {
+    display: grid;
+    gap: 28px;
+  }
+
+  .contact-copy small {
+    color: var(--color-ink-muted);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .channel-graph {
+    position: relative;
+    min-height: 560px;
+    border: 1px solid var(--color-line-strong);
+    padding: 28px;
+    overflow: hidden;
+  }
+
+  .channel-graph svg {
+    position: absolute;
+    inset: 80px 36px 72px;
+    width: calc(100% - 72px);
+    height: calc(100% - 152px);
+  }
+
+  .channel-graph line {
+    stroke: var(--color-line-strong);
+    stroke-width: 0.25;
+  }
+
+  .channel-graph circle {
+    fill: var(--color-paper);
+    stroke: var(--color-ink);
+    stroke-width: 0.45;
+  }
+
+  .channel-graph .core-node {
+    fill: var(--color-ink);
+  }
+
+  .graph-labels {
+    position: absolute;
+    inset: 80px 36px 72px;
+  }
+
+  .graph-labels button {
+    position: absolute;
+    border: 0;
+    background: transparent;
+    color: var(--color-ink-soft);
+    font-size: 12px;
+    font-weight: 800;
+    transform: translate(-50%, -150%);
+    cursor: pointer;
+  }
+
+  .graph-labels button[data-copied="true"]::after,
+  .contact-ledger a[data-copied="true"]::after {
+    content: "Copied";
+    margin-left: 8px;
+    color: var(--color-green);
+  }
+
+  .channel-graph > small {
+    position: absolute;
+    bottom: 28px;
+    left: 28px;
+    color: var(--color-ink-muted);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .contact-ledger a {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr) 140px 24px;
+    gap: 24px;
+    align-items: center;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .contact-ledger strong {
+    font-size: 1.4rem;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 1180px) {
+    .about-hero,
+    .about-thesis,
+    .split-hero,
+    .composer-panel,
+    .contact-hero {
+      grid-template-columns: 1fr;
+    }
+
+    .thesis-copy h1,
+    .index-hero h1,
+    .contact-copy h1 {
+      font-size: 5rem;
+    }
+
+    .sticky-timeline {
+      position: static;
+    }
+
+    .project-row,
+    .newsletter-row,
+    .contact-ledger a {
+      grid-template-columns: 1fr;
+    }
+
+    .tag-column {
+      max-width: 520px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .section-page {
+      gap: 52px;
+    }
+
+    .about-hero {
+      min-height: auto;
+      gap: 44px;
+    }
+
+    .identity-orbit strong {
+      font-size: 4rem;
+    }
+
+    .about-statement blockquote {
+      font-size: 2.05rem;
+    }
+
+    .thesis-copy {
+      padding-left: 20px;
+    }
+
+    .thesis-copy h1,
+    .index-hero h1,
+    .contact-copy h1 {
+      font-size: 3.15rem;
+    }
+
+    .contact-copy h1 {
+      font-size: 2.95rem;
+    }
+
+    .lead-copy {
+      font-size: 1.45rem;
+    }
+
+    .essay-columns,
+    .signal-strip,
+    .pipeline-meter {
+      grid-template-columns: 1fr;
+    }
+
+    .signal-strip div,
+    .pipeline-meter div {
+      border-right: 0;
+      border-bottom: 1px solid var(--color-line);
+    }
+
+    .signal-strip div:last-child,
+    .pipeline-meter div:last-child {
+      border-bottom: 0;
+    }
+
+    .composer-panel h2 {
+      font-size: 2rem;
+    }
+
+    .contact-hero {
+      gap: 42px;
+    }
+
+    .channel-graph {
+      min-height: 420px;
+    }
+  }
+</style>

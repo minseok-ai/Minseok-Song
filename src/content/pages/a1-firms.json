@@ -1,28 +1,28 @@
 {
   "title": "A1 Firms",
   "navLabel": "A1 Firms",
-  "description": "Brand and service hub for A1 Firms, with A1trategize as the flagship product link.",
+  "description": "The product and firm layer around A1trategize.",
   "order": 2,
-  "path": "/a1-firms",
+  "path": "/A1-Firm",
   "layoutType": "product",
   "status": "draft",
   "hidden": false,
   "hero": {
     "eyebrow": "02 / A1 Firms",
     "title": "A1 Firms",
-    "subtitle": "A product and operating layer for AI-driven strategy work."
+    "subtitle": "A compact firm layer for AI-driven strategy work, product thinking, and decision support."
   },
   "blocks": [
     {
       "id": "a1-firms-placeholder",
       "type": "text",
       "title": "Product direction",
-      "body": "Describe A1 Firms and its relationship to A1trategize here.",
+      "body": "A1 Firms is the umbrella for strategy systems and AI-native product surfaces. A1trategize remains the working app, while this site explains the firm, the work, and the portfolio around it.",
       "variant": "body"
     }
   ],
   "cta": {
     "label": "Open A1trategize app",
-    "href": "env:A1TRATEGIZE_APP_URL"
+    "href": "/A1-Firm"
   }
 }

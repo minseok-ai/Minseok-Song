@@ -1,7 +1,7 @@
 {
-  "title": "Contacts",
+  "title": "Contact",
   "navLabel": "Contacts",
-  "description": "Contact page shell backed by contact channel entries.",
+  "description": "Direct channels for specific collaboration, advisory work, and product conversations.",
   "order": 5,
   "path": "/contacts",
   "layoutType": "contact",
@@ -9,8 +9,8 @@
   "hidden": false,
   "hero": {
     "eyebrow": "05 / Contacts",
-    "title": "Contacts",
-    "subtitle": "Add, hide, or reorder contact channels from the content contract."
+    "title": "Open Node",
+    "subtitle": "A channel graph for specific, serious product conversations."
   },
   "blocks": []
 }

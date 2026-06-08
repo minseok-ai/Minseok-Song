@@ -1,7 +1,7 @@
 {
   "title": "About",
   "navLabel": "About",
-  "description": "Editable Notion-style portfolio page for the person behind the site.",
+  "description": "A concise profile of the person behind A1 Firms: strategy systems, AI product work, and operating thesis.",
   "order": 1,
   "path": "/about",
   "layoutType": "profile",
@@ -9,22 +9,22 @@
   "hidden": false,
   "hero": {
     "eyebrow": "01 / Profile",
-    "title": "About Minseok Song",
-    "subtitle": "This page is seeded as editable blocks, not fixed code."
+    "title": "Minseok Song",
+    "subtitle": "A self-introduction around strategy systems, AI product work, and the operating thesis behind A1 Firms."
   },
   "blocks": [
     {
       "id": "about-intent",
       "type": "callout",
-      "title": "Editing principle",
-      "body": "Replace, reorder, hide, or publish these blocks from the admin layer when it is added.",
+      "title": "Working thesis",
+      "body": "I do not see strategy, AI, and product as three separate jobs. I see them as three ways of asking the same question: how does a vague decision become an operating system?",
       "tone": "quiet"
     },
     {
       "id": "about-lead",
       "type": "text",
       "title": "Lead",
-      "body": "Write the personal introduction here.",
+      "body": "I build structured ways to turn ambiguous strategic questions into usable systems, product surfaces, and durable operating habits.",
       "variant": "lead"
     },
     {
@@ -34,7 +34,7 @@
       "provider": "canva",
       "src": "https://www.canva.com/design/placeholder/view?embed",
       "aspectRatio": "16/9",
-      "caption": "Replace this with a Canva, Google Slides, Figma, PDF, or approved deck embed URL.",
+      "caption": "A portfolio deck or selected presentation can live here as the public profile becomes more complete.",
       "fallbackUrl": "https://www.canva.com/",
       "allowFullscreen": true
     },
@@ -44,9 +44,9 @@
       "title": "Timeline",
       "events": [
         {
-          "date": "YYYY",
-          "title": "Milestone title",
-          "body": "Milestone description."
+          "date": "Now",
+          "title": "A1 Firms foundation",
+          "body": "The personal site is being structured first, so design, admin, authentication, and publishing can be layered on top cleanly."
         }
       ]
     },
@@ -58,7 +58,7 @@
         {
           "label": "Focus",
           "value": "A1",
-          "description": "Replace with your own metric."
+          "description": "Strategy systems, AI-native workflows, and compact product surfaces."
         }
       ]
     },
@@ -68,9 +68,9 @@
       "title": "References",
       "links": [
         {
-          "label": "Add link",
+          "label": "Reference hub",
           "href": "https://example.com",
-          "description": "Replace with a real external profile or artifact."
+          "description": "External profiles, decks, papers, and artifacts can be collected here later."
         }
       ]
     }

@@ -1,0 +1,32 @@
+---
+import WritingEditor from "../../components/admin/WritingEditor";
+import Layout from "../../layouts/Layout.astro";
+import { siteConfig } from "../../config/site";
+import { writingEntries } from "../../lib/content/registry";
+import "../../styles/admin.css";
+
+const initialWritings = writingEntries
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((entry) => ({
+    id: entry.id,
+    data: entry.data
+  }));
+---
+
+<Layout
+  title={`Writing Desk | ${siteConfig.name}`}
+  description="Admin writing editor for A1 Firms."
+  headerNote="Admin / Writing Desk"
+>
+  <section class="page-frame admin-shell">
+    <header class="admin-head">
+      <div>
+        <p class="micro-label">Admin / Writings</p>
+        <h1>Writing desk</h1>
+      </div>
+      <a href="/writings">Public index</a>
+    </header>
+
+    <WritingEditor client:load initialWritings={initialWritings} />
+  </section>
+</Layout>

@@ -1,0 +1,343 @@
+---
+const { block } = Astro.props;
+
+const embedRatio =
+  block.type === "deckEmbed" ? block.aspectRatio.replace("/", " / ") : undefined;
+
+const blockTypeLabels = {
+  text: "Text",
+  callout: "Callout",
+  timeline: "Timeline",
+  deckEmbed: "Deck embed",
+  gallery: "Gallery",
+  link: "Links",
+  stats: "Signals"
+};
+---
+
+{!block.hidden && (
+  <article class={`content-block block-${block.type}`}>
+    <div class="block-meta">
+      <span class="micro-label">{blockTypeLabels[block.type] ?? block.type}</span>
+      {block.title && <h2>{block.title}</h2>}
+    </div>
+
+    <div class="block-body">
+      {block.type === "text" && (
+        <p class={`text-${block.variant}`}>{block.body}</p>
+      )}
+
+      {block.type === "callout" && (
+        <p class={`callout tone-${block.tone}`}>{block.body}</p>
+      )}
+
+      {block.type === "timeline" && (
+        <ol class="timeline">
+          {block.events.map((event) => (
+            <li>
+              <span>{event.date}</span>
+              <div>
+                <h3>{event.title}</h3>
+                {event.body && <p>{event.body}</p>}
+                {event.href && <a href={event.href}>Open reference</a>}
+              </div>
+            </li>
+          ))}
+        </ol>
+      )}
+
+      {block.type === "deckEmbed" && (
+        <div>
+          <div class="deck-embed" style={`--embed-ratio: ${embedRatio};`}>
+            <iframe
+              src={block.src}
+              title={block.title ?? "Embedded deck"}
+              loading="lazy"
+              allow="fullscreen"
+              allowfullscreen={block.allowFullscreen}
+            />
+          </div>
+          {(block.caption || block.fallbackUrl) && (
+            <p class="caption">
+              {block.caption}
+              {block.fallbackUrl && (
+                <>
+                  {" "}
+                  <a href={block.fallbackUrl}>Open source</a>
+                </>
+              )}
+            </p>
+          )}
+        </div>
+      )}
+
+      {block.type === "gallery" && (
+        <div class="gallery-grid">
+          {block.items.map((item) => (
+            <figure>
+              <img src={item.src} alt={item.alt} loading="lazy" />
+              {item.caption && <figcaption>{item.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      )}
+
+      {block.type === "link" && (
+        <div class="link-stack">
+          {block.links.map((link) => (
+            <a href={link.href}>
+              <strong>{link.label}</strong>
+              {link.description && <span>{link.description}</span>}
+            </a>
+          ))}
+        </div>
+      )}
+
+      {block.type === "stats" && (
+        <dl class="stats-grid">
+          {block.stats.map((stat) => (
+            <div>
+              <dt>{stat.label}</dt>
+              <dd>{stat.value}</dd>
+              {stat.description && <p>{stat.description}</p>}
+            </div>
+          ))}
+        </dl>
+      )}
+    </div>
+  </article>
+)}
+
+<style>
+  .content-block {
+    display: grid;
+    grid-template-columns: minmax(120px, 0.7fr) minmax(0, 1.8fr);
+    gap: clamp(20px, 4vw, 48px);
+    padding: clamp(28px, 5vw, 56px) 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .content-block:last-child {
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  h2,
+  h3,
+  p {
+    margin-top: 0;
+  }
+
+  h2 {
+    margin-bottom: 0;
+    font-family: var(--font-serif);
+    font-size: 2.25rem;
+    font-weight: 720;
+    line-height: 1.05;
+  }
+
+  .block-meta {
+    display: grid;
+    align-content: start;
+    gap: 16px;
+  }
+
+  .block-body {
+    min-width: 0;
+  }
+
+  .text-lead {
+    margin-bottom: 0;
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    line-height: 1.18;
+  }
+
+  .text-body,
+  .callout,
+  .timeline p,
+  .caption {
+    color: var(--color-ink-soft);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .text-small {
+    color: var(--color-ink-muted);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .callout {
+    margin-bottom: 0;
+    padding: 22px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    background:
+      linear-gradient(135deg, rgba(246, 239, 227, 0.045), transparent 48%),
+      var(--color-panel);
+  }
+
+  .tone-important {
+    border-color: var(--color-accent);
+    color: var(--color-accent-ink);
+  }
+
+  .timeline {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .timeline li {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 22px;
+    padding: 20px 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .timeline li:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .timeline span {
+    color: var(--color-ink-muted);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .timeline h3 {
+    margin-bottom: 8px;
+    font-size: 20px;
+    line-height: 1.35;
+  }
+
+  .timeline a,
+  .caption a {
+    color: var(--color-accent-ink);
+    font-weight: 700;
+  }
+
+  .deck-embed {
+    position: relative;
+    width: 100%;
+    aspect-ratio: var(--embed-ratio, 16 / 9);
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    background: var(--color-field);
+  }
+
+  .deck-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .caption {
+    margin: 12px 0 0;
+    font-size: 13px;
+  }
+
+  .gallery-grid,
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  figure {
+    margin: 0;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    background: var(--color-panel);
+  }
+
+  figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  figcaption {
+    padding: 12px;
+    color: var(--color-ink-muted);
+    font-size: 13px;
+  }
+
+  .link-stack {
+    display: grid;
+    gap: 10px;
+  }
+
+  .link-stack a {
+    display: grid;
+    gap: 6px;
+    padding: 18px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    background: var(--color-panel);
+    text-decoration: none;
+  }
+
+  .link-stack span,
+  .stats-grid p {
+    color: var(--color-ink-muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .stats-grid {
+    margin: 0;
+  }
+
+  .stats-grid div {
+    padding: 18px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    background: var(--color-panel);
+  }
+
+  dt {
+    color: var(--color-ink-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  dd {
+    margin: 8px 0 0;
+    font-family: var(--font-serif);
+    font-size: 3.5rem;
+    font-weight: 760;
+    line-height: 0.95;
+  }
+
+  @media (max-width: 760px) {
+    .content-block,
+    .timeline li,
+    .gallery-grid,
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+    }
+
+    .text-lead {
+      font-size: 1.7rem;
+    }
+
+    dd {
+      font-size: 2.25rem;
+    }
+  }
+</style>

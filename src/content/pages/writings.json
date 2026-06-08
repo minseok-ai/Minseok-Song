@@ -1,7 +1,7 @@
 {
   "title": "Writings",
   "navLabel": "Writings",
-  "description": "Writing index placeholder. Newsletter and publishing automation are deferred.",
+  "description": "Newsletter reviews, crawled article sources, and editorial signals.",
   "order": 4,
   "path": "/writings",
   "layoutType": "writingIndex",
@@ -9,8 +9,8 @@
   "hidden": false,
   "hero": {
     "eyebrow": "04 / Writings",
-    "title": "Writings",
-    "subtitle": "Drafts, notes, and future newsletter entries will live here."
+    "title": "Newsletter",
+    "subtitle": "Article review, full-text crawl, source trace, and concise commentary."
   },
   "blocks": []
 }

@@ -1,0 +1,263 @@
+---
+const layers = [
+  { label: "Strategy", y: 26 },
+  { label: "Intelligence", y: 50 },
+  { label: "Infrastructure", y: 74 }
+];
+
+const nodes = [
+  { id: "brief", x: 19, y: 31, r: 1.8 },
+  { id: "model", x: 38, y: 24, r: 2.4 },
+  { id: "system", x: 61, y: 30, r: 2 },
+  { id: "firm", x: 82, y: 23, r: 3.1 },
+  { id: "archive", x: 26, y: 54, r: 2.4 },
+  { id: "app", x: 50, y: 49, r: 4.2 },
+  { id: "ops", x: 76, y: 55, r: 2.2 },
+  { id: "signal", x: 17, y: 77, r: 1.8 },
+  { id: "publish", x: 42, y: 73, r: 2.1 },
+  { id: "contact", x: 69, y: 78, r: 1.9 }
+];
+
+const edges = [
+  ["brief", "model"],
+  ["model", "system"],
+  ["system", "firm"],
+  ["brief", "archive"],
+  ["archive", "app"],
+  ["app", "ops"],
+  ["firm", "ops"],
+  ["signal", "publish"],
+  ["publish", "app"],
+  ["app", "contact"],
+  ["model", "app"],
+  ["system", "app"]
+];
+
+const byId = new Map(nodes.map((node) => [node.id, node]));
+---
+
+<figure class="operating-graph" aria-label="A1 operating graph">
+  <figcaption class="graph-header">
+    <span>FIG. 00 - A1 map</span>
+    <strong>Person / Firm / Product</strong>
+  </figcaption>
+
+  <div class="graph-stage">
+    <svg viewBox="0 0 100 100" role="img" aria-labelledby="graph-title">
+      <title id="graph-title">Minseok Song A1 operating graph</title>
+      <defs>
+        <linearGradient id="plane-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#f5f1e8" stop-opacity="0" />
+          <stop offset="38%" stop-color="#f5f1e8" stop-opacity="0.28" />
+          <stop offset="100%" stop-color="#00f0ff" stop-opacity="0.1" />
+        </linearGradient>
+        <radialGradient id="node-fill" cx="40%" cy="35%" r="68%">
+          <stop offset="0%" stop-color="#f5f1e8" stop-opacity="0.98" />
+          <stop offset="58%" stop-color="#9db8ff" stop-opacity="0.58" />
+          <stop offset="100%" stop-color="#0d0e12" stop-opacity="0.2" />
+        </radialGradient>
+      </defs>
+
+      <g class="planes">
+        {layers.map((layer) => (
+          <g>
+            <path d={`M 7 ${layer.y + 3} C 28 ${layer.y - 3}, 68 ${layer.y - 3}, 93 ${layer.y + 3}`} />
+            <line x1="11" y1={layer.y} x2="89" y2={layer.y} />
+            <text x="9" y={layer.y - 5}>{layer.label}</text>
+          </g>
+        ))}
+      </g>
+
+      <g class="edges">
+        {edges.map(([fromId, toId]) => {
+          const from = byId.get(fromId);
+          const to = byId.get(toId);
+
+          if (!from || !to) {
+            return null;
+          }
+
+          return (
+            <line x1={from.x} y1={from.y} x2={to.x} y2={to.y} />
+          );
+        })}
+      </g>
+
+      <g class="nodes">
+        {nodes.map((node) => (
+          <g class:list={["node", node.id === "app" && "node-active"]}>
+            <circle cx={node.x} cy={node.y} r={node.r} />
+          </g>
+        ))}
+      </g>
+
+      <g class="graph-labels">
+        <text x="50" y="45">A1trategize</text>
+        <text x="82" y="18">A1 Firms</text>
+        <text x="19" y="27">Brief</text>
+        <text x="70" y="84">Publish</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="graph-readout">
+    <span>Active layer</span>
+    <strong>A1 Firms</strong>
+    <p>Strategy, AI workflows, and operating surfaces arranged as one firm system.</p>
+  </div>
+</figure>
+
+<style>
+  .operating-graph {
+    display: grid;
+    gap: 16px;
+    margin: 0;
+  }
+
+  .graph-header,
+  .graph-readout span {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    color: var(--color-ink-muted);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.25;
+    text-transform: uppercase;
+  }
+
+  .graph-header strong {
+    color: var(--color-ink);
+  }
+
+  .graph-stage {
+    position: relative;
+    aspect-ratio: 1.08 / 1;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    background:
+      linear-gradient(90deg, rgba(246, 239, 227, 0.052) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(246, 239, 227, 0.04) 1px, transparent 1px),
+      rgba(8, 9, 13, 0.34);
+    background-size: 20% 100%, 100% 20%, auto;
+    box-shadow: inset 0 0 70px rgba(52, 219, 200, 0.05);
+  }
+
+  .graph-stage::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border: 1px solid rgba(245, 241, 232, 0.04);
+  }
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .planes {
+    transform-origin: center;
+    animation: graphDrift 8s ease-in-out infinite;
+  }
+
+  .planes path {
+    fill: none;
+    stroke: url(#plane-gradient);
+    stroke-width: 1.1;
+  }
+
+  .planes line {
+    stroke: rgba(245, 241, 232, 0.16);
+    stroke-width: 0.35;
+  }
+
+  .planes text,
+  .graph-labels text {
+    fill: rgba(246, 239, 227, 0.62);
+    font-family: var(--font-sans);
+    font-size: 2.3px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .edges line {
+    stroke: rgba(246, 239, 227, 0.24);
+    stroke-dasharray: 1.4 1.4;
+    stroke-width: 0.36;
+    animation: edgeTrace 7s linear infinite;
+  }
+
+  .node circle {
+    fill: url(#node-fill);
+    stroke: rgba(246, 239, 227, 0.66);
+    stroke-width: 0.42;
+    transition:
+      stroke var(--motion-base) ease,
+      transform var(--motion-base) ease;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .node-active circle {
+    stroke: var(--color-accent);
+    stroke-width: 0.9;
+    animation: nodePulse 2.8s ease-in-out infinite;
+  }
+
+  .node:hover circle {
+    stroke: var(--color-accent);
+    transform: scale(1.14);
+  }
+
+  .graph-readout {
+    display: grid;
+    gap: 8px;
+    min-height: 118px;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .graph-readout strong {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .graph-readout p {
+    max-width: 360px;
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  @keyframes graphDrift {
+    0%,
+    100% {
+      transform: translateY(0) skewY(-2deg);
+    }
+
+    50% {
+      transform: translateY(-1.5px) skewY(2deg);
+    }
+  }
+
+  @keyframes edgeTrace {
+    to {
+      stroke-dashoffset: -18;
+    }
+  }
+
+  @keyframes nodePulse {
+    0%,
+    100% {
+      filter: drop-shadow(0 0 0 rgba(0, 240, 255, 0));
+    }
+
+    50% {
+      filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.56));
+    }
+  }
+</style>

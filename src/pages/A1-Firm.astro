@@ -1,0 +1,349 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { siteConfig } from "../config/site";
+
+const telemetry = [
+  ["Domains", "Multi"],
+  ["Pipeline", "6 steps"],
+  ["Backend", "FastAPI"],
+  ["Surface", "Live app"]
+];
+
+const processRows = [
+  ["01", "Question", "Capture the strategic problem and domain context."],
+  ["02", "Research", "Route sources, equipment data, and model roles."],
+  ["03", "Synthesis", "Generate reports, critique, revise, and export artifacts."],
+  ["04", "Archive", "Store sessions as reusable strategy memory."]
+];
+
+const bars = Array.from({ length: 72 }, (_, index) => 18 + ((index * 19) % 54));
+---
+
+<Layout
+  title={`A1trategize | ${siteConfig.name}`}
+  description="A1trategize mounted as the A1 Firms product surface."
+  headerNote="02 / A1 Firms · App surface"
+>
+  <section class="a1-app-page">
+    <div class="app-kicker">
+      <span>Index 02</span>
+      <i></i>
+      <strong>A1 Firm · Strategy App</strong>
+    </div>
+
+    <section class="app-hero">
+      <div>
+        <h1>A1trategize is the firm surface.</h1>
+        <p>
+          A1 Firms should not explain the app from a distance. This page mounts
+          the working A1trategize interface directly, with the site acting as
+          the outer product shell.
+        </p>
+      </div>
+      <a class="app-launch" href={siteConfig.a1trategizeAppEntry}>Open full app →</a>
+    </section>
+
+    <section class="signal-board" aria-label="A1trategize runtime summary">
+      <div class="telemetry-grid">
+        {telemetry.map(([label, value]) => (
+          <div>
+            <span>{label}</span>
+            <strong>{value}</strong>
+          </div>
+        ))}
+      </div>
+      <div class="bar-bank" aria-hidden="true">
+        {bars.map((height) => <span style={`height: ${height}%;`}></span>)}
+      </div>
+      <p>App shell · static frontend · Astro API proxy · A1trategize backend on 127.0.0.1:8080 in development</p>
+    </section>
+
+    <section class="app-workbench">
+      <aside class="process-panel">
+        <span class="micro-label">Method · runtime loop</span>
+        <div class="process-list">
+          {processRows.map(([num, title, body]) => (
+            <article>
+              <span>{num}</span>
+              <div>
+                <h2>{title}</h2>
+                <p>{body}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </aside>
+
+      <div class="mounted-app">
+        <div class="frame-toolbar">
+          <span>Mounted A1trategize</span>
+          <strong>/static/index.html</strong>
+          <a href={siteConfig.a1trategizeAppEntry}>detach →</a>
+        </div>
+        <iframe
+          src={siteConfig.a1trategizeAppEntry}
+          title="A1trategize app"
+          loading="eager"
+        ></iframe>
+      </div>
+    </section>
+  </section>
+</Layout>
+
+<style>
+  .a1-app-page {
+    display: grid;
+    gap: 54px;
+    width: min(100%, var(--max-site));
+    margin: 0 auto;
+    padding: 44px var(--space-page) 86px;
+  }
+
+  .app-kicker {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--color-ink-muted);
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .app-kicker i {
+    display: block;
+    width: 34px;
+    height: 1px;
+    background: var(--color-line-strong);
+  }
+
+  .app-kicker strong {
+    color: var(--color-ink);
+  }
+
+  .app-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 180px;
+    gap: 48px;
+    align-items: end;
+  }
+
+  .app-hero h1 {
+    margin: 0;
+    max-width: 980px;
+    font-size: 6.2rem;
+    font-weight: 900;
+    letter-spacing: 0;
+    line-height: 0.98;
+  }
+
+  .app-hero p {
+    max-width: 760px;
+    margin: 28px 0 0;
+    color: var(--color-ink-soft);
+    font-size: 20px;
+    line-height: 1.65;
+  }
+
+  .app-launch {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 46px;
+    border: 1px solid var(--color-ink);
+    color: var(--color-paper);
+    background: var(--color-ink);
+    font-size: 13px;
+    font-weight: 900;
+    text-decoration: none;
+  }
+
+  .signal-board {
+    display: grid;
+    border: 1px solid var(--color-line-strong);
+  }
+
+  .telemetry-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .telemetry-grid div {
+    display: grid;
+    gap: 12px;
+    min-height: 118px;
+    padding: 22px;
+    border-right: 1px solid var(--color-line);
+  }
+
+  .telemetry-grid div:last-child {
+    border-right: 0;
+  }
+
+  .telemetry-grid span,
+  .signal-board p,
+  .frame-toolbar,
+  .process-list article > span {
+    color: var(--color-ink-muted);
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .telemetry-grid strong {
+    align-self: end;
+    font-size: 2.4rem;
+    line-height: 1;
+  }
+
+  .bar-bank {
+    display: flex;
+    align-items: end;
+    gap: 5px;
+    height: 80px;
+    padding: 0 18px 18px;
+    border-top: 1px solid var(--color-line);
+    overflow: hidden;
+  }
+
+  .bar-bank span {
+    flex: 1 0 7px;
+    max-width: 16px;
+    background: var(--color-ink);
+    opacity: 0.32;
+  }
+
+  .signal-board p {
+    margin: 0;
+    padding: 12px 18px;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .app-workbench {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+  }
+
+  .process-panel {
+    position: sticky;
+    top: calc(var(--header-height) + 28px);
+    display: grid;
+    gap: 22px;
+  }
+
+  .process-list {
+    display: grid;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .process-list article {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 18px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .process-list h2 {
+    margin: 0 0 6px;
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
+
+  .process-list p {
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .mounted-app {
+    min-width: 0;
+    border: 1px solid var(--color-line-strong);
+    background: var(--color-paper-deep);
+  }
+
+  .frame-toolbar {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 18px;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .frame-toolbar strong,
+  .frame-toolbar a {
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .mounted-app iframe {
+    display: block;
+    width: 100%;
+    height: 760px;
+    border: 0;
+    background: #0d0e12;
+  }
+
+  @media (max-width: 1180px) {
+    .app-hero,
+    .app-workbench {
+      grid-template-columns: 1fr;
+    }
+
+    .app-hero h1 {
+      font-size: 5rem;
+    }
+
+    .app-launch {
+      width: fit-content;
+      padding: 0 18px;
+    }
+
+    .process-panel {
+      position: static;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .a1-app-page {
+      gap: 42px;
+      padding-top: 32px;
+    }
+
+    .app-hero h1 {
+      font-size: 3.2rem;
+    }
+
+    .app-hero p {
+      font-size: 17px;
+    }
+
+    .telemetry-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .telemetry-grid div {
+      min-height: 92px;
+      border-right: 0;
+      border-bottom: 1px solid var(--color-line);
+    }
+
+    .telemetry-grid div:last-child {
+      border-bottom: 0;
+    }
+
+    .frame-toolbar {
+      grid-template-columns: 1fr;
+      gap: 6px;
+      padding: 12px 14px;
+    }
+
+    .mounted-app iframe {
+      height: 680px;
+    }
+  }
+</style>

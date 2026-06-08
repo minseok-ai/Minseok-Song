@@ -1,0 +1,41 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageRenderer from "../components/PageRenderer.astro";
+import { visibleNavigationItems } from "../config/navigation";
+import { siteConfig } from "../config/site";
+import {
+  contactEntries,
+  pageEntriesById,
+  projectEntries,
+  writingEntries
+} from "../lib/content/registry";
+
+const section = Astro.params.section ?? "";
+const navItem = visibleNavigationItems().find(
+  (item) => item.path.replace(/^\//, "") === section
+);
+
+if (!navItem) {
+  return Astro.redirect("/");
+}
+
+const page = pageEntriesById.get(navItem.contentEntry);
+
+if (!page) {
+  return Astro.redirect("/");
+}
+---
+
+<Layout
+  title={`${page.title} | ${siteConfig.name}`}
+  description={page.description}
+  headerNote={`${navItem.num} / ${navItem.label}`}
+>
+  <PageRenderer
+    page={page}
+    navItem={navItem}
+    projects={projectEntries}
+    writings={writingEntries}
+    contactEntries={contactEntries}
+  />
+</Layout>

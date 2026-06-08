@@ -1,7 +1,7 @@
 {
   "title": "Projects",
   "navLabel": "Projects",
-  "description": "Editable project index backed by project content entries.",
+  "description": "Project essays, build logs, and implementation notes.",
   "order": 3,
   "path": "/projects",
   "layoutType": "projectIndex",
@@ -9,8 +9,8 @@
   "hidden": false,
   "hero": {
     "eyebrow": "03 / Projects",
-    "title": "Projects",
-    "subtitle": "Add project entries without changing renderer code."
+    "title": "Project Journal",
+    "subtitle": "A1trategize is now the A1 Firm product surface. Projects is for build notes, implementation essays, and case-study drafts."
   },
   "blocks": []
 }

@@ -7,7 +7,7 @@ const contentRoot = path.join(root, "src", "content");
 
 const expectedPages = [
   ["about", "01", "About", "/about", "profile"],
-  ["a1-firms", "02", "A1 Firms", "/a1-firms", "product"],
+  ["a1-firms", "02", "A1 Firms", "/A1-Firm", "product"],
   ["projects", "03", "Projects", "/projects", "projectIndex"],
   ["writings", "04", "Writings", "/writings", "writingIndex"],
   ["contacts", "05", "Contacts", "/contacts", "contact"]
@@ -31,6 +31,15 @@ const allowedBlockTypes = new Set([
   "gallery",
   "link",
   "stats"
+]);
+const allowedWritingBlockTypes = new Set([
+  "paragraph",
+  "heading",
+  "image",
+  "code",
+  "embed",
+  "quote",
+  "divider"
 ]);
 
 function readJson(filePath) {
@@ -83,6 +92,24 @@ function main() {
 
   const contacts = readJson(path.join(contentRoot, "contacts", "primary.json"));
   assert(Array.isArray(contacts.channels), "Contacts channels must be an array");
+
+  for (const fileName of fs.readdirSync(path.join(contentRoot, "writings"))) {
+    if (!fileName.endsWith(".json")) continue;
+
+    const writing = readJson(path.join(contentRoot, "writings", fileName));
+    assert(allowedStatuses.has(writing.status), `${fileName}: invalid status`);
+
+    for (const block of writing.blocks ?? []) {
+      assert(allowedWritingBlockTypes.has(block.type), `${fileName}: invalid writing block type "${block.type}"`);
+      assert(typeof block.id === "string" && block.id.length > 0, `${fileName}: block id is required`);
+
+      if (block.type === "embed") {
+        assert(["canva", "googleSlides", "figma", "pdf", "generic"].includes(block.provider), `${fileName}: invalid embed provider`);
+        assert(/^https?:\/\//.test(block.src), `${fileName}: embed src must be absolute URL`);
+        assert(/^\d+\/\d+$/.test(block.aspectRatio), `${fileName}: embed aspectRatio must look like 16/9`);
+      }
+    }
+  }
 
   console.log(JSON.stringify({ ok: true, pages }, null, 2));
 }

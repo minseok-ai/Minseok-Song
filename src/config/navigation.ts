@@ -26,7 +26,7 @@ export const navigationItems = [
     id: "a1-firms",
     num: "02",
     label: "A1 Firms",
-    path: "/a1-firms",
+    path: "/A1-Firm",
     order: 2,
     layoutType: "product",
     hidden: false,

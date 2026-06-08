@@ -102,6 +102,65 @@ export const aboutBlockSchema = z.discriminatedUnion("type", [
   statsBlockSchema
 ]);
 
+const writingBlockBaseSchema = z.object({
+  id: z.string().min(1),
+  hidden: z.boolean().default(false)
+});
+
+export const paragraphWritingBlockSchema = writingBlockBaseSchema.extend({
+  type: z.literal("paragraph"),
+  body: z.string().default(""),
+  variant: z.enum(["body", "lead", "small"]).default("body")
+});
+
+export const headingWritingBlockSchema = writingBlockBaseSchema.extend({
+  type: z.literal("heading"),
+  body: z.string().default(""),
+  level: z.union([z.literal(2), z.literal(3)]).default(2)
+});
+
+export const imageWritingBlockSchema = writingBlockBaseSchema.extend({
+  type: z.literal("image"),
+  src: z.string().min(1),
+  alt: z.string().default(""),
+  caption: z.string().optional()
+});
+
+export const codeWritingBlockSchema = writingBlockBaseSchema.extend({
+  type: z.literal("code"),
+  language: z.string().default("text"),
+  code: z.string().default("")
+});
+
+export const embedWritingBlockSchema = writingBlockBaseSchema.extend({
+  type: z.literal("embed"),
+  provider: embedProviderSchema,
+  src: z.string().url(),
+  aspectRatio: z.string().regex(/^\d+\/\d+$/).default("16/9"),
+  caption: z.string().optional(),
+  allowFullscreen: z.boolean().default(true)
+});
+
+export const quoteWritingBlockSchema = writingBlockBaseSchema.extend({
+  type: z.literal("quote"),
+  body: z.string().default(""),
+  cite: z.string().optional()
+});
+
+export const dividerWritingBlockSchema = writingBlockBaseSchema.extend({
+  type: z.literal("divider")
+});
+
+export const writingBlockSchema = z.discriminatedUnion("type", [
+  paragraphWritingBlockSchema,
+  headingWritingBlockSchema,
+  imageWritingBlockSchema,
+  codeWritingBlockSchema,
+  embedWritingBlockSchema,
+  quoteWritingBlockSchema,
+  dividerWritingBlockSchema
+]);
+
 export const pageSchema = z.object({
   title: z.string().min(1),
   navLabel: z.string().min(1),
@@ -134,7 +193,7 @@ export const projectSchema = z.object({
   links: z.array(
     z.object({
       label: z.string().min(1),
-      href: z.string().url()
+      href: z.string().min(1)
     })
   ).default([]),
   visual: z.enum(["graph", "deck", "console", "paper", "blank"]).default("blank")
@@ -148,7 +207,8 @@ export const writingSchema = z.object({
   hidden: z.boolean().default(false),
   date: z.string().optional(),
   tags: z.array(z.string()).default([]),
-  body: z.string().default("")
+  body: z.string().default(""),
+  blocks: z.array(writingBlockSchema).default([])
 });
 
 export const contactSchema = z.object({
@@ -167,6 +227,7 @@ export const contactSchema = z.object({
 export type Status = z.infer<typeof statusSchema>;
 export type LayoutType = z.infer<typeof layoutTypeSchema>;
 export type AboutBlock = z.infer<typeof aboutBlockSchema>;
+export type WritingBlock = z.infer<typeof writingBlockSchema>;
 export type PageContent = z.infer<typeof pageSchema>;
 export type ProjectContent = z.infer<typeof projectSchema>;
 export type WritingContent = z.infer<typeof writingSchema>;

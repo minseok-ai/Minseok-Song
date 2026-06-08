@@ -1,0 +1,16 @@
+{
+  "title": "Newsletter Crawler Workbench",
+  "summary": "A project memo for turning external articles into reviewed newsletter issues through source capture, crawl, review, and publish states.",
+  "order": 2,
+  "status": "draft",
+  "hidden": false,
+  "year": "2026",
+  "tags": ["Newsletter", "Crawler", "Editorial System"],
+  "links": [
+    {
+      "label": "Draft note",
+      "href": "/writings"
+    }
+  ],
+  "visual": "console"
+}

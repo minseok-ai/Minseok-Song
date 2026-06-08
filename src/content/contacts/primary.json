@@ -3,16 +3,29 @@
   "channels": [
     {
       "label": "Email",
-      "value": "replace@example.com",
-      "href": "mailto:replace@example.com",
-      "copyable": true,
+      "value": "minseoksong.ai@gmail.com",
+      "copyable": "minseoksong.ai@gmail.com",
       "visible": true
     },
     {
       "label": "LinkedIn",
-      "value": "Add LinkedIn",
-      "href": "https://www.linkedin.com/",
-      "copyable": false,
+      "value": "minseok-ai",
+      "href": "https://www.linkedin.com/in/minseok-ai/",
+      "copyable": "https://www.linkedin.com/in/minseok-ai/",
+      "visible": true
+    },
+    {
+      "label": "A1 Inquiry",
+      "value": "A1trategize product conversation",
+      "href": "/A1-Firm",
+      "copyable": "A1trategize product conversation",
+      "visible": true
+    },
+    {
+      "label": "Project Notes",
+      "value": "Build-log and case-study discussion",
+      "href": "/projects",
+      "copyable": "Build-log and case-study discussion",
       "visible": true
     }
   ]
