@@ -1,5 +1,9 @@
 ---
+import { getSession } from 'auth-astro/server';
+
 const { navItem, hero, writings = [] } = Astro.props;
+
+const session = await getSession(Astro.request);
 
 const newsletterEntries = writings
   .filter((entry) => !entry.data.hidden)
@@ -21,7 +25,9 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     find a worthwhile article, crawl the full text, review the argument,
     then publish a concise Korean note with source trace intact.
   </p>
-  <a class="admin-entry-link" href="/admin/writings">Open writing desk</a>
+  {session && (
+    <a class="admin-entry-link" href="/admin/writings">Open writing desk</a>
+  )}
 </section>
 
 <section class="newsletter-instrument">

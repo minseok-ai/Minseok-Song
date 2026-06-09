@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import type { APIRoute } from "astro";
-import { readAdminSession } from "../../../lib/auth/admin";
+import { getSession } from "auth-astro/server";
 import { writingSchema } from "../../../lib/schemas/content";
 
 const writingDirectory = new URL("../../../content/writings/", import.meta.url);
@@ -18,7 +18,7 @@ const slugify = (value: string) => {
 };
 
 export const POST: APIRoute = async ({ request, cookies }) => {
-  const session = readAdminSession(cookies, import.meta.env);
+  const session = await getSession(request);
 
   if (!session) {
     return Response.json(

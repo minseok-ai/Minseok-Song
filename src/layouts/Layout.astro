@@ -1,8 +1,11 @@
 ---
+import { getSession } from 'auth-astro/server';
+import { SignOut } from 'auth-astro/components';
 import "../styles/tokens.css";
 import { visibleNavigationItems } from "../config/navigation";
 import { siteConfig } from "../config/site";
 
+const session = await getSession(Astro.request);
 const {
   title = "Minseok Song | A1 Firms",
   description = "Layered site foundation for Minseok Song and A1 Firms.",
@@ -86,15 +89,20 @@ const jsonLd = {
           })}
         </nav>
 
-        <div class="header-utility">
+        <div class="header-utility" style="display: flex; gap: 12px; align-items: center;">
           <p class="header-note">{headerNote}</p>
           <div class="login-link" aria-label="Client greeting">
             <picture>
               <source srcset="/A1Firm-logo.webp" type="image/webp" />
               <img class="utility-logo" src="/A1Firm-logo.png" alt="" width="28" height="28" />
             </picture>
-            <span>Hi, Client!</span>
+            <span>{session ? `Hi, ${session.user?.name || 'Minseok'}!` : 'Hi, Client!'}</span>
           </div>
+          {session && (
+            <SignOut style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.6; cursor: pointer; background: none; border: none; color: inherit; padding: 0;">
+              Logout
+            </SignOut>
+          )}
         </div>
       </header>
 

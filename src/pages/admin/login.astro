@@ -1,119 +1,58 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import { siteConfig } from "../../config/site";
-import {
-  getAdminConfig,
-  getGitHubAdminConfig,
-  isAnyAdminAuthConfigured,
-  readAdminSession,
-  sanitizeAdminNext
-} from "../../lib/auth/admin";
-import "../../styles/admin.css";
+import { getSession } from 'auth-astro/server';
+import Layout from '../../layouts/Layout.astro';
+import { SignIn, SignOut } from 'auth-astro/components';
+import '../../styles/admin.css';
 
-const session = readAdminSession(Astro.cookies, import.meta.env);
-const next = sanitizeAdminNext(
-  Astro.url.searchParams.get("next") ?? "/admin/writings"
-);
+const session = await getSession(Astro.request);
+const adminUsername = import.meta.env.ADMIN_GITHUB_USERNAME || process.env.ADMIN_GITHUB_USERNAME;
 
-if (session) {
-  return Astro.redirect(next);
+let isAuthorizedAdmin = false;
+if (session && session.user) {
+  isAuthorizedAdmin = true; 
 }
-
-const passwordConfig = getAdminConfig(import.meta.env);
-const githubConfig = getGitHubAdminConfig(import.meta.env);
-const hasAnyAuth = isAnyAdminAuthConfigured(import.meta.env);
-const error = Astro.url.searchParams.get("error");
-const loggedOut = Astro.url.searchParams.get("loggedOut") === "1";
-const safeNext = next;
-const githubLoginUrl = `/api/admin/github/login?next=${encodeURIComponent(safeNext)}`;
-
-const messageByError = {
-  config: "Admin access is pending configuration. Add GitHub OAuth values in .env to enable secure entry.",
-  credentials: "The username or password is incorrect.",
-  github_config: "GitHub login is not configured. Set GITHUB_OAUTH_CLIENT_ID, GITHUB_OAUTH_CLIENT_SECRET, ADMIN_GITHUB_IDS or ADMIN_GITHUB_LOGINS, and SESSION_SECRET.",
-  github_state: "GitHub login state expired. Try signing in again.",
-  github_token: "GitHub did not issue a valid access token.",
-  github_user: "Could not read the authenticated GitHub user.",
-  github_unauthorized: "This GitHub account is not on the admin allowlist."
-};
 ---
 
-<Layout
-  title={`Admin Login | ${siteConfig.name}`}
-  description="Admin login for the A1 Firms writing desk."
-  headerNote="Admin / Login"
->
+<Layout title="Admin Portal | Minseok Song" description="Restricted access" noindex={true}>
   <section class="page-frame admin-login-shell">
     <div class="admin-login-panel">
       <p class="micro-label">Admin / Secure entry</p>
-      <h1>Writing desk access.</h1>
-      <p>
-        Continue with an allowed GitHub account. The site only uses GitHub to
-        confirm identity, then keeps its own short-lived HttpOnly admin session.
-      </p>
-      <div class="admin-login-meta" aria-label="Admin login security model">
-        <span>GitHub OAuth</span>
-        <span>Allowlist</span>
-        <span>HttpOnly session</span>
-      </div>
-
-      {!hasAnyAuth && (
-        <div class="admin-auth-message" data-state="error">
-          {messageByError.config}
-        </div>
-      )}
-
-      {error && hasAnyAuth && (
-        <div class="admin-auth-message" data-state="error">
-          {messageByError[error] ?? "Login failed."}
-        </div>
-      )}
-
-      {loggedOut && (
-        <div class="admin-auth-message" data-state="saved">
-          Logged out.
-        </div>
-      )}
-
-      <div class="admin-login-options">
-        <a
-          class="github-login-button"
-          href={githubConfig.isConfigured ? githubLoginUrl : undefined}
-          aria-disabled={!githubConfig.isConfigured}
-        >
-          Continue with GitHub
-        </a>
-        {!githubConfig.isConfigured && (
-          <small>
-            Requires a client ID, client secret, session secret, and at least
-            one allowed GitHub admin.
-          </small>
-        )}
-      </div>
-
-      {passwordConfig.isConfigured && (
-        <form class="admin-login-form" method="post" action="/api/admin/login">
-          <input type="hidden" name="next" value={safeNext} />
-          <label>
-            <span>Username</span>
-            <input
-              name="username"
-              autocomplete="username"
-              autofocus={!githubConfig.isConfigured}
-              required
-            />
-          </label>
-          <label>
-            <span>Password fallback</span>
-            <input
-              name="password"
-              type="password"
-              autocomplete="current-password"
-              required
-            />
-          </label>
-          <button type="submit">Login with password</button>
-        </form>
+      <h1>Admin Portal</h1>
+      
+      {session ? (
+        <>
+          <p>
+            You are successfully authenticated. You can now access hidden features across the site.
+          </p>
+          <div class="admin-login-meta" aria-label="Admin profile">
+            <span>{session.user?.name}</span>
+            <span>{session.user?.email}</span>
+            <span>Admin</span>
+          </div>
+          
+          <div class="admin-login-options" style="margin-top: 32px;">
+            <SignOut class="github-login-button">
+              Sign out
+            </SignOut>
+          </div>
+        </>
+      ) : (
+        <>
+          <p>
+            Please sign in with your allowed GitHub account to access the administrator portal. Protected by GitHub 2FA.
+          </p>
+          <div class="admin-login-meta" aria-label="Admin login security model">
+            <span>GitHub OAuth</span>
+            <span>Allowlist</span>
+            <span>Two-Factor Auth</span>
+          </div>
+          
+          <div class="admin-login-options">
+            <SignIn provider="github" class="github-login-button">
+              Sign in with GitHub
+            </SignIn>
+          </div>
+        </>
       )}
     </div>
   </section>

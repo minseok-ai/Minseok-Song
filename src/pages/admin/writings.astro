@@ -2,15 +2,16 @@
 import WritingEditor from "../../components/admin/WritingEditor";
 import Layout from "../../layouts/Layout.astro";
 import { siteConfig } from "../../config/site";
-import { readAdminSession } from "../../lib/auth/admin";
+import { getSession } from "auth-astro/server";
+import { SignOut } from "auth-astro/components";
 import { writingEntries } from "../../lib/content/registry";
 import "../../styles/admin.css";
 
-const session = readAdminSession(Astro.cookies, import.meta.env);
+const session = await getSession(Astro.request);
 
 if (!session) {
   return Astro.redirect(
-    `/admin/login?next=${encodeURIComponent(Astro.url.pathname)}`
+    `/admin/login`
   );
 }
 
@@ -21,10 +22,7 @@ const initialWritings = writingEntries
     data: entry.data
   }));
 
-const sessionLabel =
-  session.provider === "github"
-    ? `Signed in with GitHub as @${session.username}`
-    : `Signed in as ${session.username}`;
+const sessionLabel = `Signed in with GitHub as ${session.user?.name || session.user?.email}`;
 ---
 
 <Layout
@@ -41,9 +39,7 @@ const sessionLabel =
       </div>
       <nav class="admin-head-actions" aria-label="Admin actions">
         <a href="/writings">Public index</a>
-        <form method="post" action="/api/admin/logout">
-          <button type="submit">Logout</button>
-        </form>
+        <SignOut style="font-family: inherit; font-size: inherit; font-weight: inherit; border: none; background: none; color: inherit; cursor: pointer; padding: 0;">Logout</SignOut>
       </nav>
     </header>
 

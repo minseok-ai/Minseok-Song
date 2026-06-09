@@ -652,9 +652,9 @@ input[type="file"] {
 }
 
 .admin-login-shell {
-  align-items: start;
+  align-items: center;
   min-height: calc(100svh - var(--header-height));
-  padding-top: clamp(72px, 10vh, 128px);
+  padding-top: 0;
 }
 
 .admin-login-panel {
