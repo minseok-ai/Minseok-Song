@@ -1,1 +1,948 @@
--NoNewline
+---
+const { page, navItem, hero, projects = [] } = Astro.props;
+
+const visibleProjects = projects
+  .filter((entry) => !entry.data.hidden && entry.data.status === "published")
+  .sort((a, b) => a.data.order - b.data.order);
+
+const a1FirmsProjects = visibleProjects.filter((p) => p.data.tags.includes("A1 Firms"));
+const otherProjects = visibleProjects.filter((p) => !p.data.tags.includes("A1 Firms"));
+
+
+const visualMeta = {
+  graph: {
+    label: "System graph",
+    tone: "green"
+  },
+  deck: {
+    label: "Deck surface",
+    tone: "warm"
+  },
+  console: {
+    label: "Console flow",
+    tone: "blue"
+  },
+  paper: {
+    label: "Research memo",
+    tone: "paper"
+  },
+  blank: {
+    label: "Open artifact",
+    tone: "neutral"
+  }
+};
+
+const externalHref = (href = "") => /^https?:\/\//.test(href);
+const projectCode = (order) => `PX-${String(order ?? 0).padStart(2, "0")}`;
+
+const degToRad = (deg) => (deg * Math.PI) / 180;
+const getPenta = (scores) => {
+  const p = scores || [20, 20, 20, 20, 20];
+  const rScale = 32; // max radius for vertices
+  
+  const ptAI = { x: 50 + (p[0]/100)*rScale * Math.cos(degToRad(-90)), y: 54 + (p[0]/100)*rScale * Math.sin(degToRad(-90)) };
+  const ptSemi = { x: 50 + (p[1]/100)*rScale * Math.cos(degToRad(-18)), y: 54 + (p[1]/100)*rScale * Math.sin(degToRad(-18)) };
+  const ptPhys = { x: 50 + (p[2]/100)*rScale * Math.cos(degToRad(54)), y: 54 + (p[2]/100)*rScale * Math.sin(degToRad(54)) };
+  const ptBiz = { x: 50 + (p[3]/100)*rScale * Math.cos(degToRad(126)), y: 54 + (p[3]/100)*rScale * Math.sin(degToRad(126)) };
+  const ptStrat = { x: 50 + (p[4]/100)*rScale * Math.cos(degToRad(198)), y: 54 + (p[4]/100)*rScale * Math.sin(degToRad(198)) };
+  
+  return {
+    polygon: `${ptAI.x},${ptAI.y} ${ptSemi.x},${ptSemi.y} ${ptPhys.x},${ptPhys.y} ${ptBiz.x},${ptBiz.y} ${ptStrat.x},${ptStrat.y}`,
+    pts: [ptAI, ptSemi, ptPhys, ptBiz, ptStrat],
+    scores: p
+  };
+};
+---
+
+<div class="page-kicker">
+  <span>{hero.eyebrow ?? `${navItem.num} / ${navItem.label}`}</span>
+  <i></i>
+  <strong>Project ledger</strong>
+</div>
+
+<section class="project-hero" aria-label="Projects overview">
+  <div class="project-hero-copy">
+    <p class="micro-label">Projects / Operating artifacts</p>
+    <h1>{hero.title}</h1>
+    <p>{hero.subtitle || page.description}</p>
+  </div>
+
+  <aside class="project-signal-panel" aria-label="Project status summary">
+    <div>
+      <span>Published</span>
+      <strong>{String(visibleProjects.length).padStart(2, "0")}</strong>
+    </div>
+    <div>
+      <span>Primary mode</span>
+      <strong>Build log</strong>
+    </div>
+    <div>
+      <span>Archive state</span>
+      <strong>Curated</strong>
+    </div>
+  </aside>
+</section>
+
+{visibleProjects.length === 0 && (
+  <section class="empty-projects">
+    <span class="micro-label">Projects pending</span>
+    <h2>Published project artifacts will appear here.</h2>
+    <p>Draft entries stay out of the public index until they are marked published.</p>
+  </section>
+)}
+
+{a1FirmsProjects.length > 0 && (
+  <section class="project-grid-section" aria-label="A1 Firms Ecosystem">
+    <div class="project-grid-head">
+      <p class="micro-label">A1 Firms</p>
+      <h2>Enterprise Strategy & Robotics Ecosystem.</h2>
+    </div>
+
+    <div class="project-grid">
+      {a1FirmsProjects.map((project, index) => {
+        const visual = visualMeta[project.data.visual] ?? visualMeta.blank;
+        const primaryLink = project.data.links[0];
+        const pData = getPenta(project.data.pentaPoint);
+
+        return (
+          <article class={`project-card reveal-up ${index === 0 ? 'bento-hero' : ''}`} style={`--project-order: ${index};`} data-tone={visual.tone}>
+            <div class="card-visual" aria-hidden="true">
+              <svg class="tp-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+                <circle cx="50" cy="54" r="32" class="tp-grid-circle" />
+                <circle cx="50" cy="54" r="16" class="tp-grid-circle" />
+                
+                <g class="tp-rotating-group">
+                  <line x1="50" y1="54" x2="50" y2="22" class="tp-axis-line" />
+                  <line x1="50" y1="54" x2="80.43" y2="44.11" class="tp-axis-line" />
+                  <line x1="50" y1="54" x2="68.81" y2="79.89" class="tp-axis-line" />
+                  <line x1="50" y1="54" x2="31.19" y2="79.89" class="tp-axis-line" />
+                  <line x1="50" y1="54" x2="19.57" y2="44.11" class="tp-axis-line" />
+                  
+                  <polygon points={pData.polygon} class="tp-polygon-core" />
+                  {pData.pts.map(pt => <circle cx={pt.x} cy={pt.y} r="1.5" class="tp-vertex" />)}
+                  
+                  <text x="50" y="14" class="tp-label" text-anchor="middle">AI/SW {pData.scores[0]}</text>
+                  <text x="88" y="42" class="tp-label" text-anchor="middle">NANO/HW {pData.scores[1]}</text>
+                  <text x="74" y="88" class="tp-label" text-anchor="middle">R&D {pData.scores[2]}</text>
+                  <text x="26" y="88" class="tp-label" text-anchor="middle">PM {pData.scores[3]}</text>
+                  <text x="12" y="42" class="tp-label" text-anchor="middle">GTM {pData.scores[4]}</text>
+                </g>
+              </svg>
+            </div>
+            <div class="card-meta">
+              <span>{projectCode(project.data.order)}</span>
+              <span>{project.data.year ?? "Now"} / {visual.label}</span>
+            </div>
+            <h3><span>{project.data.title}</span></h3>
+            <p>{project.data.summary}</p>
+            <div class="tag-row compact">
+              {project.data.tags.map((tag) => <span>{tag}</span>)}
+            </div>
+            {primaryLink && (
+              primaryLink.href === "#" ? (
+                <span class="card-link is-pending">{primaryLink.label}</span>
+              ) : (
+                <a
+                  class="card-link"
+                  href={primaryLink.href}
+                  target={externalHref(primaryLink.href) ? "_blank" : undefined}
+                  rel={externalHref(primaryLink.href) ? "noopener noreferrer" : undefined}
+                >
+                  {primaryLink.label}
+                </a>
+              )
+            )}
+          </article>
+        );
+      })}
+    </div>
+  </section>
+)}
+
+{otherProjects.length > 0 && (
+  <section class="project-grid-section" style="margin-top: 64px;" aria-label="Academic & Research Projects">
+    <div class="project-grid-head">
+      <p class="micro-label">Research & Academia</p>
+      <h2>Engineering, AI Models, and Scientific Validation.</h2>
+    </div>
+
+    <div class="project-grid">
+      {otherProjects.map((project, index) => {
+        const visual = visualMeta[project.data.visual] ?? visualMeta.blank;
+        const primaryLink = project.data.links[0];
+        const pData = getPenta(project.data.pentaPoint);
+
+        return (
+          <article class="project-card reveal-up" style={`--project-order: ${index};`} data-tone={visual.tone}>
+            <div class="card-visual" aria-hidden="true">
+              <svg class="tp-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+                <circle cx="50" cy="54" r="32" class="tp-grid-circle" />
+                <circle cx="50" cy="54" r="16" class="tp-grid-circle" />
+                
+                <g class="tp-rotating-group">
+                  <line x1="50" y1="54" x2="50" y2="22" class="tp-axis-line" />
+                  <line x1="50" y1="54" x2="80.43" y2="44.11" class="tp-axis-line" />
+                  <line x1="50" y1="54" x2="68.81" y2="79.89" class="tp-axis-line" />
+                  <line x1="50" y1="54" x2="31.19" y2="79.89" class="tp-axis-line" />
+                  <line x1="50" y1="54" x2="19.57" y2="44.11" class="tp-axis-line" />
+                  
+                  <polygon points={pData.polygon} class="tp-polygon-core" />
+                  {pData.pts.map(pt => <circle cx={pt.x} cy={pt.y} r="1.5" class="tp-vertex" />)}
+                  
+                  <text x="50" y="14" class="tp-label" text-anchor="middle">AI/SW {pData.scores[0]}</text>
+                  <text x="88" y="42" class="tp-label" text-anchor="middle">NANO/HW {pData.scores[1]}</text>
+                  <text x="74" y="88" class="tp-label" text-anchor="middle">R&D {pData.scores[2]}</text>
+                  <text x="26" y="88" class="tp-label" text-anchor="middle">PM {pData.scores[3]}</text>
+                  <text x="12" y="42" class="tp-label" text-anchor="middle">GTM {pData.scores[4]}</text>
+                </g>
+              </svg>
+            </div>
+            <div class="card-meta">
+              <span>{projectCode(project.data.order)}</span>
+              <span>{project.data.year ?? "Now"} / {visual.label}</span>
+            </div>
+            <h3><span>{project.data.title}</span></h3>
+            <p>{project.data.summary}</p>
+            <div class="tag-row compact">
+              {project.data.tags.map((tag) => <span>{tag}</span>)}
+            </div>
+            {primaryLink && (
+              primaryLink.href === "#" ? (
+                <span class="card-link is-pending">{primaryLink.label}</span>
+              ) : (
+                <a
+                  class="card-link"
+                  href={primaryLink.href}
+                  target={externalHref(primaryLink.href) ? "_blank" : undefined}
+                  rel={externalHref(primaryLink.href) ? "noopener noreferrer" : undefined}
+                >
+                  {primaryLink.label}
+                </a>
+              )
+            )}
+          </article>
+        );
+      })}
+    </div>
+  </section>
+)}
+
+<script is:inline>
+  function initProjectCards() {
+    const projectCards = document.querySelectorAll('.project-card');
+    projectCards.forEach(card => {
+      // Remove old listeners to prevent duplicates if astro:page-load fires multiple times
+      const newCard = card.cloneNode(true);
+      if (card.parentNode) {
+        card.parentNode.replaceChild(newCard, card);
+      }
+      
+      newCard.addEventListener('mousemove', (e) => {
+        const rect = newCard.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        newCard.style.setProperty('--mouse-x', `${x}px`);
+        newCard.style.setProperty('--mouse-y', `${y}px`);
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -3;
+        const rotateY = ((x - centerX) / centerX) * 3;
+        
+        newCard.style.transform = `perspective(1000px) scale3d(1.02, 1.02, 1.02) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+
+      newCard.addEventListener('mouseenter', () => {
+        newCard.style.transition = 'transform 0.1s ease-out, box-shadow 0.3s ease, border-color 0.3s ease';
+      });
+
+      newCard.addEventListener('mouseleave', () => {
+        newCard.style.transition = 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s ease, border-color 0.6s ease, background 0.6s ease';
+        newCard.style.transform = `perspective(1000px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg)`;
+      });
+    });
+  }
+
+  initProjectCards();
+  document.addEventListener('astro:page-load', initProjectCards);
+</script>
+
+<style>
+  .project-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.38fr);
+    gap: clamp(32px, 6vw, 88px);
+    align-items: end;
+  }
+
+  .project-hero-copy {
+    display: grid;
+    gap: 20px;
+    max-width: 1040px;
+  }
+
+  .project-hero h1 {
+    margin: 0;
+    font-family: "Outfit", var(--font-serif);
+    font-size: 6rem;
+    font-weight: 850;
+    line-height: 0.92;
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
+
+  .project-hero p:not(.micro-label) {
+    max-width: 720px;
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 18px;
+    line-height: 1.7;
+    text-wrap: pretty;
+  }
+
+  .project-signal-panel {
+    display: grid;
+    border-top: 1px solid var(--color-line-strong);
+  }
+
+  .project-signal-panel div {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: baseline;
+    min-height: 74px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .project-signal-panel span,
+  .card-meta span {
+    color: var(--color-ink-muted);
+    font-size: 11px;
+    font-weight: 850;
+    text-transform: uppercase;
+  }
+
+  .project-signal-panel strong {
+    font-family: var(--font-mono);
+    font-size: 17px;
+    font-weight: 850;
+    color: var(--color-ink);
+  }
+
+  .featured-project {
+    display: grid;
+    grid-template-columns: minmax(340px, 0.88fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: stretch;
+    padding: clamp(24px, 3vw, 36px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-card);
+    background: var(--glass-bg);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: var(--glass-blur);
+    overflow: hidden;
+    transition: border-color var(--motion-base) ease, box-shadow var(--motion-base) ease;
+  }
+  
+  .featured-project:hover {
+    border-color: var(--color-green);
+    box-shadow: 0 12px 40px var(--glass-shadow), 0 0 0 1px var(--color-green-soft);
+  }
+
+  .project-visual {
+    position: relative;
+    min-height: 460px;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 24% 20%, rgba(107, 156, 242, 0.22), transparent 34%),
+      radial-gradient(circle at 80% 76%, rgba(var(--rgb-warm), 0.15), transparent 32%),
+      var(--color-field);
+    transition: border-color var(--motion-base) ease;
+  }
+  
+  .featured-project:hover .project-visual {
+    border-color: var(--color-green);
+  }
+
+  .visual-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: radial-gradient(circle at 50% 50%, black, transparent 84%);
+  }
+
+  .console-lines {
+    position: absolute;
+    inset: auto 34px 34px;
+    display: grid;
+    gap: 14px;
+  }
+
+  .console-lines span,
+  .paper-stack span {
+    display: block;
+    height: 10px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--color-accent), transparent);
+    opacity: 0.72;
+  }
+
+  .console-lines span:nth-child(2) {
+    width: 74%;
+    background: linear-gradient(90deg, var(--color-warm), transparent);
+  }
+
+  .console-lines span:nth-child(3) {
+    width: 48%;
+    background: linear-gradient(90deg, var(--color-green), transparent);
+  }
+
+  .graph-node-map {
+    position: absolute;
+    inset: 72px;
+  }
+
+  .graph-node-map::before,
+  .graph-node-map::after,
+  .graph-node-map i {
+    content: "";
+    position: absolute;
+    height: 1px;
+    background: var(--color-line-strong);
+    transform-origin: left;
+  }
+
+  .graph-node-map::before {
+    inset: 44% auto auto 16%;
+    width: 72%;
+    transform: rotate(18deg);
+  }
+
+  .graph-node-map::after {
+    inset: 58% auto auto 20%;
+    width: 64%;
+    transform: rotate(-22deg);
+  }
+
+  .graph-node-map i {
+    inset: 50% auto auto 18%;
+    width: 68%;
+  }
+
+  .graph-node-map span {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--color-accent);
+    border-radius: 50%;
+    background: var(--color-paper);
+    box-shadow: 0 0 24px rgba(107, 156, 242, 0.3);
+  }
+
+  .graph-node-map span:nth-child(1) {
+    top: 12%;
+    left: 12%;
+  }
+
+  .graph-node-map span:nth-child(2) {
+    top: 52%;
+    left: 46%;
+    border-color: var(--color-warm);
+  }
+
+  .graph-node-map span:nth-child(3) {
+    right: 12%;
+    bottom: 10%;
+    border-color: var(--color-green);
+  }
+
+  .paper-stack {
+    position: absolute;
+    inset: 72px 54px;
+    display: grid;
+    align-content: center;
+    gap: 20px;
+  }
+
+  .paper-stack span {
+    height: 72px;
+    border-radius: 8px;
+    border: 1px solid var(--color-line);
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+  }
+
+  .featured-copy {
+    display: grid;
+    align-content: center;
+    gap: 22px;
+  }
+
+  .featured-copy h2 {
+    margin: 0;
+    max-width: 860px;
+    font-family: "Outfit", var(--font-serif);
+    font-size: 4rem;
+    font-weight: 850;
+    line-height: 0.98;
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
+
+  .featured-copy p {
+    max-width: 720px;
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 17px;
+    line-height: 1.72;
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag-row span {
+    min-height: 28px;
+    padding: 7px 10px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    color: var(--color-ink-muted);
+    background: rgba(255, 255, 255, 0.03);
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .project-links,
+  .project-grid-section {
+    display: grid;
+    gap: 24px;
+  }
+
+  .project-links {
+    grid-template-columns: repeat(auto-fit, minmax(160px, max-content));
+  }
+
+  .project-links a,
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    width: fit-content;
+    padding: 0 18px;
+    border: 1px solid var(--color-ink);
+    border-radius: 8px;
+    color: var(--color-paper-deep);
+    background: var(--color-ink);
+    font-size: 13px;
+    font-weight: 850;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      border-color var(--motion-fast) ease,
+      background var(--motion-fast) ease,
+      transform var(--motion-fast) ease;
+  }
+
+  .project-links a:hover,
+  .card-link:hover {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    transform: translateY(-1px);
+  }
+
+  @keyframes scanline {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+  }
+
+  .card-link.is-pending {
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 255, 255, 0.03) 10px,
+      rgba(255, 255, 255, 0.03) 20px
+    );
+    background-size: 200% 200%;
+    animation: scanline 20s linear infinite;
+    border-color: var(--color-line);
+    color: var(--color-ink-muted);
+    cursor: default;
+    pointer-events: none;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+  }
+
+  .project-grid-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    align-items: end;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--color-line-strong);
+  }
+
+  .project-grid-head h2 {
+    max-width: 660px;
+    margin: 0;
+    color: var(--color-ink);
+    font-family: "Outfit", var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 760;
+    line-height: 1.28;
+    text-align: right;
+    text-wrap: balance;
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 26px;
+  }
+
+  .bento-hero {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .bento-hero .card-visual {
+    height: 280px;
+  }
+
+  .bento-hero h3 {
+    font-size: 3.05rem;
+    max-width: 760px;
+  }
+
+  .project-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 480px;
+    padding: 30px;
+    border: 1px solid var(--glass-border);
+    border-radius: calc(var(--radius-card) + 8px);
+    background: linear-gradient(145deg, rgba(255,255,255,0.02) 0%, transparent 100%), var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    overflow: hidden;
+    will-change: transform;
+    transition:
+      border-color 0.6s ease,
+      background 0.6s ease,
+      transform 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+      box-shadow 0.6s ease;
+  }
+
+  .project-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    pointer-events: none;
+    opacity: 0.55;
+  }
+
+  .project-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(800px circle at var(--mouse-x, 20%) var(--mouse-y, 0%), rgba(107, 156, 242, 0.12), transparent 44%);
+    opacity: 0;
+    transition: opacity var(--motion-base) ease;
+    pointer-events: none;
+  }
+
+  .project-card[data-tone="warm"]::before,
+  .project-card[data-tone="paper"]::before {
+    background: radial-gradient(800px circle at var(--mouse-x, 20%) var(--mouse-y, 0%), rgba(var(--rgb-warm), 0.12), transparent 44%);
+  }
+
+  .project-card[data-tone="green"]::before {
+    background: radial-gradient(800px circle at var(--mouse-x, 20%) var(--mouse-y, 0%), rgba(108, 163, 125, 0.13), transparent 44%);
+  }
+
+  .project-card:hover {
+    border-color: var(--color-line-strong);
+    background: var(--color-panel-solid);
+    box-shadow: 0 18px 48px var(--glass-shadow), 0 0 0 1px var(--color-green-soft);
+    transform: translateY(-4px);
+  }
+
+  .project-card:hover::before {
+    opacity: 1;
+  }
+
+  @keyframes meshFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .card-visual {
+    position: relative;
+    display: block;
+    height: 160px;
+    margin: -8px -8px 8px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: calc(var(--radius-card) - 2px);
+    overflow: hidden;
+    background: radial-gradient(circle at top left, rgba(107, 156, 242, 0.18), transparent 70%),
+                radial-gradient(circle at bottom right, rgba(var(--rgb-warm), 0.12), transparent 70%),
+                var(--color-field);
+    background-size: 200% 200%;
+    animation: meshFlow 15s ease-in-out infinite;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.25);
+  }
+
+  .project-card[data-tone="green"] .card-visual {
+    background: radial-gradient(circle at top right, rgba(108, 163, 125, 0.22), transparent 70%),
+                radial-gradient(circle at bottom left, rgba(108, 163, 125, 0.08), transparent 70%),
+                var(--color-field);
+    background-size: 200% 200%;
+  }
+
+  .project-card[data-tone="warm"] .card-visual,
+  .project-card[data-tone="paper"] .card-visual {
+    background: radial-gradient(circle at top right, rgba(var(--rgb-warm), 0.2), transparent 70%),
+                radial-gradient(circle at bottom left, rgba(var(--rgb-warm), 0.08), transparent 70%),
+                var(--color-field);
+    background-size: 200% 200%;
+  }
+
+  .tp-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .tp-grid-circle {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 0.5;
+    stroke-dasharray: 2 2;
+  }
+
+  .tp-axis-line {
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 0.5;
+  }
+
+  .tp-label {
+    fill: rgba(255, 255, 255, 0.5);
+    font-size: 6.5px;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  @keyframes spinTriplePoint {
+    0% { transform: rotate(-10deg); }
+    50% { transform: rotate(10deg); }
+    100% { transform: rotate(-10deg); }
+  }
+
+  .tp-rotating-group {
+    transform-origin: 50px 54px;
+    animation: spinTriplePoint 12s ease-in-out infinite;
+  }
+
+  .tp-polygon-core {
+    fill: rgba(107, 156, 242, 0.25);
+    stroke: rgba(107, 156, 242, 0.8);
+    stroke-width: 1;
+    filter: drop-shadow(0 0 4px rgba(107, 156, 242, 0.5));
+    transition: fill 0.3s ease, stroke 0.3s ease;
+  }
+
+  .tp-vertex {
+    fill: #fff;
+    filter: drop-shadow(0 0 2px rgba(255,255,255,0.8));
+  }
+
+  .project-card[data-tone="green"] .tp-polygon-core {
+    fill: rgba(108, 163, 125, 0.25);
+    stroke: rgba(108, 163, 125, 0.8);
+    filter: drop-shadow(0 0 4px rgba(108, 163, 125, 0.5));
+  }
+  
+  .project-card[data-tone="warm"] .tp-polygon-core,
+  .project-card[data-tone="paper"] .tp-polygon-core {
+    fill: rgba(var(--rgb-warm), 0.25);
+    stroke: rgba(var(--rgb-warm), 0.8);
+    filter: drop-shadow(0 0 4px rgba(var(--rgb-warm), 0.5));
+  }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .card-meta span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 8px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-panel-solid) 42%, transparent);
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .card-meta span:first-child {
+    border-color: color-mix(in srgb, var(--color-accent) 42%, transparent);
+    color: var(--color-accent-ink);
+    background: var(--color-accent-soft);
+  }
+
+  .project-card h3 {
+    margin: 0;
+    max-width: 560px;
+    font-family: "Outfit", "Pretendard", var(--font-sans);
+    font-size: 2.08rem;
+    font-weight: 820;
+    line-height: 1.08;
+    letter-spacing: 0;
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+
+  .project-card h3 span {
+    background: linear-gradient(180deg, var(--color-ink), var(--color-ink));
+    background: linear-gradient(
+      180deg,
+      var(--color-ink) 0%,
+      color-mix(in srgb, var(--color-ink) 78%, var(--color-accent-ink)) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .project-card p {
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 14.5px;
+    line-height: 1.72;
+    text-wrap: pretty;
+  }
+
+  .tag-row.compact span {
+    min-height: 24px;
+    padding: 6px 9px;
+    font-size: 10px;
+    font-weight: 850;
+    border-color: var(--color-line);
+    color: var(--color-ink-muted);
+    background: color-mix(in srgb, var(--color-panel-solid) 36%, transparent);
+  }
+
+  .card-link {
+    align-self: end;
+    margin-top: auto;
+    letter-spacing: 0;
+  }
+
+  .empty-projects {
+    display: grid;
+    gap: 12px;
+    padding: 34px 0;
+    border-top: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .empty-projects h2 {
+    margin: 0;
+    font-size: 2rem;
+  }
+
+  .empty-projects p {
+    margin: 0;
+    color: var(--color-ink-soft);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 1180px) {
+    .project-hero,
+    .featured-project,
+    .project-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .bento-hero {
+      grid-column: auto;
+      grid-row: auto;
+    }
+
+    .bento-hero .card-visual {
+      height: 180px;
+    }
+
+    .project-visual {
+      min-height: 340px;
+    }
+
+    .project-grid-head {
+      display: grid;
+      align-items: start;
+    }
+
+    .project-grid-head h2 {
+      text-align: left;
+    }
+
+    .project-hero h1 {
+      font-size: 4.6rem;
+    }
+
+    .featured-copy h2,
+    .bento-hero h3 {
+      font-size: 2.6rem;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .featured-project {
+      padding: 18px;
+    }
+
+    .project-card {
+      min-height: auto;
+      padding: 24px;
+    }
+
+    .project-signal-panel div {
+      min-height: 58px;
+    }
+
+    .project-hero h1 {
+      font-size: 3.3rem;
+    }
+
+    .project-card h3 {
+      font-size: 1.72rem;
+    }
+
+    .card-meta {
+      flex-wrap: wrap;
+    }
+  }
+</style>

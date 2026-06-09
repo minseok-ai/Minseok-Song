@@ -19,10 +19,10 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
 <section class="about-hero">
   <figure class="identity-figure" aria-label="Minseok Song identity diagram">
     <div class="identity-orbit">
-      <div class="profile-center" style="position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; border: 1px solid rgba(220, 184, 125, 0.3);">
+      <div class="profile-center" style="position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; border: 1px solid rgba(var(--rgb-warm), 0.3);">
         <div class="profile-bg" style="position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; background-image: url('/profile.jpg'); background-size: cover; background-position: center; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); filter: grayscale(20%) contrast(1.1);"></div>
-        <div class="profile-scanner-line" style="position: absolute; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(220, 184, 125, 0.8), transparent); filter: drop-shadow(0 0 4px rgba(220, 184, 125, 0.4)); opacity: 0.6; pointer-events: none; animation: profileScanner 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;"></div>
-        <div class="profile-grid-layer" style="position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(rgba(220, 184, 125, 0.1) 1px, transparent 1px); background-size: 16px 16px; opacity: 0.5; border-radius: 50%;"></div>
+        <div class="profile-scanner-line" style="position: absolute; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(var(--rgb-warm), 0.8), transparent); filter: drop-shadow(0 0 4px rgba(var(--rgb-warm), 0.4)); opacity: 0.6; pointer-events: none; animation: profileScanner 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;"></div>
+        <div class="profile-grid-layer" style="position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(rgba(var(--rgb-warm), 0.1) 1px, transparent 1px); background-size: 16px 16px; opacity: 0.5; border-radius: 50%;"></div>
         <div class="profile-vignette" style="position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.7); border-radius: 50%;"></div>
       </div>
       <div class="orbit-ring">
@@ -73,7 +73,7 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
           body: "Design, product, and operating systems are being composed into one public surface."
         }
       ]).map((event, index) => (
-        <li class={index === 0 ? "is-current" : ""}>
+        <li class={`reveal-in stagger-${(index % 5) + 1} ${index === 0 ? "is-current" : ""}`}>
           {event.title.includes('A1trategize') && <img src="/A1Firm-logo.webp" alt="A1trategize" class="timeline-logo" />}
           {event.title.includes('NNFC') && <img src="/NNFC-logo.webp" alt="KAIST NNFC" class="timeline-logo" />}
           {event.title.includes('KRISS') && <img src="/KRISS-logo.webp" alt="KRISS" class="timeline-logo" />}
@@ -92,11 +92,11 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
   <article class="thesis-copy">
     <p class="micro-label">§ 1 — The Operating Question</p>
     <h1>{hero.title}</h1>
-    <p class="lead-copy">
+    <p class="lead-copy reveal-up">
       {leadBlock?.body ??
         "I build structured ways to turn ambiguous strategic questions into usable systems, product surfaces, and durable operating habits."}
     </p>
-    <div class="essay-columns">
+    <div class="essay-columns reveal-up stagger-1">
       {visibleBlocks
         .filter((block) => block.type === "text" && block.variant === "body")
         .map((block) => (
@@ -104,7 +104,7 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
         ))}
     </div>
     {statBlock && (
-      <dl class="signal-strip">
+      <dl class="signal-strip reveal-up stagger-2">
         {statBlock.stats.map((stat) => (
           <div>
             <dt>{stat.label}</dt>
@@ -139,15 +139,30 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     
   }
 
-  // Mouse tracking for metric strip glass cards
   const signalCards = document.querySelectorAll('.signal-strip div');
   signalCards.forEach(card => {
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -5;
+      const rotateY = ((x - centerX) / centerX) * 5;
+      
       card.style.setProperty('--mouse-x', `${x}px`);
       card.style.setProperty('--mouse-y', `${y}px`);
+      card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+      card.style.transition = 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+    });
+    
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'border-color 0.5s ease, box-shadow 0.5s ease'; // Remove transform from transition during hover
     });
   });
 
@@ -227,13 +242,13 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     const edgeEls = allEdges.map(e => {
       const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
       if (e.type === 'inter') {
-        line.setAttribute("stroke", "rgba(220, 184, 125, 0.8)");
-        line.setAttribute("stroke-opacity", "0.2");
+        line.setAttribute("stroke", "var(--color-warm)");
+        line.setAttribute("stroke-opacity", "0.3");
         line.setAttribute("stroke-width", "1");
         line.setAttribute("stroke-dasharray", "2 4");
       } else {
-        line.setAttribute("stroke", "rgba(220, 184, 125, 0.8)");
-        line.setAttribute("stroke-opacity", e.layer === 0 ? "0.4" : e.layer === 1 ? "0.2" : "0.08");
+        line.setAttribute("stroke", "var(--color-warm)");
+        line.setAttribute("stroke-opacity", e.layer === 0 ? "0.5" : e.layer === 1 ? "0.2" : "0.1");
         line.setAttribute("stroke-width", "1.5");
       }
       edgesGroup.appendChild(line);
@@ -242,8 +257,8 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
 
     const nodeEls = allNodes.map(n => {
       const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      circle.setAttribute("fill", "var(--color-bg)");
-      circle.setAttribute("stroke", "rgba(220, 184, 125, 0.8)");
+      circle.setAttribute("fill", "var(--color-paper)");
+      circle.setAttribute("stroke", "var(--color-warm)");
       circle.setAttribute("stroke-width", "1.5");
       circle.setAttribute("opacity", n.layer === 0 ? "0.8" : n.layer === 1 ? "0.4" : "0.15");
       nodesGroup.appendChild(circle);
@@ -356,17 +371,21 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     place-items: center;
     width: min(520px, 100%);
     aspect-ratio: 1;
-    border: 1px solid rgba(220, 184, 125, 0.15);
+    border: 1px solid rgba(var(--rgb-warm), 0.2);
     border-radius: 50%;
     background:
-      radial-gradient(circle at 50% 50%, rgba(220, 184, 125, 0.03), transparent 60%),
+      radial-gradient(circle at 50% 50%, rgba(var(--rgb-warm), 0.05), transparent 60%),
+      radial-gradient(circle at 30% 70%, rgba(107, 156, 242, 0.03), transparent 50%),
       #030303;
-    outline: 1px solid rgba(255, 255, 255, 0.03);
+    outline: 1px solid rgba(255, 255, 255, 0.04);
     outline-offset: 16px;
+    box-shadow: 
+      0 0 60px rgba(var(--rgb-warm), 0.1),
+      inset 0 0 40px rgba(0, 0, 0, 0.5);
   }
 
   .profile-center {
-    box-shadow: 0 0 50px rgba(220, 184, 125, 0.08), inset 0 0 20px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 50px rgba(var(--rgb-warm), 0.08), inset 0 0 20px rgba(0, 0, 0, 0.8);
     z-index: 2;
   }
 
@@ -393,16 +412,18 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     position: absolute;
     width: 12px;
     height: 12px;
-    border: 1px solid rgba(220, 184, 125, 0.6);
+    border: 1px solid rgba(var(--rgb-warm), 0.7);
     border-radius: 50%;
     background: var(--color-paper);
-    box-shadow: 0 0 12px rgba(220, 184, 125, 0.2);
+    box-shadow: 
+      0 0 12px rgba(var(--rgb-warm), 0.3),
+      0 0 24px rgba(var(--rgb-warm), 0.1);
     animation: pulseNode 4s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
   }
 
   @keyframes pulseNode {
-    0% { transform: scale(1); box-shadow: 0 0 6px rgba(220, 184, 125, 0.1); }
-    100% { transform: scale(1.15); box-shadow: 0 0 16px rgba(220, 184, 125, 0.5); }
+    0% { transform: scale(1); box-shadow: 0 0 8px rgba(var(--rgb-warm), 0.2), 0 0 16px rgba(var(--rgb-warm), 0.1); }
+    100% { transform: scale(1.2); box-shadow: 0 0 20px rgba(var(--rgb-warm), 0.6), 0 0 32px rgba(var(--rgb-warm), 0.2); }
   }
 
   .node-a { top: 20%; right: 22%; }
@@ -470,7 +491,7 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     left: -12px;
     font-family: var(--font-serif);
     font-size: 7rem;
-    color: rgba(220, 184, 125, 0.25);
+    color: rgba(var(--rgb-warm), 0.25);
     line-height: 1;
     font-style: normal;
   }
@@ -482,7 +503,7 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     right: 20px;
     font-family: var(--font-serif);
     font-size: 7rem;
-    color: rgba(220, 184, 125, 0.1);
+    color: rgba(var(--rgb-warm), 0.1);
     line-height: 1;
     font-style: normal;
   }
@@ -497,6 +518,7 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
   .sticky-timeline {
     position: sticky;
     top: calc(var(--header-height) + 54px);
+    padding-top: 4px;
   }
 
   @media (max-width: 1180px) {
@@ -541,17 +563,17 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     left: 0;
     width: 10px;
     height: 10px;
-    border: 1px solid rgba(220, 184, 125, 0.3);
+    border: 1px solid rgba(var(--rgb-warm), 0.3);
     border-radius: 0;
     transform: rotate(45deg);
-    background: var(--color-bg);
+    background: var(--color-paper);
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .sticky-timeline li:hover::before {
-    border-color: rgba(220, 184, 125, 0.8);
-    background: rgba(220, 184, 125, 0.15);
-    box-shadow: 0 0 12px rgba(220, 184, 125, 0.4);
+    border-color: rgba(var(--rgb-warm), 0.8);
+    background: rgba(var(--rgb-warm), 0.15);
+    box-shadow: 0 0 12px rgba(var(--rgb-warm), 0.4);
     transform: rotate(135deg) scale(1.2);
   }
 
@@ -586,13 +608,13 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
   .sticky-timeline li:hover .timeline-logo {
     opacity: 1;
     transform: translateX(0);
-    filter: drop-shadow(0 0 8px rgba(220, 184, 125, 0.4));
+    filter: drop-shadow(0 0 8px rgba(var(--rgb-warm), 0.4));
   }
 
   .sticky-timeline li.is-current::before {
-    background: rgba(220, 184, 125, 0.8);
-    border-color: rgba(220, 184, 125, 1);
-    box-shadow: 0 0 10px rgba(220, 184, 125, 0.3);
+    background: rgba(var(--rgb-warm), 0.8);
+    border-color: rgba(var(--rgb-warm), 1);
+    box-shadow: 0 0 10px rgba(var(--rgb-warm), 0.3);
   }
 
   .sticky-timeline span,
@@ -615,6 +637,7 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     border-left: 1px solid rgba(255, 255, 255, 0.06);
     padding-left: 42px;
     position: relative;
+    padding-top: 4px;
   }
   
   .thesis-copy::before {
@@ -624,7 +647,7 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     left: -1px;
     width: 2px;
     height: 60px;
-    background: linear-gradient(to bottom, rgba(220, 184, 125, 0.6), transparent);
+    background: linear-gradient(to bottom, rgba(var(--rgb-warm), 0.6), transparent);
   }
 
   .thesis-copy h1 {
@@ -658,6 +681,12 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     line-height: 1.75;
   }
 
+  .essay-columns p {
+    margin: 0;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.055);
+  }
+
   .signal-strip {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -669,11 +698,13 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
   .signal-strip div {
     position: relative;
     padding: 28px 24px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 8px; /* Sharper corners for a more corporate/executive feel */
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(20, 20, 20, 0.5) 100%);
-    backdrop-filter: blur(12px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-card);
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: 
+      0 4px 20px var(--glass-shadow), 
+      inset 0 1px 0 var(--color-line-strong);
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
   }
@@ -682,7 +713,7 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(140px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(220, 184, 125, 0.08), transparent 80%);
+    background: radial-gradient(140px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(var(--rgb-warm), 0.08), transparent 80%);
     opacity: 0;
     transition: opacity 0.4s ease;
     pointer-events: none;
@@ -695,7 +726,7 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     left: 0;
     width: 30px;
     height: 1px;
-    background: rgba(220, 184, 125, 0.5);
+    background: rgba(var(--rgb-warm), 0.5);
     transition: width 0.4s ease;
   }
 
@@ -709,9 +740,11 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
 
   .signal-strip div:hover {
     transform: translateY(-4px);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.035) 0%, rgba(20, 20, 20, 0.7) 100%);
-    border-color: rgba(220, 184, 125, 0.2);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    background: var(--color-panel-solid);
+    border-color: var(--color-warm-glow);
+    box-shadow: 
+      0 16px 40px var(--glass-shadow), 
+      inset 0 1px 0 var(--color-line-strong);
   }
 
   .signal-strip dt {

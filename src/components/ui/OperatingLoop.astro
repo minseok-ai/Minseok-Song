@@ -86,7 +86,7 @@ const { signalLoop } = Astro.props;
     position: relative;
     min-height: 320px;
     padding: 32px;
-    border-radius: var(--radius-card);
+    border-radius: 8px;
     background: var(--color-panel);
     border: 1px solid var(--color-line);
     transition: transform var(--motion-base) var(--easing-spring), box-shadow var(--motion-base) var(--easing-spring), border-color var(--motion-base) ease;
@@ -171,6 +171,16 @@ const { signalLoop } = Astro.props;
     line-height: 1;
     letter-spacing: -0.02em;
     color: var(--color-ink);
+  }
+
+  .loop-card h3::after {
+    content: "";
+    display: block;
+    width: 34px;
+    height: 1px;
+    margin-top: 18px;
+    background: var(--card-glow);
+    opacity: 0.55;
   }
 
   .loop-card p {

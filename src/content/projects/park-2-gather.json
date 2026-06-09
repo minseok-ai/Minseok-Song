@@ -1,0 +1,22 @@
+{
+  "title": "Predictive Parking Exit System",
+  "summary": "Commercialized a dormant patent into a BLE Beacon-based architecture resolving double-parking conflicts. Won CNU Grand Prize.",
+  "order": 15,
+  "status": "published",
+  "hidden": false,
+  "year": "2023",
+  "tags": [
+    "IoT",
+    "Business Strategy",
+    "Patent Commercialization"
+  ],
+  "links": [],
+  "visual": "console",
+  "pentaPoint": [
+    50,
+    70,
+    40,
+    100,
+    90
+  ]
+}

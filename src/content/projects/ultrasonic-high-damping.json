@@ -1,0 +1,22 @@
+{
+  "title": "Cross-Axis Ultrasonic Identification",
+  "summary": "Overcame signal attenuation via Cross-Axis Measurement to precisely identify polymer materials in a blind test.",
+  "order": 9,
+  "status": "published",
+  "hidden": false,
+  "year": "2024",
+  "tags": [
+    "Research",
+    "Materials",
+    "KRISS"
+  ],
+  "links": [],
+  "visual": "paper",
+  "pentaPoint": [
+    10,
+    80,
+    100,
+    20,
+    0
+  ]
+}

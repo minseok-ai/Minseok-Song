@@ -2,7 +2,7 @@
   "title": "AI Signal Review",
   "summary": "A sample issue format for reviewing a noteworthy AI article after crawling the full source and extracting the claim, evidence, and implication.",
   "order": 1,
-  "status": "draft",
+  "status": "published",
   "hidden": false,
   "date": "2026-06-07",
   "tags": ["Article Review", "AI"],

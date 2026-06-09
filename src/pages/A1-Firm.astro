@@ -33,6 +33,11 @@ const operatingLoop = [
           A1trategize is an editorial intelligence platform that solves the cognitive limits and hallucinations of single AI models. 
           By dynamically routing specialized tasks to a heterogeneous network of 5 LLM providers, it produces institutional-grade strategy reports.
         </p>
+        <div class="product-stat-strip" aria-label="A1trategize product signals">
+          <span>5 LLM providers</span>
+          <span>Patent-pending</span>
+          <span>Report exports</span>
+        </div>
       </div>
       <a class="app-launch" href={appUrl} target="_blank" rel="noopener noreferrer">
         <span class="status-dot"></span>
@@ -52,7 +57,7 @@ const operatingLoop = [
         <p>A1trategize delegates tasks to specialized models, optimizing for reasoning depth, real-time citation scraping, and cost-efficient self-critique.</p>
       </div>
       <div class="router-grid">
-        <div class="router-card">
+        <div class="router-card reveal-up stagger-1">
           <div class="card-brand">
             <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M17 1.4h5v1.2l-1 1v1.2l-1 1v1.2l-1 1v1.2l-1 1v1.2l-1 1v1.2l1 1v1.2l1 1v1.2l-9 1v1.2l-1 1v1.2h-8v-1.2l1-1v-1.2l1-1v-1.2l1-1v-1.2l1-1v-1.2l-1-1v-1.2l-1-1v-1.2l10-1v-1.2l2-1v-1.2l2-1z"></path>
@@ -64,7 +69,7 @@ const operatingLoop = [
           <small>Classifies input domain, expanding query parameters and detecting user intent.</small>
         </div>
 
-        <div class="router-card">
+        <div class="router-card reveal-up stagger-2">
           <div class="card-brand">
             <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square">
               <path d="M12 2v20M12 12 5 6.5v11zM12 12l7-5.5v11zM5 9.5V4h4.5M19 9.5V4h-4.5M5 14.5V20h4.5M19 14.5V20h-4.5"></path>
@@ -76,7 +81,7 @@ const operatingLoop = [
           <small>Scrapes global web indexes in real-time, sourcing citation-backed text context.</small>
         </div>
 
-        <div class="router-card">
+        <div class="router-card reveal-up stagger-3">
           <div class="card-brand">
             <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 2C12 7.5 7.5 12 2 12C7.5 12 12 16.5 12 22C12 16.5 16.5 12 22 12C16.5 12 12 7.5 12 2Z"></path>
@@ -88,7 +93,7 @@ const operatingLoop = [
           <small>Injects deep context windows to draft comprehensive, highly structured briefings.</small>
         </div>
 
-        <div class="router-card">
+        <div class="router-card reveal-up stagger-4">
           <div class="card-brand">
             <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 12a8 8 0 018-8v8H4zM12 4a8 8 0 018 8h-8V4zM20 12a8 8 0 01-8 8v-8h8z"></path>
@@ -100,7 +105,7 @@ const operatingLoop = [
           <small>Reviews drafts as an adversarial agent, spotting logical gaps or minor errors.</small>
         </div>
 
-        <div class="router-card">
+        <div class="router-card reveal-up stagger-5">
           <div class="card-brand">
             <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 2L2 22h20L12 2zM12 6l7 12H5L12 6z"></path>
@@ -121,25 +126,25 @@ const operatingLoop = [
         <p>A1trategize loads specialized prompt bases and rules depending on the domain. NNFC semiconductor validation is just one application of this core engine.</p>
       </div>
       <div class="domains-grid">
-        <article class="domain-card">
+        <article class="domain-card reveal-up stagger-1">
           <span class="micro-label">Domain 01</span>
           <h3>💼 Business Strategy</h3>
           <p>McKinsey-style outlines, market size models, competitive landscaping, and growth initiative recommendations.</p>
         </article>
 
-        <article class="domain-card">
+        <article class="domain-card reveal-up stagger-2">
           <span class="micro-label">Domain 02</span>
           <h3>🔬 NNFC Semiconductor</h3>
           <p>Recipe parameter mapping. Cross-checks wafer sizes, temperatures, and gases against 183 fabrication tools.</p>
         </article>
 
-        <article class="domain-card">
+        <article class="domain-card reveal-up stagger-3">
           <span class="micro-label">Domain 03</span>
           <h3>⚖️ IP & Patent Strategy</h3>
           <p>Prior-art query matching, KIPO patent claim structuring, and draft patent background composition.</p>
         </article>
 
-        <article class="domain-card">
+        <article class="domain-card reveal-up stagger-4">
           <span class="micro-label">Domain 04</span>
           <h3>📋 Career Coaching</h3>
           <p>Resume bullet impact audits, technical skill gap analysis, and global tech company interview prep.</p>
@@ -148,6 +153,29 @@ const operatingLoop = [
     </section>
   </section>
 </Layout>
+
+<script is:inline>
+  // Magnetic Button Hover Effect
+  const magnetButton = document.querySelector('.app-launch');
+  if (magnetButton) {
+    magnetButton.addEventListener('mousemove', (e) => {
+      const rect = magnetButton.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      
+      magnetButton.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px) scale(1.02)`;
+    });
+    
+    magnetButton.addEventListener('mouseleave', () => {
+      magnetButton.style.transform = '';
+      magnetButton.style.transition = 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+    });
+    
+    magnetButton.addEventListener('mouseenter', () => {
+      magnetButton.style.transition = 'none';
+    });
+  }
+</script>
 
 <style>
   .a1-product-page {
@@ -211,7 +239,7 @@ const operatingLoop = [
     font-weight: 600;
     letter-spacing: -0.01em;
     line-height: 1.05;
-    background: linear-gradient(180deg, var(--color-ink) 0%, rgba(255, 255, 255, 0.8) 100%);
+    background: linear-gradient(180deg, var(--color-ink) 0%, var(--color-ink-soft) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -224,6 +252,26 @@ const operatingLoop = [
     line-height: 1.65;
   }
 
+  .product-stat-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 28px;
+  }
+
+  .product-stat-strip span {
+    min-height: 28px;
+    padding: 7px 10px;
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    color: var(--color-ink-muted);
+    background: var(--glass-bg);
+    font-size: 11px;
+    font-weight: 850;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
   .app-launch {
     position: relative;
     display: inline-flex;
@@ -233,14 +281,15 @@ const operatingLoop = [
     padding: 0 28px;
     border-radius: 14px;
     color: var(--color-ink);
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--glass-bg);
     font-size: 13px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     text-decoration: none;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 8px 24px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 0 0 1px var(--glass-border), var(--glass-shadow);
+    backdrop-filter: var(--glass-blur);
     overflow: hidden;
   }
 
@@ -255,8 +304,8 @@ const operatingLoop = [
 
   .app-launch:hover {
     transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.06);
-    box-shadow: inset 0 0 0 1px var(--color-accent), 0 12px 32px rgba(107, 156, 242, 0.15), inset 0 0 20px rgba(107, 156, 242, 0.08);
+    background: var(--color-panel-solid);
+    box-shadow: inset 0 0 0 1px var(--color-accent), 0 12px 32px var(--color-accent-soft), inset 0 0 20px var(--color-accent-soft);
   }
 
   .app-launch:hover::before {
@@ -315,10 +364,11 @@ const operatingLoop = [
     display: grid;
     gap: 36px;
     padding: 42px;
-    border: 1px solid var(--color-line);
+    border: 1px solid var(--glass-border);
     border-radius: 20px;
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.02) 0%, rgba(0, 0, 0, 0.2) 100%);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 20px 60px rgba(0, 0, 0, 0.3);
+    background: var(--glass-bg);
+    box-shadow: inset 0 1px 0 var(--color-line-strong), var(--glass-shadow);
+    backdrop-filter: var(--glass-blur);
     position: relative;
     overflow: hidden;
   }
@@ -330,7 +380,7 @@ const operatingLoop = [
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
   }
 
   .router-header h2 {
@@ -353,7 +403,7 @@ const operatingLoop = [
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid var(--glass-border);
     padding-top: 36px;
   }
 
@@ -362,9 +412,9 @@ const operatingLoop = [
     grid-template-rows: auto auto auto 1fr;
     gap: 10px;
     padding: 24px 20px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--color-line);
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.015);
+    background: var(--color-paper);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
@@ -374,16 +424,16 @@ const operatingLoop = [
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.05), transparent 70%);
+    background: radial-gradient(circle at top right, var(--color-accent-soft), transparent 70%);
     opacity: 0;
     transition: opacity 0.4s ease;
   }
 
   .router-card:hover {
-    background: rgba(255, 255, 255, 0.03);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--color-panel-solid);
+    border-color: var(--color-line-strong);
     transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--glass-shadow);
   }
 
   .router-card:hover::before {
@@ -472,18 +522,23 @@ const operatingLoop = [
   .domain-card {
     position: relative;
     padding: 28px 24px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--color-line);
     border-radius: 16px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(0, 0, 0, 0.1) 100%);
+    background: var(--color-paper);
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .domain-card h3,
+  .router-card h3 {
+    overflow-wrap: anywhere;
   }
 
   .domain-card::before {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-image: radial-gradient(var(--glass-border) 1px, transparent 1px);
     background-size: 16px 16px;
     pointer-events: none;
     z-index: 0;
@@ -498,7 +553,7 @@ const operatingLoop = [
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+    background: linear-gradient(90deg, transparent, var(--color-accent-soft), transparent);
     opacity: 0;
     transition: opacity 0.4s ease;
   }
@@ -509,9 +564,9 @@ const operatingLoop = [
   }
 
   .domain-card:hover {
-    border-color: rgba(255, 255, 255, 0.15);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.2) 100%);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+    border-color: var(--color-line-strong);
+    background: var(--color-panel-solid);
+    box-shadow: var(--glass-shadow);
     transform: translateY(-4px);
   }
 

@@ -1,0 +1,22 @@
+{
+  "title": "Fluorescence Explosives Detection AI",
+  "summary": "Developed a 1D-CNN and LSTM hybrid model to process environmental and photoluminescence data, achieving 51.4% MSE reduction.",
+  "order": 8,
+  "status": "published",
+  "hidden": false,
+  "year": "2024",
+  "tags": [
+    "Machine Learning",
+    "Data Analysis",
+    "Deep Learning"
+  ],
+  "links": [],
+  "visual": "graph",
+  "pentaPoint": [
+    100,
+    40,
+    90,
+    30,
+    0
+  ]
+}

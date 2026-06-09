@@ -1,0 +1,22 @@
+{
+  "title": "Graphene Dirac Cone Analysis",
+  "summary": "Theoretical analysis of electron behavior in crystal lattices, deriving energy levels and investigating Graphene conductivity.",
+  "order": 14,
+  "status": "published",
+  "hidden": false,
+  "year": "2023",
+  "tags": [
+    "Physics",
+    "Quantum Mechanics",
+    "Research"
+  ],
+  "links": [],
+  "visual": "paper",
+  "pentaPoint": [
+    0,
+    50,
+    100,
+    10,
+    0
+  ]
+}

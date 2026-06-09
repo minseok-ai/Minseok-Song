@@ -1,0 +1,22 @@
+{
+  "title": "Planar Micro-Battery Architecture",
+  "summary": "Developing next-generation micro-batteries via planar interdigitated cell architecture to mitigate electrolyte degradation.",
+  "order": 4,
+  "status": "published",
+  "hidden": false,
+  "year": "2026",
+  "tags": [
+    "Research",
+    "Semiconductor",
+    "KAIST NNFC"
+  ],
+  "links": [],
+  "visual": "paper",
+  "pentaPoint": [
+    0,
+    100,
+    80,
+    40,
+    0
+  ]
+}

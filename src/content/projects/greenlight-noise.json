@@ -1,0 +1,22 @@
+{
+  "title": "Deep-Learning Noise Enforcement",
+  "summary": "Fused imaging sensors with deep learning sound localization to identify noise-violating vehicles. Won KOSAF Special Award.",
+  "order": 12,
+  "status": "published",
+  "hidden": false,
+  "year": "2024",
+  "tags": [
+    "Deep Learning",
+    "B2G",
+    "Open Innovation"
+  ],
+  "links": [],
+  "visual": "deck",
+  "pentaPoint": [
+    60,
+    60,
+    30,
+    90,
+    100
+  ]
+}

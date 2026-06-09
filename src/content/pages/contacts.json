@@ -5,7 +5,7 @@
   "order": 5,
   "path": "/contacts",
   "layoutType": "contact",
-  "status": "draft",
+  "status": "published",
   "hidden": false,
   "hero": {
     "eyebrow": "05 / Contacts",

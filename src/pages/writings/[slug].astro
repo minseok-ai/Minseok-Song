@@ -7,7 +7,7 @@ import { writingEntries } from "../../lib/content/registry";
 const slug = Astro.params.slug ?? "";
 const entry = writingEntries.find((writing) => writing.id === slug);
 
-if (!entry || entry.data.hidden) {
+if (!entry || entry.data.hidden || entry.data.status !== "published") {
   return Astro.redirect("/writings");
 }
 ---

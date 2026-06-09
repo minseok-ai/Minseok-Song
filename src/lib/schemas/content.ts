@@ -200,7 +200,14 @@ export const projectSchema = z.object({
     src: z.string().min(1),
     alt: z.string().default("")
   }).optional(),
-  visual: z.enum(["graph", "deck", "console", "paper", "blank"]).default("blank")
+  visual: z.enum(["graph", "deck", "console", "paper", "blank"]).default("blank"),
+  pentaPoint: z.tuple([
+    z.number().min(0).max(100),
+    z.number().min(0).max(100),
+    z.number().min(0).max(100),
+    z.number().min(0).max(100),
+    z.number().min(0).max(100)
+  ]).default([20, 20, 20, 20, 20])
 });
 
 export const writingSchema = z.object({

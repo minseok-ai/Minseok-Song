@@ -27,12 +27,12 @@ const surfaceMeta = {
     line: "Work"
   },
   writings: {
-    accent: "#c98278",
+    accent: "var(--color-coral)",
     glyph: "WR",
     line: "Notes"
   },
   contacts: {
-    accent: "#947bd4",
+    accent: "var(--color-purple)",
     glyph: "CO",
     line: "Reach"
   }
@@ -86,13 +86,13 @@ const focusStats = [
   headerNote="A1 Firms / Seoul"
 >
   <section class="home-page">
-    <HeroSystem a1Firms={a1Firms} focusStats={focusStats} siteConfig={siteConfig} />
+    <div class="reveal-up"><HeroSystem a1Firms={a1Firms} focusStats={focusStats} siteConfig={siteConfig} /></div>
     
-    <OperatingLoop signalLoop={signalLoop} />
+    <div class="reveal-up stagger-1"><OperatingLoop signalLoop={signalLoop} /></div>
     
-    <SurfaceGrid sectionCards={sectionCards} />
+    <div class="reveal-up stagger-2"><SurfaceGrid sectionCards={sectionCards} /></div>
 
-    <section class="product-band fade-in-up" aria-label="A1trategize">
+    <section id="product-band" class="product-band reveal-up stagger-3" aria-label="A1trategize">
       <div class="band-grid-bg" aria-hidden="true"></div>
       <div>
         <p class="micro-label">Flagship product</p>
@@ -108,6 +108,34 @@ const focusStats = [
     </section>
   </section>
 </Layout>
+
+<script is:inline>
+  const productBand = document.getElementById('product-band');
+  if (productBand) {
+    productBand.addEventListener('mousemove', (e) => {
+      const rect = productBand.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -4;
+      const rotateY = ((x - centerX) / centerX) * 4;
+      
+      // We keep the translateY(-3px) from the hover effect and add perspective
+      productBand.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`;
+    });
+    
+    productBand.addEventListener('mouseleave', () => {
+      productBand.style.transform = '';
+      productBand.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.6s ease, box-shadow 0.6s ease';
+    });
+    
+    productBand.addEventListener('mouseenter', () => {
+      productBand.style.transition = 'border-color 0.6s ease, box-shadow 0.6s ease';
+    });
+  }
+</script>
 
 <style>
   .home-page {
@@ -127,11 +155,14 @@ const focusStats = [
     padding: 64px 48px;
     margin: 0 auto 112px;
     width: min(calc(100% - 48px), var(--max-site));
-    border-radius: 24px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(20, 20, 20, 0.4) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 24px 60px rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(20px);
+    border-radius: var(--radius-lg);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: 
+      inset 0 1px 0 var(--glass-border),
+      0 24px 60px var(--glass-shadow),
+      0 0 0 1px var(--color-accent-soft);
+    backdrop-filter: blur(24px);
     position: relative;
     overflow: hidden;
     transition: transform 0.6s var(--easing-spring), border-color 0.6s ease, box-shadow 0.6s ease;
@@ -154,9 +185,12 @@ const focusStats = [
   }
 
   .product-band:hover {
-    transform: translateY(-2px);
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 32px 80px rgba(0, 0, 0, 0.5);
+    transform: translateY(-3px);
+    border-color: var(--color-accent-soft);
+    box-shadow: 
+      inset 0 1px 0 var(--glass-border),
+      0 32px 80px var(--glass-shadow),
+      0 0 0 1px var(--color-accent);
   }
 
   .band-grid-bg {
@@ -181,7 +215,7 @@ const focusStats = [
     left: -50px;
     width: 350px;
     height: 350px;
-    background: radial-gradient(circle, rgba(107, 156, 242, 0.12) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(107, 156, 242, 0.18) 0%, transparent 70%);
     pointer-events: none;
     z-index: 0;
   }
@@ -192,7 +226,7 @@ const focusStats = [
     inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 50%, rgba(255, 255, 255, 0.04) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 50%, rgba(255, 255, 255, 0.05) 100%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -202,7 +236,7 @@ const focusStats = [
   }
 
   .product-band:hover::after {
-    background: linear-gradient(135deg, rgba(107, 156, 242, 0.4) 0%, transparent 60%, rgba(255, 255, 255, 0.15) 100%);
+    background: linear-gradient(135deg, rgba(107, 156, 242, 0.5) 0%, transparent 60%, rgba(255, 255, 255, 0.2) 100%);
   }
 
   .product-band h2 {
@@ -211,11 +245,20 @@ const focusStats = [
     font-weight: 900;
     line-height: 0.95;
     letter-spacing: -0.02em;
-    background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 100%);
+    background: linear-gradient(180deg, var(--color-ink) 0%, var(--color-ink-soft) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     position: relative;
     z-index: 2;
+  }
+
+  .product-band h2::after {
+    content: "";
+    display: block;
+    width: 58px;
+    height: 2px;
+    margin-top: 20px;
+    background: linear-gradient(90deg, var(--color-accent), transparent);
   }
 
   .product-band p {
@@ -234,15 +277,17 @@ const focusStats = [
     justify-content: center;
     min-height: 52px;
     padding: 0 32px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     font-size: 15px;
     font-weight: 800;
     text-decoration: none;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     color: var(--color-paper-deep);
     background: var(--color-ink);
-    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
+    box-shadow: 
+      0 8px 20px var(--glass-shadow),
+      0 0 0 1px var(--color-accent-soft);
     position: relative;
     z-index: 2;
   }
@@ -255,8 +300,9 @@ const focusStats = [
 
   .primary-action:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.25);
-    background: #ffffff;
+    box-shadow: 
+      0 12px 30px var(--glass-shadow),
+      0 0 0 1px var(--color-accent);
   }
 
   .primary-action:hover .arrow-shifted {

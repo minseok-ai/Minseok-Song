@@ -1,0 +1,22 @@
+{
+  "title": "OBD-II Pedal Evidence Blackbox",
+  "summary": "Designed a low-cost evidence system projecting OBD-II data onto a HUD to solve Sudden Unintended Acceleration disputes.",
+  "order": 7,
+  "status": "published",
+  "hidden": false,
+  "year": "2024",
+  "tags": [
+    "Hardware",
+    "Automotive",
+    "Legal Tech"
+  ],
+  "links": [],
+  "visual": "console",
+  "pentaPoint": [
+    40,
+    80,
+    60,
+    90,
+    80
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Ultrasonic Glucose Monitoring",
+  "summary": "Led independent research on non-invasive glucose monitoring using ultrasonic velocity analysis. Presented as 1st Author at KSNT.",
+  "order": 6,
+  "status": "published",
+  "hidden": false,
+  "year": "2024",
+  "tags": [
+    "Research",
+    "Medical Tech",
+    "KRISS"
+  ],
+  "links": [],
+  "visual": "graph",
+  "pentaPoint": [
+    80,
+    40,
+    100,
+    30,
+    10
+  ]
+}

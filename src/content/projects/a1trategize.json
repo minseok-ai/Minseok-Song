@@ -1,16 +1,28 @@
 {
-  "title": "A1trategize",
-  "summary": "The flagship A1 Firms product surface: a separate strategy web app that stays independent from this editorial site.",
+  "title": "A1trategize Strategy Intelligence OS",
+  "summary": "An enterprise B2B strategy system that automates the generation of logically flawless consulting reports through user intent-based dynamic prompt expansion and adaptive collaboration between heterogeneous Large Language Models (LLMs).",
   "order": 1,
-  "status": "draft",
+  "status": "published",
   "hidden": false,
   "year": "2026",
-  "tags": ["A1 Firms", "AI Strategy", "Product"],
+  "tags": [
+    "A1 Firms",
+    "Product",
+    "LLM Architecture",
+    "Launched"
+  ],
   "links": [
     {
-      "label": "Open app",
+      "label": "Open App",
       "href": "https://a1trategize.com"
     }
   ],
-  "visual": "console"
+  "visual": "deck",
+  "pentaPoint": [
+    75,
+    10,
+    10,
+    85,
+    95
+  ]
 }

@@ -2,18 +2,28 @@
 import { getSession } from 'auth-astro/server';
 import Layout from '../../layouts/Layout.astro';
 import { SignIn, SignOut } from 'auth-astro/components';
+import {
+  getAuthAdminConfig,
+  getAuthAdminLabel,
+  isAllowedAuthAdminSession
+} from '../../lib/auth/admin';
 import '../../styles/admin.css';
 
 const session = await getSession(Astro.request);
-const adminUsername = import.meta.env.ADMIN_GITHUB_USERNAME || process.env.ADMIN_GITHUB_USERNAME;
-
-let isAuthorizedAdmin = false;
-if (session && session.user?.username === adminUsername) {
-  isAuthorizedAdmin = true;
-}
-
+const adminConfig = getAuthAdminConfig(import.meta.env);
+const isAuthorizedAdmin = isAllowedAuthAdminSession(session, import.meta.env);
+const adminLabel = getAuthAdminLabel(session);
 const url = new URL(Astro.request.url);
 const error = url.searchParams.get("error");
+const errorMessages = {
+  unauthorized: "Your GitHub account is signed in, but it is not in the admin allowlist.",
+  config: "Admin login is not configured. Set an allowed GitHub username or numeric ID.",
+  legacy_auth: "This site now uses the GitHub OAuth session managed by Auth.js."
+};
+const errorMessage =
+  error && error in errorMessages
+    ? errorMessages[error as keyof typeof errorMessages]
+    : undefined;
 ---
 
 <Layout title="Admin Portal | Minseok Song" description="Restricted access" noindex={true}>
@@ -21,6 +31,11 @@ const error = url.searchParams.get("error");
     <div class="admin-login-panel">
       <p class="micro-label">Admin / Secure entry</p>
       <h1>Admin Portal</h1>
+      {errorMessage && (
+        <div class="admin-auth-message" data-state="error">
+          {errorMessage}
+        </div>
+      )}
       
       {session ? (
         isAuthorizedAdmin ? (
@@ -30,7 +45,7 @@ const error = url.searchParams.get("error");
             </p>
             <div class="admin-login-meta" aria-label="Admin profile">
               <span>{session.user?.name}</span>
-              <span>{session.user?.username}</span>
+              <span>{adminLabel}</span>
               <span>Admin</span>
             </div>
             
@@ -46,7 +61,7 @@ const error = url.searchParams.get("error");
         ) : (
           <>
             <div class="admin-auth-message" data-state="error" style="margin-bottom: 12px;">
-              Access Denied: Your GitHub account ({session.user?.username}) does not have administrator privileges.
+              Access Denied: Your GitHub account ({adminLabel}) does not have administrator privileges.
             </div>
             <p>
               If you believe this is an error, please ensure you are logged into the correct GitHub account.
@@ -65,7 +80,7 @@ const error = url.searchParams.get("error");
           </p>
           <div class="admin-login-meta" aria-label="Admin login security model">
             <span>GitHub OAuth</span>
-            <span>Allowlist</span>
+            <span>{adminConfig.isConfigured ? "Allowlist ready" : "Allowlist missing"}</span>
             <span>Two-Factor Auth</span>
           </div>
           

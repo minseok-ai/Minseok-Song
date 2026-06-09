@@ -44,45 +44,38 @@ be managed by the A1trategize application repository/deployment.
 
 ## Admin Login
 
-The writing desk lives at `/admin/writings` and is protected by an HttpOnly
-session cookie. Admin login is designed to use GitHub OAuth first. Register a
-GitHub OAuth App or GitHub App with this callback URL:
+The writing desk lives at `/admin/writings` and is protected by the Auth.js
+session managed by `auth-astro`. Register a GitHub OAuth App or GitHub App with
+this callback URL:
 
 ```txt
-https://minseoksong.com/api/admin/github/callback
+https://minseoksong.com/api/auth/callback/github
 ```
 
 For local development, add the matching localhost callback URL for the dev port
 you are using, for example:
 
 ```txt
-http://localhost:4321/api/admin/github/callback
+http://localhost:4321/api/auth/callback/github
 ```
 
 Set these values in `.env`:
 
 ```sh
-GITHUB_OAUTH_CLIENT_ID=
-GITHUB_OAUTH_CLIENT_SECRET=
+AUTH_SECRET=
+AUTH_TRUST_HOST=true
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+ADMIN_GITHUB_ID=
+ADMIN_GITHUB_USERNAME=
 ADMIN_GITHUB_IDS=
-ADMIN_GITHUB_LOGINS=
-SESSION_SECRET=
+ADMIN_GITHUB_USERNAMES=
 ```
 
-`ADMIN_GITHUB_IDS` is preferred because numeric GitHub user IDs are stable.
-`ADMIN_GITHUB_LOGINS` is accepted as a convenience fallback. Both variables are
-comma-separated allowlists.
-
-The legacy password form is still available as a local fallback when these
-values are set:
-
-```sh
-ADMIN_USERNAME=
-ADMIN_PASSWORD=
-SESSION_SECRET=
-```
-
-`SESSION_SECRET` should be at least 32 characters. You can generate one with:
+`ADMIN_GITHUB_ID` / `ADMIN_GITHUB_IDS` are preferred because numeric GitHub user
+IDs are stable. `ADMIN_GITHUB_USERNAME` / `ADMIN_GITHUB_USERNAMES` are accepted
+as convenience fallbacks. Plural variables are comma-separated allowlists.
+`AUTH_SECRET` should be at least 32 characters. You can generate one with:
 
 ```sh
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
@@ -111,6 +104,6 @@ The first navigation contract is:
 `A1 Firms` is routed to `/A1-Firm`. That route is a public product page for
 A1trategize and links out to `https://a1trategize.com`.
 
-About uses a Notion-style block model. `deckEmbed` is included now so Canva,
-presentation, and artifact embeds can be managed by data later instead of by
-hand-editing iframe code.
+About uses a Notion-style block model. `deckEmbed` blocks are supported and
+validated when present, so Canva, presentation, and artifact embeds can be
+managed by data later instead of by hand-editing iframe code.

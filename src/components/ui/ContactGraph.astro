@@ -29,13 +29,13 @@ const { contactNodes, visibleChannels } = Astro.props;
           <line x1="50" y1="52" x2="50" y2="11" stroke="url(#radar-sweep-gradient)" stroke-width="0.8" class="radar-sweeper" />
 
           <!-- Radar Concentric Reference Rings -->
-          <circle cx="50" cy="52" r="14" fill="none" stroke="rgba(255,255,255,0.015)" stroke-width="0.3" stroke-dasharray="1 3" />
-          <circle cx="50" cy="52" r="28" fill="none" stroke="rgba(255,255,255,0.015)" stroke-width="0.3" stroke-dasharray="2 4" />
-          <circle cx="50" cy="52" r="41" fill="none" stroke="rgba(255,255,255,0.012)" stroke-width="0.3" />
+          <circle cx="50" cy="52" r="14" fill="none" stroke="var(--color-line)" stroke-width="0.3" stroke-dasharray="1 3" />
+          <circle cx="50" cy="52" r="28" fill="none" stroke="var(--color-line)" stroke-width="0.3" stroke-dasharray="2 4" />
+          <circle cx="50" cy="52" r="41" fill="none" stroke="var(--color-line)" stroke-width="0.3" />
 
           <!-- Radar Crosshairs -->
-          <line x1="50" y1="6" x2="50" y2="98" stroke="rgba(255,255,255,0.01)" stroke-width="0.2" />
-          <line x1="2" y1="52" x2="98" y2="52" stroke="rgba(255,255,255,0.01)" stroke-width="0.2" />
+          <line x1="50" y1="6" x2="50" y2="98" stroke="var(--color-line)" stroke-width="0.2" />
+          <line x1="2" y1="52" x2="98" y2="52" stroke="var(--color-line)" stroke-width="0.2" />
 
           <!-- Ambient float particles -->
           <circle cx="24" cy="20" r="0.4" fill="var(--color-accent)" opacity="0.15">
@@ -53,12 +53,13 @@ const { contactNodes, visibleChannels } = Astro.props;
 
           {contactNodes.map((node, index) => {
             const isCopyable = node.copyable;
+            const isExternal = node.href?.startsWith("http");
             const linkProps = isCopyable
               ? { role: "button", tabindex: "0" }
               : {
                   href: node.href ?? "#",
-                  target: "_blank",
-                  rel: "noopener noreferrer"
+                  target: isExternal ? "_blank" : undefined,
+                  rel: isExternal ? "noopener noreferrer" : undefined
                 };
 
             return (
@@ -107,8 +108,8 @@ const { contactNodes, visibleChannels } = Astro.props;
           class="channel-card"
           data-index={index}
           href={channel.copyable ? undefined : (channel.href ?? "#")}
-          target={channel.copyable ? undefined : "_blank"}
-          rel={channel.copyable ? undefined : "noopener noreferrer"}
+          target={!channel.copyable && channel.href?.startsWith("http") ? "_blank" : undefined}
+          rel={!channel.copyable && channel.href?.startsWith("http") ? "noopener noreferrer" : undefined}
           data-copy={channel.copyable ? channel.value : undefined}
           type={channel.copyable ? "button" : undefined}
         >
@@ -283,6 +284,19 @@ const { contactNodes, visibleChannels } = Astro.props;
     color: var(--color-ink);
   }
 
+  .contact-copy {
+    position: relative;
+  }
+
+  .contact-copy::before {
+    content: "";
+    display: block;
+    width: 52px;
+    height: 2px;
+    margin-bottom: 24px;
+    background: linear-gradient(90deg, var(--color-accent), transparent);
+  }
+
   .contact-copy p {
     margin: 24px 0 32px;
     max-width: 640px;
@@ -310,14 +324,15 @@ const { contactNodes, visibleChannels } = Astro.props;
     border-radius: var(--radius-card);
     padding: 28px;
     overflow: hidden;
-    background: var(--color-panel);
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
     transition: transform var(--motion-slow) var(--easing-smooth), box-shadow var(--motion-slow) var(--easing-smooth);
-    box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 80px var(--glass-shadow);
   }
 
   .channel-graph:hover {
     transform: rotateX(2deg) rotateY(-2deg);
-    box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.5), 0 24px 48px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 0 80px var(--glass-shadow), 0 24px 48px var(--glass-shadow);
     border-color: var(--color-line-strong);
   }
 
@@ -326,9 +341,10 @@ const { contactNodes, visibleChannels } = Astro.props;
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      linear-gradient(var(--color-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
     background-size: 40px 40px;
+    opacity: 0.15;
     pointer-events: none;
   }
 
@@ -392,7 +408,7 @@ const { contactNodes, visibleChannels } = Astro.props;
 
   .core-node {
     fill: var(--color-ink);
-    filter: drop-shadow(0 0 12px rgba(242, 245, 249, 0.5));
+    filter: drop-shadow(0 0 12px var(--color-accent-glow));
   }
 
   .core-ring {
@@ -423,7 +439,7 @@ const { contactNodes, visibleChannels } = Astro.props;
 
   .signal-dot {
     fill: var(--color-accent);
-    filter: drop-shadow(0 0 4px var(--color-accent));
+    filter: drop-shadow(0 0 4px var(--color-accent-glow));
     opacity: 0.7;
   }
 
@@ -480,15 +496,21 @@ const { contactNodes, visibleChannels } = Astro.props;
     width: 100%;
     text-align: left;
     padding: 0;
-    border: 1px solid var(--color-line);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-card);
-    background: var(--color-panel);
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
     text-decoration: none;
     color: inherit;
     cursor: pointer;
     overflow: hidden;
     transition: border-color var(--motion-base) var(--easing-smooth), box-shadow var(--motion-base) var(--easing-smooth), transform var(--motion-base) var(--easing-smooth);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--glass-shadow);
+  }
+
+  .channel-card:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
   }
 
   .card-inner {
@@ -497,14 +519,14 @@ const { contactNodes, visibleChannels } = Astro.props;
     flex-direction: column;
     height: 100%;
     min-height: 220px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.015) 0%, transparent 100%);
+    background: linear-gradient(135deg, var(--color-line) 0%, transparent 100%);
     transition: background var(--motion-base) var(--easing-smooth);
   }
 
   .channel-card:hover,
   .channel-card.is-highlighted {
     border-color: var(--color-accent);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25), inset 0 0 20px rgba(255, 255, 255, 0.02);
+    box-shadow: 0 12px 32px var(--glass-shadow), inset 0 0 20px var(--color-line);
   }
 
   .channel-card:hover .card-inner,
@@ -539,7 +561,7 @@ const { contactNodes, visibleChannels } = Astro.props;
     gap: 6px;
     padding: 4px 8px;
     border-radius: 99px;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--glass-bg);
     border: 1px solid var(--color-line);
     transition: all var(--motion-base) ease;
   }
@@ -549,7 +571,7 @@ const { contactNodes, visibleChannels } = Astro.props;
     height: 6px;
     border-radius: 50%;
     background: var(--color-accent);
-    box-shadow: 0 0 6px var(--color-accent);
+    box-shadow: 0 0 6px var(--color-accent-glow);
     transition: all var(--motion-base) ease;
   }
 
@@ -608,7 +630,7 @@ const { contactNodes, visibleChannels } = Astro.props;
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--glass-bg);
     border: 1px solid var(--color-line);
     display: flex;
     align-items: center;
@@ -646,7 +668,7 @@ const { contactNodes, visibleChannels } = Astro.props;
 
   .channel-card[data-copied="true"] .telemetry-dot {
     background: var(--color-green) !important;
-    box-shadow: 0 0 8px var(--color-green) !important;
+    box-shadow: 0 0 8px var(--color-green-glow) !important;
   }
 
   .channel-card[data-copied="true"] .telemetry-status {
@@ -665,7 +687,7 @@ const { contactNodes, visibleChannels } = Astro.props;
   .channel-card[data-copied="true"] .action-icon-wrap {
     color: var(--color-green) !important;
     border-color: var(--color-green) !important;
-    box-shadow: 0 0 8px rgba(108, 163, 125, 0.2) !important;
+    box-shadow: 0 0 8px var(--color-green-glow) !important;
   }
 
   .fade-in-up {

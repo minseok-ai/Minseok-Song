@@ -1,0 +1,22 @@
+{
+  "title": "Nano-Scale Perovskite Fabrication",
+  "summary": "Fabricated Perovskite Solar Cells and conducted root-cause failure analysis emphasizing precision in nano-scale semiconductor fabrication.",
+  "order": 10,
+  "status": "published",
+  "hidden": false,
+  "year": "2024",
+  "tags": [
+    "Semiconductor",
+    "Energy",
+    "Fabrication"
+  ],
+  "links": [],
+  "visual": "blank",
+  "pentaPoint": [
+    0,
+    100,
+    90,
+    20,
+    0
+  ]
+}

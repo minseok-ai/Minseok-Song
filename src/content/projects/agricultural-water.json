@@ -1,0 +1,22 @@
+{
+  "title": "Predictive Reservoir Intelligence",
+  "summary": "Constructed a robust data pipeline and evaluated ML models to forecast reservoir water levels. Won Best Paper Award at AAiCON 2024.",
+  "order": 11,
+  "status": "published",
+  "hidden": false,
+  "year": "2024",
+  "tags": [
+    "Big Data",
+    "Machine Learning",
+    "Agriculture"
+  ],
+  "links": [],
+  "visual": "graph",
+  "pentaPoint": [
+    100,
+    20,
+    80,
+    60,
+    40
+  ]
+}

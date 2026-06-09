@@ -1,0 +1,28 @@
+{
+  "title": "RA1 Edge Robotics Control System",
+  "summary": "A next-generation autonomous edge AI robot control system that performs multi-layered physical verification through geometric 3D volume analysis and edge NPU power gating based on vector resonance.",
+  "order": 3,
+  "status": "published",
+  "hidden": false,
+  "year": "2026",
+  "tags": [
+    "A1 Firms",
+    "Robotics",
+    "Hardware AI",
+    "Pending"
+  ],
+  "links": [
+    {
+      "label": "Pending",
+      "href": "#"
+    }
+  ],
+  "visual": "graph",
+  "pentaPoint": [
+    85,
+    95,
+    80,
+    20,
+    40
+  ]
+}

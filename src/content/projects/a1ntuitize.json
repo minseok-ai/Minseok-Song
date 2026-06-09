@@ -1,0 +1,28 @@
+{
+  "title": "A1ntuitize Vision Memory Engine",
+  "summary": "A hyper-realistic dual-engine AI system that processes visual inputs, extracts observation vectors, and maintains long-term entity memories to prevent physical and logical hallucination.",
+  "order": 2,
+  "status": "published",
+  "hidden": false,
+  "year": "2026",
+  "tags": [
+    "A1 Firms",
+    "AI",
+    "Memory Engine",
+    "Pending"
+  ],
+  "links": [
+    {
+      "label": "Pending",
+      "href": "#"
+    }
+  ],
+  "visual": "console",
+  "pentaPoint": [
+    95,
+    15,
+    25,
+    30,
+    60
+  ]
+}

@@ -24,7 +24,7 @@ const { sectionCards } = Astro.props;
           <p>{item.page?.description ?? item.layoutType}</p>
         </div>
         <span class="surface-command">
-          {item.id === "a1-firms" ? "Launch product" : "Open section"}
+          {item.id === "a1-firms" ? "Launch product" : "Open section"} <b aria-hidden="true">→</b>
         </span>
       </a>
     ))}
@@ -75,13 +75,13 @@ const { sectionCards } = Astro.props;
     align-content: space-between;
     min-height: 360px;
     padding: 36px;
-    border-radius: 20px;
+    border-radius: 8px;
     overflow: hidden;
     color: var(--color-ink);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(10, 10, 15, 0.6) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 8px 24px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(16px);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: inset 0 1px 0 var(--color-line), var(--glass-shadow);
+    backdrop-filter: var(--glass-blur);
     text-decoration: none;
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     
@@ -109,7 +109,7 @@ const { sectionCards } = Astro.props;
     inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 40%, transparent 60%, rgba(255, 255, 255, 0.05) 100%);
+    background: linear-gradient(135deg, var(--color-line-strong) 0%, transparent 40%, transparent 60%, var(--color-line) 100%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -125,9 +125,9 @@ const { sectionCards } = Astro.props;
       115deg,
       transparent 0%,
       transparent 35%,
-      rgba(255, 255, 255, 0.04) 45%,
-      rgba(255, 255, 255, 0.14) 50%,
-      rgba(255, 255, 255, 0.04) 55%,
+      var(--color-line) 45%,
+      var(--color-line-strong) 50%,
+      var(--color-line) 55%,
       transparent 65%,
       transparent 100%
     );
@@ -211,16 +211,16 @@ const { sectionCards } = Astro.props;
     gap: 8px;
   }
 
-  .surface-command::after {
-    content: '→';
+  .surface-command b {
+    font-weight: 900;
     transition: transform var(--motion-fast) ease;
   }
 
   .surface-card:hover {
     transform: translateY(-6px);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 24px 60px rgba(0, 0, 0, 0.4);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(10, 10, 15, 0.8) 100%);
-    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 var(--color-line-strong), 0 24px 60px var(--glass-shadow);
+    background: var(--color-panel-solid);
+    border-color: var(--color-line-strong);
   }
 
   .surface-card:hover::before {
@@ -248,7 +248,7 @@ const { sectionCards } = Astro.props;
     color: var(--color-ink-soft);
   }
 
-  .surface-card:hover .surface-command::after {
+  .surface-card:hover .surface-command b {
     transform: translateX(4px);
   }
 

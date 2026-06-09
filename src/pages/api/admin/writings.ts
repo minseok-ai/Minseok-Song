@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import type { APIRoute } from "astro";
 import { getSession } from "auth-astro/server";
+import { isAllowedAuthAdminSession } from "../../../lib/auth/admin";
 import { writingSchema } from "../../../lib/schemas/content";
 
 const writingDirectory = new URL("../../../content/writings/", import.meta.url);
@@ -17,12 +18,10 @@ const slugify = (value: string) => {
   return slug || `writing-${Date.now()}`;
 };
 
-export const POST: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request }) => {
   const session = await getSession(request);
 
-  const adminUsername = import.meta.env.ADMIN_GITHUB_USERNAME || process.env.ADMIN_GITHUB_USERNAME;
-
-  if (!session || session.user?.username !== adminUsername) {
+  if (!isAllowedAuthAdminSession(session, import.meta.env)) {
     return Response.json(
       {
         error: "Admin authentication is required."

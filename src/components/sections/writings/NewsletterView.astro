@@ -6,7 +6,7 @@ const { navItem, hero, writings = [] } = Astro.props;
 const session = await getSession(Astro.request);
 
 const newsletterEntries = writings
-  .filter((entry) => !entry.data.hidden)
+  .filter((entry) => !entry.data.hidden && entry.data.status === "published")
   .sort((a, b) => a.data.order - b.data.order);
 
 const articleTags = ["Source", "Crawl", "Review", "Publish"];
@@ -25,6 +25,11 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     find a worthwhile article, crawl the full text, review the argument,
     then publish a concise Korean note with source trace intact.
   </p>
+  <div class="newsletter-stats" aria-label="Newsletter publishing status">
+    <span>{String(newsletterEntries.length).padStart(2, "0")} published</span>
+    <span>Source trace kept</span>
+    <span>Drafts hidden</span>
+  </div>
   {session && (
     <a class="admin-entry-link" href="/admin/writings">Open writing desk</a>
   )}
@@ -48,7 +53,7 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
   <div class="newsletter-list">
     {newsletterEntries.length > 0 ? (
       newsletterEntries.map((writing, index) => (
-        <a class="newsletter-row" href={`/writings/${writing.id}`} data-tag={writing.data.tags[0]?.toLowerCase() ?? "review"}>
+        <a class={`newsletter-row reveal-up stagger-${(index % 5) + 1}`} href={`/writings/${writing.id}`} data-tag={writing.data.tags[0]?.toLowerCase() ?? "review"}>
           <span>{String(index + 1).padStart(3, "0")}</span>
           <time>{writing.data.date ?? "Draft"}</time>
           <strong>{writing.data.title}</strong>
@@ -130,6 +135,31 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     line-height: 1.65;
   }
 
+  .newsletter-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .newsletter-stats span {
+    min-height: 28px;
+    padding: 7px 10px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    color: var(--color-ink-muted);
+    background: var(--glass-bg);
+    font-size: 11px;
+    font-weight: 850;
+    line-height: 1;
+    text-transform: uppercase;
+    transition: border-color var(--motion-fast) ease, background var(--motion-fast) ease;
+  }
+  
+  .newsletter-stats span:hover {
+    border-color: var(--color-coral);
+    background: var(--color-coral-soft);
+  }
+
   .admin-entry-link {
     display: inline-flex;
     align-items: center;
@@ -152,8 +182,8 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
   }
 
   .admin-entry-link:hover {
-    border-color: var(--color-accent);
-    background: var(--color-accent-soft);
+    border-color: var(--color-coral);
+    background: var(--color-coral-soft);
     transform: translateY(-1px);
   }
 
@@ -165,10 +195,13 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
   .pipeline-meter {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    border: 1px solid var(--color-line-strong);
-    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
     position: relative;
     overflow: hidden;
+    border-radius: var(--radius-card);
+    box-shadow: var(--glass-shadow);
   }
 
   .pipeline-meter::before {
@@ -193,12 +226,18 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     padding: 18px;
     border: 0;
     border-right: 1px solid var(--color-line-strong);
-    transition: background var(--motion-fast) ease;
+    transition: background var(--motion-fast) ease, box-shadow var(--motion-fast) ease;
     position: relative;
   }
 
   .pipeline-meter .pipeline-step:hover {
-    background: rgba(255,255,255,0.03);
+    background: var(--color-panel-solid);
+    box-shadow: inset 0 0 0 1px var(--color-coral-soft), inset 0 0 24px rgba(239, 182, 141, 0.05);
+    z-index: 2;
+  }
+  
+  .pipeline-meter .pipeline-step:hover strong {
+    color: var(--color-coral);
   }
 
   .pipeline-meter .pipeline-step:last-child {
@@ -233,11 +272,23 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     transition: opacity 0.4s var(--easing-smooth), transform 0.4s var(--easing-smooth), border-color 0.3s ease, background-color 0.3s ease;
   }
 
+  .newsletter-row::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    background: var(--color-coral);
+    opacity: 0;
+    transition: opacity var(--motion-fast) ease;
+  }
+
   .newsletter-row::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(107, 156, 242, 0.08), transparent 45%);
+    background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(232, 168, 124, 0.1), transparent 45%);
     opacity: 0;
     transition: opacity var(--motion-fast) ease;
     pointer-events: none;
@@ -248,10 +299,15 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     opacity: 1;
   }
 
+  .newsletter-row:hover::after,
+  .newsletter-row.pipeline-highlight::after {
+    opacity: 1;
+  }
+
   /* Interactive highlights */
   .newsletter-row.pipeline-highlight {
-    border-color: var(--color-accent);
-    background-color: rgba(107, 156, 242, 0.04);
+    border-color: var(--color-coral);
+    background-color: rgba(232, 168, 124, 0.06);
     transform: translateX(6px);
     z-index: 2;
   }
@@ -279,7 +335,7 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     text-transform: none;
     pointer-events: none;
     opacity: 0;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 12px 36px var(--glass-shadow);
     transition: opacity 0.3s var(--easing-smooth), transform 0.3s var(--easing-smooth);
     z-index: 100;
   }
@@ -323,7 +379,10 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
   }
 
   .newsletter-row strong {
-    font-size: 1.75rem;
+    font-family: var(--font-serif);
+    font-size: 1.85rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
   }
 
   .newsletter-row small {

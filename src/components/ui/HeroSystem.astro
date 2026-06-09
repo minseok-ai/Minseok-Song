@@ -8,7 +8,7 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <pattern id="hero-dots" width="24" height="24" patternUnits="userSpaceOnUse">
-          <circle cx="2" cy="2" r="0.8" fill="rgba(220, 184, 125, 0.08)" />
+          <circle cx="2" cy="2" r="0.8" fill="var(--glass-border)" />
         </pattern>
         <radialGradient id="hero-dots-fade" cx="30%" cy="40%" r="55%">
           <stop offset="0%" stop-color="#fff" stop-opacity="1" />
@@ -57,7 +57,7 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
       <!-- Multi-LLM Routing Telemetry -->
       <div class="telemetry-bar">
         <div class="telemetry-pipeline">
-          <div class="telemetry-node active" style="--node-color: var(--color-warm);">
+          <div class="telemetry-node active" style="--node-color: var(--color-accent);">
             <span class="telemetry-dot"></span>
             <span class="telemetry-label">solar-pro</span>
           </div>
@@ -67,12 +67,12 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
             <span class="telemetry-label">sonar-pro</span>
           </div>
           <span class="telemetry-arrow">➔</span>
-          <div class="telemetry-node active" style="--node-color: #c98278;">
+          <div class="telemetry-node active" style="--node-color: var(--color-coral);">
             <span class="telemetry-dot"></span>
             <span class="telemetry-label">gemini-pro</span>
           </div>
           <span class="telemetry-arrow">➔</span>
-          <div class="telemetry-node active" style="--node-color: #947bd4;">
+          <div class="telemetry-node active" style="--node-color: var(--color-purple);">
             <span class="telemetry-dot"></span>
             <span class="telemetry-label">deepseek-v4</span>
           </div>
@@ -127,7 +127,7 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     position: absolute;
     inset: 0 var(--space-page) auto;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(220, 184, 125, 0.6), transparent);
+    background: linear-gradient(90deg, transparent, rgba(var(--rgb-warm), 0.6), transparent);
     opacity: 0.6;
     z-index: 1;
   }
@@ -139,7 +139,7 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     left: -100px;
     width: 800px;
     height: 800px;
-    background: radial-gradient(circle, rgba(220, 184, 125, 0.04) 0%, transparent 60%);
+    background: radial-gradient(circle, rgba(var(--rgb-warm), 0.04) 0%, transparent 60%);
     pointer-events: none;
     z-index: -1;
   }
@@ -173,7 +173,7 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
   }
 
   .hero-copy-panel h1:hover span {
-    filter: drop-shadow(0 0 12px rgba(107, 156, 242, 0.35));
+    filter: drop-shadow(0 0 12px rgba(var(--rgb-warm), 0.35));
   }
 
   .hero-copy-panel p:not(.micro-label) {
@@ -250,13 +250,14 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
   .hero-brief {
     position: relative;
     align-self: center;
-    padding: 38px 42px;
-    border-radius: 4px;
-    background: #030407;
-    border: 1px solid rgba(220, 184, 125, 0.2);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02), 0 24px 60px rgba(0, 0, 0, 0.6);
+    padding: 32px;
+    border-radius: var(--radius-lg);
+    background: var(--color-panel);
+    border: 1px solid var(--glass-border);
+    transition:
+      transform var(--motion-base) var(--easing-spring),
+      box-shadow var(--motion-base) var(--easing-spring);
     overflow: hidden;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease, box-shadow 0.5s ease;
     z-index: 2;
     grid-column: 2;
     grid-row: 1;
@@ -264,8 +265,7 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
 
   .hero-brief:hover {
     transform: translateY(-4px);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 32px 80px rgba(0, 0, 0, 0.7);
-    border-color: rgba(220, 184, 125, 0.4);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
   }
 
   .brief-glow {
@@ -274,7 +274,7 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     right: -50px;
     width: 200px;
     height: 200px;
-    background: radial-gradient(circle, rgba(220, 184, 125, 0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(var(--rgb-warm), 0.1) 0%, transparent 70%);
     pointer-events: none;
   }
 
@@ -349,9 +349,9 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     margin-bottom: 24px;
     padding: 14px 18px;
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.01);
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+    background: var(--color-field);
+    border: 1px solid var(--color-line);
+    box-shadow: inset 0 1px 2px var(--color-line-dark);
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -408,7 +408,7 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
   .telemetry-progress-track {
     width: 100%;
     height: 1px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-line);
     position: relative;
     overflow: hidden;
   }
@@ -432,7 +432,7 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     display: grid;
     margin: 0;
     padding-top: 24px;
-    border-top: 1px solid rgba(220, 184, 125, 0.25);
+    border-top: 1px solid rgba(var(--rgb-warm), 0.25);
   }
 
   .hero-brief dl div {
@@ -440,7 +440,7 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     justify-content: space-between;
     align-items: baseline;
     padding: 16px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--color-line);
   }
 
   .hero-brief dl div:last-child {

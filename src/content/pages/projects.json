@@ -5,11 +5,11 @@
   "order": 3,
   "path": "/projects",
   "layoutType": "projectIndex",
-  "status": "draft",
+  "status": "published",
   "hidden": false,
   "hero": {
     "eyebrow": "03 / Projects",
-    "title": "Portfolio",
+    "title": "Projects",
     "subtitle": "A structured shelf for project posts, decks, experiments, and selected artifacts."
   },
   "blocks": []

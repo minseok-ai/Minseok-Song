@@ -245,7 +245,7 @@ const pipelinePhases = [
 
   .process-list {
     display: grid;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid var(--color-line);
   }
 
   .process-list article {
@@ -253,7 +253,7 @@ const pipelinePhases = [
     grid-template-columns: 40px minmax(0, 1fr);
     gap: 16px;
     padding: 24px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--color-line-dark);
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     opacity: 0.35;
@@ -287,12 +287,12 @@ const pipelinePhases = [
   .process-list article.active::before {
     height: 60%;
     opacity: 1;
-    box-shadow: 0 0 12px var(--color-accent);
+    box-shadow: 0 0 12px var(--color-accent-glow);
   }
 
   .process-list article.active span {
     color: var(--color-accent);
-    text-shadow: 0 0 12px rgba(107, 156, 242, 0.4);
+    text-shadow: 0 0 12px var(--color-accent-glow);
   }
 
   .process-list article.active h2 {
@@ -326,19 +326,19 @@ const pipelinePhases = [
 
   .product-panel {
     min-width: 0;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: linear-gradient(145deg, rgba(25, 25, 25, 0.6) 0%, rgba(10, 10, 10, 0.8) 100%);
+    border: 1px solid var(--color-line);
+    background: var(--color-panel);
     border-radius: 20px;
     overflow: hidden;
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 20px 50px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 1px 0 var(--color-line-dark), 0 20px 50px var(--glass-shadow);
     position: relative;
     backdrop-filter: blur(20px);
   }
 
   .product-panel:hover {
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 30px 70px rgba(0, 0, 0, 0.4);
+    border-color: var(--color-line-strong);
+    box-shadow: inset 0 1px 0 var(--color-line), 0 30px 70px rgba(0, 0, 0, 0.4);
     transform: translateY(-4px);
   }
 
@@ -349,8 +349,8 @@ const pipelinePhases = [
     align-items: center;
     min-height: 52px;
     padding: 0 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-line-dark);
   }
 
   .panel-toolbar span {
@@ -377,7 +377,7 @@ const pipelinePhases = [
     height: 6px;
     border-radius: 50%;
     background-color: var(--color-green);
-    box-shadow: 0 0 8px var(--color-green);
+    box-shadow: 0 0 8px var(--color-green-glow);
     animation: pulseLight 2s infinite;
   }
 
@@ -391,8 +391,8 @@ const pipelinePhases = [
     min-height: 320px;
     overflow: hidden;
     background:
-      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      linear-gradient(90deg, var(--color-line-strong) 1px, transparent 1px),
+      linear-gradient(180deg, var(--color-line-strong) 1px, transparent 1px);
     background-size: 60px 60px;
     background-position: center;
     perspective: 1000px;
@@ -402,8 +402,9 @@ const pipelinePhases = [
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at center, transparent 20%, rgba(0, 0, 0, 0.6) 100%);
+    background: radial-gradient(circle at center, transparent 20%, var(--color-paper-deep) 100%);
     pointer-events: none;
+    opacity: 0.8;
   }
 
   .product-diagram svg {
@@ -422,18 +423,18 @@ const pipelinePhases = [
   }
 
   .line-main {
-    stroke: rgba(255, 255, 255, 0.15);
+    stroke: var(--color-ink-soft);
     stroke-width: 1.5;
   }
 
   .line-sub {
-    stroke: rgba(255, 255, 255, 0.1);
+    stroke: var(--color-ink-muted);
     stroke-width: 1.2;
     stroke-dasharray: 2 4;
   }
 
   .line-loop {
-    stroke: rgba(255, 255, 255, 0.1);
+    stroke: var(--color-ink-muted);
     stroke-width: 1.2;
     stroke-dasharray: 2 4;
   }
@@ -470,13 +471,13 @@ const pipelinePhases = [
   #product-svg[data-active-step="1"] .pulse-main {
     opacity: 0.7;
     stroke-width: 3;
-    filter: drop-shadow(0 0 6px var(--color-accent));
+    filter: drop-shadow(0 0 6px var(--color-accent-glow));
   }
 
   #product-svg[data-active-step="2"] .pulse-main {
     opacity: 0.7;
     stroke-width: 3;
-    filter: drop-shadow(0 0 6px var(--color-accent));
+    filter: drop-shadow(0 0 6px var(--color-accent-glow));
   }
 
   #product-svg[data-active-step="3"] .pulse-main {
@@ -485,7 +486,7 @@ const pipelinePhases = [
   #product-svg[data-active-step="3"] .pulse-sub {
     opacity: 0.8;
     stroke-width: 3;
-    filter: drop-shadow(0 0 6px var(--color-warm));
+    filter: drop-shadow(0 0 6px var(--color-warm-glow));
   }
 
   #product-svg[data-active-step="4"] .pulse-main {
@@ -494,13 +495,13 @@ const pipelinePhases = [
   #product-svg[data-active-step="4"] .pulse-loop {
     opacity: 0.8;
     stroke-width: 3;
-    filter: drop-shadow(0 0 6px var(--color-green));
+    filter: drop-shadow(0 0 6px var(--color-green-glow));
   }
 
   #product-svg[data-active-step="5"] .pulse-main {
     opacity: 0.7;
     stroke-width: 3;
-    filter: drop-shadow(0 0 6px var(--color-accent));
+    filter: drop-shadow(0 0 6px var(--color-accent-glow));
   }
 
   @keyframes flowPulse {
@@ -511,7 +512,7 @@ const pipelinePhases = [
   /* Node items */
   .node, .node-gate {
     fill: var(--color-paper);
-    stroke: rgba(255, 255, 255, 0.4);
+    stroke: var(--color-ink-soft);
     stroke-width: 2;
     cursor: pointer;
     transform-box: fill-box;
@@ -524,7 +525,7 @@ const pipelinePhases = [
     stroke: #ffffff;
     stroke-width: 3;
     transform: scale(1.6);
-    filter: drop-shadow(0 0 16px rgba(107, 156, 242, 0.8));
+    filter: drop-shadow(0 0 16px var(--color-accent-glow));
     animation: nodePulse 2s infinite;
   }
 
@@ -533,18 +534,18 @@ const pipelinePhases = [
     stroke: #ffffff;
     stroke-width: 3;
     transform: scale(1.5) rotate(45deg);
-    filter: drop-shadow(0 0 16px rgba(220, 184, 125, 0.8));
+    filter: drop-shadow(0 0 16px var(--color-warm-glow));
     animation: gatePulse 2s infinite;
   }
 
   @keyframes nodePulse {
-    0%, 100% { filter: drop-shadow(0 0 12px rgba(107, 156, 242, 0.6)); }
-    50% { filter: drop-shadow(0 0 24px rgba(107, 156, 242, 0.9)); }
+    0%, 100% { filter: drop-shadow(0 0 12px var(--color-accent-glow)); }
+    50% { filter: drop-shadow(0 0 24px var(--color-accent-glow)); }
   }
 
   @keyframes gatePulse {
-    0%, 100% { filter: drop-shadow(0 0 12px rgba(220, 184, 125, 0.6)); }
-    50% { filter: drop-shadow(0 0 24px rgba(220, 184, 125, 0.9)); }
+    0%, 100% { filter: drop-shadow(0 0 12px var(--color-warm-glow)); }
+    50% { filter: drop-shadow(0 0 24px var(--color-warm-glow)); }
   }
 
   /* Telemetry Status Bar Styling */
@@ -553,8 +554,8 @@ const pipelinePhases = [
     grid-template-columns: 220px 1fr 200px;
     gap: 32px;
     padding: 28px 32px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+    border-top: 1px solid var(--color-line);
+    background: linear-gradient(90deg, var(--color-line-dark) 0%, transparent 100%);
     position: relative;
     overflow: hidden;
   }

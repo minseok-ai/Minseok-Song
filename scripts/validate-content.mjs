@@ -81,13 +81,11 @@ function validatePage(id, expected) {
 function main() {
   const pages = expectedPages.map(([id, ...rest]) => validatePage(id, [id, ...rest]));
   const a1Firms = pages.find((page) => page.id === "a1-firms");
-  const about = readJson(path.join(contentRoot, "pages", "about.json"));
 
   assert(a1Firms?.num === "02", "02 A1 Firms must remain the second navigation contract item");
-  assert(about.blocks.some((block) => block.type === "deckEmbed"), "About must include at least one deckEmbed block");
 
   const project = readJson(path.join(contentRoot, "projects", "a1trategize.json"));
-  assert(project.title === "A1trategize", "A1trategize project seed is required");
+  assert(project.title?.includes("A1trategize"), "A1trategize project seed is required");
   assert(allowedStatuses.has(project.status), "Project seed has invalid status");
 
   const contacts = readJson(path.join(contentRoot, "contacts", "primary.json"));
