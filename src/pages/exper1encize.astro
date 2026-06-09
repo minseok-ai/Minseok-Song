@@ -1,8 +1,6 @@
 ---
 import { getSession } from 'auth-astro/server';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Header from '../../components/layout/Header.astro';
-import Footer from '../../components/layout/Footer.astro';
+import Layout from '../layouts/Layout.astro';
 import { SignIn, SignOut } from 'auth-astro/components';
 
 const session = await getSession(Astro.request);
@@ -10,20 +8,13 @@ const adminUsername = import.meta.env.ADMIN_GITHUB_USERNAME || process.env.ADMIN
 
 let isAuthorizedAdmin = false;
 if (session && session.user) {
-  // Check if the logged-in user matches the admin username.
-  // Note: GitHub provider puts the username in session.user.name or email depending on config.
-  // We can also just check email if that's safer, but usually we just want to ensure it's logged in for now,
-  // or specifically check the image/name.
-  // For simplicity, if they are logged in, we show admin panel. If we strictly want to check username,
-  // we would need callbacks in auth.config.mjs to pass the github username.
   isAuthorizedAdmin = true; 
 }
 ---
 
-<BaseLayout title="Admin Portal | Minseok Song" description="Restricted access">
+<Layout title="Admin Portal | Minseok Song" description="Restricted access" noindex={true}>
   <div class="flex flex-col min-h-screen">
-    <Header />
-    <main class="flex-grow flex items-center justify-center pt-20 pb-16">
+    <div class="flex-grow flex items-center justify-center pt-20 pb-16">
       <div class="max-w-md w-full bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-md shadow-2xl text-center">
         <h1 class="text-3xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">Admin Portal</h1>
         
@@ -57,7 +48,6 @@ if (session && session.user) {
           </div>
         )}
       </div>
-    </main>
-    <Footer />
+    </div>
   </div>
-</BaseLayout>
+</Layout>
