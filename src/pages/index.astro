@@ -38,15 +38,17 @@ const surfaceMeta = {
   }
 };
 
-const sectionCards = nav.map((item) => {
-  const page = pageEntriesById.get(item.contentEntry);
+const sectionCards = nav
+  .filter((item) => item.id !== "home")
+  .map((item) => {
+    const page = pageEntriesById.get(item.contentEntry);
 
-  return {
-    ...item,
-    page,
-    meta: surfaceMeta[item.id] ?? surfaceMeta.about
-  };
-});
+    return {
+      ...item,
+      page,
+      meta: surfaceMeta[item.id] ?? surfaceMeta.about
+    };
+  });
 
 const signalLoop = [
   {
@@ -91,6 +93,7 @@ const focusStats = [
     <SurfaceGrid sectionCards={sectionCards} />
 
     <section class="product-band fade-in-up" aria-label="A1trategize">
+      <div class="band-grid-bg" aria-hidden="true"></div>
       <div>
         <p class="micro-label">Flagship product</p>
         <h2>{a1Firms?.hero?.title ?? "A1trategize"}</h2>
@@ -99,7 +102,9 @@ const focusStats = [
         A1trategize remains the working application surface. This site gives it
         a sharper public layer: context, proof, writing, and product memory.
       </p>
-      <a class="primary-action" href={siteConfig.a1FirmPath}>Enter product</a>
+      <a class="primary-action" href={siteConfig.a1FirmPath}>
+        Enter product <span class="arrow-shifted">→</span>
+      </a>
     </section>
   </section>
 </Layout>
@@ -117,50 +122,145 @@ const focusStats = [
   .product-band {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(260px, 0.72fr) auto;
-    gap: 36px;
-    align-items: end;
-    padding-top: 54px;
-    padding-bottom: 112px;
-    border-top: 1px solid var(--color-line);
-    width: min(100%, var(--max-site));
-    margin: 0 auto;
-    padding-right: var(--space-page);
-    padding-left: var(--space-page);
+    gap: 48px;
+    align-items: center;
+    padding: 64px 48px;
+    margin: 0 auto 112px;
+    width: min(calc(100% - 48px), var(--max-site));
+    border-radius: 24px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(20, 20, 20, 0.4) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 24px 60px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.6s var(--easing-spring), border-color 0.6s ease, box-shadow 0.6s ease;
+    z-index: 1;
+  }
+
+  .product-band > div:not(.band-grid-bg) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .product-band > p {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .product-band > .primary-action {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .product-band:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 32px 80px rgba(0, 0, 0, 0.5);
+  }
+
+  .band-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-position: center;
+    mask-image: radial-gradient(circle at 15% 50%, black 10%, rgba(0, 0, 0, 0.1) 85%);
+    -webkit-mask-image: radial-gradient(circle at 15% 50%, black 10%, rgba(0, 0, 0, 0.1) 85%);
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  .product-band::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(107, 156, 242, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .product-band::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 50%, rgba(255, 255, 255, 0.04) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    transition: background var(--motion-base) ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .product-band:hover::after {
+    background: linear-gradient(135deg, rgba(107, 156, 242, 0.4) 0%, transparent 60%, rgba(255, 255, 255, 0.15) 100%);
   }
 
   .product-band h2 {
-    margin: 10px 0 0;
-    font-size: 5.6rem;
+    margin: 12px 0 0;
+    font-size: 5.2rem;
     font-weight: 900;
-    line-height: 0.92;
+    line-height: 0.95;
     letter-spacing: -0.02em;
+    background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    z-index: 2;
   }
 
   .product-band p {
     margin: 0;
     color: var(--color-ink-soft);
-    line-height: 1.65;
+    line-height: 1.7;
+    font-size: 16px;
+    max-width: 480px;
+    position: relative;
+    z-index: 2;
   }
 
   .primary-action {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
-    padding: 0 24px;
-    border-radius: 999px;
-    font-size: 14px;
-    font-weight: 700;
+    min-height: 52px;
+    padding: 0 32px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 800;
     text-decoration: none;
-    transition: all var(--motion-fast) var(--easing-spring);
-    border: 1px solid var(--color-ink);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--color-paper-deep);
     background: var(--color-ink);
+    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
+    position: relative;
+    z-index: 2;
+  }
+
+  .primary-action .arrow-shifted {
+    margin-left: 8px;
+    transition: transform var(--motion-fast) var(--easing-smooth);
+    display: inline-block;
   }
 
   .primary-action:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.25);
+    background: #ffffff;
+  }
+
+  .primary-action:hover .arrow-shifted {
+    transform: translateX(4px);
   }
 
   .fade-in-up {
@@ -182,6 +282,21 @@ const focusStats = [
     .product-band {
       grid-template-columns: 1fr;
       align-items: start;
+    }
+    
+    .product-band > div:not(.band-grid-bg) {
+      grid-column: auto;
+      grid-row: auto;
+    }
+
+    .product-band > p {
+      grid-column: auto;
+      grid-row: auto;
+    }
+
+    .product-band > .primary-action {
+      grid-column: auto;
+      grid-row: auto;
     }
   }
 

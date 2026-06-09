@@ -8,9 +8,12 @@ const session = await getSession(Astro.request);
 const adminUsername = import.meta.env.ADMIN_GITHUB_USERNAME || process.env.ADMIN_GITHUB_USERNAME;
 
 let isAuthorizedAdmin = false;
-if (session && session.user) {
-  isAuthorizedAdmin = true; 
+if (session && session.user?.username === adminUsername) {
+  isAuthorizedAdmin = true;
 }
+
+const url = new URL(Astro.request.url);
+const error = url.searchParams.get("error");
 ---
 
 <Layout title="Admin Portal | Minseok Song" description="Restricted access" noindex={true}>
@@ -20,22 +23,41 @@ if (session && session.user) {
       <h1>Admin Portal</h1>
       
       {session ? (
-        <>
-          <p>
-            You are successfully authenticated. You can now access hidden features across the site.
-          </p>
-          <div class="admin-login-meta" aria-label="Admin profile">
-            <span>{session.user?.name}</span>
-            <span>{session.user?.email}</span>
-            <span>Admin</span>
-          </div>
-          
-          <div class="admin-login-options" style="margin-top: 32px;">
-            <SignOut class="github-login-button">
-              Sign out
-            </SignOut>
-          </div>
-        </>
+        isAuthorizedAdmin ? (
+          <>
+            <p>
+              You are successfully authenticated. You can now access hidden features across the site.
+            </p>
+            <div class="admin-login-meta" aria-label="Admin profile">
+              <span>{session.user?.name}</span>
+              <span>{session.user?.username}</span>
+              <span>Admin</span>
+            </div>
+            
+            <div class="admin-login-options" style="margin-top: 32px;">
+              <a href="/admin/writings" class="github-login-button" style="background: var(--color-accent); border-color: var(--color-accent); color: var(--color-paper-deep); margin-bottom: 8px;">
+                Open Writing Desk
+              </a>
+              <SignOut class="github-login-button" style="background: transparent; color: var(--color-ink);">
+                Sign out
+              </SignOut>
+            </div>
+          </>
+        ) : (
+          <>
+            <div class="admin-auth-message" data-state="error" style="margin-bottom: 12px;">
+              Access Denied: Your GitHub account ({session.user?.username}) does not have administrator privileges.
+            </div>
+            <p>
+              If you believe this is an error, please ensure you are logged into the correct GitHub account.
+            </p>
+            <div class="admin-login-options" style="margin-top: 24px;">
+              <SignOut class="github-login-button">
+                Sign out
+              </SignOut>
+            </div>
+          </>
+        )
       ) : (
         <>
           <p>

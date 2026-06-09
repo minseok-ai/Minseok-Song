@@ -15,6 +15,7 @@ const { sectionCards } = Astro.props;
         href={item.path}
         style={`--accent: ${item.meta.accent}; --animation-order: ${index};`}
       >
+        <span class="shimmer-sweep"></span>
         <span class="surface-num">{item.num}</span>
         <span class="surface-glyph">{item.meta.glyph}</span>
         <div class="surface-content">
@@ -72,15 +73,17 @@ const { sectionCards } = Astro.props;
     position: relative;
     display: grid;
     align-content: space-between;
-    min-height: 340px;
-    padding: 32px;
-    border-radius: var(--radius-card);
+    min-height: 360px;
+    padding: 36px;
+    border-radius: 20px;
     overflow: hidden;
     color: var(--color-ink);
-    background: var(--color-panel);
-    border: 1px solid var(--color-line);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(10, 10, 15, 0.6) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 8px 24px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(16px);
     text-decoration: none;
-    transition: all var(--motion-base) var(--easing-spring);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     
     /* Scroll reveal simulation */
     animation: fadeInUp 0.6s var(--easing-smooth) both;
@@ -90,13 +93,48 @@ const { sectionCards } = Astro.props;
   .surface-card::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100%;
-    background: radial-gradient(circle at top right, var(--accent), transparent 60%);
-    opacity: 0.05;
-    transition: opacity var(--motion-base) ease;
+    top: -40px;
+    right: -40px;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, var(--accent), transparent 70%);
+    opacity: 0.04;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+  }
+
+  .surface-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 40%, transparent 60%, rgba(255, 255, 255, 0.05) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.5;
+    transition: opacity 0.5s ease, background-image 0.5s ease;
+    pointer-events: none;
+  }
+
+  .shimmer-sweep {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 35%,
+      rgba(255, 255, 255, 0.04) 45%,
+      rgba(255, 255, 255, 0.14) 50%,
+      rgba(255, 255, 255, 0.04) 55%,
+      transparent 65%,
+      transparent 100%
+    );
+    transform: translateX(-100%) skewX(-15deg);
+    transition: none;
+    z-index: 2;
+    pointer-events: none;
   }
 
   .surface-card:nth-child(1),
@@ -110,14 +148,22 @@ const { sectionCards } = Astro.props;
 
   .surface-glyph {
     position: absolute;
-    top: 32px;
-    right: 32px;
+    top: 36px;
+    right: 36px;
     color: var(--accent);
-    font-size: 48px;
+    font-size: 56px;
     font-weight: 900;
     line-height: 1;
-    opacity: 0.8;
-    transition: transform var(--motion-base) var(--easing-spring);
+    opacity: 0.5;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .surface-num {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-ink-muted);
+    letter-spacing: 0.05em;
+    font-family: var(--font-mono);
   }
 
   .surface-content {
@@ -127,27 +173,29 @@ const { sectionCards } = Astro.props;
 
   .surface-card small {
     color: var(--accent);
-    font-size: 12px;
-    font-weight: 700;
+    font-size: 11px;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.12em;
+    opacity: 0.9;
   }
 
   .surface-card h3 {
-    margin: 12px 0 16px;
-    font-size: 2.8rem;
+    margin: 14px 0 16px;
+    font-size: 3.2rem;
     font-weight: 800;
     line-height: 1;
     letter-spacing: -0.02em;
+    color: var(--color-ink);
   }
 
   .surface-card p {
     max-width: 470px;
     margin: 0;
-    color: var(--color-ink-muted);
+    color: var(--color-ink-soft);
     font-size: 15px;
-    line-height: 1.62;
-    transition: color var(--motion-fast) ease;
+    line-height: 1.65;
+    transition: color 0.3s ease;
   }
 
   .surface-command {
@@ -169,17 +217,30 @@ const { sectionCards } = Astro.props;
   }
 
   .surface-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
-    border-color: var(--color-line-strong);
+    transform: translateY(-6px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 24px 60px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(10, 10, 15, 0.8) 100%);
+    border-color: rgba(255, 255, 255, 0.08);
   }
 
   .surface-card:hover::before {
-    opacity: 0.15;
+    opacity: 0.18;
+    transform: scale(1.15);
+  }
+
+  .surface-card:hover::after {
+    opacity: 1;
+    background: linear-gradient(135deg, var(--accent) 0%, transparent 50%, rgba(255, 255, 255, 0.15) 100%);
+  }
+
+  .surface-card:hover .shimmer-sweep {
+    transform: translateX(100%) skewX(-15deg);
+    transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .surface-card:hover .surface-glyph {
     transform: scale(1.1) rotate(5deg);
+    opacity: 0.65;
   }
 
   .surface-card:hover p,

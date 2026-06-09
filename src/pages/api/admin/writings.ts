@@ -20,7 +20,9 @@ const slugify = (value: string) => {
 export const POST: APIRoute = async ({ request, cookies }) => {
   const session = await getSession(request);
 
-  if (!session) {
+  const adminUsername = import.meta.env.ADMIN_GITHUB_USERNAME || process.env.ADMIN_GITHUB_USERNAME;
+
+  if (!session || session.user?.username !== adminUsername) {
     return Response.json(
       {
         error: "Admin authentication is required."

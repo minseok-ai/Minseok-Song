@@ -31,18 +31,24 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
 </section>
 
 <section class="newsletter-instrument">
-  <div class="pipeline-meter">
+  <div class="pipeline-meter" id="pipeline-meter">
     {articleTags.map((tag, index) => (
-      <div>
+      <div class="pipeline-step" data-step={tag.toLowerCase()}>
         <span>{String(index + 1).padStart(2, "0")}</span>
         <strong>{tag}</strong>
+        <span class="step-tooltip">
+          {tag === "Source" && "Identify high-signal tech articles, papers & research logs."}
+          {tag === "Crawl" && "Perform clean full-text extracts and archive source metadata."}
+          {tag === "Review" && "Run critical analysis, evaluate arguments & refine takeaways."}
+          {tag === "Publish" && "Deliver structured Korean summaries with full trace logs intact."}
+        </span>
       </div>
     ))}
   </div>
   <div class="newsletter-list">
     {newsletterEntries.length > 0 ? (
       newsletterEntries.map((writing, index) => (
-        <a class="newsletter-row" href={`/writings/${writing.id}`}>
+        <a class="newsletter-row" href={`/writings/${writing.id}`} data-tag={writing.data.tags[0]?.toLowerCase() ?? "review"}>
           <span>{String(index + 1).padStart(3, "0")}</span>
           <time>{writing.data.date ?? "Draft"}</time>
           <strong>{writing.data.title}</strong>
@@ -71,6 +77,28 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
       const y = e.clientY - rect.top;
       row.style.setProperty('--mouse-x', `${x}px`);
       row.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
+
+  // Interactive Pipeline Highlights
+  const steps = document.querySelectorAll('.pipeline-step');
+  steps.forEach(step => {
+    step.addEventListener('mouseenter', () => {
+      const filterTag = step.getAttribute('data-step');
+      rows.forEach(row => {
+        const rowTag = row.getAttribute('data-tag');
+        if (rowTag === filterTag) {
+          row.classList.add('pipeline-highlight');
+        } else {
+          row.classList.add('pipeline-dim');
+        }
+      });
+    });
+    
+    step.addEventListener('mouseleave', () => {
+      rows.forEach(row => {
+        row.classList.remove('pipeline-highlight', 'pipeline-dim');
+      });
     });
   });
 </script>
@@ -158,7 +186,7 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     100% { background-position: -100% 0; }
   }
 
-  .pipeline-meter div {
+  .pipeline-meter .pipeline-step {
     display: grid;
     gap: 12px;
     min-height: 112px;
@@ -166,13 +194,14 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     border: 0;
     border-right: 1px solid var(--color-line-strong);
     transition: background var(--motion-fast) ease;
+    position: relative;
   }
 
-  .pipeline-meter div:hover {
+  .pipeline-meter .pipeline-step:hover {
     background: rgba(255,255,255,0.03);
   }
 
-  .pipeline-meter div:last-child {
+  .pipeline-meter .pipeline-step:last-child {
     border-right: 0;
   }
 
@@ -201,13 +230,14 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     border-bottom: 1px solid var(--color-line);
     text-decoration: none;
     overflow: hidden;
+    transition: opacity 0.4s var(--easing-smooth), transform 0.4s var(--easing-smooth), border-color 0.3s ease, background-color 0.3s ease;
   }
 
   .newsletter-row::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255,255,255,0.06), transparent 40%);
+    inset: 0;
+    background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(107, 156, 242, 0.08), transparent 45%);
     opacity: 0;
     transition: opacity var(--motion-fast) ease;
     pointer-events: none;
@@ -216,6 +246,58 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
 
   .newsletter-row:hover::before {
     opacity: 1;
+  }
+
+  /* Interactive highlights */
+  .newsletter-row.pipeline-highlight {
+    border-color: var(--color-accent);
+    background-color: rgba(107, 156, 242, 0.04);
+    transform: translateX(6px);
+    z-index: 2;
+  }
+
+  .newsletter-row.pipeline-dim {
+    opacity: 0.25;
+  }
+
+  /* Tooltips for pipeline steps */
+  .step-tooltip {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    width: 240px;
+    background: var(--color-panel-solid);
+    border: 1px solid var(--color-line-strong);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--color-ink-soft);
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.45;
+    text-align: center;
+    text-transform: none;
+    pointer-events: none;
+    opacity: 0;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+    transition: opacity 0.3s var(--easing-smooth), transform 0.3s var(--easing-smooth);
+    z-index: 100;
+  }
+
+  .step-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--color-line-strong);
+  }
+
+  .pipeline-step:hover .step-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    color: var(--color-ink);
   }
 
   .newsletter-row > * {

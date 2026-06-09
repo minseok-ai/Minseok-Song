@@ -13,6 +13,16 @@ export type NavigationItem = {
 
 export const navigationItems = [
   {
+    id: "home",
+    num: "00",
+    label: "Home",
+    path: "/",
+    order: 0,
+    layoutType: "profile",
+    hidden: false,
+    contentEntry: "home"
+  },
+  {
     id: "about",
     num: "01",
     label: "About",

@@ -1,17 +1,55 @@
 ---
-const { operatingLoop, appUrl } = Astro.props;
+const { appUrl } = Astro.props;
+
+const pipelinePhases = [
+  {
+    num: "01",
+    title: "Input Detection",
+    model: "Solar-pro3",
+    role: "Intent Classifier",
+    desc: "Upstage Solar classifies the user query into Business, Career, IP, or semiconductor domains and expands prompt keywords."
+  },
+  {
+    num: "02",
+    title: "Research Scrutiny",
+    model: "Sonar-pro",
+    role: "Context Harvester",
+    desc: "Perplexity Sonar performs live web searches, scraping high-signal citations and localizing raw reference data."
+  },
+  {
+    num: "03",
+    title: "Adaptive scoring",
+    model: "Rule Engine",
+    role: "Pipeline Gatekeeper",
+    desc: "Evaluates context quality (score 0-100). If score < 75, loops into supplementary research; otherwise, skips directly to draft to save API costs."
+  },
+  {
+    num: "04",
+    title: "Adversarial Critique",
+    model: "DeepSeek V4 & Gemini Pro",
+    role: "Creative & Critic Loop",
+    desc: "Gemini drafts the report. DeepSeek critiques it as an adversarial agent to correct hallucinations and refine conclusions."
+  },
+  {
+    num: "05",
+    title: "QA & Verification",
+    model: "Gemini Flash & Rules",
+    role: "Compliance Inspector",
+    desc: "Performs strict database spec matches (e.g. NNFC machine logs) and generates formatted Word, PowerPoint, PDF, or Excel sheets."
+  }
+];
 ---
 
 <section class="product-workbench fade-in-up">
   <aside class="process-panel">
-    <span class="micro-label">Method / product loop</span>
+    <span class="micro-label">Method / cognitive pipeline</span>
     <div class="process-list" id="process-list">
-      {operatingLoop.map(([num, title, body], index) => (
+      {pipelinePhases.map((phase, index) => (
         <article data-step={index + 1} class={index === 0 ? "active" : ""}>
-          <span>{num}</span>
+          <span>{phase.num}</span>
           <div>
-            <h2>{title}</h2>
-            <p>{body}</p>
+            <h2>{phase.title}</h2>
+            <p>{phase.role}</p>
           </div>
         </article>
       ))}
@@ -20,134 +58,241 @@ const { operatingLoop, appUrl } = Astro.props;
 
   <div class="product-panel" id="product-panel">
     <div class="panel-toolbar">
-      <span>A1trategize</span>
-      <strong>{appUrl}</strong>
+      <span>A1trategize Pipeline Visualizer</span>
+      <strong class="telemetry-log">Active Trace / Latency: 420ms</strong>
     </div>
+    
     <div class="product-diagram" aria-hidden="true" id="diagram-container">
-      <svg viewBox="0 0 720 420" id="product-svg">
-        <path class="flow-path path-primary" d="M70 270 C150 170 255 318 356 196 S540 96 646 168" />
-        <path class="flow-path path-secondary" d="M86 150 C176 96 244 154 360 124 S548 78 650 108" />
+      <svg viewBox="0 0 720 300" id="product-svg">
+        <!-- Background static grid lines -->
+        <path class="flow-line line-main" d="M 70 150 L 650 150" />
+        <path class="flow-line line-sub" d="M 220 150 Q 370 240 520 150" />
+        <path class="flow-line line-loop" d="M 650 150 Q 585 60 520 150" />
         
-        <circle class="node node-1" cx="70" cy="270" r="8" />
-        <circle class="node node-2" cx="360" cy="124" r="7" />
-        <circle class="node node-3" cx="356" cy="196" r="12" />
-        <circle class="node node-4" cx="646" cy="168" r="8" />
+        <!-- Animated pulse flows -->
+        <path class="pulse-line pulse-main" d="M 70 150 L 650 150" />
+        <path class="pulse-line pulse-sub" d="M 220 150 Q 370 240 520 150" />
+        <path class="pulse-line pulse-loop" d="M 650 150 Q 585 60 520 150" />
+        
+        <!-- Nodes -->
+        <!-- Step 1: Detect -->
+        <circle class="node node-1 active" cx="70" cy="150" r="7" data-step="1" />
+        
+        <!-- Step 2: Research -->
+        <circle class="node node-2" cx="220" cy="150" r="7" data-step="2" />
+        
+        <!-- Step 3: Adaptive Gate (Diamond Node) -->
+        <polygon class="node-gate node-3" points="370,136 384,150 370,164 356,150" data-step="3" />
+        
+        <!-- Step 4: Critique & QA -->
+        <circle class="node node-4" cx="520" cy="150" r="7" data-step="4" />
+        
+        <!-- Step 5: Save & Export -->
+        <circle class="node node-5" cx="650" cy="150" r="7" data-step="5" />
       </svg>
-      <div class="diagram-core" id="diagram-core">
-        <div class="core-ring"></div>
-        <strong>A1</strong>
-        <span>Product app</span>
+    </div>
+
+    <!-- Repositioned Dedicated Telemetry Status Bar -->
+    <div class="telemetry-info-bar" id="telemetry-bar">
+      <div class="bar-left">
+        <span class="bar-kicker" id="card-model">Solar-pro3</span>
+        <h3 id="card-title">Input Detection</h3>
+      </div>
+      <div class="bar-center">
+        <p id="card-desc">Upstage Solar classifies the user query into Business, Career, IP, or semiconductor domains and expands prompt keywords.</p>
+      </div>
+      <div class="bar-right">
+        <div>
+          <span>Engine</span>
+          <strong id="card-engine">Solar-pro</strong>
+        </div>
+        <div>
+          <span>Target</span>
+          <strong id="card-status">Adaptive</strong>
+        </div>
       </div>
     </div>
-    <a class="panel-cta primary-action" href={appUrl}>Launch standalone app</a>
   </div>
 </section>
 
-<script>
-  // 1. Interactive Process Loop Synchronization
-  const articles = document.querySelectorAll('#process-list article');
-  const nodes = document.querySelectorAll('#product-svg .node');
-  const svg = document.getElementById('product-svg');
-  let currentStep = 1;
-  const totalSteps = 4;
-
-  function setStep(step) {
-    // Highlight list
-    articles.forEach(article => {
-      article.classList.toggle('active', parseInt(article.dataset.step) === step);
-    });
-
-    // Highlight SVG nodes
-    nodes.forEach((node, index) => {
-      node.classList.toggle('active', (index + 1) === step);
-    });
-
-    // Update path animation phase
-    if (svg) {
-      svg.dataset.phase = step;
-    }
-  }
-
-  // Auto-cycling
-  let cycleInterval = setInterval(() => {
-    currentStep = currentStep >= totalSteps ? 1 : currentStep + 1;
-    setStep(currentStep);
-  }, 3000);
-
-  // Allow manual clicking
-  articles.forEach(article => {
-    article.addEventListener('click', () => {
-      clearInterval(cycleInterval); // Pause auto-cycle on interaction
-      currentStep = parseInt(article.dataset.step);
-      setStep(currentStep);
-    });
-  });
-
-  // 2. Interactive Parallax Effect
-  const panel = document.getElementById('diagram-container');
-  const core = document.getElementById('diagram-core');
-  
-  if (panel && core && svg) {
-    panel.addEventListener('mousemove', (e) => {
-      const rect = panel.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-
-      // Move core slightly towards cursor
-      core.style.transform = `translate(calc(-50% + ${x * 0.08}px), calc(-50% + ${y * 0.08}px))`;
+<script is:inline define:vars={{ pipelinePhases }}>
+  document.addEventListener("DOMContentLoaded", () => {
+    const listArticles = document.querySelectorAll('#process-list article');
+    const nodes = document.querySelectorAll('#product-svg .node, #product-svg .node-gate');
+    const svg = document.getElementById('product-svg');
+    
+    // Telemetry Bar Elements
+    const cardModel = document.getElementById('card-model');
+    const cardTitle = document.getElementById('card-title');
+    const cardDesc = document.getElementById('card-desc');
+    const cardEngine = document.getElementById('card-engine');
+    const cardStatus = document.getElementById('card-status');
+    
+    let currentStep = 1;
+    const totalSteps = 5;
+    
+    function updateDetails(stepIndex) {
+      const data = pipelinePhases[stepIndex - 1];
+      if (!data) return;
       
-      // Move SVG paths slightly in opposite direction for parallax depth
-      svg.style.transform = `translate(${x * -0.03}px, ${y * -0.03}px)`;
+      // Update info panel
+      if (cardModel) cardModel.textContent = data.role;
+      if (cardTitle) cardTitle.textContent = data.title;
+      if (cardDesc) cardDesc.textContent = data.desc;
+      if (cardEngine) cardEngine.textContent = data.model;
+      if (cardStatus) cardStatus.textContent = data.num === "03" ? "Condition Gate" : "Active Flow";
+    }
+
+    function setStep(step) {
+      currentStep = step;
+      
+      // Highlight list items
+      listArticles.forEach(article => {
+        const stepNum = parseInt(article.dataset.step);
+        article.classList.toggle('active', stepNum === step);
+      });
+
+      // Highlight SVG nodes
+      nodes.forEach(node => {
+        const stepNum = parseInt(node.dataset.step);
+        node.classList.toggle('active', stepNum === step);
+      });
+      
+      // Update active step attribute on the SVG element
+      if (svg) {
+        svg.setAttribute('data-active-step', step.toString());
+      }
+      
+      updateDetails(step);
+    }
+
+    // Auto-cycle in the background (very slowly, every 4.5s)
+    let cycleInterval = setInterval(() => {
+      const nextStep = currentStep >= totalSteps ? 1 : currentStep + 1;
+      setStep(nextStep);
+    }, 4500);
+
+    // Allow manual interaction
+    listArticles.forEach(article => {
+      article.addEventListener('click', () => {
+        clearInterval(cycleInterval); // Pause auto-cycle
+        const step = parseInt(article.dataset.step);
+        setStep(step);
+      });
     });
 
-    panel.addEventListener('mouseleave', () => {
-      core.style.transform = `translate(-50%, -50%)`;
-      svg.style.transform = `translate(0, 0)`;
+    nodes.forEach(node => {
+      node.addEventListener('click', () => {
+        clearInterval(cycleInterval); // Pause auto-cycle
+        const step = parseInt(node.dataset.step);
+        setStep(step);
+      });
+      
+      node.addEventListener('mouseenter', () => {
+        const step = parseInt(node.dataset.step);
+        updateDetails(step);
+      });
+      
+      node.addEventListener('mouseleave', () => {
+        updateDetails(currentStep);
+      });
     });
-  }
+
+    // 3D Parallax Movement (SVG only)
+    const panel = document.getElementById('diagram-container');
+    
+    if (panel && svg) {
+      panel.addEventListener('mousemove', (e) => {
+        const rect = panel.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+
+        // Soft, elegant movement
+        svg.style.transform = `translate(${x * -0.015}px, ${y * -0.015}px)`;
+      });
+
+      panel.addEventListener('mouseleave', () => {
+        svg.style.transform = `translate(0, 0)`;
+        svg.style.transition = 'transform 0.5s ease';
+      });
+      
+      panel.addEventListener('mouseenter', () => {
+        svg.style.transition = 'none';
+      });
+    }
+    
+    // Initial load
+    updateDetails(1);
+  });
 </script>
 
 <style>
   .product-workbench {
     display: grid;
-    grid-template-columns: 340px minmax(0, 1fr);
-    gap: 28px;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 40px;
     align-items: start;
+    position: relative;
+    z-index: 10;
   }
 
   .process-panel {
     position: sticky;
-    top: calc(var(--header-height) + 28px);
+    top: calc(var(--header-height) + 48px);
     display: grid;
-    gap: 22px;
+    gap: 24px;
   }
 
   .process-list {
     display: grid;
-    border-top: 1px solid var(--color-line);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .process-list article {
     display: grid;
-    grid-template-columns: 44px minmax(0, 1fr);
-    gap: 18px;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--color-line);
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 16px;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     cursor: pointer;
-    transition: all var(--motion-fast) ease;
-    opacity: 0.4;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0.35;
+    position: relative;
+  }
+
+  .process-list article::before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 0;
+    background: var(--color-accent);
+    border-radius: 4px;
+    transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0;
   }
 
   .process-list article:hover {
     opacity: 0.7;
+    transform: translateX(4px);
   }
 
   .process-list article.active {
     opacity: 1;
+    transform: translateX(8px);
+  }
+
+  .process-list article.active::before {
+    height: 60%;
+    opacity: 1;
+    box-shadow: 0 0 12px var(--color-accent);
   }
 
   .process-list article.active span {
     color: var(--color-accent);
+    text-shadow: 0 0 12px rgba(107, 156, 242, 0.4);
   }
 
   .process-list article.active h2 {
@@ -157,17 +302,19 @@ const { operatingLoop, appUrl } = Astro.props;
   .process-list span {
     color: var(--color-ink-muted);
     font-size: 12px;
-    font-weight: 900;
+    font-weight: 800;
     text-transform: uppercase;
-    transition: color var(--motion-fast) ease;
+    transition: all 0.4s ease;
   }
 
   .process-list h2 {
     margin: 0 0 6px;
     font-size: 1.25rem;
-    line-height: 1.2;
-    transition: color var(--motion-fast) ease;
+    line-height: 1.25;
+    font-weight: 600;
+    transition: color 0.4s ease;
     color: var(--color-ink-soft);
+    letter-spacing: -0.01em;
   }
 
   .process-list p {
@@ -179,16 +326,20 @@ const { operatingLoop, appUrl } = Astro.props;
 
   .product-panel {
     min-width: 0;
-    border: 1px solid var(--color-line-strong);
-    background: var(--color-panel);
-    border-radius: var(--radius-card);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(145deg, rgba(25, 25, 25, 0.6) 0%, rgba(10, 10, 10, 0.8) 100%);
+    border-radius: 20px;
     overflow: hidden;
-    transition: border-color var(--motion-base) ease;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 20px 50px rgba(0, 0, 0, 0.3);
+    position: relative;
+    backdrop-filter: blur(20px);
   }
 
   .product-panel:hover {
-    border-color: var(--color-line-strong);
-    box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 30px 70px rgba(0, 0, 0, 0.4);
+    transform: translateY(-4px);
   }
 
   .panel-toolbar {
@@ -196,32 +347,53 @@ const { operatingLoop, appUrl } = Astro.props;
     grid-template-columns: 1fr auto;
     gap: 18px;
     align-items: center;
-    min-height: 48px;
-    padding: 0 14px;
-    border-bottom: 1px solid var(--color-line);
-    background: rgba(255,255,255,0.02);
+    min-height: 52px;
+    padding: 0 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
   }
 
   .panel-toolbar span {
     color: var(--color-ink-muted);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 900;
     text-transform: uppercase;
+    letter-spacing: 0.1em;
   }
 
-  .panel-toolbar strong {
-    color: var(--color-ink);
-    font-size: 13px;
+  .telemetry-log {
+    color: var(--color-accent-ink);
+    font-size: 11px;
+    font-family: var(--font-mono);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .telemetry-log::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--color-green);
+    box-shadow: 0 0 8px var(--color-green);
+    animation: pulseLight 2s infinite;
+  }
+
+  @keyframes pulseLight {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
   }
 
   .product-diagram {
     position: relative;
-    min-height: 520px;
+    min-height: 320px;
     overflow: hidden;
     background:
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 72px 100%, 100% 72px;
+      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
     background-position: center;
     perspective: 1000px;
   }
@@ -230,161 +402,263 @@ const { operatingLoop, appUrl } = Astro.props;
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at center, transparent 30%, var(--color-panel) 100%);
+    background: radial-gradient(circle at center, transparent 20%, rgba(0, 0, 0, 0.6) 100%);
     pointer-events: none;
   }
 
   .product-diagram svg {
     position: absolute;
-    inset: 8% 5%;
-    width: 90%;
-    height: 84%;
-    transition: transform 0.2s cubic-bezier(0.1, 0.5, 0.1, 1);
+    inset: 6% 4%;
+    width: 92%;
+    height: 88%;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.5));
   }
 
-  .flow-path {
+  /* SVG Flow Lines */
+  .flow-line {
     fill: none;
-    stroke: var(--color-accent);
-    stroke-width: 3;
     stroke-linecap: round;
-    opacity: 0.2;
-    stroke-dasharray: 1200;
-    stroke-dashoffset: 1200;
-    transition: stroke-dashoffset 1.5s var(--easing-smooth), opacity 0.5s ease;
   }
 
-  .path-secondary {
+  .line-main {
+    stroke: rgba(255, 255, 255, 0.15);
+    stroke-width: 1.5;
+  }
+
+  .line-sub {
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 1.2;
+    stroke-dasharray: 2 4;
+  }
+
+  .line-loop {
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 1.2;
+    stroke-dasharray: 2 4;
+  }
+
+  /* Animated pulse flows - Ultra slow and elegant */
+  .pulse-line {
+    fill: none;
+    stroke-linecap: round;
+    opacity: 0.08;
+    stroke-dasharray: 12 60;
+    animation: flowPulse 7s linear infinite;
+    transition: opacity 0.5s ease, stroke-width 0.5s ease;
+  }
+
+  .pulse-main {
+    stroke: var(--color-accent);
+    stroke-width: 2.2;
+  }
+
+  .pulse-sub {
+    stroke: var(--color-warm);
+    stroke-width: 1.8;
+    animation-duration: 9s;
+  }
+
+  .pulse-loop {
     stroke: var(--color-green);
+    stroke-width: 1.8;
+    animation-duration: 8s;
+    animation-direction: reverse;
   }
 
-  /* SVG Animation Phases */
-  svg[data-phase="1"] .path-primary { stroke-dashoffset: 800; opacity: 0.8; }
-  svg[data-phase="1"] .path-secondary { stroke-dashoffset: 1200; opacity: 0.2; }
-  
-  svg[data-phase="2"] .path-primary { stroke-dashoffset: 800; opacity: 0.6; }
-  svg[data-phase="2"] .path-secondary { stroke-dashoffset: 600; opacity: 0.8; }
-  
-  svg[data-phase="3"] .path-primary { stroke-dashoffset: 300; opacity: 0.9; }
-  svg[data-phase="3"] .path-secondary { stroke-dashoffset: 600; opacity: 0.4; }
-  
-  svg[data-phase="4"] .path-primary { stroke-dashoffset: 0; opacity: 1; }
-  svg[data-phase="4"] .path-secondary { stroke-dashoffset: 0; opacity: 1; }
-
-  .node {
-    fill: var(--color-paper);
-    stroke: var(--color-ink);
+  /* Interactive active step line styling highlights */
+  #product-svg[data-active-step="1"] .pulse-main {
+    opacity: 0.7;
     stroke-width: 3;
-    transition: all var(--motion-base) var(--easing-spring);
+    filter: drop-shadow(0 0 6px var(--color-accent));
+  }
+
+  #product-svg[data-active-step="2"] .pulse-main {
+    opacity: 0.7;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 6px var(--color-accent));
+  }
+
+  #product-svg[data-active-step="3"] .pulse-main {
+    opacity: 0.35;
+  }
+  #product-svg[data-active-step="3"] .pulse-sub {
+    opacity: 0.8;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 6px var(--color-warm));
+  }
+
+  #product-svg[data-active-step="4"] .pulse-main {
+    opacity: 0.35;
+  }
+  #product-svg[data-active-step="4"] .pulse-loop {
+    opacity: 0.8;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 6px var(--color-green));
+  }
+
+  #product-svg[data-active-step="5"] .pulse-main {
+    opacity: 0.7;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 6px var(--color-accent));
+  }
+
+  @keyframes flowPulse {
+    from { stroke-dashoffset: 360; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* Node items */
+  .node, .node-gate {
+    fill: var(--color-paper);
+    stroke: rgba(255, 255, 255, 0.4);
+    stroke-width: 2;
+    cursor: pointer;
+    transform-box: fill-box;
     transform-origin: center;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .node.active {
     fill: var(--color-accent);
-    stroke: var(--color-accent);
+    stroke: #ffffff;
+    stroke-width: 3;
     transform: scale(1.6);
-    filter: drop-shadow(0 0 12px var(--color-accent));
+    filter: drop-shadow(0 0 16px rgba(107, 156, 242, 0.8));
+    animation: nodePulse 2s infinite;
   }
 
-  .diagram-core {
-    position: absolute;
-    left: 50%;
-    top: 50%;
+  .node-gate.active {
+    fill: var(--color-warm);
+    stroke: #ffffff;
+    stroke-width: 3;
+    transform: scale(1.5) rotate(45deg);
+    filter: drop-shadow(0 0 16px rgba(220, 184, 125, 0.8));
+    animation: gatePulse 2s infinite;
+  }
+
+  @keyframes nodePulse {
+    0%, 100% { filter: drop-shadow(0 0 12px rgba(107, 156, 242, 0.6)); }
+    50% { filter: drop-shadow(0 0 24px rgba(107, 156, 242, 0.9)); }
+  }
+
+  @keyframes gatePulse {
+    0%, 100% { filter: drop-shadow(0 0 12px rgba(220, 184, 125, 0.6)); }
+    50% { filter: drop-shadow(0 0 24px rgba(220, 184, 125, 0.9)); }
+  }
+
+  /* Telemetry Status Bar Styling */
+  .telemetry-info-bar {
     display: grid;
-    place-items: center;
-    width: 140px;
-    height: 140px;
-    border: 1px solid var(--color-line-strong);
-    border-radius: 999px;
-    background: rgba(5, 5, 5, 0.84);
-    transform: translate(-50%, -50%);
-    backdrop-filter: blur(8px);
-    transition: transform 0.2s cubic-bezier(0.1, 0.5, 0.1, 1), box-shadow var(--motion-slow) ease;
-    box-shadow: 0 0 40px rgba(0,0,0,0.5);
-    z-index: 2;
+    grid-template-columns: 220px 1fr 200px;
+    gap: 32px;
+    padding: 28px 32px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+    position: relative;
+    overflow: hidden;
   }
 
-  .diagram-core:hover {
-    box-shadow: 0 0 60px rgba(107, 156, 242, 0.2);
-    border-color: rgba(107, 156, 242, 0.4);
-  }
-
-  .core-ring {
+  .telemetry-info-bar::before {
+    content: '';
     position: absolute;
-    inset: -1px;
-    border-radius: 50%;
-    border: 1px solid var(--color-accent);
-    opacity: 0;
-    transform: scale(1);
-    animation: corePulse 3s infinite;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+    opacity: 0.5;
   }
 
-  @keyframes corePulse {
-    0% { transform: scale(1); opacity: 0.8; }
-    100% { transform: scale(1.4); opacity: 0; }
+  .bar-left {
+    display: grid;
+    gap: 6px;
   }
 
-  .diagram-core strong {
-    font-size: 3.2rem;
-    line-height: 1;
-    color: var(--color-ink);
+  .bar-kicker {
+    color: var(--color-accent-ink);
+    font-size: 11px;
     font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
 
-  .diagram-core span {
+  .bar-left h3 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--color-ink);
+    letter-spacing: -0.01em;
+  }
+
+  .bar-center p {
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .bar-right {
+    display: flex;
+    justify-content: flex-end;
+    gap: 28px;
+  }
+
+  .bar-right div {
+    display: grid;
+    gap: 6px;
+    text-align: right;
+  }
+
+  .bar-right span {
     color: var(--color-ink-muted);
     font-size: 11px;
-    font-weight: 900;
     text-transform: uppercase;
-  }
-
-  .panel-cta {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    min-height: 58px;
-    border-right: 0;
-    border-bottom: 0;
-    border-left: 0;
-    border-top: 1px solid var(--color-line);
-    color: var(--color-paper-deep);
-    background: var(--color-ink);
-    font-size: 14px;
     font-weight: 800;
-    text-decoration: none;
-    transition: all var(--motion-fast) ease;
+    letter-spacing: 0.05em;
   }
 
-  .panel-cta:hover {
-    background: var(--color-ink-soft);
-  }
-
-  .fade-in-up {
-    animation: fadeInUp var(--motion-slow) var(--easing-smooth) both;
-  }
-
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
+  .bar-right strong {
+    font-size: 13px;
+    color: var(--color-ink);
+    font-family: var(--font-mono);
   }
 
   @media (max-width: 1180px) {
     .product-workbench {
       grid-template-columns: 1fr;
+      gap: 32px;
     }
     .process-panel {
       position: static;
     }
+    .process-list article {
+      grid-template-columns: 40px minmax(0, 1fr);
+      padding: 20px 0;
+    }
+    .process-list article::before {
+      display: none;
+    }
   }
 
   @media (max-width: 760px) {
-    .panel-toolbar {
-      grid-template-columns: 1fr;
-      gap: 6px;
-      padding: 12px 14px;
-    }
     .product-diagram {
-      min-height: 360px;
+      min-height: 260px;
+    }
+    
+    .telemetry-info-bar {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      padding: 24px;
+    }
+
+    .bar-right {
+      justify-content: flex-start;
+      gap: 40px;
+    }
+
+    .bar-right div {
+      text-align: left;
     }
   }
 </style>

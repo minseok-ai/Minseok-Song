@@ -18,55 +18,133 @@ const { contactNodes, visibleChannels } = Astro.props;
       <div class="channel-graph">
         <span class="micro-label">Channel graph</span>
         <svg viewBox="0 0 100 100" aria-hidden="true" class="graph-svg">
-          {contactNodes.map((node) => (
-            <g class="graph-edge">
-              <line class="edge-line" x1="50" y1="52" x2={node.x} y2={node.y} />
-              <circle cx={node.x} cy={node.y} r="1.6" class="node-point" />
-              <circle class="signal-dot" r="0.6">
-                <animateMotion 
-                  dur={`${1.5 + Math.random()}s`} 
-                  repeatCount="indefinite" 
-                  path={`M50 52 L${node.x} ${node.y}`} 
-                />
-              </circle>
-            </g>
-          ))}
-          <circle class="core-ring" cx="50" cy="52" r="2.3" />
-          <circle class="core-node" cx="50" cy="52" r="2.3" />
-        </svg>
-        <div class="graph-labels">
-          {contactNodes.map((node) => {
-            const Tag = node.copyable ? "button" : "a";
+          <defs>
+            <linearGradient id="radar-sweep-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="var(--color-accent)" stop-opacity="0.12" />
+              <stop offset="100%" stop-color="var(--color-accent)" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+
+          <!-- Rotating Radar Sweep Line -->
+          <line x1="50" y1="52" x2="50" y2="11" stroke="url(#radar-sweep-gradient)" stroke-width="0.8" class="radar-sweeper" />
+
+          <!-- Radar Concentric Reference Rings -->
+          <circle cx="50" cy="52" r="14" fill="none" stroke="rgba(255,255,255,0.015)" stroke-width="0.3" stroke-dasharray="1 3" />
+          <circle cx="50" cy="52" r="28" fill="none" stroke="rgba(255,255,255,0.015)" stroke-width="0.3" stroke-dasharray="2 4" />
+          <circle cx="50" cy="52" r="41" fill="none" stroke="rgba(255,255,255,0.012)" stroke-width="0.3" />
+
+          <!-- Radar Crosshairs -->
+          <line x1="50" y1="6" x2="50" y2="98" stroke="rgba(255,255,255,0.01)" stroke-width="0.2" />
+          <line x1="2" y1="52" x2="98" y2="52" stroke="rgba(255,255,255,0.01)" stroke-width="0.2" />
+
+          <!-- Ambient float particles -->
+          <circle cx="24" cy="20" r="0.4" fill="var(--color-accent)" opacity="0.15">
+            <animate attributeName="cy" values="20;24;20" dur="8s" repeatCount="indefinite" />
+          </circle>
+          <circle cx="76" cy="18" r="0.5" fill="var(--color-accent)" opacity="0.1">
+            <animate attributeName="cx" values="76;72;76" dur="10s" repeatCount="indefinite" />
+          </circle>
+          <circle cx="16" cy="70" r="0.4" fill="var(--color-accent)" opacity="0.12">
+            <animate attributeName="cy" values="70;66;70" dur="7s" repeatCount="indefinite" />
+          </circle>
+          <circle cx="82" cy="80" r="0.5" fill="var(--color-accent)" opacity="0.15">
+            <animate attributeName="cx" values="82;85;82" dur="9s" repeatCount="indefinite" />
+          </circle>
+
+          {contactNodes.map((node, index) => {
+            const isCopyable = node.copyable;
+            const linkProps = isCopyable
+              ? { role: "button", tabindex: "0" }
+              : {
+                  href: node.href ?? "#",
+                  target: "_blank",
+                  rel: "noopener noreferrer"
+                };
+
             return (
-              <Tag
-                type={node.copyable ? "button" : undefined}
-                href={node.copyable ? undefined : (node.href ?? "#")}
-                target={node.copyable ? undefined : "_blank"}
-                rel={node.copyable ? undefined : "noopener noreferrer"}
-                class="node-label-btn"
-                data-copy={node.copyable ? node.value : undefined}
-                style={`left: ${node.x}%; top: ${node.y}%;`}
+              <a
+                class="graph-edge-link"
+                data-index={index}
+                data-copy={isCopyable ? node.value : undefined}
+                {...linkProps}
               >
-                {node.label}
-                <span class="tooltip">{node.copyable ? "Click to copy" : "Click to open"}</span>
-              </Tag>
+                <g class="graph-edge" data-index={index}>
+                  <line class="edge-line" x1="50" y1="52" x2={node.x} y2={node.y} />
+                  <circle cx={node.x} cy={node.y} r="1.6" class="node-point" />
+                  <circle class="signal-dot" r="0.6">
+                    <animateMotion 
+                      dur={`${1.4 + Math.random() * 0.8}s`} 
+                      repeatCount="indefinite" 
+                      path={`M50 52 L${node.x} ${node.y}`} 
+                    />
+                  </circle>
+                  <text 
+                    x={node.x} 
+                    y={node.y - 3.8} 
+                    class="node-label-text"
+                    text-anchor="middle"
+                  >
+                    {node.label}
+                  </text>
+                </g>
+              </a>
             );
           })}
-        </div>
+          <!-- Staggered Concentric Radar Core Rings -->
+          <circle class="core-ring core-ring-1" cx="50" cy="52" r="2.3" />
+          <circle class="core-ring core-ring-2" cx="50" cy="52" r="2.3" />
+          <circle class="core-ring core-ring-3" cx="50" cy="52" r="2.3" />
+          <circle class="core-node" cx="50" cy="52" r="2.3" />
+        </svg>
         <small class="graph-hint">Click a copyable node or open the channel below.</small>
       </div>
     </div>
-  </section>
+  </section>  <section class="contact-grid">
+    {visibleChannels.map((channel, index) => {
+      const CardTag = channel.copyable ? "button" : "a";
+      return (
+        <CardTag
+          class="channel-card"
+          data-index={index}
+          href={channel.copyable ? undefined : (channel.href ?? "#")}
+          target={channel.copyable ? undefined : "_blank"}
+          rel={channel.copyable ? undefined : "noopener noreferrer"}
+          data-copy={channel.copyable ? channel.value : undefined}
+          type={channel.copyable ? "button" : undefined}
+        >
+          <div class="card-inner">
+            <div class="card-header">
+              <span class="channel-label">{channel.label}</span>
+              <div class="telemetry-badge">
+                <span class="telemetry-dot"></span>
+                <span class="telemetry-status">
+                  {channel.copyable ? "Ready / Copy" : "Live / Route"}
+                </span>
+              </div>
+            </div>
 
-  <section class="contact-ledger">
-    {visibleChannels.map((channel) => (
-      <a class="ledger-row" href={channel.href ?? "#"} target={channel.copyable ? undefined : "_blank"} rel={channel.copyable ? undefined : "noopener noreferrer"} data-copy={channel.copyable ? channel.value : undefined}>
-        <span class="channel-label">{channel.label}</span>
-        <strong class="channel-value">{channel.value}</strong>
-        <small class="channel-action">{channel.copyable ? "click to copy" : "click to open"}</small>
-        <b aria-hidden="true" class="arrow">→</b>
-      </a>
-    ))}
+            <div class="card-body">
+              <span class="channel-value-text">{channel.value}</span>
+            </div>
+
+            <div class="card-footer">
+              <span class="channel-action-hint">
+                {channel.copyable ? "Click to copy address" : "Click to open connection"}
+              </span>
+              <div class="action-icon-wrap">
+                <svg viewBox="0 0 24 24" class="action-svg" aria-hidden="true">
+                  {channel.copyable ? (
+                    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m-6 4h10m-5-5v10" />
+                  ) : (
+                    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3" />
+                  )}
+                </svg>
+              </div>
+            </div>
+          </div>
+        </CardTag>
+      );
+    })}
   </section>
 </div>
 
@@ -89,20 +167,96 @@ const { contactNodes, visibleChannels } = Astro.props;
 
     graphContainer.addEventListener('mouseleave', () => {
       graph.style.transform = 'rotateX(0) rotateY(0)';
-      graph.style.transition = 'transform var(--motion-slow) var(--easing-smooth), box-shadow var(--motion-slow) var(--easing-smooth)';
+      graph.style.transition = 'transform var(--motion-slow) var(--easing-smooth)';
     });
   }
 
-  const labels = document.querySelectorAll('.node-label-btn');
+  const labels = document.querySelectorAll('.graph-edge-link');
   const edges = document.querySelectorAll('.graph-edge');
-  
-  labels.forEach((label, i) => {
-    label.addEventListener('mouseenter', () => {
-      if (edges[i]) edges[i].classList.add('is-active');
+  const cards = document.querySelectorAll('.channel-card');
+
+  function highlightNode(index, active) {
+    if (edges[index]) edges[index].classList.toggle('is-active', active);
+    if (labels[index]) labels[index].classList.toggle('is-active', active);
+    if (cards[index]) cards[index].classList.toggle('is-highlighted', active);
+  }
+
+  labels.forEach((label) => {
+    const idx = parseInt(label.getAttribute('data-index') || '0');
+    label.addEventListener('mouseenter', () => highlightNode(idx, true));
+    label.addEventListener('mouseleave', () => highlightNode(idx, false));
+  });
+
+  cards.forEach((card) => {
+    const idx = parseInt(card.getAttribute('data-index') || '0');
+    card.addEventListener('mouseenter', () => highlightNode(idx, true));
+    card.addEventListener('mouseleave', () => {
+      highlightNode(idx, false);
+      card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      card.style.transition = 'transform var(--motion-slow) var(--easing-smooth)';
     });
-    label.addEventListener('mouseleave', () => {
-      if (edges[i]) edges[i].classList.remove('is-active');
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      
+      const rotateX = (y / rect.height) * -6;
+      const rotateY = (x / rect.width) * 6;
+      
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      card.style.transition = 'none';
     });
+  });
+
+  // Success checkmark feedback for SVG text nodes on copy click
+  document.addEventListener("click", (event) => {
+    const trigger = event.target.closest(".graph-edge-link[data-copy]");
+    if (!trigger) return;
+
+    const textNode = trigger.querySelector('.node-label-text');
+    if (textNode && !trigger.hasAttribute('data-text-updating')) {
+      trigger.setAttribute('data-text-updating', 'true');
+      const originalText = textNode.textContent;
+      textNode.textContent = `${originalText} ✓`;
+      setTimeout(() => {
+        textNode.textContent = originalText;
+        trigger.removeAttribute('data-text-updating');
+      }, 1400);
+    }
+  });
+
+  // Keyboard accessibility support for copying
+  document.addEventListener("keydown", async (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      const trigger = event.target.closest("[data-copy]");
+      if (!trigger) return;
+      
+      event.preventDefault();
+      const value = trigger.getAttribute("data-copy");
+      if (!value) return;
+
+      try {
+        await navigator.clipboard.writeText(value);
+        trigger.setAttribute("data-copied", "true");
+        
+        // Handle text label checkmark if it's the graph edge link
+        const textNode = trigger.querySelector('.node-label-text');
+        if (textNode && !trigger.hasAttribute('data-text-updating')) {
+          trigger.setAttribute('data-text-updating', 'true');
+          const originalText = textNode.textContent;
+          textNode.textContent = `${originalText} ✓`;
+          setTimeout(() => {
+            textNode.textContent = originalText;
+            trigger.removeAttribute('data-text-updating');
+          }, 1400);
+        }
+
+        window.setTimeout(() => trigger.removeAttribute("data-copied"), 1400);
+      } catch {
+        trigger.removeAttribute("data-copied");
+      }
+    }
   });
 </script>
 
@@ -171,7 +325,10 @@ const { contactNodes, visibleChannels } = Astro.props;
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 50% 50%, rgba(107, 156, 242, 0.1), transparent 70%);
+    background:
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
     pointer-events: none;
   }
 
@@ -197,12 +354,24 @@ const { contactNodes, visibleChannels } = Astro.props;
   .graph-edge line {
     stroke: var(--color-line-strong);
     stroke-width: 0.3;
-    transition: stroke var(--motion-fast) ease;
+    transition: stroke var(--motion-fast) ease, stroke-width var(--motion-fast) ease;
   }
 
   .graph-edge:hover line,
   .graph-edge.is-active line {
     stroke: var(--color-accent);
+    stroke-width: 0.5;
+  }
+
+  .radar-sweeper {
+    transform-origin: 50px 52px;
+    animation: radarSweep 14s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes radarSweep {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 
   .node-point {
@@ -210,6 +379,7 @@ const { contactNodes, visibleChannels } = Astro.props;
     stroke: var(--color-ink);
     stroke-width: 0.5;
     transition: all var(--motion-fast) ease;
+    transform-box: fill-box;
     transform-origin: center;
   }
 
@@ -218,7 +388,6 @@ const { contactNodes, visibleChannels } = Astro.props;
     fill: var(--color-accent);
     stroke: var(--color-accent);
     transform: scale(1.5);
-    filter: drop-shadow(0 0 8px var(--color-accent));
   }
 
   .core-node {
@@ -229,9 +398,22 @@ const { contactNodes, visibleChannels } = Astro.props;
   .core-ring {
     fill: none;
     stroke: var(--color-accent);
-    stroke-width: 0.5;
+    stroke-width: 0.4;
     transform-origin: 50px 52px;
-    animation: corePulse 3s infinite ease-out;
+  }
+
+  .core-ring-1 {
+    animation: corePulse 3s infinite cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .core-ring-2 {
+    animation: corePulse 3s infinite cubic-bezier(0.16, 1, 0.3, 1);
+    animation-delay: 1s;
+  }
+
+  .core-ring-3 {
+    animation: corePulse 3s infinite cubic-bezier(0.16, 1, 0.3, 1);
+    animation-delay: 2s;
   }
 
   @keyframes corePulse {
@@ -245,63 +427,33 @@ const { contactNodes, visibleChannels } = Astro.props;
     opacity: 0.7;
   }
 
-  .graph-labels {
-    position: absolute;
-    inset: 80px 36px 72px;
-    pointer-events: none;
-  }
-
-  .node-label-btn {
-    position: absolute;
-    border: 0;
-    background: transparent;
-    color: var(--color-ink-soft);
-    font-size: 13px;
-    font-weight: 700;
-    transform: translate(-50%, -150%);
-    transform-origin: bottom center;
+  .graph-edge-link {
     cursor: pointer;
+    outline: none;
     pointer-events: auto;
-    text-decoration: none;
-    padding-bottom: 24px;
-    margin-bottom: -24px;
-    transition: color var(--motion-fast) ease, transform var(--motion-fast) var(--easing-spring);
   }
 
-  .node-label-btn:hover {
-    color: var(--color-ink);
-    transform: translate(-50%, -150%) scale(1.15);
-  }
-
-  .tooltip {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%) translateY(10px);
-    background: var(--color-ink);
-    color: var(--color-paper-deep);
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 10px;
-    font-weight: 800;
-    white-space: nowrap;
-    opacity: 0;
+  .node-label-text {
+    font-family: var(--font-sans);
+    fill: var(--color-ink-muted);
+    font-size: 3.5px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
     pointer-events: none;
-    transition: all var(--motion-fast) var(--easing-spring);
+    transition: fill var(--motion-fast) ease;
   }
 
-  .node-label-btn:hover .tooltip {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-5px);
+  .graph-edge-link:hover .node-label-text,
+  .graph-edge-link.is-active .node-label-text {
+    fill: var(--color-ink);
   }
 
-  .node-label-btn[data-copied="true"]::after,
-  .ledger-row[data-copied="true"]::after {
-    content: "Copied";
-    margin-left: 8px;
-    color: var(--color-green);
-    font-size: 11px;
-    font-weight: 800;
+  .graph-edge-link:focus-visible .node-label-text {
+    fill: var(--color-accent);
+  }
+
+  .graph-edge-link[data-copied="true"] .node-label-text {
+    fill: var(--color-green) !important;
   }
 
   .graph-hint {
@@ -315,64 +467,205 @@ const { contactNodes, visibleChannels } = Astro.props;
     letter-spacing: 0.05em;
   }
 
-  .contact-ledger {
-    border-top: 1px solid var(--color-line);
-  }
-
-  .ledger-row {
+  .contact-grid {
     display: grid;
-    grid-template-columns: 160px minmax(0, 1fr) 140px 24px;
-    gap: 24px;
-    align-items: center;
-    padding: 24px 0;
-    border-bottom: 1px solid var(--color-line);
-    text-decoration: none;
-    color: var(--color-ink);
-    transition: background var(--motion-fast) ease, padding-left var(--motion-fast) ease;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 40px;
   }
 
-  .ledger-row:hover {
-    background: rgba(255, 255, 255, 0.02);
-    padding-left: 16px;
+  .channel-card {
+    position: relative;
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    background: var(--color-panel);
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color var(--motion-base) var(--easing-smooth), box-shadow var(--motion-base) var(--easing-smooth), transform var(--motion-base) var(--easing-smooth);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-inner {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 220px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.015) 0%, transparent 100%);
+    transition: background var(--motion-base) var(--easing-smooth);
+  }
+
+  .channel-card:hover,
+  .channel-card.is-highlighted {
+    border-color: var(--color-accent);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25), inset 0 0 20px rgba(255, 255, 255, 0.02);
+  }
+
+  .channel-card:hover .card-inner,
+  .channel-card.is-highlighted .card-inner {
+    background: linear-gradient(135deg, var(--color-accent-soft) 0%, transparent 100%);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
   }
 
   .channel-label {
-    color: var(--color-ink-muted);
-    font-size: 13px;
-    font-weight: 700;
-  }
-
-  .channel-value {
-    font-size: 1.4rem;
-    font-weight: 600;
-    overflow-wrap: anywhere;
-    transition: color var(--motion-fast) ease;
-  }
-
-  .ledger-row:hover .channel-value {
-    color: var(--color-accent);
-  }
-
-  .channel-action {
-    color: var(--color-ink-muted);
-    font-size: 12px;
-    font-weight: 700;
+    font-size: 11px;
+    font-weight: 800;
     text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-ink-muted);
     transition: color var(--motion-fast) ease;
   }
 
-  .ledger-row:hover .channel-action {
+  .channel-card:hover .channel-label,
+  .channel-card.is-highlighted .channel-label {
     color: var(--color-ink);
   }
 
-  .arrow {
-    color: var(--color-ink-muted);
-    transition: transform var(--motion-fast) var(--easing-spring), color var(--motion-fast) ease;
+  .telemetry-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--color-line);
+    transition: all var(--motion-base) ease;
   }
 
-  .ledger-row:hover .arrow {
-    transform: translateX(6px);
+  .telemetry-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow: 0 0 6px var(--color-accent);
+    transition: all var(--motion-base) ease;
+  }
+
+  .telemetry-status {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-ink-muted);
+    transition: color var(--motion-base) ease;
+  }
+
+  .card-body {
+    flex-grow: 1;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+  }
+
+  .channel-value-text {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    word-break: break-all;
+    line-height: 1.4;
+    transition: color var(--motion-fast) ease;
+  }
+
+  .channel-card:hover .channel-value-text,
+  .channel-card.is-highlighted .channel-value-text {
+    color: var(--color-accent-ink);
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--color-line);
+    padding-top: 18px;
+  }
+
+  .channel-action-hint {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-ink-muted);
+    transition: color var(--motion-fast) ease;
+  }
+
+  .channel-card:hover .channel-action-hint,
+  .channel-card.is-highlighted .channel-action-hint {
+    color: var(--color-ink-soft);
+  }
+
+  .action-icon-wrap {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--color-line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-ink-muted);
+    transition: all var(--motion-base) var(--easing-spring);
+  }
+
+  .action-svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .channel-card:hover .action-icon-wrap,
+  .channel-card.is-highlighted .action-icon-wrap {
     color: var(--color-accent);
+    border-color: var(--color-accent);
+    transform: scale(1.1);
+    box-shadow: 0 0 8px var(--color-accent-soft);
+  }
+
+  /* Success State when data-copied is true */
+  .channel-card[data-copied="true"] {
+    border-color: var(--color-green) !important;
+    box-shadow: 0 12px 32px rgba(108, 163, 125, 0.15), inset 0 0 20px rgba(108, 163, 125, 0.05) !important;
+  }
+
+  .channel-card[data-copied="true"] .card-inner {
+    background: linear-gradient(135deg, rgba(108, 163, 125, 0.05) 0%, transparent 100%) !important;
+  }
+
+  .channel-card[data-copied="true"] .channel-value-text {
+    color: var(--color-green) !important;
+  }
+
+  .channel-card[data-copied="true"] .telemetry-dot {
+    background: var(--color-green) !important;
+    box-shadow: 0 0 8px var(--color-green) !important;
+  }
+
+  .channel-card[data-copied="true"] .telemetry-status {
+    color: var(--color-green) !important;
+  }
+
+  .channel-card[data-copied="true"] .telemetry-badge {
+    border-color: rgba(108, 163, 125, 0.3) !important;
+    background: rgba(108, 163, 125, 0.05) !important;
+  }
+
+  .channel-card[data-copied="true"] .channel-action-hint {
+    color: var(--color-green) !important;
+  }
+
+  .channel-card[data-copied="true"] .action-icon-wrap {
+    color: var(--color-green) !important;
+    border-color: var(--color-green) !important;
+    box-shadow: 0 0 8px rgba(108, 163, 125, 0.2) !important;
   }
 
   .fade-in-up {
@@ -390,17 +683,24 @@ const { contactNodes, visibleChannels } = Astro.props;
     }
   }
 
-  @media (max-width: 1180px) {
+  @media (max-width: 1024px) {
     .contact-hero {
       grid-template-columns: 1fr;
     }
-    .ledger-row {
-      grid-template-columns: 1fr;
-      gap: 8px;
-      padding: 24px 16px;
+    .contact-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
     }
-    .channel-action, .arrow {
-      display: none;
+  }
+
+  @media (max-width: 768px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .card-inner {
+      padding: 24px;
+      min-height: 180px;
     }
   }
 </style>

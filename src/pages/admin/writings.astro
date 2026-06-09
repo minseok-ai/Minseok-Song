@@ -8,11 +8,14 @@ import { writingEntries } from "../../lib/content/registry";
 import "../../styles/admin.css";
 
 const session = await getSession(Astro.request);
+const adminUsername = import.meta.env.ADMIN_GITHUB_USERNAME || process.env.ADMIN_GITHUB_USERNAME;
 
 if (!session) {
-  return Astro.redirect(
-    `/admin/login`
-  );
+  return Astro.redirect(`/admin/login`);
+}
+
+if (session.user?.username !== adminUsername) {
+  return Astro.redirect(`/admin/login?error=unauthorized`);
 }
 
 const initialWritings = writingEntries
@@ -48,10 +51,10 @@ const sessionLabel = `Signed in with GitHub as ${session.user?.name || session.u
 
   <script is:inline>
     window.addEventListener('error', function(event) {
-      document.body.innerHTML += '<div style="position:fixed;top:0;left:0;z-index:9999;background:red;color:white;padding:20px;">' + event.error.message + '<br/><pre>' + event.error.stack + '</pre></div>';
+      console.error('Admin error:', event.error?.message, event.error?.stack);
     });
     window.addEventListener('unhandledrejection', function(event) {
-      document.body.innerHTML += '<div style="position:fixed;top:0;left:0;z-index:9999;background:red;color:white;padding:20px;">' + event.reason + '</div>';
+      console.error('Unhandled promise rejection:', event.reason);
     });
   </script>
 </Layout>

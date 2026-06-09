@@ -3,6 +3,26 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
 ---
 
 <section class="hero-system" aria-label="A1 Firms overview">
+  <!-- Dotted geometric background overlay with a radial mask -->
+  <div class="hero-dots-bg" aria-hidden="true">
+    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="hero-dots" width="24" height="24" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="0.8" fill="rgba(220, 184, 125, 0.08)" />
+        </pattern>
+        <radialGradient id="hero-dots-fade" cx="30%" cy="40%" r="55%">
+          <stop offset="0%" stop-color="#fff" stop-opacity="1" />
+          <stop offset="60%" stop-color="#fff" stop-opacity="0.25" />
+          <stop offset="100%" stop-color="#fff" stop-opacity="0" />
+        </radialGradient>
+        <mask id="hero-dots-mask">
+          <rect width="100%" height="100%" fill="url(#hero-dots-fade)" />
+        </mask>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#hero-dots)" mask="url(#hero-dots-mask)" />
+    </svg>
+  </div>
+
   <div class="hero-copy-panel fade-in-up">
     <p class="micro-label">Minseok Song / A1 Firms</p>
     <h1>
@@ -14,25 +34,66 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     </p>
     <div class="hero-actions" aria-label="Primary actions">
       <a class="primary-action" href={siteConfig.a1FirmPath}>Open A1trategize</a>
-      <a class="secondary-action" href="#surfaces">Explore surfaces</a>
+      <a class="secondary-action" href="#surfaces">Explore surfaces <span class="arrow-shifted">→</span></a>
     </div>
   </div>
 
   <aside class="hero-brief fade-in-up" style="animation-delay: 150ms;" aria-label="Current focus">
-    <p class="micro-label">Current focus</p>
-    <h2>{a1Firms?.hero?.title ?? "A1trategize"}</h2>
-    <p>
-      The working product remains separate. This site explains the context,
-      proof, writing, and product memory around it.
-    </p>
-    <dl>
-      {focusStats.map(([label, value]) => (
-        <div>
-          <dt>{label}</dt>
-          <dd>{value}</dd>
+    <div class="brief-glow"></div>
+    <div class="brief-content">
+      <div class="focus-title-wrap">
+        <p class="micro-label">Current focus</p>
+        <span class="live-indicator">
+          <span class="indicator-dot"></span>
+          Live
+        </span>
+      </div>
+      <h2>{a1Firms?.hero?.title ?? "A1trategize"}</h2>
+      <p>
+        The working product remains separate. This site explains the context,
+        proof, writing, and product memory around it.
+      </p>
+
+      <!-- Multi-LLM Routing Telemetry -->
+      <div class="telemetry-bar">
+        <div class="telemetry-pipeline">
+          <div class="telemetry-node active" style="--node-color: var(--color-warm);">
+            <span class="telemetry-dot"></span>
+            <span class="telemetry-label">solar-pro</span>
+          </div>
+          <span class="telemetry-arrow">➔</span>
+          <div class="telemetry-node active" style="--node-color: var(--color-blue);">
+            <span class="telemetry-dot"></span>
+            <span class="telemetry-label">sonar-pro</span>
+          </div>
+          <span class="telemetry-arrow">➔</span>
+          <div class="telemetry-node active" style="--node-color: #c98278;">
+            <span class="telemetry-dot"></span>
+            <span class="telemetry-label">gemini-pro</span>
+          </div>
+          <span class="telemetry-arrow">➔</span>
+          <div class="telemetry-node active" style="--node-color: #947bd4;">
+            <span class="telemetry-dot"></span>
+            <span class="telemetry-label">deepseek-v4</span>
+          </div>
         </div>
-      ))}
-    </dl>
+        <div class="telemetry-status">
+          <span class="telemetry-log">ROUTING CONTEXT / LATENCY 420ms</span>
+          <span class="telemetry-progress-track">
+            <span class="telemetry-progress-bar"></span>
+          </span>
+        </div>
+      </div>
+
+      <dl>
+        {focusStats.map(([label, value]) => (
+          <div>
+            <dt>{label}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
   </aside>
 </section>
 
@@ -53,14 +114,34 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     overflow: hidden;
   }
 
+  .hero-dots-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
   .hero-system::before {
     content: "";
     position: absolute;
     inset: 0 var(--space-page) auto;
     height: 1px;
-    /* Premium elegant gradient */
-    background: linear-gradient(90deg, var(--color-accent), var(--color-warm), transparent);
-    opacity: 0.3;
+    background: linear-gradient(90deg, transparent, rgba(220, 184, 125, 0.6), transparent);
+    opacity: 0.6;
+    z-index: 1;
+  }
+
+  .hero-system::after {
+    content: "";
+    position: absolute;
+    top: -200px;
+    left: -100px;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(220, 184, 125, 0.04) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: -1;
   }
 
   .hero-copy-panel {
@@ -68,23 +149,31 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     z-index: 2;
     align-self: center;
     max-width: 800px;
+    grid-column: 1;
+    grid-row: 1;
   }
 
   .hero-copy-panel h1 {
-    margin: 18px 0 22px;
-    font-size: clamp(3rem, 6.5vw, 6.4rem);
-    font-weight: 800;
-    letter-spacing: -0.01em;
-    line-height: 1.05;
-    font-family: var(--font-sans);
+    margin: 18px 0 24px;
+    font-size: clamp(3.2rem, 7vw, 6.8rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    font-family: "Noto Serif KR", "Noto Serif", serif;
+    color: var(--color-ink-muted);
   }
 
   .hero-copy-panel h1 span {
     display: inline-block;
-    color: transparent;
-    background: linear-gradient(120deg, var(--color-accent) 0%, var(--color-warm) 100%);
-    background-clip: text;
+    background: linear-gradient(135deg, var(--color-ink) 30%, var(--color-accent-ink) 100%);
     -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    transition: filter var(--motion-base) ease;
+  }
+
+  .hero-copy-panel h1:hover span {
+    filter: drop-shadow(0 0 12px rgba(107, 156, 242, 0.35));
   }
 
   .hero-copy-panel p:not(.micro-label) {
@@ -104,88 +193,276 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
 
   .primary-action,
   .secondary-action {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-height: 48px;
-    padding: 0 24px;
-    border-radius: 999px;
-    font-size: 14px;
+    padding: 0 32px;
+    border-radius: 4px;
+    font-size: 13px;
     font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     text-decoration: none;
-    transition: all var(--motion-fast) var(--easing-spring);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
   }
 
   .primary-action {
-    border: 1px solid var(--color-ink);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--color-paper-deep);
     background: var(--color-ink);
+    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
   }
 
   .secondary-action {
-    border: 1px solid var(--color-line-strong);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     color: var(--color-ink);
     background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .secondary-action .arrow-shifted {
+    margin-left: 6px;
+    transition: transform var(--motion-fast) var(--easing-smooth);
+    display: inline-block;
   }
 
   .primary-action:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.25);
+    background: #ffffff;
   }
 
   .secondary-action:hover {
     transform: translateY(-2px);
     background: rgba(255, 255, 255, 0.08);
-    border-color: var(--color-ink-muted);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .secondary-action:hover .arrow-shifted {
+    transform: translateX(4px);
   }
 
   .hero-brief {
+    position: relative;
     align-self: center;
-    padding: 32px;
-    border-radius: var(--radius-card);
-    background: var(--color-panel);
-    border: 1px solid var(--color-line);
-    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(12px);
+    padding: 38px 42px;
+    border-radius: 4px;
+    background: #030407;
+    border: 1px solid rgba(220, 184, 125, 0.2);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02), 0 24px 60px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease, box-shadow 0.5s ease;
+    z-index: 2;
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .hero-brief:hover {
+    transform: translateY(-4px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 32px 80px rgba(0, 0, 0, 0.7);
+    border-color: rgba(220, 184, 125, 0.4);
+  }
+
+  .brief-glow {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(220, 184, 125, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .brief-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .focus-title-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 9px;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--color-green);
+    letter-spacing: 0.1em;
+    background: rgba(108, 163, 125, 0.08);
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(108, 163, 125, 0.15);
+  }
+
+  .indicator-dot {
+    width: 5px;
+    height: 5px;
+    background: var(--color-green);
+    border-radius: 50%;
+    position: relative;
+  }
+
+  .indicator-dot::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: var(--color-green);
+    opacity: 0.4;
+    animation: dotPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes dotPulse {
+    0% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(2.4); opacity: 0; }
+    100% { transform: scale(1); opacity: 0; }
   }
 
   .hero-brief h2 {
-    font-size: 2rem;
+    font-family: "Noto Serif KR", "Noto Serif", serif;
+    font-size: 2.6rem;
     margin: 12px 0 16px;
-    font-weight: 700;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
   }
   
   .hero-brief p {
     color: var(--color-ink-soft);
     font-size: 15px;
-    line-height: 1.6;
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+
+  /* Sleek Multi-LLM Routing Telemetry Styles */
+  .telemetry-bar {
     margin-bottom: 24px;
+    padding: 14px 18px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .telemetry-pipeline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .telemetry-node {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .telemetry-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: var(--node-color, var(--color-accent));
+    box-shadow: 0 0 6px var(--node-color, var(--color-accent));
+  }
+
+  .telemetry-label {
+    font-size: 9px;
+    color: var(--color-ink-soft);
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .telemetry-arrow {
+    font-size: 9px;
+    color: var(--color-ink-muted);
+  }
+
+  .telemetry-status {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .telemetry-log {
+    font-size: 8px;
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .telemetry-progress-track {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .telemetry-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 30%;
+    background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+    animation: telemetrySweep 3s infinite linear;
+  }
+
+  @keyframes telemetrySweep {
+    0% { transform: translateX(-150%); }
+    100% { transform: translateX(350%); }
   }
 
   .hero-brief dl {
     display: grid;
-    gap: 16px;
     margin: 0;
+    padding-top: 24px;
+    border-top: 1px solid rgba(220, 184, 125, 0.25);
   }
 
   .hero-brief dl div {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .hero-brief dl div:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
   }
 
   .hero-brief dt {
-    font-size: 11px;
+    font-size: 10px;
     text-transform: uppercase;
     color: var(--color-ink-muted);
     font-weight: 700;
+    letter-spacing: 0.1em;
   }
 
   .hero-brief dd {
     margin: 0;
-    font-size: 15px;
+    font-family: "Noto Serif KR", "Noto Serif", serif;
+    font-size: 18px;
     font-weight: 500;
+    color: var(--color-ink);
+    text-align: right;
   }
 
   .fade-in-up {
@@ -208,7 +485,14 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
       grid-template-columns: 1fr;
     }
     
+    .hero-copy-panel {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
     .hero-brief {
+      grid-column: 1;
+      grid-row: 2;
       max-width: 600px;
     }
   }
