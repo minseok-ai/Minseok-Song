@@ -1,0 +1,16 @@
+---
+import BlockRenderer from "../../BlockRenderer.astro";
+
+const { page } = Astro.props;
+const visibleBlocks = (page.blocks ?? []).filter((block) => !block.hidden);
+---
+
+<div class="block-stack">
+  {visibleBlocks.map((block) => <BlockRenderer block={block} />)}
+</div>
+
+<style>
+  .block-stack {
+    display: grid;
+  }
+</style>

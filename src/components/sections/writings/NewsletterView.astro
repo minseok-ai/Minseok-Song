@@ -1,0 +1,286 @@
+---
+const { navItem, hero, writings = [] } = Astro.props;
+
+const newsletterEntries = writings
+  .filter((entry) => !entry.data.hidden)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const articleTags = ["Source", "Crawl", "Review", "Publish"];
+---
+
+<div class="page-kicker">
+  <span>{hero.eyebrow ?? `${navItem.num} / ${navItem.label}`}</span>
+  <i></i>
+  <strong>Newsletter desk</strong>
+</div>
+
+<section class="index-hero newsletter-hero">
+  <h1>Reviewed articles, crawled sources, and short editorial signals.</h1>
+  <p>
+    Writings is not a loose essay shelf. It is the newsletter surface:
+    find a worthwhile article, crawl the full text, review the argument,
+    then publish a concise Korean note with source trace intact.
+  </p>
+  <a class="admin-entry-link" href="/admin/writings">Open writing desk</a>
+</section>
+
+<section class="newsletter-instrument">
+  <div class="pipeline-meter">
+    {articleTags.map((tag, index) => (
+      <div>
+        <span>{String(index + 1).padStart(2, "0")}</span>
+        <strong>{tag}</strong>
+      </div>
+    ))}
+  </div>
+  <div class="newsletter-list">
+    {newsletterEntries.length > 0 ? (
+      newsletterEntries.map((writing, index) => (
+        <a class="newsletter-row" href={`/writings/${writing.id}`}>
+          <span>{String(index + 1).padStart(3, "0")}</span>
+          <time>{writing.data.date ?? "Draft"}</time>
+          <strong>{writing.data.title}</strong>
+          <em>{writing.data.tags[0] ?? "Review"}</em>
+          <small>{writing.data.summary}</small>
+          <b aria-hidden="true">→</b>
+        </a>
+      ))
+    ) : (
+      <div class="empty-ledger">
+        <span class="micro-label">Newsletter pending</span>
+        <h2>Connect crawler output to publish reviewed briefs here.</h2>
+        <p>Each issue should keep source, crawl, review, and final note separate.</p>
+      </div>
+    )}
+  </div>
+</section>
+
+<script is:inline>
+  // Spotlight hover for Newsletter Rows
+  const rows = document.querySelectorAll('.newsletter-row');
+  rows.forEach(row => {
+    row.addEventListener('mousemove', (e) => {
+      const rect = row.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      row.style.setProperty('--mouse-x', `${x}px`);
+      row.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
+</script>
+
+<style>
+  .index-hero {
+    display: grid;
+    gap: 28px;
+  }
+
+  .newsletter-hero {
+    max-width: 1120px;
+  }
+
+  .index-hero h1 {
+    margin: 0;
+    max-width: 960px;
+    font-family: var(--font-serif);
+    font-size: clamp(2.45rem, 3.65vw, 3.55rem);
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .index-hero p {
+    margin: 0;
+    max-width: 640px;
+    color: var(--color-ink-soft);
+    font-size: 18px;
+    line-height: 1.65;
+  }
+
+  .admin-entry-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    min-height: 44px;
+    padding: 0 18px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-card);
+    color: var(--color-ink);
+    background: rgba(248, 247, 242, 0.06);
+    font-size: 13px;
+    font-weight: 850;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      background var(--motion-fast) ease,
+      border-color var(--motion-fast) ease,
+      transform var(--motion-fast) ease;
+  }
+
+  .admin-entry-link:hover {
+    border-color: var(--color-accent);
+    background: var(--color-accent-soft);
+    transform: translateY(-1px);
+  }
+
+  .newsletter-instrument {
+    display: grid;
+    gap: 24px;
+  }
+
+  .pipeline-meter {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border: 1px solid var(--color-line-strong);
+    background: rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pipeline-meter::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    background-size: 200% 100%;
+    animation: pipelineFlow 4s infinite linear;
+    pointer-events: none;
+  }
+
+  @keyframes pipelineFlow {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+  }
+
+  .pipeline-meter div {
+    display: grid;
+    gap: 12px;
+    min-height: 112px;
+    padding: 18px;
+    border: 0;
+    border-right: 1px solid var(--color-line-strong);
+    transition: background var(--motion-fast) ease;
+  }
+
+  .pipeline-meter div:hover {
+    background: rgba(255,255,255,0.03);
+  }
+
+  .pipeline-meter div:last-child {
+    border-right: 0;
+  }
+
+  .pipeline-meter span {
+    color: var(--color-ink-muted);
+    font-size: 12px;
+  }
+
+  .pipeline-meter strong {
+    align-self: end;
+    font-size: 1.45rem;
+  }
+
+  .newsletter-list {
+    display: grid;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .newsletter-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 64px 104px minmax(180px, 0.55fr) 96px minmax(0, 1fr) 28px;
+    gap: 24px;
+    align-items: center;
+    min-height: 86px;
+    border-bottom: 1px solid var(--color-line);
+    text-decoration: none;
+    overflow: hidden;
+  }
+
+  .newsletter-row::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255,255,255,0.06), transparent 40%);
+    opacity: 0;
+    transition: opacity var(--motion-fast) ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .newsletter-row:hover::before {
+    opacity: 1;
+  }
+
+  .newsletter-row > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .newsletter-row span,
+  .newsletter-row time,
+  .newsletter-row em {
+    color: var(--color-ink-muted);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .newsletter-row em {
+    border: 1px solid var(--color-line);
+    padding: 6px 8px;
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .newsletter-row strong {
+    font-size: 1.75rem;
+  }
+
+  .newsletter-row small {
+    color: var(--color-ink-soft);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .empty-ledger {
+    padding: 32px 0;
+  }
+
+  .empty-ledger h2 {
+    margin: 8px 0 10px;
+    font-size: 2.2rem;
+  }
+
+  .empty-ledger p {
+    margin: 0;
+    color: var(--color-ink-soft);
+    line-height: 1.65;
+  }
+
+  @media (max-width: 1180px) {
+    .index-hero h1 {
+      font-size: clamp(2.25rem, 6vw, 3rem);
+    }
+    .newsletter-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .index-hero h1 {
+      font-size: clamp(1.95rem, 8vw, 2.45rem);
+    }
+    .pipeline-meter {
+      grid-template-columns: 1fr;
+    }
+    .pipeline-meter div {
+      border-right: 0;
+      border-bottom: 1px solid var(--color-line);
+    }
+    .pipeline-meter div:last-child {
+      border-bottom: 0;
+    }
+  }
+</style>

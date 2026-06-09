@@ -1,0 +1,56 @@
+---
+import ContactGraph from "../../ui/ContactGraph.astro";
+
+const { navItem, hero, contactEntries = [] } = Astro.props;
+
+const visibleChannels = contactEntries.flatMap((entry) =>
+  entry.data.channels.filter((channel) => channel.visible)
+);
+
+const contactNodePositions = [
+  { x: 50, y: 16 }, // Top
+  { x: 80, y: 66 }, // Bottom Right
+  { x: 20, y: 66 }, // Bottom Left
+  { x: 84, y: 34 },
+  { x: 16, y: 34 },
+  { x: 50, y: 90 }
+];
+
+const contactNodes = visibleChannels.map((channel, index) => ({
+  ...channel,
+  ...(contactNodePositions[index % contactNodePositions.length] ?? contactNodePositions[0])
+}));
+---
+
+<div class="page-kicker">
+  <span>{hero.eyebrow ?? `${navItem.num} / ${navItem.label}`}</span>
+  <i></i>
+  <strong>Open node</strong>
+</div>
+
+<div class="availability-strip" aria-hidden="true">
+  <span>Available for · Strategy · AI Product · Research · Collaboration ·</span>
+  <span>Available for · Strategy · AI Product · Research · Collaboration ·</span>
+</div>
+
+<ContactGraph contactNodes={contactNodes} visibleChannels={visibleChannels} />
+
+<style>
+  .availability-strip {
+    display: flex;
+    gap: 48px;
+    overflow: hidden;
+    padding: 16px 0;
+    border-top: 1px solid var(--color-line-strong);
+    border-bottom: 1px solid var(--color-line-strong);
+    color: var(--color-ink-muted);
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .availability-strip span {
+    flex: 0 0 auto;
+  }
+</style>

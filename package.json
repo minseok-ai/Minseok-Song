@@ -15,9 +15,11 @@
   "dependencies": {
     "@astrojs/react": "^5.0.7",
     "@astrojs/vercel": "^10.0.8",
+    "@auth/core": "^0.37.4",
     "@types/react": "^19.2.16",
     "@types/react-dom": "^19.2.3",
     "astro": "^6.4.4",
+    "auth-astro": "^4.2.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   }
