@@ -1,0 +1,222 @@
+---
+const { a1Firms, focusStats, siteConfig } = Astro.props;
+---
+
+<section class="hero-system" aria-label="A1 Firms overview">
+  <div class="hero-copy-panel fade-in-up">
+    <p class="micro-label">Minseok Song / A1 Firms</p>
+    <h1>
+      Strategy systems for <span>AI-native firms.</span>
+    </h1>
+    <p>
+      A public operating layer for A1trategize, selected work, field notes,
+      and the strategic intelligence loop behind them.
+    </p>
+    <div class="hero-actions" aria-label="Primary actions">
+      <a class="primary-action" href={siteConfig.a1FirmPath}>Open A1trategize</a>
+      <a class="secondary-action" href="#surfaces">Explore surfaces</a>
+    </div>
+  </div>
+
+  <aside class="hero-brief fade-in-up" style="animation-delay: 150ms;" aria-label="Current focus">
+    <p class="micro-label">Current focus</p>
+    <h2>{a1Firms?.hero?.title ?? "A1trategize"}</h2>
+    <p>
+      The working product remains separate. This site explains the context,
+      proof, writing, and product memory around it.
+    </p>
+    <dl>
+      {focusStats.map(([label, value]) => (
+        <div>
+          <dt>{label}</dt>
+          <dd>{value}</dd>
+        </div>
+      ))}
+    </dl>
+  </aside>
+</section>
+
+<style>
+  .hero-system {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(420px, 0.78fr);
+    grid-template-rows: 1fr auto;
+    gap: 42px 62px;
+    width: min(100%, var(--max-site));
+    margin: 0 auto;
+    padding-right: var(--space-page);
+    padding-left: var(--space-page);
+    min-height: calc(100svh - var(--header-height) - 40px);
+    padding-top: 56px;
+    padding-bottom: 28px;
+    overflow: hidden;
+  }
+
+  .hero-system::before {
+    content: "";
+    position: absolute;
+    inset: 0 var(--space-page) auto;
+    height: 1px;
+    /* Premium elegant gradient */
+    background: linear-gradient(90deg, var(--color-accent), var(--color-warm), transparent);
+    opacity: 0.3;
+  }
+
+  .hero-copy-panel {
+    position: relative;
+    z-index: 2;
+    align-self: center;
+    max-width: 800px;
+  }
+
+  .hero-copy-panel h1 {
+    margin: 18px 0 22px;
+    font-size: clamp(3rem, 6.5vw, 6.4rem);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+    font-family: var(--font-sans);
+  }
+
+  .hero-copy-panel h1 span {
+    display: inline-block;
+    color: transparent;
+    background: linear-gradient(120deg, var(--color-accent) 0%, var(--color-warm) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+  }
+
+  .hero-copy-panel p:not(.micro-label) {
+    max-width: 650px;
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 18px;
+    line-height: 1.72;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 36px;
+  }
+
+  .primary-action,
+  .secondary-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 24px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all var(--motion-fast) var(--easing-spring);
+  }
+
+  .primary-action {
+    border: 1px solid var(--color-ink);
+    color: var(--color-paper-deep);
+    background: var(--color-ink);
+  }
+
+  .secondary-action {
+    border: 1px solid var(--color-line-strong);
+    color: var(--color-ink);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(8px);
+  }
+
+  .primary-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.12);
+  }
+
+  .secondary-action:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--color-ink-muted);
+  }
+
+  .hero-brief {
+    align-self: center;
+    padding: 32px;
+    border-radius: var(--radius-card);
+    background: var(--color-panel);
+    border: 1px solid var(--color-line);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+  }
+
+  .hero-brief h2 {
+    font-size: 2rem;
+    margin: 12px 0 16px;
+    font-weight: 700;
+  }
+  
+  .hero-brief p {
+    color: var(--color-ink-soft);
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .hero-brief dl {
+    display: grid;
+    gap: 16px;
+    margin: 0;
+  }
+
+  .hero-brief dl div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .hero-brief dt {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    font-weight: 700;
+  }
+
+  .hero-brief dd {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .fade-in-up {
+    animation: fadeInUp var(--motion-slow) var(--easing-smooth) both;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 1180px) {
+    .hero-system {
+      grid-template-columns: 1fr;
+    }
+    
+    .hero-brief {
+      max-width: 600px;
+    }
+  }
+
+  @media (max-width: 820px) {
+    .hero-system {
+      min-height: auto;
+      padding-top: 42px;
+    }
+  }
+</style>

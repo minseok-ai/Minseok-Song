@@ -1,0 +1,149 @@
+---
+const { signalLoop } = Astro.props;
+---
+
+<section class="loop-section fade-in-up" aria-label="Operating loop">
+  <div class="section-head">
+    <p class="micro-label">Operating loop</p>
+    <h2>From signal to surface, without losing the reasoning trace.</h2>
+  </div>
+
+  <div class="loop-grid">
+    {signalLoop.map((step, index) => (
+      <article class="loop-card" style={`--animation-order: ${index};`}>
+        <span class="step-num">{step.num}</span>
+        <h3>{step.title}</h3>
+        <p>{step.copy}</p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .loop-section {
+    display: grid;
+    gap: 32px;
+    padding-top: 104px;
+    padding-bottom: 92px;
+    border-top: 1px solid var(--color-line);
+    width: min(100%, var(--max-site));
+    margin: 0 auto;
+    padding-right: var(--space-page);
+    padding-left: var(--space-page);
+  }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 28px;
+    align-items: end;
+    border-bottom: 1px solid var(--color-line-strong);
+    padding-bottom: 24px;
+  }
+
+  .section-head h2 {
+    max-width: 620px;
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.5;
+    text-align: right;
+  }
+
+  .loop-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .loop-card {
+    position: relative;
+    min-height: 320px;
+    padding: 32px;
+    border-radius: var(--radius-card);
+    background: var(--color-panel);
+    border: 1px solid var(--color-line);
+    transition: transform var(--motion-base) var(--easing-spring), box-shadow var(--motion-base) var(--easing-spring);
+    overflow: hidden;
+    
+    /* Scroll reveal simulation */
+    animation: fadeInUp 0.6s var(--easing-smooth) both;
+    animation-delay: calc(var(--animation-order) * 100ms);
+  }
+
+  .loop-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top right, rgba(107, 156, 242, 0.05), transparent 60%);
+    opacity: 0;
+    transition: opacity var(--motion-base) ease;
+  }
+
+  .loop-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    border-color: var(--color-line-strong);
+  }
+
+  .loop-card:hover::before {
+    opacity: 1;
+  }
+
+  .step-num {
+    color: var(--color-accent);
+    font-size: 14px;
+    font-weight: 800;
+    font-family: var(--font-mono);
+  }
+
+  .loop-card h3 {
+    margin: 84px 0 16px;
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
+
+  .loop-card p {
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 15px;
+    line-height: 1.64;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 1180px) {
+    .loop-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 820px) {
+    .loop-grid {
+      grid-template-columns: 1fr;
+    }
+    .section-head {
+      display: grid;
+      align-items: start;
+    }
+    .section-head h2 {
+      text-align: left;
+    }
+  }
+</style>

@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { siteConfig } from "../config/site";
+import ProductWorkbench from "../components/ui/ProductWorkbench.astro";
 
 const appUrl = import.meta.env.A1TRATEGIZE_URL || siteConfig.a1trategizeUrl;
 
@@ -83,44 +84,7 @@ const bars = Array.from({ length: 72 }, (_, index) => 18 + ((index * 19) % 54));
       </article>
     </section>
 
-    <section class="product-workbench">
-      <aside class="process-panel">
-        <span class="micro-label">Method / product loop</span>
-        <div class="process-list">
-          {operatingLoop.map(([num, title, body]) => (
-            <article>
-              <span>{num}</span>
-              <div>
-                <h2>{title}</h2>
-                <p>{body}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </aside>
-
-      <div class="product-panel">
-        <div class="panel-toolbar">
-          <span>A1trategize</span>
-          <strong>{appUrl}</strong>
-        </div>
-        <div class="product-diagram" aria-hidden="true">
-          <svg viewBox="0 0 720 420">
-            <path d="M70 270 C150 170 255 318 356 196 S540 96 646 168" />
-            <path d="M86 150 C176 96 244 154 360 124 S548 78 650 108" />
-            <circle cx="70" cy="270" r="8" />
-            <circle cx="356" cy="196" r="12" />
-            <circle cx="646" cy="168" r="8" />
-            <circle cx="360" cy="124" r="7" />
-          </svg>
-          <div class="diagram-core">
-            <strong>A1</strong>
-            <span>Product app</span>
-          </div>
-        </div>
-        <a class="panel-cta" href={appUrl}>Launch standalone app</a>
-      </div>
-    </section>
+    <ProductWorkbench operatingLoop={operatingLoop} appUrl={appUrl} />
   </section>
 </Layout>
 
@@ -285,139 +249,10 @@ const bars = Array.from({ length: 72 }, (_, index) => 18 + ((index * 19) % 54));
     line-height: 1.7;
   }
 
-  .product-workbench {
-    display: grid;
-    grid-template-columns: 340px minmax(0, 1fr);
-    gap: 28px;
-    align-items: start;
-  }
-
-  .process-panel {
-    position: sticky;
-    top: calc(var(--header-height) + 28px);
-    display: grid;
-    gap: 22px;
-  }
-
-  .process-list {
-    display: grid;
-    border-top: 1px solid var(--color-line);
-  }
-
-  .process-list article {
-    display: grid;
-    grid-template-columns: 44px minmax(0, 1fr);
-    gap: 18px;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--color-line);
-  }
-
-  .process-list h2 {
-    margin: 0 0 6px;
-    font-size: 1.25rem;
-    line-height: 1.2;
-  }
-
-  .process-list p {
-    margin: 0;
-    color: var(--color-ink-soft);
-    font-size: 14px;
-    line-height: 1.55;
-  }
-
-  .product-panel {
-    min-width: 0;
-    border: 1px solid var(--color-line-strong);
-    background: var(--color-paper-deep);
-  }
-
-  .panel-toolbar {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 18px;
-    align-items: center;
-    min-height: 48px;
-    padding: 0 14px;
-    border-bottom: 1px solid var(--color-line);
-  }
-
-  .panel-toolbar strong {
-    color: var(--color-ink);
-  }
-
-  .product-diagram {
-    position: relative;
-    min-height: 520px;
-    overflow: hidden;
-    background:
-      linear-gradient(90deg, rgba(248, 247, 242, 0.05) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(248, 247, 242, 0.045) 1px, transparent 1px);
-    background-size: 72px 100%, 100% 72px;
-  }
-
-  .product-diagram svg {
-    position: absolute;
-    inset: 8% 5%;
-    width: 90%;
-    height: 84%;
-  }
-
-  .product-diagram path {
-    fill: none;
-    stroke: var(--color-accent);
-    stroke-width: 3;
-    stroke-linecap: round;
-    opacity: 0.8;
-  }
-
-  .product-diagram path + path {
-    stroke: var(--color-green);
-    opacity: 0.62;
-  }
-
-  .product-diagram circle {
-    fill: var(--color-ink);
-    stroke: var(--color-paper);
-    stroke-width: 5;
-  }
-
-  .diagram-core {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    display: grid;
-    place-items: center;
-    width: 140px;
-    height: 140px;
-    border: 1px solid var(--color-line-strong);
-    border-radius: 999px;
-    background: rgba(5, 5, 5, 0.84);
-    transform: translate(-50%, -50%);
-  }
-
-  .diagram-core strong {
-    font-size: 3.2rem;
-    line-height: 1;
-  }
-
-  .diagram-core span {
-    color: var(--color-ink-muted);
-    font-size: 11px;
-    font-weight: 900;
-    text-transform: uppercase;
-  }
-
-  .panel-cta {
-    width: 100%;
-    min-height: 58px;
-    border-right: 0;
-    border-bottom: 0;
-    border-left: 0;
-  }
+  /* ProductWorkbench styles extracted to component */
 
   @media (max-width: 1180px) {
-    .product-hero,
-    .product-workbench {
+    .product-hero {
       grid-template-columns: 1fr;
     }
 
@@ -428,10 +263,6 @@ const bars = Array.from({ length: 72 }, (_, index) => 18 + ((index * 19) % 54));
     .app-launch {
       width: fit-content;
       padding: 0 18px;
-    }
-
-    .process-panel {
-      position: static;
     }
   }
 
@@ -466,16 +297,6 @@ const bars = Array.from({ length: 72 }, (_, index) => 18 + ((index * 19) % 54));
 
     .separation-grid h2 {
       font-size: 2.2rem;
-    }
-
-    .panel-toolbar {
-      grid-template-columns: 1fr;
-      gap: 6px;
-      padding: 12px 14px;
-    }
-
-    .product-diagram {
-      min-height: 360px;
     }
   }
 </style>

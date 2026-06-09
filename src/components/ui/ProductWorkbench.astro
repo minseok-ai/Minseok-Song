@@ -1,0 +1,390 @@
+---
+const { operatingLoop, appUrl } = Astro.props;
+---
+
+<section class="product-workbench fade-in-up">
+  <aside class="process-panel">
+    <span class="micro-label">Method / product loop</span>
+    <div class="process-list" id="process-list">
+      {operatingLoop.map(([num, title, body], index) => (
+        <article data-step={index + 1} class={index === 0 ? "active" : ""}>
+          <span>{num}</span>
+          <div>
+            <h2>{title}</h2>
+            <p>{body}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </aside>
+
+  <div class="product-panel" id="product-panel">
+    <div class="panel-toolbar">
+      <span>A1trategize</span>
+      <strong>{appUrl}</strong>
+    </div>
+    <div class="product-diagram" aria-hidden="true" id="diagram-container">
+      <svg viewBox="0 0 720 420" id="product-svg">
+        <path class="flow-path path-primary" d="M70 270 C150 170 255 318 356 196 S540 96 646 168" />
+        <path class="flow-path path-secondary" d="M86 150 C176 96 244 154 360 124 S548 78 650 108" />
+        
+        <circle class="node node-1" cx="70" cy="270" r="8" />
+        <circle class="node node-2" cx="360" cy="124" r="7" />
+        <circle class="node node-3" cx="356" cy="196" r="12" />
+        <circle class="node node-4" cx="646" cy="168" r="8" />
+      </svg>
+      <div class="diagram-core" id="diagram-core">
+        <div class="core-ring"></div>
+        <strong>A1</strong>
+        <span>Product app</span>
+      </div>
+    </div>
+    <a class="panel-cta primary-action" href={appUrl}>Launch standalone app</a>
+  </div>
+</section>
+
+<script>
+  // 1. Interactive Process Loop Synchronization
+  const articles = document.querySelectorAll('#process-list article');
+  const nodes = document.querySelectorAll('#product-svg .node');
+  const svg = document.getElementById('product-svg');
+  let currentStep = 1;
+  const totalSteps = 4;
+
+  function setStep(step) {
+    // Highlight list
+    articles.forEach(article => {
+      article.classList.toggle('active', parseInt(article.dataset.step) === step);
+    });
+
+    // Highlight SVG nodes
+    nodes.forEach((node, index) => {
+      node.classList.toggle('active', (index + 1) === step);
+    });
+
+    // Update path animation phase
+    if (svg) {
+      svg.dataset.phase = step;
+    }
+  }
+
+  // Auto-cycling
+  let cycleInterval = setInterval(() => {
+    currentStep = currentStep >= totalSteps ? 1 : currentStep + 1;
+    setStep(currentStep);
+  }, 3000);
+
+  // Allow manual clicking
+  articles.forEach(article => {
+    article.addEventListener('click', () => {
+      clearInterval(cycleInterval); // Pause auto-cycle on interaction
+      currentStep = parseInt(article.dataset.step);
+      setStep(currentStep);
+    });
+  });
+
+  // 2. Interactive Parallax Effect
+  const panel = document.getElementById('diagram-container');
+  const core = document.getElementById('diagram-core');
+  
+  if (panel && core && svg) {
+    panel.addEventListener('mousemove', (e) => {
+      const rect = panel.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+
+      // Move core slightly towards cursor
+      core.style.transform = `translate(calc(-50% + ${x * 0.08}px), calc(-50% + ${y * 0.08}px))`;
+      
+      // Move SVG paths slightly in opposite direction for parallax depth
+      svg.style.transform = `translate(${x * -0.03}px, ${y * -0.03}px)`;
+    });
+
+    panel.addEventListener('mouseleave', () => {
+      core.style.transform = `translate(-50%, -50%)`;
+      svg.style.transform = `translate(0, 0)`;
+    });
+  }
+</script>
+
+<style>
+  .product-workbench {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+  }
+
+  .process-panel {
+    position: sticky;
+    top: calc(var(--header-height) + 28px);
+    display: grid;
+    gap: 22px;
+  }
+
+  .process-list {
+    display: grid;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .process-list article {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 18px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-line);
+    cursor: pointer;
+    transition: all var(--motion-fast) ease;
+    opacity: 0.4;
+  }
+
+  .process-list article:hover {
+    opacity: 0.7;
+  }
+
+  .process-list article.active {
+    opacity: 1;
+  }
+
+  .process-list article.active span {
+    color: var(--color-accent);
+  }
+
+  .process-list article.active h2 {
+    color: var(--color-ink);
+  }
+
+  .process-list span {
+    color: var(--color-ink-muted);
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    transition: color var(--motion-fast) ease;
+  }
+
+  .process-list h2 {
+    margin: 0 0 6px;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    transition: color var(--motion-fast) ease;
+    color: var(--color-ink-soft);
+  }
+
+  .process-list p {
+    margin: 0;
+    color: var(--color-ink-muted);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .product-panel {
+    min-width: 0;
+    border: 1px solid var(--color-line-strong);
+    background: var(--color-panel);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    transition: border-color var(--motion-base) ease;
+  }
+
+  .product-panel:hover {
+    border-color: var(--color-line-strong);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+  }
+
+  .panel-toolbar {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--color-line);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .panel-toolbar span {
+    color: var(--color-ink-muted);
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .panel-toolbar strong {
+    color: var(--color-ink);
+    font-size: 13px;
+  }
+
+  .product-diagram {
+    position: relative;
+    min-height: 520px;
+    overflow: hidden;
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 72px 100%, 100% 72px;
+    background-position: center;
+    perspective: 1000px;
+  }
+
+  .product-diagram::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 30%, var(--color-panel) 100%);
+    pointer-events: none;
+  }
+
+  .product-diagram svg {
+    position: absolute;
+    inset: 8% 5%;
+    width: 90%;
+    height: 84%;
+    transition: transform 0.2s cubic-bezier(0.1, 0.5, 0.1, 1);
+  }
+
+  .flow-path {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 3;
+    stroke-linecap: round;
+    opacity: 0.2;
+    stroke-dasharray: 1200;
+    stroke-dashoffset: 1200;
+    transition: stroke-dashoffset 1.5s var(--easing-smooth), opacity 0.5s ease;
+  }
+
+  .path-secondary {
+    stroke: var(--color-green);
+  }
+
+  /* SVG Animation Phases */
+  svg[data-phase="1"] .path-primary { stroke-dashoffset: 800; opacity: 0.8; }
+  svg[data-phase="1"] .path-secondary { stroke-dashoffset: 1200; opacity: 0.2; }
+  
+  svg[data-phase="2"] .path-primary { stroke-dashoffset: 800; opacity: 0.6; }
+  svg[data-phase="2"] .path-secondary { stroke-dashoffset: 600; opacity: 0.8; }
+  
+  svg[data-phase="3"] .path-primary { stroke-dashoffset: 300; opacity: 0.9; }
+  svg[data-phase="3"] .path-secondary { stroke-dashoffset: 600; opacity: 0.4; }
+  
+  svg[data-phase="4"] .path-primary { stroke-dashoffset: 0; opacity: 1; }
+  svg[data-phase="4"] .path-secondary { stroke-dashoffset: 0; opacity: 1; }
+
+  .node {
+    fill: var(--color-paper);
+    stroke: var(--color-ink);
+    stroke-width: 3;
+    transition: all var(--motion-base) var(--easing-spring);
+    transform-origin: center;
+  }
+
+  .node.active {
+    fill: var(--color-accent);
+    stroke: var(--color-accent);
+    transform: scale(1.6);
+    filter: drop-shadow(0 0 12px var(--color-accent));
+  }
+
+  .diagram-core {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    width: 140px;
+    height: 140px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 999px;
+    background: rgba(5, 5, 5, 0.84);
+    transform: translate(-50%, -50%);
+    backdrop-filter: blur(8px);
+    transition: transform 0.2s cubic-bezier(0.1, 0.5, 0.1, 1), box-shadow var(--motion-slow) ease;
+    box-shadow: 0 0 40px rgba(0,0,0,0.5);
+    z-index: 2;
+  }
+
+  .diagram-core:hover {
+    box-shadow: 0 0 60px rgba(107, 156, 242, 0.2);
+    border-color: rgba(107, 156, 242, 0.4);
+  }
+
+  .core-ring {
+    position: absolute;
+    inset: -1px;
+    border-radius: 50%;
+    border: 1px solid var(--color-accent);
+    opacity: 0;
+    transform: scale(1);
+    animation: corePulse 3s infinite;
+  }
+
+  @keyframes corePulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+
+  .diagram-core strong {
+    font-size: 3.2rem;
+    line-height: 1;
+    color: var(--color-ink);
+    font-weight: 800;
+  }
+
+  .diagram-core span {
+    color: var(--color-ink-muted);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .panel-cta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 58px;
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-top: 1px solid var(--color-line);
+    color: var(--color-paper-deep);
+    background: var(--color-ink);
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: all var(--motion-fast) ease;
+  }
+
+  .panel-cta:hover {
+    background: var(--color-ink-soft);
+  }
+
+  .fade-in-up {
+    animation: fadeInUp var(--motion-slow) var(--easing-smooth) both;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 1180px) {
+    .product-workbench {
+      grid-template-columns: 1fr;
+    }
+    .process-panel {
+      position: static;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .panel-toolbar {
+      grid-template-columns: 1fr;
+      gap: 6px;
+      padding: 12px 14px;
+    }
+    .product-diagram {
+      min-height: 360px;
+    }
+  }
+</style>

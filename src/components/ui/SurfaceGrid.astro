@@ -1,0 +1,225 @@
+---
+const { sectionCards } = Astro.props;
+---
+
+<section id="surfaces" class="surface-index fade-in-up" aria-label="Site index">
+  <div class="section-head">
+    <p class="micro-label">Surfaces</p>
+    <h2>Five public surfaces around one working product.</h2>
+  </div>
+
+  <div class="surface-grid">
+    {sectionCards.map((item, index) => (
+      <a
+        class="surface-card"
+        href={item.path}
+        style={`--accent: ${item.meta.accent}; --animation-order: ${index};`}
+      >
+        <span class="surface-num">{item.num}</span>
+        <span class="surface-glyph">{item.meta.glyph}</span>
+        <div class="surface-content">
+          <small>{item.meta.line}</small>
+          <h3>{item.label}</h3>
+          <p>{item.page?.description ?? item.layoutType}</p>
+        </div>
+        <span class="surface-command">
+          {item.id === "a1-firms" ? "Launch product" : "Open section"}
+        </span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .surface-index {
+    display: grid;
+    gap: 32px;
+    padding-top: 104px;
+    padding-bottom: 92px;
+    border-top: 1px solid var(--color-line);
+    width: min(100%, var(--max-site));
+    margin: 0 auto;
+    padding-right: var(--space-page);
+    padding-left: var(--space-page);
+  }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 28px;
+    align-items: end;
+    border-bottom: 1px solid var(--color-line-strong);
+    padding-bottom: 24px;
+  }
+
+  .section-head h2 {
+    max-width: 620px;
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.5;
+    text-align: right;
+  }
+
+  .surface-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .surface-card {
+    position: relative;
+    display: grid;
+    align-content: space-between;
+    min-height: 340px;
+    padding: 32px;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    color: var(--color-ink);
+    background: var(--color-panel);
+    border: 1px solid var(--color-line);
+    text-decoration: none;
+    transition: all var(--motion-base) var(--easing-spring);
+    
+    /* Scroll reveal simulation */
+    animation: fadeInUp 0.6s var(--easing-smooth) both;
+    animation-delay: calc(var(--animation-order) * 100ms);
+  }
+
+  .surface-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: radial-gradient(circle at top right, var(--accent), transparent 60%);
+    opacity: 0.05;
+    transition: opacity var(--motion-base) ease;
+  }
+
+  .surface-card:nth-child(1),
+  .surface-card:nth-child(2) {
+    grid-column: span 3;
+  }
+
+  .surface-card:nth-child(n + 3) {
+    grid-column: span 2;
+  }
+
+  .surface-glyph {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    color: var(--accent);
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1;
+    opacity: 0.8;
+    transition: transform var(--motion-base) var(--easing-spring);
+  }
+
+  .surface-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .surface-card small {
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .surface-card h3 {
+    margin: 12px 0 16px;
+    font-size: 2.8rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .surface-card p {
+    max-width: 470px;
+    margin: 0;
+    color: var(--color-ink-muted);
+    font-size: 15px;
+    line-height: 1.62;
+    transition: color var(--motion-fast) ease;
+  }
+
+  .surface-command {
+    position: relative;
+    z-index: 1;
+    color: var(--color-ink-muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .surface-command::after {
+    content: '→';
+    transition: transform var(--motion-fast) ease;
+  }
+
+  .surface-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+    border-color: var(--color-line-strong);
+  }
+
+  .surface-card:hover::before {
+    opacity: 0.15;
+  }
+
+  .surface-card:hover .surface-glyph {
+    transform: scale(1.1) rotate(5deg);
+  }
+
+  .surface-card:hover p,
+  .surface-card:hover .surface-command {
+    color: var(--color-ink-soft);
+  }
+
+  .surface-card:hover .surface-command::after {
+    transform: translateX(4px);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 820px) {
+    .surface-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .surface-card:nth-child(1),
+    .surface-card:nth-child(2),
+    .surface-card:nth-child(n + 3) {
+      grid-column: auto;
+    }
+
+    .section-head {
+      display: grid;
+      align-items: start;
+    }
+
+    .section-head h2 {
+      text-align: left;
+    }
+  }
+</style>

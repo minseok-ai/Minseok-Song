@@ -1,52 +1,53 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap");
 
 :root {
   color-scheme: dark;
-  --color-paper: #050505;
-  --color-paper-deep: #000;
-  --color-ink: #f8f7f2;
-  --color-ink-soft: rgba(248, 247, 242, 0.72);
-  --color-ink-muted: rgba(248, 247, 242, 0.5);
-  --color-panel: rgba(10, 10, 10, 0.82);
-  --color-panel-solid: #0b0b0b;
-  --color-field: #070707;
-  --color-ivory: #f8f7f2;
-  --color-ivory-soft: #ebe8df;
-  --color-ink-on-light: #111217;
-  --color-muted-on-light: rgba(17, 18, 23, 0.58);
-  --color-line: rgba(248, 247, 242, 0.14);
-  --color-line-strong: rgba(248, 247, 242, 0.28);
-  --color-line-dark: rgba(17, 18, 23, 0.18);
-  --color-accent: #7ea7d8;
-  --color-accent-ink: #b8cce8;
-  --color-accent-soft: rgba(126, 167, 216, 0.14);
-  --color-warm: #d8c07e;
-  --color-green: #7aa06a;
-  --color-blue: #7ea7d8;
+  --color-paper: #030407;
+  --color-paper-deep: #010102;
+  --color-ink: #f2f5f9;
+  --color-ink-soft: rgba(242, 245, 249, 0.72);
+  --color-ink-muted: rgba(242, 245, 249, 0.45);
+  --color-panel: rgba(8, 10, 15, 0.75);
+  --color-panel-solid: #0b0e14;
+  --color-field: #06080c;
+  --color-ivory: #fafbfa;
+  --color-ivory-soft: #e8eae9;
+  --color-ink-on-light: #0d1117;
+  --color-muted-on-light: rgba(13, 17, 23, 0.58);
+  --color-line: rgba(255, 255, 255, 0.08);
+  --color-line-strong: rgba(255, 255, 255, 0.16);
+  --color-line-dark: rgba(13, 17, 23, 0.18);
+  --color-accent: #6b9cf2;
+  --color-accent-ink: #a6c4f9;
+  --color-accent-soft: rgba(107, 156, 242, 0.12);
+  --color-warm: #dcb87d;
+  --color-green: #6ca37d;
+  --color-blue: #6b9cf2;
   --body-bg-gradient:
-    linear-gradient(-45deg, #050505 0%, #080d16 34%, #0b0911 66%, #06100d 100%);
+    radial-gradient(circle at top left, rgba(107, 156, 242, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at bottom right, rgba(220, 184, 125, 0.04) 0%, transparent 40%);
   --body-bg-veil:
-    linear-gradient(90deg, rgba(248, 247, 242, 0.018) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(248, 247, 242, 0.014) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
   --font-sans:
-    "Noto Sans KR",
-    ui-sans-serif,
+    "Inter",
+    "Pretendard",
     system-ui,
     -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
     sans-serif;
-  --font-wordmark: "Source Serif 4", Georgia, "Times New Roman", serif;
-  --font-serif: "Source Serif 4", Georgia, "Times New Roman", "Noto Sans KR", serif;
-  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-  --space-page: clamp(20px, 4vw, 64px);
-  --space-section: clamp(72px, 10vw, 148px);
-  --radius-card: 8px;
-  --motion-fast: 160ms;
-  --motion-base: 280ms;
-  --motion-slow: 720ms;
+  --font-wordmark: "Outfit", sans-serif;
+  --font-serif: "Plus Jakarta Sans", "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  --space-page: clamp(24px, 5vw, 80px);
+  --space-section: clamp(80px, 12vw, 160px);
+  --radius-card: 16px;
+  --motion-fast: 200ms;
+  --motion-base: 400ms;
+  --motion-slow: 800ms;
+  --easing-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --easing-smooth: cubic-bezier(0.25, 1, 0.5, 1);
   --max-site: 1520px;
-  --header-height: 60px;
+  --header-height: 64px;
 }
 
 * {
@@ -67,10 +68,10 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--body-bg-gradient);
-  background-size: 280% 280%;
+  background-color: var(--color-paper);
+  background-image: var(--body-bg-gradient);
+  background-attachment: fixed;
   color: var(--color-ink);
-  animation: auraGradient 26s ease infinite;
 }
 
 body::before {
@@ -94,12 +95,12 @@ body::after {
   pointer-events: none;
   background: #050509;
   transform: translateY(-100%);
-  animation: pageCurtainIn 720ms cubic-bezier(0.77, 0, 0.175, 1) both;
+  animation: pageCurtainIn var(--motion-slow) var(--easing-smooth) both;
 }
 
 body.is-exiting::after {
   transform: translateY(0);
-  animation: pageCurtainOut 260ms cubic-bezier(0.77, 0, 0.175, 1) both;
+  animation: pageCurtainOut var(--motion-base) var(--easing-smooth) both;
 }
 
 a {
@@ -118,19 +119,7 @@ select {
   color: var(--color-paper);
 }
 
-@keyframes auraGradient {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
-}
+/* Optimized background, no continuous animation required */
 
 @keyframes pageCurtainIn {
   0% {

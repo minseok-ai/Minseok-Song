@@ -1,5 +1,6 @@
 ---
 import BlockRenderer from "./BlockRenderer.astro";
+import ContactGraph from "./ui/ContactGraph.astro";
 
 const {
   page,
@@ -36,10 +37,10 @@ const visibleChannels = contactEntries.flatMap((entry) =>
 );
 
 const contactNodePositions = [
-  { x: 50, y: 16 },
+  { x: 50, y: 16 }, // Top
+  { x: 80, y: 66 }, // Bottom Right
+  { x: 20, y: 66 }, // Bottom Left
   { x: 84, y: 34 },
-  { x: 78, y: 76 },
-  { x: 22, y: 76 },
   { x: 16, y: 34 },
   { x: 50, y: 90 }
 ];
@@ -72,11 +73,14 @@ const projectVisualLabels = {
       <section class="about-hero">
         <figure class="identity-figure" aria-label="Minseok Song identity diagram">
           <div class="identity-orbit">
-            <span class="orbit-node node-a"></span>
-            <span class="orbit-node node-b"></span>
-            <span class="orbit-node node-c"></span>
-            <strong>MS</strong>
-            <small>A1 Firms</small>
+            <div class="profile-center" style="position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; overflow: hidden;">
+              <div class="profile-bg" style="position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; background-image: url('/profile.jpg'); background-size: cover; background-position: center;"></div>
+            </div>
+            <div class="orbit-ring">
+              <span class="orbit-node node-a"></span>
+              <span class="orbit-node node-b"></span>
+              <span class="orbit-node node-c"></span>
+            </div>
           </div>
           <figcaption>
             <span>Fig. 00 — Self</span>
@@ -287,53 +291,7 @@ const projectVisualLabels = {
         <span>Available for · Strategy · AI Product · Research · Collaboration ·</span>
       </div>
 
-      <section class="contact-hero">
-        <div class="contact-copy">
-          <h1>Open to specific, serious product conversations.</h1>
-          <p>
-            Send a short note with context, the decision you are trying to make,
-            and the artifact you want to build. Short, concrete messages get
-            answered fastest.
-          </p>
-          <small>Response mode · Korean or English · project-first</small>
-        </div>
-
-        <div class="channel-graph">
-          <span class="micro-label">Channel graph</span>
-          <svg viewBox="0 0 100 100" aria-hidden="true">
-            {contactNodes.map((node) => (
-              <>
-                <line x1="50" y1="52" x2={node.x} y2={node.y} />
-                <circle cx={node.x} cy={node.y} r="1.6" />
-              </>
-            ))}
-            <circle class="core-node" cx="50" cy="52" r="2.3" />
-          </svg>
-          <div class="graph-labels">
-            {contactNodes.map((node) => (
-              <button
-                type="button"
-                data-copy={node.copyable ? node.value : undefined}
-                style={`left: ${node.x}%; top: ${node.y}%;`}
-              >
-                {node.label}
-              </button>
-            ))}
-          </div>
-          <small>Click a copyable node or open the channel below.</small>
-        </div>
-      </section>
-
-      <section class="contact-ledger">
-        {visibleChannels.map((channel) => (
-          <a href={channel.href ?? "#"} data-copy={channel.copyable ? channel.value : undefined}>
-            <span>{channel.label}</span>
-            <strong>{channel.value}</strong>
-            <small>{channel.copyable ? "click to copy" : "click to open"}</small>
-            <b aria-hidden="true">→</b>
-          </a>
-        ))}
-      </section>
+      <ContactGraph contactNodes={contactNodes} visibleChannels={visibleChannels} />
     </>
   )}
 
@@ -362,6 +320,68 @@ const projectVisualLabels = {
       trigger.removeAttribute("data-copied");
     }
   });
+
+  // 3D Tilt for Portfolio Cards
+  const cards = document.querySelectorAll('.portfolio-card a');
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -4;
+      const rotateY = ((x - centerX) / centerX) * 4;
+      
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'rotateX(0) rotateY(0)';
+      card.style.transition = 'transform 0.4s ease';
+    });
+    
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'none';
+    });
+  });
+
+  // Spotlight hover for Newsletter Rows
+  const rows = document.querySelectorAll('.newsletter-row');
+  rows.forEach(row => {
+    row.addEventListener('mousemove', (e) => {
+      const rect = row.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      row.style.setProperty('--mouse-x', `${x}px`);
+      row.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
+
+  // 3D Tilt for Identity Figure
+  const identityFigure = document.querySelector('.identity-figure');
+  if (identityFigure) {
+    identityFigure.addEventListener('mousemove', (e) => {
+      const rect = identityFigure.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -10;
+      const rotateY = ((x - centerX) / centerX) * 10;
+      
+      identityFigure.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    
+    identityFigure.addEventListener('mouseleave', () => {
+      identityFigure.style.transform = 'rotateX(0) rotateY(0)';
+      identityFigure.style.transition = 'transform var(--motion-slow) ease';
+    });
+    
+    identityFigure.addEventListener('mouseenter', () => {
+      identityFigure.style.transition = 'none';
+    });
+  }
 </script>
 
 <style>
@@ -403,6 +423,9 @@ const projectVisualLabels = {
     display: grid;
     gap: 22px;
     margin: 0;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    transition: transform var(--motion-slow) ease;
   }
 
   .identity-orbit {
@@ -420,10 +443,47 @@ const projectVisualLabels = {
     outline-offset: 12px;
   }
 
+  .profile-center {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,0,0,0.8);
+    border: 1px solid var(--color-line-strong);
+    background: #000;
+    transform: translateZ(0); /* force stacking context and fix Safari clipping */
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+  }
+
+  .profile-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.45;
+    mix-blend-mode: luminosity;
+    transition: opacity var(--motion-slow) ease, mix-blend-mode var(--motion-slow) ease, transform var(--motion-slow) ease;
+  }
+
+  .identity-figure:hover .profile-bg {
+    opacity: 0.85;
+    mix-blend-mode: normal;
+    transform: scale(1.05);
+  }
+
   .identity-orbit strong {
+    position: relative;
+    z-index: 1;
     font-size: 6rem;
     font-weight: 900;
     line-height: 1;
+    text-shadow: 0 4px 20px rgba(0,0,0,1);
   }
 
   .identity-orbit small {
@@ -433,6 +493,18 @@ const projectVisualLabels = {
     font-weight: 800;
     position: absolute;
     text-transform: uppercase;
+  }
+
+  .orbit-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    animation: orbitSpin 24s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes orbitSpin {
+    100% { transform: rotate(360deg); }
   }
 
   .orbit-node {
@@ -478,6 +550,14 @@ const projectVisualLabels = {
     width: min(680px, 100%);
     height: auto;
     color: var(--color-ink-soft);
+  }
+
+  .about-statement polyline {
+    animation: dashTicker 0.8s linear infinite;
+  }
+
+  @keyframes dashTicker {
+    to { stroke-dashoffset: -10; }
   }
 
   .about-statement circle {
@@ -701,6 +781,7 @@ const projectVisualLabels = {
 
   .portfolio-card {
     min-width: 0;
+    perspective: 1200px;
   }
 
   .portfolio-card a {
@@ -708,6 +789,8 @@ const projectVisualLabels = {
     gap: 14px;
     color: inherit;
     text-decoration: none;
+    transform-style: preserve-3d;
+    transition: transform var(--motion-slow) ease;
   }
 
   .portfolio-cover {
@@ -715,9 +798,16 @@ const projectVisualLabels = {
     margin: 0;
     aspect-ratio: 16 / 9;
     overflow: hidden;
-    border: 1px solid var(--color-line);
+    border: 1px solid var(--color-line-strong);
     border-radius: var(--radius-card);
-    background: var(--color-field);
+    background: var(--color-panel);
+    transition: box-shadow var(--motion-slow) ease, border-color var(--motion-slow) ease;
+    transform: translateZ(20px);
+  }
+
+  .portfolio-card:hover .portfolio-cover {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.02);
   }
 
   .portfolio-cover img,
@@ -737,11 +827,16 @@ const projectVisualLabels = {
     align-content: space-between;
     padding: 18px;
     background:
-      linear-gradient(135deg, rgba(248, 247, 242, 0.18), transparent 46%),
-      linear-gradient(90deg, rgba(248, 247, 242, 0.05) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(248, 247, 242, 0.04) 1px, transparent 1px),
-      #101114;
+      linear-gradient(135deg, rgba(248, 247, 242, 0.06), transparent 46%),
+      linear-gradient(90deg, rgba(248, 247, 242, 0.03) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(248, 247, 242, 0.03) 1px, transparent 1px),
+      var(--color-panel);
     background-size: auto, 54px 100%, 100% 54px, auto;
+    transition: background-position var(--motion-slow) linear;
+  }
+
+  .portfolio-card:hover .cover-visual {
+    background-position: 0 0, -10px -10px, -10px -10px, 0 0;
   }
 
   .cover-visual::after {
@@ -971,7 +1066,25 @@ const projectVisualLabels = {
   .pipeline-meter {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    border: 1px solid var(--color-line);
+    border: 1px solid var(--color-line-strong);
+    background: rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pipeline-meter::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    background-size: 200% 100%;
+    animation: pipelineFlow 4s infinite linear;
+    pointer-events: none;
+  }
+
+  @keyframes pipelineFlow {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
   }
 
   .pipeline-meter div {
@@ -980,7 +1093,12 @@ const projectVisualLabels = {
     min-height: 112px;
     padding: 18px;
     border: 0;
-    border-right: 1px solid var(--color-line);
+    border-right: 1px solid var(--color-line-strong);
+    transition: background var(--motion-fast) ease;
+  }
+
+  .pipeline-meter div:hover {
+    background: rgba(255,255,255,0.03);
   }
 
   .pipeline-meter div:last-child {
@@ -998,6 +1116,7 @@ const projectVisualLabels = {
   }
 
   .newsletter-row {
+    position: relative;
     display: grid;
     grid-template-columns: 64px 104px minmax(180px, 0.55fr) 96px minmax(0, 1fr) 28px;
     gap: 24px;
@@ -1005,6 +1124,27 @@ const projectVisualLabels = {
     min-height: 86px;
     border-bottom: 1px solid var(--color-line);
     text-decoration: none;
+    overflow: hidden;
+  }
+
+  .newsletter-row::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255,255,255,0.06), transparent 40%);
+    opacity: 0;
+    transition: opacity var(--motion-fast) ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .newsletter-row:hover::before {
+    opacity: 1;
+  }
+
+  .newsletter-row > * {
+    position: relative;
+    z-index: 1;
   }
 
   .newsletter-row strong {

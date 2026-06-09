@@ -4,28 +4,19 @@
     {
       "label": "Email",
       "value": "minseoksong.ai@gmail.com",
-      "copyable": "minseoksong.ai@gmail.com",
+      "href": "mailto:minseoksong.ai@gmail.com",
       "visible": true
     },
     {
       "label": "LinkedIn",
       "value": "minseok-ai",
       "href": "https://www.linkedin.com/in/minseok-ai/",
-      "copyable": "https://www.linkedin.com/in/minseok-ai/",
       "visible": true
     },
     {
-      "label": "A1 Inquiry",
-      "value": "A1trategize product conversation",
-      "href": "https://a1trategize.com",
-      "copyable": "A1trategize product conversation",
-      "visible": true
-    },
-    {
-      "label": "Project Notes",
-      "value": "Build-log and case-study discussion",
-      "href": "/projects",
-      "copyable": "Build-log and case-study discussion",
+      "label": "GitHub",
+      "value": "minseok-ai",
+      "href": "https://github.com/minseok-ai",
       "visible": true
     }
   ]
