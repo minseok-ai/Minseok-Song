@@ -1,7 +1,7 @@
 {
   "title": "About",
   "navLabel": "About",
-  "description": "A concise profile of the person behind A1 Firms: strategy systems, AI product work, and operating thesis.",
+  "description": "Founder @ A1trategize | R&D Intern @ KAIST NNFC",
   "order": 1,
   "path": "/about",
   "layoutType": "profile",
@@ -10,67 +10,88 @@
   "hero": {
     "eyebrow": "01 / Profile",
     "title": "Minseok Song",
-    "subtitle": "A self-introduction around strategy systems, AI product work, and the operating thesis behind A1 Firms."
+    "subtitle": "Founder @ A1trategize | R&D Intern @ KAIST NNFC"
   },
   "blocks": [
     {
       "id": "about-intent",
       "type": "callout",
-      "title": "Working thesis",
-      "body": "I do not see strategy, AI, and product as three separate jobs. I see them as three ways of asking the same question: how does a vague decision become an operating system?",
-      "tone": "quiet"
+      "title": "Operating Thesis",
+      "body": "My strength is Proactive Execution—transforming complex technical challenges into valuable Deep Tech strategies. I want to be someone who values hands-on experience over just words.",
+      "tone": "important"
     },
     {
       "id": "about-lead",
       "type": "text",
       "title": "Lead",
-      "body": "I build structured ways to turn ambiguous strategic questions into usable systems, product surfaces, and durable operating habits.",
+      "body": "I am currently an R&D Intern at KAIST NNFC and Founder of A1trategize, with a strong foundation in Physics and Semiconductor-Energy Convergence Science from Chungnam National University.",
       "variant": "lead"
     },
     {
-      "id": "portfolio-deck",
-      "type": "deckEmbed",
-      "title": "Portfolio deck",
-      "provider": "canva",
-      "src": "https://www.canva.com/design/placeholder/view?embed",
-      "aspectRatio": "16/9",
-      "caption": "A portfolio deck or selected presentation can live here as the public profile becomes more complete.",
-      "fallbackUrl": "https://www.canva.com/",
-      "allowFullscreen": true
+      "id": "about-body-1",
+      "type": "text",
+      "title": "Body 1",
+      "body": "My recent work involves designing interdigitated electrochemical devices and developing autonomous robot control systems. I've also successfully self-filed two patents combining deep tech engineering with legal strategy.",
+      "variant": "body"
     },
     {
-      "id": "timeline",
+      "id": "about-body-2",
+      "type": "text",
+      "title": "Body 2",
+      "body": "From utilizing ultrasound velocity for non-invasive glucose monitoring to engineering smart noise enforcement signs using open innovation, I continuously aim to resolve critical technical gaps through structured data and applied logic.",
+      "variant": "body"
+    },
+    {
+      "id": "experience-timeline",
       "type": "timeline",
       "title": "Timeline",
       "events": [
         {
-          "date": "Now",
-          "title": "A1 Firms foundation",
-          "body": "The personal site is being structured first, so design, admin, authentication, and publishing can be layered on top cleanly."
+          "date": "Apr 2026 - Present",
+          "title": "R&D Intern @ KAIST NNFC",
+          "body": "Developing next-generation micro-batteries via planar interdigitated cell architecture."
+        },
+        {
+          "date": "Jan 2026 - Present",
+          "title": "Founder @ A1trategize",
+          "body": "Digital Transformation & Business Consulting. Self-filed two independent patents."
+        },
+        {
+          "date": "Jul 2024 - Nov 2024",
+          "title": "RA & Collaborator @ KRISS",
+          "body": "Independent research on non-invasive glucose monitoring using ultrasonic velocity analysis."
+        },
+        {
+          "date": "Mar 2024 - Aug 2024",
+          "title": "URA @ Chungnam National University",
+          "body": "Optical Analysis Research on Air-Suction High-Sensitivity Nitro Group Sensor."
+        },
+        {
+          "date": "Mar 2017 - Feb 2026",
+          "title": "Chungnam National University",
+          "body": "BS, Physics (Semiconductor-Energy Convergence Science)"
         }
       ]
     },
     {
-      "id": "stats",
+      "id": "key-stats",
       "type": "stats",
-      "title": "Signals",
+      "title": "Key Milestones",
       "stats": [
         {
-          "label": "Focus",
-          "value": "A1",
-          "description": "Strategy systems, AI-native workflows, and compact product surfaces."
-        }
-      ]
-    },
-    {
-      "id": "links",
-      "type": "link",
-      "title": "References",
-      "links": [
+          "label": "Patents",
+          "value": "2",
+          "description": "Independently filed tech patents"
+        },
         {
-          "label": "Reference hub",
-          "href": "https://example.com",
-          "description": "External profiles, decks, papers, and artifacts can be collected here later."
+          "label": "Publications",
+          "value": "2",
+          "description": "Including 1st Author at KSNT 2024"
+        },
+        {
+          "label": "Awards",
+          "value": "6",
+          "description": "Grand Prize (CNU) & 5 Special Awards"
         }
       ]
     }

@@ -580,16 +580,25 @@ export default function WritingEditor({ initialWritings = [] }: Props) {
               />
             </label>
 
-            <label className="field-full">
-              <span>Tags</span>
-              <input
-                value={draft.tags.join(", ")}
-                onChange={(event) =>
-                  setDraftField("tags", tagsFromInput(event.target.value))
-                }
-                placeholder="AI, Strategy, Review"
-              />
-            </label>
+            <div className="field-full tags-field-container">
+              <label>
+                <span>Tags (comma separated)</span>
+                <input
+                  value={(draft.tags || []).join(", ")}
+                  onChange={(event) =>
+                    setDraftField("tags", tagsFromInput(event.target.value))
+                  }
+                  placeholder="AI, Strategy, Review"
+                />
+              </label>
+              {(draft.tags || []).length > 0 && (
+                <div className="admin-tag-pills">
+                  {(draft.tags || []).map(tag => (
+                    <span key={tag}>{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
 
             <label className="check-field">
               <input
@@ -676,21 +685,22 @@ function BlockEditor({
           <strong>{blockLabels[block.type]}</strong>
         </div>
         <div className="block-actions">
-          <button type="button" onClick={() => onMove(-1)} disabled={index === 0}>
-            Up
+          <button type="button" onClick={() => onMove(-1)} disabled={index === 0} title="Move Up">
+            ↑
           </button>
           <button
             type="button"
             onClick={() => onMove(1)}
             disabled={index === total - 1}
+            title="Move Down"
           >
-            Down
+            ↓
           </button>
-          <button type="button" onClick={onDuplicate}>
-            Copy
+          <button type="button" onClick={onDuplicate} title="Duplicate">
+            ⧉
           </button>
-          <button type="button" onClick={onRemove}>
-            Delete
+          <button type="button" onClick={onRemove} title="Delete">
+            ✕
           </button>
         </div>
       </header>

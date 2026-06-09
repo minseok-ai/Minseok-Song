@@ -35,16 +35,22 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
   </figure>
 
   <div class="about-statement">
-    <svg viewBox="0 0 620 120" aria-hidden="true">
-      <polyline
-        points="18,84 108,46 188,70 274,42 370,68 470,36 600,54"
-        fill="none"
-        stroke="currentColor"
-        stroke-dasharray="2 8"
-      />
-      {[18, 108, 188, 274, 370, 470, 600].map((x, index) => (
-        <circle cx={x} cy={[84, 46, 70, 42, 68, 36, 54][index]} r={index === 0 || index === 6 ? 6 : 4} />
-      ))}
+    <svg viewBox="0 0 800 240" aria-hidden="true" class="true-3d-lattice" style="width: 100%; height: auto;">
+      <defs>
+        <filter id="neural-glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="3.5" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+
+      <g filter="url(#neural-glow)">
+        <g class="edges-group"></g>
+        <g class="nodes-group"></g>
+        <g class="particles-group"></g>
+      </g>
     </svg>
     <blockquote>
       "{calloutBlock?.body ??
@@ -65,9 +71,16 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
         }
       ]).map((event, index) => (
         <li class={index === 0 ? "is-current" : ""}>
-          <span>{event.date}</span>
-          <strong>{event.title}</strong>
-          {event.body && <small>{event.body}</small>}
+          {event.title.includes('A1trategize') && <img src="/A1Firm-logo.webp" alt="A1trategize" class="timeline-logo" />}
+          {event.title.includes('NNFC') && <img src="/NNFC-logo.webp" alt="KAIST NNFC" class="timeline-logo" />}
+          {event.title.includes('KRISS') && <img src="/KRISS-logo.webp" alt="KRISS" class="timeline-logo" />}
+          {event.title.includes('Chungnam National University') && <img src="/CNU-logo.webp" alt="CNU" class="timeline-logo" />}
+          
+          <div class="timeline-content">
+            <span>{event.date}</span>
+            <strong>{event.title}</strong>
+            {event.body && <small>{event.body}</small>}
+          </div>
         </li>
       ))}
     </ol>
@@ -81,16 +94,11 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
         "I build structured ways to turn ambiguous strategic questions into usable systems, product surfaces, and durable operating habits."}
     </p>
     <div class="essay-columns">
-      <p>
-        A1 is not framed as a portfolio of disconnected work. It is a
-        public operating layer for strategy, software, research, and the
-        habits that make those things repeatable.
-      </p>
-      <p>
-        The site should therefore behave less like a brochure and more
-        like a map: where the person, the firm, the product, the writing,
-        and the contact surface each have a distinct role.
-      </p>
+      {visibleBlocks
+        .filter((block) => block.type === "text" && block.variant === "body")
+        .map((block) => (
+          <p>{block.body}</p>
+        ))}
     </div>
     {statBlock && (
       <dl class="signal-strip">
@@ -130,6 +138,185 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
       identityFigure.style.transition = 'none';
     });
   }
+
+  // 3D True Perspective Engine for SVG
+  const latticeWrapper = document.querySelector('.about-statement');
+  const svg3d = document.querySelector('.true-3d-lattice');
+  
+  if (latticeWrapper && svg3d) {
+    const edgesGroup = svg3d.querySelector('.edges-group');
+    const nodesGroup = svg3d.querySelector('.nodes-group');
+    const particlesGroup = svg3d.querySelector('.particles-group');
+
+    // Network Topology (Adjusted for perfect hexagons)
+    const planeNodes = [
+      {x: -280, y: 0},
+      {x: -210, y: -40}, {x: -210, y: 40},
+      {x: -140, y: 0},
+      {x: -70, y: -40},  {x: -70, y: 40},
+      {x: 0, y: 0},
+      {x: 70, y: -40},   {x: 70, y: 40},
+      {x: 140, y: 0},
+      {x: 210, y: -40},  {x: 210, y: 40},
+      {x: 280, y: 0}
+    ];
+
+    const planeEdges = [
+      [0,1], [0,2], [1,3], [2,3],
+      [3,4], [3,5], [4,6], [5,6],
+      [6,7], [6,8], [7,9], [8,9],
+      [9,10], [9,11], [10,12], [11,12],
+      [1,5], [2,4], [4,8], [5,7], [7,11], [8,10]
+    ];
+
+    // Z-coordinates for L1 (Front), L2 (Middle), L3 (Back)
+    // Negative Z is closer to the camera in this projection formula.
+    const layersZ = [-110, 0, 110];
+    const allNodes = [];
+    const allEdges = [];
+
+    // Construct 3D Nodes
+    layersZ.forEach((z, lIdx) => {
+      planeNodes.forEach(n => {
+        allNodes.push({ x: n.x, y: n.y, z: z, layer: lIdx });
+      });
+    });
+
+    const L_OFFSET = 13;
+    layersZ.forEach((_, lIdx) => {
+      // Intra-layer tight binding
+      planeEdges.forEach(edge => {
+        allEdges.push({ 
+          from: edge[0] + lIdx * L_OFFSET, 
+          to: edge[1] + lIdx * L_OFFSET,
+          type: 'intra', layer: lIdx 
+        });
+      });
+      // Inter-layer vertical hopping
+      if (lIdx < 2) {
+        for(let i=0; i<13; i++) {
+          allEdges.push({
+            from: i + lIdx * L_OFFSET,
+            to: i + (lIdx + 1) * L_OFFSET,
+            type: 'inter'
+          });
+        }
+      }
+    });
+
+    // SNN Hopping Particles
+    const particles = [
+      { path: [0, 1, 4, 6, 8, 11, 12], progress: 0, speed: 0.004, color: 'var(--color-accent)' },
+      { path: [0, 14, 17, 32, 34, 37, 38], progress: 0.4, speed: 0.0035, color: '#a0c4ff' },
+      { path: [26, 28, 18, 6, 7, 23, 25], progress: 0.8, speed: 0.0045, color: '#ffffff' }
+    ];
+
+    // DOM Generation
+    const edgeEls = allEdges.map(e => {
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      if (e.type === 'inter') {
+        line.setAttribute("stroke", "var(--color-accent)");
+        line.setAttribute("stroke-opacity", "0.25");
+        line.setAttribute("stroke-width", "1");
+        line.setAttribute("stroke-dasharray", "2 4");
+      } else {
+        line.setAttribute("stroke", "var(--color-accent)");
+        line.setAttribute("stroke-opacity", e.layer === 0 ? "0.6" : e.layer === 1 ? "0.3" : "0.1");
+        line.setAttribute("stroke-width", "1.5");
+      }
+      edgesGroup.appendChild(line);
+      return line;
+    });
+
+    const nodeEls = allNodes.map(n => {
+      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      circle.setAttribute("fill", "var(--color-bg)");
+      circle.setAttribute("stroke", "var(--color-accent)");
+      circle.setAttribute("stroke-width", "1.5");
+      circle.setAttribute("opacity", n.layer === 0 ? "1" : n.layer === 1 ? "0.6" : "0.2");
+      nodesGroup.appendChild(circle);
+      return circle;
+    });
+
+    const particleEls = particles.map(p => {
+      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      circle.setAttribute("fill", p.color);
+      particlesGroup.appendChild(circle);
+      return circle;
+    });
+
+    let targetRotX = 0, targetRotY = 0;
+    let currentRotX = 0, currentRotY = 0;
+    // Base angle with 0 yaw (RotY = 0) so the lattice aligns perfectly horizontally.
+    const baseRotX = -0.6, baseRotY = 0;
+
+    latticeWrapper.addEventListener('mousemove', (e) => {
+      const rect = latticeWrapper.getBoundingClientRect();
+      const cy = rect.top + rect.height / 2;
+      
+      // 사용자 요청: 좌우 휘어짐 방지 (RotY 고정), 상하(위아래)로만 살짝 움직임 (RotX만 미세하게 적용)
+      targetRotY = 0; 
+      targetRotX = ((e.clientY - cy) / window.innerHeight) * -0.5;
+    });
+
+    latticeWrapper.addEventListener('mouseleave', () => {
+      targetRotX = 0; targetRotY = 0;
+    });
+
+    const FL = 800;
+    function renderLoop() {
+      currentRotX += (targetRotX - currentRotX) * 0.08;
+      currentRotY += (targetRotY - currentRotY) * 0.08;
+
+      const rx = baseRotX + currentRotX;
+      const ry = baseRotY + currentRotY;
+
+      const cosX = Math.cos(rx), sinX = Math.sin(rx);
+      const cosY = Math.cos(ry), sinY = Math.sin(ry);
+
+      const projNodes = allNodes.map(n => {
+        const x1 = n.x * cosY - n.z * sinY;
+        const z1 = n.z * cosY + n.x * sinY;
+        const y2 = n.y * cosX - z1 * sinX;
+        
+        // Orthographic projection (scale = 1.0) ensures all Z-lines remain 
+        // perfectly parallel, creating a clean, aligned architectural diagram look.
+        return { x: x1 + 400, y: y2 + 120, scale: 1.0 };
+      });
+
+      allEdges.forEach((e, i) => {
+        const p1 = projNodes[e.from], p2 = projNodes[e.to];
+        edgeEls[i].setAttribute("x1", p1.x); edgeEls[i].setAttribute("y1", p1.y);
+        edgeEls[i].setAttribute("x2", p2.x); edgeEls[i].setAttribute("y2", p2.y);
+      });
+
+      allNodes.forEach((n, i) => {
+        const p = projNodes[i];
+        nodeEls[i].setAttribute("cx", p.x); nodeEls[i].setAttribute("cy", p.y);
+        nodeEls[i].setAttribute("r", (n.layer === 0 ? 3.5 : n.layer === 1 ? 2.5 : 1.5) * p.scale);
+      });
+
+      particles.forEach((p, i) => {
+        p.progress += p.speed;
+        if (p.progress >= 1) p.progress = 0;
+
+        const totalSegments = p.path.length - 1;
+        const segmentFloat = p.progress * totalSegments;
+        const segmentIndex = Math.floor(segmentFloat);
+        const segmentProgress = segmentFloat - segmentIndex;
+
+        const n1 = projNodes[p.path[segmentIndex]];
+        const n2 = projNodes[p.path[Math.min(segmentIndex + 1, totalSegments)]];
+
+        particleEls[i].setAttribute("cx", n1.x + (n2.x - n1.x) * segmentProgress);
+        particleEls[i].setAttribute("cy", n1.y + (n2.y - n1.y) * segmentProgress);
+        particleEls[i].setAttribute("r", 4 * ((n1.scale + n2.scale) / 2));
+      });
+
+      requestAnimationFrame(renderLoop);
+    }
+    renderLoop();
+  }
 </script>
 
 <style>
@@ -156,13 +343,17 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     place-items: center;
     width: min(520px, 100%);
     aspect-ratio: 1;
-    border: 1px solid var(--color-line-strong);
+    border: 1px dashed rgba(255, 255, 255, 0.15);
     border-radius: 50%;
     background:
-      radial-gradient(circle at 48% 42%, rgba(248, 247, 242, 0.1), transparent 34%),
+      radial-gradient(circle at 48% 42%, rgba(138, 180, 248, 0.08), transparent 45%),
       #050505;
-    outline: 1px solid var(--color-line);
+    outline: 1px solid rgba(255, 255, 255, 0.05);
     outline-offset: 12px;
+  }
+
+  .profile-center {
+    box-shadow: 0 0 40px rgba(138, 180, 248, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.5);
   }
 
   .orbit-ring {
@@ -179,11 +370,18 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
 
   .orbit-node {
     position: absolute;
-    width: 13px;
-    height: 13px;
-    border: 1px solid var(--color-ink);
+    width: 14px;
+    height: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 50%;
     background: var(--color-paper);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+    animation: pulseNode 3s infinite alternate;
+  }
+
+  @keyframes pulseNode {
+    0% { transform: scale(1); box-shadow: 0 0 8px rgba(255, 255, 255, 0.2); }
+    100% { transform: scale(1.2); box-shadow: 0 0 20px rgba(138, 180, 248, 0.8); }
   }
 
   .node-a { top: 20%; right: 22%; }
@@ -200,14 +398,20 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
   }
 
   .about-statement {
+    position: relative;
     display: grid;
     gap: 28px;
+    perspective: 1400px;
   }
 
   .about-statement svg {
-    width: min(680px, 100%);
+    width: min(800px, 100%);
     height: auto;
     color: var(--color-ink-soft);
+    transform-style: preserve-3d;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
+    filter: drop-shadow(0 15px 40px rgba(138, 180, 248, 0.15));
   }
 
   .about-statement polyline {
@@ -228,7 +432,11 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     max-width: 820px;
     font-size: clamp(2rem, 3.4vw, 3rem);
     font-weight: 760;
-    line-height: 1.22;
+    line-height: 1.25;
+    background: linear-gradient(135deg, #ffffff 0%, #a0c4ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 4px 32px rgba(160, 196, 255, 0.15);
   }
 
   .about-thesis {
@@ -253,10 +461,23 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
 
   .sticky-timeline li {
     position: relative;
+    padding: 0 0 28px 28px;
+    color: var(--color-ink-muted);
+    transition: color var(--motion-fast) ease;
+  }
+
+  .timeline-content {
     display: grid;
     gap: 5px;
-    padding: 0 0 28px 26px;
-    color: var(--color-ink-muted);
+    transition: transform var(--motion-fast) var(--easing-spring);
+  }
+
+  .sticky-timeline li:hover {
+    color: var(--color-ink);
+  }
+
+  .sticky-timeline li:hover .timeline-content {
+    transform: translateX(12px);
   }
 
   .sticky-timeline li::before {
@@ -264,25 +485,54 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     position: absolute;
     top: 6px;
     left: 0;
-    width: 10px;
-    height: 10px;
-    border: 1px solid currentColor;
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
     border-radius: 50%;
-    background: var(--color-paper);
+    background: var(--color-bg);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    transition: all var(--motion-fast) ease;
+  }
+
+  .sticky-timeline li:hover::before {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    box-shadow: 0 0 16px rgba(138, 180, 248, 0.5);
   }
 
   .sticky-timeline li::after {
     content: "";
     position: absolute;
-    top: 18px;
+    top: 22px;
     bottom: 2px;
     left: 5px;
-    width: 1px;
-    background: var(--color-line);
+    width: 2px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.02));
   }
 
   .sticky-timeline li.is-current {
     color: var(--color-ink);
+  }
+
+  .timeline-logo {
+    position: absolute;
+    left: -44px;
+    top: 6px;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    opacity: 0;
+    transform: translateX(-16px);
+    transition: opacity 0.4s ease, transform 0.4s var(--easing-spring), filter 0.4s ease;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .sticky-timeline li:hover .timeline-logo {
+    opacity: 1;
+    transform: translateX(0);
+    /* Premium elegant glow tracing the exact logo shape */
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.3)) drop-shadow(0 0 14px rgba(160, 196, 255, 0.5));
   }
 
   .sticky-timeline li.is-current::before {
@@ -340,38 +590,48 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
   .signal-strip {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
     margin: 44px 0 0;
-    border-top: 1px solid var(--color-line);
-    border-bottom: 1px solid var(--color-line);
+    border: none;
   }
 
   .signal-strip div {
-    padding: 22px;
-    border-right: 1px solid var(--color-line);
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: transform var(--motion-fast) ease, box-shadow var(--motion-fast) ease, background var(--motion-fast) ease;
   }
 
-  .signal-strip div:last-child {
-    border-right: 0;
+  .signal-strip div:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
   .signal-strip dt {
-    color: var(--color-ink-muted);
-    font-size: 11px;
+    color: var(--color-ink-soft);
+    font-size: 12px;
     font-weight: 800;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
   }
 
   .signal-strip dd {
-    margin: 8px 0 0;
-    font-size: 2.6rem;
+    margin: 12px 0 0;
+    font-size: 2.8rem;
     font-weight: 900;
     line-height: 1;
+    color: var(--color-ink);
+    text-shadow: 0 2px 12px rgba(255, 255, 255, 0.1);
   }
 
   .signal-strip p {
-    margin: 8px 0 0;
+    margin: 12px 0 0;
     color: var(--color-ink-muted);
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1.5;
   }
 

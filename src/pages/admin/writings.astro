@@ -45,4 +45,13 @@ const sessionLabel = `Signed in with GitHub as ${session.user?.name || session.u
 
     <WritingEditor client:load initialWritings={initialWritings} />
   </section>
+
+  <script is:inline>
+    window.addEventListener('error', function(event) {
+      document.body.innerHTML += '<div style="position:fixed;top:0;left:0;z-index:9999;background:red;color:white;padding:20px;">' + event.error.message + '<br/><pre>' + event.error.stack + '</pre></div>';
+    });
+    window.addEventListener('unhandledrejection', function(event) {
+      document.body.innerHTML += '<div style="position:fixed;top:0;left:0;z-index:9999;background:red;color:white;padding:20px;">' + event.reason + '</div>';
+    });
+  </script>
 </Layout>
