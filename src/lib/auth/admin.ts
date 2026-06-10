@@ -18,16 +18,27 @@ export type AuthSessionLike = {
   user?: AuthUser | null;
 } | null;
 
-export function getAuthAdminConfig(env: AdminEnv) {
+export function getAuthAdminConfig(env?: AdminEnv) {
+  const getEnv = (key: keyof AdminEnv) => {
+    if (env && env[key]) return env[key];
+    if (key === 'ADMIN_GITHUB_ID') return import.meta.env.ADMIN_GITHUB_ID;
+    if (key === 'ADMIN_GITHUB_IDS') return import.meta.env.ADMIN_GITHUB_IDS;
+    if (key === 'ADMIN_GITHUB_LOGIN') return import.meta.env.ADMIN_GITHUB_LOGIN;
+    if (key === 'ADMIN_GITHUB_LOGINS') return import.meta.env.ADMIN_GITHUB_LOGINS;
+    if (key === 'ADMIN_GITHUB_USERNAME') return import.meta.env.ADMIN_GITHUB_USERNAME;
+    if (key === 'ADMIN_GITHUB_USERNAMES') return import.meta.env.ADMIN_GITHUB_USERNAMES;
+    return undefined;
+  };
+
   const adminIds = [
-    ...parseCsv(env.ADMIN_GITHUB_ID || import.meta.env.ADMIN_GITHUB_ID || (typeof process !== "undefined" ? process.env.ADMIN_GITHUB_ID : undefined)),
-    ...parseCsv(env.ADMIN_GITHUB_IDS || import.meta.env.ADMIN_GITHUB_IDS || (typeof process !== "undefined" ? process.env.ADMIN_GITHUB_IDS : undefined))
+    ...parseCsv(getEnv('ADMIN_GITHUB_ID')),
+    ...parseCsv(getEnv('ADMIN_GITHUB_IDS'))
   ];
   const adminUsernames = [
-    ...parseCsv(env.ADMIN_GITHUB_LOGIN || import.meta.env.ADMIN_GITHUB_LOGIN || (typeof process !== "undefined" ? process.env.ADMIN_GITHUB_LOGIN : undefined)),
-    ...parseCsv(env.ADMIN_GITHUB_LOGINS || import.meta.env.ADMIN_GITHUB_LOGINS || (typeof process !== "undefined" ? process.env.ADMIN_GITHUB_LOGINS : undefined)),
-    ...parseCsv(env.ADMIN_GITHUB_USERNAME || import.meta.env.ADMIN_GITHUB_USERNAME || (typeof process !== "undefined" ? process.env.ADMIN_GITHUB_USERNAME : undefined)),
-    ...parseCsv(env.ADMIN_GITHUB_USERNAMES || import.meta.env.ADMIN_GITHUB_USERNAMES || (typeof process !== "undefined" ? process.env.ADMIN_GITHUB_USERNAMES : undefined))
+    ...parseCsv(getEnv('ADMIN_GITHUB_LOGIN')),
+    ...parseCsv(getEnv('ADMIN_GITHUB_LOGINS')),
+    ...parseCsv(getEnv('ADMIN_GITHUB_USERNAME')),
+    ...parseCsv(getEnv('ADMIN_GITHUB_USERNAMES'))
   ].map((username) => username.toLowerCase());
 
   return {
