@@ -383,11 +383,13 @@ const { contactNodes, visibleChannels } = Astro.props;
     transform-origin: 50px 52px;
     animation: radarSweep 14s linear infinite;
     pointer-events: none;
+    filter: drop-shadow(0 0 8px var(--color-accent-glow));
   }
 
   @keyframes radarSweep {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from { transform: rotate(0deg); opacity: 0.3; }
+    50% { opacity: 0.8; }
+    to { transform: rotate(360deg); opacity: 0.3; }
   }
 
   .node-point {

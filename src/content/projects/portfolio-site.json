@@ -1,0 +1,23 @@
+{
+  "title": "Dual-Engine Strategy Portfolio & Curation Engine",
+  "summary": "Designed and built this high-fidelity personal portfolio architecture using Astro, featuring dynamic dark/light mode synchronization, integrated data validation schemas, and an embedded signal curation pipeline.",
+  "order": 4,
+  "status": "published",
+  "hidden": false,
+  "year": "2026",
+  "tags": [
+    "Astro",
+    "Architecture",
+    "Tailored UX",
+    "Launched"
+  ],
+  "links": [],
+  "visual": "console",
+  "pentaPoint": [
+    90,
+    70,
+    60,
+    50,
+    80
+  ]
+}

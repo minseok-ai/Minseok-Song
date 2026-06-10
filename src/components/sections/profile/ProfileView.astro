@@ -233,9 +233,11 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
 
     // SNN Hopping Particles
     const particles = [
-      { path: [0, 1, 4, 6, 8, 11, 12], progress: 0, speed: 0.004, color: 'var(--color-accent)' },
-      { path: [0, 14, 17, 32, 34, 37, 38], progress: 0.4, speed: 0.0035, color: '#a0c4ff' },
-      { path: [26, 28, 18, 6, 7, 23, 25], progress: 0.8, speed: 0.0045, color: '#ffffff' }
+      { path: [0, 1, 4, 6, 8, 11, 12], progress: 0, speed: 0.004, color: 'var(--color-accent)', glow: true },
+      { path: [0, 14, 17, 32, 34, 37, 38], progress: 0.4, speed: 0.0035, color: '#a0c4ff', glow: false },
+      { path: [26, 28, 18, 6, 7, 23, 25], progress: 0.8, speed: 0.0045, color: '#ffffff', glow: false },
+      { path: [5, 7, 9, 10, 12, 8, 6], progress: 0.2, speed: 0.0038, color: 'var(--color-warm)', glow: true },
+      { path: [2, 4, 6, 8, 10, 12, 11], progress: 0.6, speed: 0.0042, color: 'var(--color-green)', glow: false }
     ];
 
     // DOM Generation
@@ -268,6 +270,9 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     const particleEls = particles.map(p => {
       const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
       circle.setAttribute("fill", p.color);
+      if (p.glow) {
+        circle.setAttribute("filter", "url(#neural-glow)");
+      }
       particlesGroup.appendChild(circle);
       return circle;
     });

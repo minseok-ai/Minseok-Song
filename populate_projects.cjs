@@ -6,33 +6,33 @@ const projectsDir = path.join(__dirname, 'src', 'content', 'projects');
 const newProjects = [
   {
     filename: 'interdigitated-devices.json',
-    title: 'Development of Durable Interdigitated Electrochemical Devices',
+    title: 'Planar Micro-Battery Architecture',
     summary: 'Developing next-generation micro-batteries via planar interdigitated cell architecture to mitigate electrolyte degradation.',
-    order: 4,
+    order: 5,
     status: 'published',
     hidden: false,
     year: '2026',
     tags: ['Research', 'Semiconductor', 'KAIST NNFC'],
     links: [],
-    visual: 'paper'
+    visual: 'paper',
+    pentaPoint: [0, 100, 80, 40, 0]
   },
   {
-    filename: 'patent-exam.json',
-    title: 'Patent Attorney Exam Prep & Patent Filings',
-    summary: 'Self-filed two patents combining deep tech engineering with legal strategy based on Patent Law study.',
-    order: 5,
+    filename: 'portfolio-site.json',
+    title: 'Dual-Engine Strategy Portfolio & Curation Engine',
+    summary: 'Designed and built this high-fidelity personal portfolio architecture using Astro, featuring dynamic dark/light mode synchronization, integrated data validation schemas, and an embedded signal curation pipeline.',
+    order: 4,
     status: 'published',
     hidden: false,
-    year: '2025',
-    tags: ['Legal', 'Patent', 'IP'],
-    links: [
-      { label: 'View Patent 1', href: 'https://kipris.or.kr/' }
-    ],
-    visual: 'paper'
+    year: '2026',
+    tags: ['Astro', 'Architecture', 'Tailored UX', 'Launched'],
+    links: [],
+    visual: 'console',
+    pentaPoint: [90, 70, 60, 50, 80]
   },
   {
     filename: 'glucose-ultrasound.json',
-    title: 'Non-invasive Evaluation of Glucose Concentration by Measuring Ultrasound Velocity',
+    title: 'Ultrasonic Glucose Monitoring',
     summary: 'Led independent research on non-invasive glucose monitoring using ultrasonic velocity analysis. Presented as 1st Author at KSNT.',
     order: 6,
     status: 'published',
@@ -40,11 +40,12 @@ const newProjects = [
     year: '2024',
     tags: ['Research', 'Medical Tech', 'KRISS'],
     links: [],
-    visual: 'graph'
+    visual: 'graph',
+    pentaPoint: [80, 40, 100, 30, 10]
   },
   {
     filename: 'pedal-blackbox.json',
-    title: 'RPM-based Pedal Blackbox',
+    title: 'OBD-II Pedal Evidence Blackbox',
     summary: 'Designed a low-cost evidence system projecting OBD-II data onto a HUD to solve Sudden Unintended Acceleration disputes.',
     order: 7,
     status: 'published',
@@ -52,11 +53,12 @@ const newProjects = [
     year: '2024',
     tags: ['Hardware', 'Automotive', 'Legal Tech'],
     links: [],
-    visual: 'console'
+    visual: 'console',
+    pentaPoint: [40, 80, 60, 90, 80]
   },
   {
     filename: 'nitroaromatic-explosives.json',
-    title: 'Analysis and Training Evaluation of Nitroaromatic Explosives Detection Data',
+    title: 'Fluorescence Explosives Detection AI',
     summary: 'Developed a 1D-CNN and LSTM hybrid model to process environmental and photoluminescence data, achieving 51.4% MSE reduction.',
     order: 8,
     status: 'published',
@@ -64,11 +66,12 @@ const newProjects = [
     year: '2024',
     tags: ['Machine Learning', 'Data Analysis', 'Deep Learning'],
     links: [],
-    visual: 'graph'
+    visual: 'graph',
+    pentaPoint: [100, 40, 90, 30, 0]
   },
   {
     filename: 'ultrasonic-high-damping.json',
-    title: 'Ultrasonic Velocity Measurement & Identification of High-Damping Specimen',
+    title: 'Cross-Axis Ultrasonic Identification',
     summary: 'Overcame signal attenuation via Cross-Axis Measurement to precisely identify polymer materials in a blind test.',
     order: 9,
     status: 'published',
@@ -76,11 +79,12 @@ const newProjects = [
     year: '2024',
     tags: ['Research', 'Materials', 'KRISS'],
     links: [],
-    visual: 'paper'
+    visual: 'paper',
+    pentaPoint: [10, 80, 100, 20, 0]
   },
   {
     filename: 'perovskite-solar.json',
-    title: 'Fabrication and Efficiency Analysis of Perovskite Solar Cells',
+    title: 'Nano-Scale Perovskite Fabrication',
     summary: 'Fabricated Perovskite Solar Cells and conducted root-cause failure analysis emphasizing precision in nano-scale semiconductor fabrication.',
     order: 10,
     status: 'published',
@@ -88,11 +92,12 @@ const newProjects = [
     year: '2024',
     tags: ['Semiconductor', 'Energy', 'Fabrication'],
     links: [],
-    visual: 'blank'
+    visual: 'blank',
+    pentaPoint: [0, 100, 90, 20, 0]
   },
   {
     filename: 'agricultural-water.json',
-    title: 'Integrated Agricultural Water Management System Using Big Data',
+    title: 'Predictive Reservoir Intelligence',
     summary: 'Constructed a robust data pipeline and evaluated ML models to forecast reservoir water levels. Won Best Paper Award at AAiCON 2024.',
     order: 11,
     status: 'published',
@@ -100,11 +105,12 @@ const newProjects = [
     year: '2024',
     tags: ['Big Data', 'Machine Learning', 'Agriculture'],
     links: [],
-    visual: 'graph'
+    visual: 'graph',
+    pentaPoint: [100, 20, 80, 60, 40]
   },
   {
     filename: 'greenlight-noise.json',
-    title: 'Smart Noise Enforcement Sign, "Grennlight"',
+    title: 'Deep-Learning Noise Enforcement',
     summary: 'Fused imaging sensors with deep learning sound localization to identify noise-violating vehicles. Won KOSAF Special Award.',
     order: 12,
     status: 'published',
@@ -112,11 +118,12 @@ const newProjects = [
     year: '2024',
     tags: ['Deep Learning', 'B2G', 'Open Innovation'],
     links: [],
-    visual: 'deck'
+    visual: 'deck',
+    pentaPoint: [60, 60, 30, 90, 100]
   },
   {
     filename: 'reborn-reusable.json',
-    title: '"RE:BORN", Innovator of the Reusable Gorge',
+    title: 'Reusable Tableware MICE Platform',
     summary: 'Pivoted business model for a Mobile Reusable Tableware Service targeting the MICE industry. Secured ~4M KRW mock crowdfunding.',
     order: 13,
     status: 'published',
@@ -124,11 +131,12 @@ const newProjects = [
     year: '2024',
     tags: ['Business', 'Startup', 'B2B'],
     links: [],
-    visual: 'deck'
+    visual: 'deck',
+    pentaPoint: [0, 0, 30, 80, 100]
   },
   {
     filename: 'nearly-free-electron.json',
-    title: 'A Study on the Nearly-Free-Electron Model',
+    title: 'Graphene Dirac Cone Analysis',
     summary: 'Theoretical analysis of electron behavior in crystal lattices, deriving energy levels and investigating Graphene conductivity.',
     order: 14,
     status: 'published',
@@ -136,11 +144,12 @@ const newProjects = [
     year: '2023',
     tags: ['Physics', 'Quantum Mechanics', 'Research'],
     links: [],
-    visual: 'paper'
+    visual: 'paper',
+    pentaPoint: [0, 50, 100, 10, 0]
   },
   {
     filename: 'park-2-gather.json',
-    title: '"PARK 2 GATHER", Parking Exit Time Notification Service',
+    title: 'Predictive Parking Exit System',
     summary: 'Commercialized a dormant patent into a BLE Beacon-based architecture resolving double-parking conflicts. Won CNU Grand Prize.',
     order: 15,
     status: 'published',
@@ -148,19 +157,26 @@ const newProjects = [
     year: '2023',
     tags: ['IoT', 'Business Strategy', 'Patent Commercialization'],
     links: [],
-    visual: 'console'
+    visual: 'console',
+    pentaPoint: [50, 70, 40, 100, 90]
   },
   {
-    filename: 'ra1-robot.json',
-    title: 'RA1 Autonomous Robot Control System',
-    summary: 'Engineered an edge AI architecture maximizing battery efficiency via vector resonance-based hardware power gating of NPU blocks. Pending launch.',
+    filename: 'ra1.json',
+    title: 'RA1 Edge Robotics Control System',
+    summary: 'A next-generation autonomous edge AI robot control system that performs multi-layered physical verification through geometric 3D volume analysis and edge NPU power gating based on vector resonance.',
     order: 3,
     status: 'published',
     hidden: false,
     year: '2026',
-    tags: ['A1 Firms', 'Robotics', 'Patent', 'Pending'],
-    links: [],
-    visual: 'console'
+    tags: ['A1 Firms', 'Robotics', 'Hardware AI', 'Pending'],
+    links: [
+      {
+        label: 'Pending',
+        href: '#'
+      }
+    ],
+    visual: 'graph',
+    pentaPoint: [85, 95, 80, 20, 40]
   }
 ];
 
