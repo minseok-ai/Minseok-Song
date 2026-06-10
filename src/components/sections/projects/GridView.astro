@@ -33,7 +33,11 @@ const visualMeta = {
 };
 
 const externalHref = (href = "") => /^https?:\/\//.test(href);
+const configuredA1PreviewHref = import.meta.env.A1TRATEGIZE_PREVIEW_URL ?? "";
+const a1PreviewHref = configuredA1PreviewHref || "/a1trategize-mock/index.html";
 const projectCode = (order) => `PX-${String(order ?? 0).padStart(2, "0")}`;
+const isA1trategizeProject = (entry) =>
+  entry.id === "a1trategize" || entry.data.title.toLowerCase().includes("a1trategize");
 
 const degToRad = (deg) => (deg * Math.PI) / 180;
 const getPenta = (scores) => {
@@ -103,9 +107,10 @@ const getPenta = (scores) => {
         const visual = visualMeta[project.data.visual] ?? visualMeta.blank;
         const primaryLink = project.data.links[0];
         const pData = getPenta(project.data.pentaPoint);
+        const showAppPreview = isA1trategizeProject(project) && Boolean(a1PreviewHref);
 
         return (
-          <article class={`project-card reveal-up ${index === 0 ? 'bento-hero' : ''}`} style={`--project-order: ${index};`} data-tone={visual.tone}>
+          <article class={`project-card reveal-up ${index === 0 ? 'bento-hero' : ''} ${showAppPreview ? 'has-app-preview' : ''}`} style={`--project-order: ${index};`} data-tone={visual.tone}>
             <div class="card-visual" aria-hidden="true">
               <svg class="tp-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
                 <circle cx="50" cy="54" r="32" class="tp-grid-circle" />
@@ -138,6 +143,19 @@ const getPenta = (scores) => {
             <div class="tag-row compact">
               {project.data.tags.map((tag) => <span>{tag}</span>)}
             </div>
+            {showAppPreview && (
+              <div class="app-preview-panel" aria-label="A1trategize interactive frontend preview">
+                <div class="app-preview-shell" data-source-width="1440">
+                  <iframe
+                    src={a1PreviewHref}
+                    title="A1trategize interactive frontend preview"
+                    loading="lazy"
+                    referrerpolicy="no-referrer"
+                    sandbox="allow-scripts allow-forms allow-same-origin allow-popups"
+                  ></iframe>
+                </div>
+              </div>
+            )}
             {primaryLink && (
               primaryLink.href === "#" ? (
                 <span class="card-link is-pending">{primaryLink.label}</span>
@@ -228,6 +246,18 @@ const getPenta = (scores) => {
 )}
 
 <script is:inline>
+  function fitAppPreviewFrames() {
+    document.querySelectorAll('.app-preview-shell').forEach(shell => {
+      const sourceWidth = Number(shell.dataset.sourceWidth || 1440);
+      const shellWidth = Math.max(1, shell.clientWidth);
+      const shellHeight = Math.max(1, shell.clientHeight);
+      const scale = Math.min(1, shellWidth / sourceWidth);
+      shell.style.setProperty('--app-preview-scale', String(scale));
+      shell.style.setProperty('--app-preview-width', `${sourceWidth}px`);
+      shell.style.setProperty('--app-preview-height', `${Math.ceil(shellHeight / scale)}px`);
+    });
+  }
+
   function initProjectCards() {
     const projectCards = document.querySelectorAll('.project-card');
     projectCards.forEach(card => {
@@ -235,6 +265,10 @@ const getPenta = (scores) => {
       const newCard = card.cloneNode(true);
       if (card.parentNode) {
         card.parentNode.replaceChild(newCard, card);
+      }
+
+      if (newCard.classList.contains('has-app-preview')) {
+        return;
       }
       
       newCard.addEventListener('mousemove', (e) => {
@@ -261,9 +295,15 @@ const getPenta = (scores) => {
         newCard.style.transform = `perspective(1000px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg)`;
       });
     });
+
+    fitAppPreviewFrames();
   }
 
   initProjectCards();
+  if (!window.__projectPreviewResizeBound) {
+    window.addEventListener('resize', fitAppPreviewFrames);
+    window.__projectPreviewResizeBound = true;
+  }
   document.addEventListener('astro:page-load', initProjectCards);
 </script>
 
@@ -681,6 +721,10 @@ const getPenta = (scores) => {
     transform: translateY(-4px);
   }
 
+  .project-card.has-app-preview:hover {
+    transform: none;
+  }
+
   .project-card:hover::before {
     opacity: 1;
   }
@@ -706,6 +750,51 @@ const getPenta = (scores) => {
     background-size: 200% 200%;
     animation: meshFlow 15s ease-in-out infinite;
     box-shadow: inset 0 0 30px rgba(0,0,0,0.25);
+  }
+
+  .app-preview-panel {
+    position: relative;
+    flex: 1 1 520px;
+    min-height: clamp(460px, 36vw, 640px);
+    margin: 2px -8px 0;
+    border: 1px solid var(--color-line);
+    border-radius: calc(var(--radius-card) - 2px);
+    overflow: hidden;
+    background: #f4f6f9;
+    box-shadow: inset 0 0 28px rgba(13, 17, 23, 0.1);
+    isolation: isolate;
+  }
+
+  .app-preview-shell {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+    overflow: hidden;
+    border-radius: inherit;
+    background: #f4f6f9;
+  }
+
+  .app-preview-shell::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 34%),
+      radial-gradient(circle at 24% 18%, rgba(107, 156, 242, 0.12), transparent 36%);
+    pointer-events: none;
+  }
+
+  .app-preview-shell iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--app-preview-width, 1440px);
+    height: var(--app-preview-height, 980px);
+    border: 0;
+    transform: scale(var(--app-preview-scale, 0.62));
+    transform-origin: 0 0;
   }
 
   .project-card[data-tone="green"] .card-visual {
@@ -896,6 +985,11 @@ const getPenta = (scores) => {
       height: 180px;
     }
 
+    .app-preview-panel {
+      flex-basis: 460px;
+      min-height: 460px;
+    }
+
     .project-visual {
       min-height: 340px;
     }
@@ -927,6 +1021,12 @@ const getPenta = (scores) => {
     .project-card {
       min-height: auto;
       padding: 24px;
+    }
+
+    .app-preview-panel {
+      flex-basis: 320px;
+      min-height: 320px;
+      margin: 2px -6px 2px;
     }
 
     .project-signal-panel div {

@@ -38,9 +38,10 @@ A1trategize is operated as a separate product application:
 a1trategize.com
 ```
 
-The portfolio links to A1trategize but does not mount its frontend or proxy its
-API. App login, user sessions, provider keys, exports, and product data should
-be managed by the A1trategize application repository/deployment.
+The portfolio links to A1trategize and can render a sandboxed visual iframe
+preview on the Projects page. It does not proxy the A1trategize API. App login,
+user sessions, provider keys, exports, and product data should be managed by the
+A1trategize application repository/deployment.
 
 ## Admin Login
 
@@ -90,6 +91,15 @@ The A1trategize launch URL can be configured for copy and links:
 ```sh
 A1TRATEGIZE_URL=https://a1trategize.com
 ```
+
+The Projects page preview can point to a public or local A1trategize frontend:
+
+```sh
+A1TRATEGIZE_PREVIEW_URL=https://a1trategize.com
+```
+
+When this value is omitted in local development, the preview falls back to
+`http://127.0.0.1:8080/`.
 
 ## Layer 1 Contract
 

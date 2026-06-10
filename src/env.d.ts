@@ -3,6 +3,7 @@
 interface ImportMetaEnv {
   readonly SITE_URL?: string;
   readonly A1TRATEGIZE_URL?: string;
+  readonly A1TRATEGIZE_PREVIEW_URL?: string;
   readonly AUTH_SECRET?: string;
   readonly AUTH_TRUST_HOST?: string;
   readonly GITHUB_APP_ID?: string;
