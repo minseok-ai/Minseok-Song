@@ -20,14 +20,14 @@ export type AuthSessionLike = {
 
 export function getAuthAdminConfig(env: AdminEnv) {
   const adminIds = [
-    ...parseCsv(env.ADMIN_GITHUB_ID),
-    ...parseCsv(env.ADMIN_GITHUB_IDS)
+    ...parseCsv(env.ADMIN_GITHUB_ID || import.meta.env.ADMIN_GITHUB_ID || (typeof process !== "undefined" ? process.env.ADMIN_GITHUB_ID : undefined)),
+    ...parseCsv(env.ADMIN_GITHUB_IDS || import.meta.env.ADMIN_GITHUB_IDS || (typeof process !== "undefined" ? process.env.ADMIN_GITHUB_IDS : undefined))
   ];
   const adminUsernames = [
-    ...parseCsv(env.ADMIN_GITHUB_LOGIN),
-    ...parseCsv(env.ADMIN_GITHUB_LOGINS),
-    ...parseCsv(env.ADMIN_GITHUB_USERNAME),
-    ...parseCsv(env.ADMIN_GITHUB_USERNAMES)
+    ...parseCsv(env.ADMIN_GITHUB_LOGIN || import.meta.env.ADMIN_GITHUB_LOGIN || (typeof process !== "undefined" ? process.env.ADMIN_GITHUB_LOGIN : undefined)),
+    ...parseCsv(env.ADMIN_GITHUB_LOGINS || import.meta.env.ADMIN_GITHUB_LOGINS || (typeof process !== "undefined" ? process.env.ADMIN_GITHUB_LOGINS : undefined)),
+    ...parseCsv(env.ADMIN_GITHUB_USERNAME || import.meta.env.ADMIN_GITHUB_USERNAME || (typeof process !== "undefined" ? process.env.ADMIN_GITHUB_USERNAME : undefined)),
+    ...parseCsv(env.ADMIN_GITHUB_USERNAMES || import.meta.env.ADMIN_GITHUB_USERNAMES || (typeof process !== "undefined" ? process.env.ADMIN_GITHUB_USERNAMES : undefined))
   ].map((username) => username.toLowerCase());
 
   return {
