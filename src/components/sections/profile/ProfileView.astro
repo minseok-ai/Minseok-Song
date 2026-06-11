@@ -67,8 +67,8 @@ const timelineEvents = experienceTimelineBlock
       </g>
     </svg>
     <blockquote>
-      "{calloutBlock?.body ??
-        "A1 Firms is organized around one practical question: how can ambiguous strategy work become clearer decisions, better tools, and repeatable operating habits?"}"
+      {calloutBlock?.body ??
+        "A1 Firms is organized around one practical question: how can ambiguous strategy work become clearer decisions, better tools, and repeatable operating habits?"}
     </blockquote>
   </div>
 </section>
@@ -421,7 +421,8 @@ const timelineEvents = experienceTimelineBlock
     background-image: url("/profile.jpg");
     background-position: center;
     background-size: cover;
-    filter: grayscale(20%) contrast(1.1);
+    /* Beauty retouch CSS: brightens, warms up skin tones, and enhances vibrancy */
+    filter: brightness(1.08) contrast(1.05) saturate(1.15) sepia(5%);
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
@@ -534,10 +535,10 @@ const timelineEvents = experienceTimelineBlock
     margin: 0;
     max-width: 860px;
     font-family: "Noto Serif KR", "Noto Serif", serif;
-    font-size: clamp(1.5rem, 3vw, 2.6rem);
+    font-size: clamp(1.4rem, 2.5vw, 2.2rem);
     font-weight: 400;
     font-style: italic;
-    line-height: 1.55;
+    line-height: 1.65;
     color: var(--color-ink);
     padding-left: 48px;
     letter-spacing: -0.01em;
