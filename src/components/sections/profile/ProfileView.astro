@@ -534,36 +534,35 @@ const timelineEvents = experienceTimelineBlock
     margin: 0;
     max-width: 860px;
     font-family: "Noto Serif KR", "Noto Serif", serif;
-    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-size: clamp(1.5rem, 3vw, 2.6rem);
     font-weight: 400;
     font-style: italic;
-    line-height: 1.45;
+    line-height: 1.55;
     color: var(--color-ink);
-    border-left: 0;
     padding-left: 48px;
     letter-spacing: -0.01em;
   }
 
   .about-statement blockquote::before {
-    content: '"';
+    content: '\201C';
     position: absolute;
-    top: -20px;
-    left: -12px;
-    font-family: var(--font-serif);
+    top: -24px;
+    left: -16px;
+    font-family: "Noto Serif", serif;
     font-size: 7rem;
-    color: rgba(var(--rgb-warm), 0.25);
+    color: rgba(var(--rgb-warm), 0.3);
     line-height: 1;
     font-style: normal;
   }
 
   .about-statement blockquote::after {
-    content: '"';
+    content: '\201D';
     position: absolute;
-    bottom: -60px;
-    right: 20px;
-    font-family: var(--font-serif);
+    bottom: -50px;
+    right: 10px;
+    font-family: "Noto Serif", serif;
     font-size: 7rem;
-    color: rgba(var(--rgb-warm), 0.1);
+    color: rgba(var(--rgb-warm), 0.15);
     line-height: 1;
     font-style: normal;
   }
@@ -670,6 +669,19 @@ const timelineEvents = experienceTimelineBlock
     opacity: 1;
     transform: translateX(0);
     filter: drop-shadow(0 0 8px rgba(var(--rgb-warm), 0.4));
+  }
+
+  @media (max-width: 1180px) {
+    .timeline-logo {
+      left: auto;
+      right: 0;
+      top: -12px;
+      transform: translateY(16px);
+    }
+
+    .sticky-timeline li:hover .timeline-logo {
+      transform: translateY(0);
+    }
   }
 
   .sticky-timeline li.is-current::before {
@@ -855,7 +867,21 @@ const timelineEvents = experienceTimelineBlock
     }
 
     .about-statement blockquote {
-      font-size: 2.05rem;
+      font-size: 1.45rem;
+      line-height: 1.6;
+      padding-left: 28px;
+    }
+
+    .about-statement blockquote::before {
+      font-size: 5rem;
+      top: -16px;
+      left: -12px;
+    }
+
+    .about-statement blockquote::after {
+      font-size: 5rem;
+      bottom: -32px;
+      right: 0;
     }
 
     .thesis-copy {
