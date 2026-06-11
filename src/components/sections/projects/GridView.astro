@@ -34,9 +34,8 @@ const visualMeta = {
 
 const externalHref = (href = "") => /^https?:\/\//.test(href);
 const configuredA1PreviewHref = import.meta.env.A1TRATEGIZE_PREVIEW_URL ?? "";
-const a1PreviewHref =
-  configuredA1PreviewHref || (import.meta.env.DEV ? "/a1trategize-mock/index.html" : "");
-const appPreviewSandbox = "allow-scripts allow-forms allow-same-origin";
+const a1PreviewHref = configuredA1PreviewHref || "/a1trategize-mock/index.html";
+const appPreviewSandbox = "allow-scripts allow-forms allow-same-origin allow-popups";
 const projectCode = (order) => `PX-${String(order ?? 0).padStart(2, "0")}`;
 const isA1trategizeProject = (entry) =>
   entry.id === "a1trategize" || entry.data.title.toLowerCase().includes("a1trategize");

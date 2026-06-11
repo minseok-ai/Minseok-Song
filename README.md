@@ -109,10 +109,9 @@ The Projects page preview can point to a public or local A1trategize frontend:
 A1TRATEGIZE_PREVIEW_URL=https://a1trategize.com
 ```
 
-When this value is omitted in local development, the preview falls back to the
-tracked mock at `/a1trategize-mock/index.html`. Production renders the iframe
-preview only when `A1TRATEGIZE_PREVIEW_URL` is explicitly configured, avoiding a
-same-origin mock iframe as the default public behavior.
+When this value is omitted, the preview falls back to the tracked mock at
+`/a1trategize-mock/index.html`. The mock remains visible in production as a
+testing surface and is loaded inside a sandboxed iframe.
 
 ## Layer 1 Contract
 

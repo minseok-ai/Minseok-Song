@@ -2,25 +2,21 @@
 const { page, navItem, hero } = Astro.props;
 
 const visibleBlocks = (page.blocks ?? []).filter((block) => !block.hidden);
-const timelineBlocks = visibleBlocks.filter((block) => block.type === "timeline");
+const experienceTimelineBlock =
+  visibleBlocks.find((block) => block.type === "timeline" && block.id === "experience-timeline") ??
+  visibleBlocks.find((block) => block.type === "timeline");
 const leadBlock = visibleBlocks.find(
   (block) => block.type === "text" && block.variant === "lead"
 );
 const calloutBlock = visibleBlocks.find((block) => block.type === "callout");
 const statBlock = visibleBlocks.find((block) => block.type === "stats");
-const timelineEvents = timelineBlocks.length
-  ? timelineBlocks.flatMap((block) =>
-      block.events.map((event) => ({
-        ...event,
-        groupTitle: block.title
-      }))
-    )
+const timelineEvents = experienceTimelineBlock
+  ? experienceTimelineBlock.events
   : [
       {
         date: "Now",
         title: "A1 Firms foundation",
-        body: "Design, product, and operating systems are being composed into one public surface.",
-        groupTitle: "Timeline"
+        body: "Design, product, and operating systems are being composed into one public surface."
       }
     ];
 ---
@@ -89,7 +85,7 @@ const timelineEvents = timelineBlocks.length
           {event.title.includes('Chungnam National University') && <img src="/CNU-logo.webp" alt="CNU" class="timeline-logo" />}
           
           <div class="timeline-content">
-            <span>{event.groupTitle ? `${event.groupTitle} / ${event.date}` : event.date}</span>
+            <span>{event.date}</span>
             <strong>{event.title}</strong>
             {event.body && <small>{event.body}</small>}
           </div>
@@ -590,9 +586,6 @@ const timelineEvents = timelineBlocks.length
       position: static;
     }
 
-    .timeline-logo {
-      display: none;
-    }
   }
 
   .sticky-timeline ol {
@@ -601,9 +594,6 @@ const timelineEvents = timelineBlocks.length
     margin: 24px 0 0;
     padding: 0;
     list-style: none;
-    max-height: calc(100svh - var(--header-height) - 120px);
-    overflow: auto;
-    scrollbar-width: thin;
   }
 
   .sticky-timeline li {

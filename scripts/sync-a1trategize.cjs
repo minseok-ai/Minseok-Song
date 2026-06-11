@@ -37,7 +37,9 @@ for (const file of fs.readdirSync(sourceDir)) {
   const content = fs.readFileSync(sourceFile);
 
   if (file.endsWith(".html") || file.endsWith(".css") || file.endsWith(".js")) {
-    let textContent = content.toString("utf8").replace(/\/static\//g, "/a1trategize-mock/");
+    let textContent = content
+      .toString("utf8")
+      .replace(/(["'(=])\/static\//g, "$1/a1trategize-mock/");
 
     if (file === "app.js") {
       textContent = patchMockApp(textContent);
