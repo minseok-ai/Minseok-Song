@@ -1,6 +1,6 @@
 {
   "title": "A1ntuitize Vision Memory Engine",
-  "summary": "A hyper-realistic dual-engine AI system that processes visual inputs, extracts observation vectors, and maintains long-term entity memories to prevent physical and logical hallucination.",
+  "summary": "Developing a 3D coordinate memory system that maps real-world visual impressions into emotion-vector particles, then uses attention, repetition, entropy, and Ebbinghaus-style decay to model intuition.",
   "order": 2,
   "status": "published",
   "hidden": false,
