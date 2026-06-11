@@ -2,12 +2,27 @@
 const { page, navItem, hero } = Astro.props;
 
 const visibleBlocks = (page.blocks ?? []).filter((block) => !block.hidden);
-const timelineBlock = visibleBlocks.find((block) => block.type === "timeline");
+const timelineBlocks = visibleBlocks.filter((block) => block.type === "timeline");
 const leadBlock = visibleBlocks.find(
   (block) => block.type === "text" && block.variant === "lead"
 );
 const calloutBlock = visibleBlocks.find((block) => block.type === "callout");
 const statBlock = visibleBlocks.find((block) => block.type === "stats");
+const timelineEvents = timelineBlocks.length
+  ? timelineBlocks.flatMap((block) =>
+      block.events.map((event) => ({
+        ...event,
+        groupTitle: block.title
+      }))
+    )
+  : [
+      {
+        date: "Now",
+        title: "A1 Firms foundation",
+        body: "Design, product, and operating systems are being composed into one public surface.",
+        groupTitle: "Timeline"
+      }
+    ];
 ---
 
 <div class="page-kicker">
@@ -19,11 +34,11 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
 <section class="about-hero">
   <figure class="identity-figure" aria-label="Minseok Song identity diagram">
     <div class="identity-orbit">
-      <div class="profile-center" style="position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; border: 1px solid rgba(var(--rgb-warm), 0.3);">
-        <div class="profile-bg" style="position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; background-image: url('/profile.jpg'); background-size: cover; background-position: center; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); filter: grayscale(20%) contrast(1.1);"></div>
-        <div class="profile-scanner-line" style="position: absolute; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(var(--rgb-warm), 0.8), transparent); filter: drop-shadow(0 0 4px rgba(var(--rgb-warm), 0.4)); opacity: 0.6; pointer-events: none; animation: profileScanner 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;"></div>
-        <div class="profile-grid-layer" style="position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(rgba(var(--rgb-warm), 0.1) 1px, transparent 1px); background-size: 16px 16px; opacity: 0.5; border-radius: 50%;"></div>
-        <div class="profile-vignette" style="position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.7); border-radius: 50%;"></div>
+      <div class="profile-center">
+        <div class="profile-bg"></div>
+        <div class="profile-scanner-line"></div>
+        <div class="profile-grid-layer"></div>
+        <div class="profile-vignette"></div>
       </div>
       <div class="orbit-ring">
         <span class="orbit-node node-a"></span>
@@ -32,13 +47,13 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
       </div>
     </div>
     <figcaption>
-      <span>Fig. 00 — Self</span>
-      <span>Strategy · AI · Operating Systems</span>
+      <span>Fig. 00 / Self</span>
+      <span>Strategy / AI / Operating Systems</span>
     </figcaption>
   </figure>
 
   <div class="about-statement">
-    <svg viewBox="0 0 800 240" aria-hidden="true" class="true-3d-lattice" style="width: 100%; height: auto;">
+    <svg viewBox="0 0 800 240" aria-hidden="true" class="true-3d-lattice">
       <defs>
         <filter id="neural-glow" x="-30%" y="-30%" width="160%" height="160%">
           <feGaussianBlur stdDeviation="3.5" result="blur" />
@@ -66,13 +81,7 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
   <aside class="sticky-timeline">
     <span class="micro-label">Timeline / Sticky</span>
     <ol>
-      {(timelineBlock?.events ?? [
-        {
-          date: "Now",
-          title: "A1 Firms foundation",
-          body: "Design, product, and operating systems are being composed into one public surface."
-        }
-      ]).map((event, index) => (
+      {timelineEvents.map((event, index) => (
         <li class={`reveal-in stagger-${(index % 5) + 1} ${index === 0 ? "is-current" : ""}`}>
           {event.title.includes('A1trategize') && <img src="/A1Firm-logo.webp" alt="A1trategize" class="timeline-logo" />}
           {event.title.includes('NNFC') && <img src="/NNFC-logo.webp" alt="KAIST NNFC" class="timeline-logo" />}
@@ -80,7 +89,7 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
           {event.title.includes('Chungnam National University') && <img src="/CNU-logo.webp" alt="CNU" class="timeline-logo" />}
           
           <div class="timeline-content">
-            <span>{event.date}</span>
+            <span>{event.groupTitle ? `${event.groupTitle} / ${event.date}` : event.date}</span>
             <strong>{event.title}</strong>
             {event.body && <small>{event.body}</small>}
           </div>
@@ -90,7 +99,7 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
   </aside>
 
   <article class="thesis-copy">
-    <p class="micro-label">§ 1 — The Operating Question</p>
+    <p class="micro-label">01 / The Operating Question</p>
     <h1>{hero.title}</h1>
     <p class="lead-copy reveal-up">
       {leadBlock?.body ??
@@ -376,6 +385,7 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     place-items: center;
     width: min(520px, 100%);
     aspect-ratio: 1;
+    overflow: hidden;
     border: 1px solid rgba(var(--rgb-warm), 0.2);
     border-radius: 50%;
     background:
@@ -390,8 +400,57 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
   }
 
   .profile-center {
-    box-shadow: 0 0 50px rgba(var(--rgb-warm), 0.08), inset 0 0 20px rgba(0, 0, 0, 0.8);
+    position: absolute;
+    inset: 0;
     z-index: 2;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(var(--rgb-warm), 0.3);
+    border-radius: 50%;
+    box-shadow: 0 0 50px rgba(var(--rgb-warm), 0.08), inset 0 0 20px rgba(0, 0, 0, 0.8);
+  }
+
+  .profile-bg,
+  .profile-grid-layer,
+  .profile-vignette {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+
+  .profile-bg {
+    background-image: url("/profile.jpg");
+    background-position: center;
+    background-size: cover;
+    filter: grayscale(20%) contrast(1.1);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .profile-scanner-line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(var(--rgb-warm), 0.8), transparent);
+    filter: drop-shadow(0 0 4px rgba(var(--rgb-warm), 0.4));
+    opacity: 0.6;
+    pointer-events: none;
+    animation: profileScanner 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  .profile-grid-layer {
+    background-image: radial-gradient(rgba(var(--rgb-warm), 0.1) 1px, transparent 1px);
+    background-size: 16px 16px;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .profile-vignette {
+    box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.7);
+    pointer-events: none;
   }
 
   .orbit-ring {
@@ -490,7 +549,7 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
   }
 
   .about-statement blockquote::before {
-    content: '“';
+    content: '"';
     position: absolute;
     top: -20px;
     left: -12px;
@@ -502,7 +561,7 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
   }
 
   .about-statement blockquote::after {
-    content: '”';
+    content: '"';
     position: absolute;
     bottom: -60px;
     right: 20px;
@@ -530,6 +589,10 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     .sticky-timeline {
       position: static;
     }
+
+    .timeline-logo {
+      display: none;
+    }
   }
 
   .sticky-timeline ol {
@@ -538,6 +601,9 @@ const statBlock = visibleBlocks.find((block) => block.type === "stats");
     margin: 24px 0 0;
     padding: 0;
     list-style: none;
+    max-height: calc(100svh - var(--header-height) - 120px);
+    overflow: auto;
+    scrollbar-width: thin;
   }
 
   .sticky-timeline li {

@@ -11,9 +11,9 @@ const { sectionCards } = Astro.props;
   <div class="surface-grid">
     {sectionCards.map((item, index) => (
       <a
-        class="surface-card"
+        class={`surface-card surface-step-${(index % 5) + 1}`}
         href={item.path}
-        style={`--accent: ${item.meta.accent}; --animation-order: ${index};`}
+        data-surface={item.id}
       >
         <span class="shimmer-sweep"></span>
         <span class="surface-num">{item.num}</span>
@@ -24,7 +24,10 @@ const { sectionCards } = Astro.props;
           <p>{item.page?.description ?? item.layoutType}</p>
         </div>
         <span class="surface-command">
-          {item.id === "a1-firms" ? "Launch product" : "Open section"} <b aria-hidden="true">→</b>
+          {item.id === "a1-firms" ? "Launch product" : "Open section"}
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
         </span>
       </a>
     ))}
@@ -85,21 +88,31 @@ const { sectionCards } = Astro.props;
     text-decoration: none;
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     
-    /* Scroll reveal simulation */
     animation: fadeInUp 0.6s var(--easing-smooth) both;
-    animation-delay: calc(var(--animation-order) * 100ms);
   }
+
+  .surface-step-1 { animation-delay: 0ms; }
+  .surface-step-2 { animation-delay: 100ms; }
+  .surface-step-3 { animation-delay: 200ms; }
+  .surface-step-4 { animation-delay: 300ms; }
+  .surface-step-5 { animation-delay: 400ms; }
+
+  .surface-card[data-surface="about"] { --accent: var(--color-blue); }
+  .surface-card[data-surface="a1-firms"] { --accent: var(--color-warm); }
+  .surface-card[data-surface="projects"] { --accent: var(--color-green); }
+  .surface-card[data-surface="writings"] { --accent: var(--color-coral); }
+  .surface-card[data-surface="contacts"] { --accent: var(--color-purple); }
 
   .surface-card::before {
     content: '';
     position: absolute;
-    top: -40px;
-    right: -40px;
-    width: 280px;
-    height: 280px;
-    background: radial-gradient(circle, var(--accent), transparent 70%);
-    opacity: 0.04;
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    top: 24px;
+    right: 0;
+    bottom: 24px;
+    width: 2px;
+    background: linear-gradient(180deg, transparent, var(--accent), transparent);
+    opacity: 0.16;
+    transition: opacity 0.5s ease;
     pointer-events: none;
   }
 
@@ -211,8 +224,10 @@ const { sectionCards } = Astro.props;
     gap: 8px;
   }
 
-  .surface-command b {
-    font-weight: 900;
+  .surface-command svg {
+    display: block;
+    width: 16px;
+    height: 16px;
     transition: transform var(--motion-fast) ease;
   }
 
@@ -224,8 +239,7 @@ const { sectionCards } = Astro.props;
   }
 
   .surface-card:hover::before {
-    opacity: 0.18;
-    transform: scale(1.15);
+    opacity: 0.45;
   }
 
   .surface-card:hover::after {
@@ -248,7 +262,7 @@ const { sectionCards } = Astro.props;
     color: var(--color-ink-soft);
   }
 
-  .surface-card:hover .surface-command b {
+  .surface-card:hover .surface-command svg {
     transform: translateX(4px);
   }
 

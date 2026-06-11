@@ -3,6 +3,7 @@ const { block } = Astro.props;
 
 const embedRatio =
   block.type === "deckEmbed" ? block.aspectRatio.replace("/", " / ") : undefined;
+const embedSandbox = "allow-scripts allow-same-origin allow-popups allow-presentation";
 
 const blockTypeLabels = {
   text: "Text",
@@ -55,6 +56,8 @@ const blockTypeLabels = {
               loading="lazy"
               allow="fullscreen"
               allowfullscreen={block.allowFullscreen}
+              referrerpolicy="no-referrer"
+              sandbox={embedSandbox}
             />
           </div>
           {(block.caption || block.fallbackUrl) && (

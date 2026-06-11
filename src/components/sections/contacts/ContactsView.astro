@@ -30,10 +30,10 @@ const contactNodes = visibleChannels.map((channel, index) => ({
 
 <div class="availability-strip reveal-in" aria-hidden="true">
   <div class="marquee-track">
-    <span><span class="live-dot"></span> Available for · Strategy · AI Product · Research · Collaboration ·</span>
-    <span><span class="live-dot"></span> Available for · Strategy · AI Product · Research · Collaboration ·</span>
-    <span><span class="live-dot"></span> Available for · Strategy · AI Product · Research · Collaboration ·</span>
-    <span><span class="live-dot"></span> Available for · Strategy · AI Product · Research · Collaboration ·</span>
+    <span><span class="live-dot"></span> Available for / Strategy / AI Product / Research / Collaboration /</span>
+    <span><span class="live-dot"></span> Available for / Strategy / AI Product / Research / Collaboration /</span>
+    <span><span class="live-dot"></span> Available for / Strategy / AI Product / Research / Collaboration /</span>
+    <span><span class="live-dot"></span> Available for / Strategy / AI Product / Research / Collaboration /</span>
   </div>
 </div>
 
@@ -54,6 +54,8 @@ const contactNodes = visibleChannels.map((channel, index) => ({
     white-space: nowrap;
     background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);
+    mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent);
   }
 
   .live-dot {
@@ -94,5 +96,33 @@ const contactNodes = visibleChannels.map((channel, index) => ({
 
   .availability-strip:hover .marquee-track {
     animation-play-state: paused;
+  }
+
+  @media (max-width: 760px) {
+    .availability-strip {
+      padding: 14px 18px;
+      white-space: normal;
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+
+    .marquee-track {
+      display: flex;
+      width: 100%;
+      animation: none;
+    }
+
+    .marquee-track > span {
+      display: none;
+      padding-right: 0;
+    }
+
+    .marquee-track > span:first-child {
+      display: block;
+      width: 100%;
+      line-height: 1.6;
+      text-align: center;
+      white-space: normal;
+    }
   }
 </style>

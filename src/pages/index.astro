@@ -12,27 +12,22 @@ const a1Firms = pageEntriesById.get("a1-firms");
 
 const surfaceMeta = {
   about: {
-    accent: "var(--color-blue)",
     glyph: "MS",
     line: "Person"
   },
   "a1-firms": {
-    accent: "var(--color-warm)",
     glyph: "A1",
     line: "Firm"
   },
   projects: {
-    accent: "var(--color-green)",
     glyph: "PX",
     line: "Work"
   },
   writings: {
-    accent: "var(--color-coral)",
     glyph: "WR",
     line: "Notes"
   },
   contacts: {
-    accent: "var(--color-purple)",
     glyph: "CO",
     line: "Reach"
   }
@@ -103,7 +98,10 @@ const focusStats = [
         a sharper public layer: context, proof, writing, and product memory.
       </p>
       <a class="primary-action" href={siteConfig.a1FirmPath}>
-        Enter product <span class="arrow-shifted">→</span>
+        Enter product
+        <svg class="arrow-shifted" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
       </a>
     </section>
   </section>
@@ -217,19 +215,14 @@ const focusStats = [
   .product-band::before {
     content: '';
     position: absolute;
-    top: -50px;
-    left: -50px;
-    width: 350px;
-    height: 350px;
-    background: radial-gradient(circle, rgba(107, 156, 242, 0.18) 0%, transparent 70%);
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, var(--color-accent), transparent);
     pointer-events: none;
     z-index: 0;
-    animation: gradientPulse 8s ease-in-out infinite alternate;
-  }
-
-  @keyframes gradientPulse {
-    0% { transform: scale(1); opacity: 0.6; }
-    100% { transform: scale(1.15); opacity: 0.9; }
+    opacity: 0.72;
   }
 
   .product-band::after {
@@ -305,6 +298,8 @@ const focusStats = [
   }
 
   .primary-action .arrow-shifted {
+    width: 16px;
+    height: 16px;
     margin-left: 8px;
     transition: transform var(--motion-fast) var(--easing-smooth);
     display: inline-block;

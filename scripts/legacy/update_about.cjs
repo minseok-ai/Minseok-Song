@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const aboutPath = path.join(__dirname, 'src', 'content', 'pages', 'about.json');
+const root = path.resolve(__dirname, '..', '..');
+const aboutPath = path.join(root, 'src', 'content', 'pages', 'about.json');
 const data = JSON.parse(fs.readFileSync(aboutPath, 'utf8'));
 
 const newBlocks = [

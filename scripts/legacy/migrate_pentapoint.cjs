@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const dir = path.join(__dirname, 'src/content/projects');
+const root = path.resolve(__dirname, '..', '..');
+const dir = path.join(root, 'src', 'content', 'projects');
 const files = fs.readdirSync(dir).filter(f => f.endsWith('.json'));
 
 const translations = {

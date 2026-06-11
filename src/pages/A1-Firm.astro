@@ -128,25 +128,25 @@ const operatingLoop = [
       <div class="domains-grid">
         <article class="domain-card reveal-up stagger-1">
           <span class="micro-label">Domain 01</span>
-          <h3>💼 Business Strategy</h3>
+          <h3 class="domain-title"><span class="domain-glyph">BIZ</span> Business Strategy</h3>
           <p>McKinsey-style outlines, market size models, competitive landscaping, and growth initiative recommendations.</p>
         </article>
 
         <article class="domain-card reveal-up stagger-2">
           <span class="micro-label">Domain 02</span>
-          <h3>🔬 NNFC Semiconductor</h3>
+          <h3 class="domain-title"><span class="domain-glyph">FAB</span> NNFC Semiconductor</h3>
           <p>Recipe parameter mapping. Cross-checks wafer sizes, temperatures, and gases against 183 fabrication tools.</p>
         </article>
 
         <article class="domain-card reveal-up stagger-3">
           <span class="micro-label">Domain 03</span>
-          <h3>⚖️ IP & Patent Strategy</h3>
+          <h3 class="domain-title"><span class="domain-glyph">IP</span> IP & Patent Strategy</h3>
           <p>Prior-art query matching, KIPO patent claim structuring, and draft patent background composition.</p>
         </article>
 
         <article class="domain-card reveal-up stagger-4">
           <span class="micro-label">Domain 04</span>
-          <h3>📋 Career Coaching</h3>
+          <h3 class="domain-title"><span class="domain-glyph">CV</span> Career Coaching</h3>
           <p>Resume bullet impact audits, technical skill gap analysis, and global tech company interview prep.</p>
         </article>
       </div>
@@ -190,14 +190,13 @@ const operatingLoop = [
   .a1-product-page::before {
     content: '';
     position: absolute;
-    top: -100px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 800px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(107, 156, 242, 0.08) 0%, transparent 70%);
+    top: 0;
+    right: var(--space-page);
+    left: var(--space-page);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(107, 156, 242, 0.38), transparent);
     pointer-events: none;
-    z-index: -1;
+    z-index: 0;
   }
 
   .product-kicker {
@@ -501,11 +500,11 @@ const operatingLoop = [
     border-radius: 50%;
     background: var(--color-green);
     box-shadow: 0 0 8px var(--color-green-glow);
-    animation: statusPulse 2s ease-in-out infinite;
+    animation: routerStatusPulse 2s ease-in-out infinite;
     z-index: 10;
   }
 
-  @keyframes statusPulse {
+  @keyframes routerStatusPulse {
     0%, 100% { opacity: 1; transform: scale(1); }
     50% { opacity: 0.5; transform: scale(0.8); }
   }
@@ -614,6 +613,30 @@ const operatingLoop = [
     font-size: 18px;
     font-weight: 700;
     letter-spacing: -0.01em;
+  }
+
+  .domain-title {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .domain-glyph {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    min-width: 34px;
+    min-height: 24px;
+    padding: 0 7px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 6px;
+    color: var(--color-accent-ink);
+    background: var(--color-accent-soft);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 850;
+    line-height: 1;
   }
 
   .domain-card p {

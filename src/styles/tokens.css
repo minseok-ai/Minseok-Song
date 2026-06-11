@@ -519,9 +519,41 @@ select {
   transition: all var(--motion-fast) ease;
 }
 
+.theme-icon {
+  display: block;
+}
+
+.theme-icon-moon,
+[data-theme="light"] .theme-icon-sun {
+  display: none;
+}
+
+[data-theme="light"] .theme-icon-moon {
+  display: block;
+}
+
 .header-utility .theme-toggle:hover {
   background: var(--color-accent-soft);
   color: var(--color-accent);
+}
+
+.logout-button {
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: none;
+  cursor: pointer;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.62;
+  transition: color var(--motion-fast) ease, opacity var(--motion-fast) ease;
+}
+
+.logout-button:hover,
+.logout-button:focus-visible {
+  color: var(--color-accent);
+  opacity: 1;
 }
 
 .header-utility .login-link {

@@ -955,6 +955,8 @@ function PreviewBlock({ block }: { block: WritingBlock }) {
             title={`${block.provider} embed preview`}
             style={{ aspectRatio: block.aspectRatio.replace("/", " / ") }}
             allowFullScreen={block.allowFullscreen}
+            referrerPolicy="no-referrer"
+            sandbox="allow-scripts allow-same-origin allow-popups allow-presentation"
           />
         ) : (
           <div className="embed-placeholder" />

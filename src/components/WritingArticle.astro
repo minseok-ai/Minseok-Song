@@ -27,6 +27,7 @@ const blockLabel = (block: WritingBlock) => {
   if (block.type === "code") return block.language || "text";
   return block.type;
 };
+const embedSandbox = "allow-scripts allow-same-origin allow-popups allow-presentation";
 ---
 
 <article class="writing-article page-frame">
@@ -81,6 +82,8 @@ const blockLabel = (block: WritingBlock) => {
                 loading="lazy"
                 allow="fullscreen"
                 allowfullscreen={block.allowFullscreen}
+                referrerpolicy="no-referrer"
+                sandbox={embedSandbox}
               />
             </div>
             {block.caption && <p class="caption">{block.caption}</p>}

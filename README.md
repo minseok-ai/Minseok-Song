@@ -24,6 +24,17 @@ npm run dev
 npm run build
 ```
 
+`npm run dev` and `npm run build` run `scripts/sync-a1trategize.cjs` first.
+That script copies a local A1trategize static build into the tracked mock only
+when the source directory exists. Override the default local source path with:
+
+```sh
+A1TRATEGIZE_STATIC_DIR=C:\Projects\A1trategize\static
+```
+
+Historical content migration helpers live in `scripts/legacy`. They are kept
+for audit history and should not be wired into dev, build, or deployment hooks.
+
 ## Domains
 
 This repository powers the portfolio site:
@@ -98,8 +109,10 @@ The Projects page preview can point to a public or local A1trategize frontend:
 A1TRATEGIZE_PREVIEW_URL=https://a1trategize.com
 ```
 
-When this value is omitted in local development, the preview falls back to
-`http://127.0.0.1:8080/`.
+When this value is omitted in local development, the preview falls back to the
+tracked mock at `/a1trategize-mock/index.html`. Production renders the iframe
+preview only when `A1TRATEGIZE_PREVIEW_URL` is explicitly configured, avoiding a
+same-origin mock iframe as the default public behavior.
 
 ## Layer 1 Contract
 

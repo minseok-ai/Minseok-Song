@@ -106,6 +106,14 @@
   gap: 10px;
 }
 
+.admin-login-options.is-authorized {
+  margin-top: 32px;
+}
+
+.admin-login-options.is-compact {
+  margin-top: 24px;
+}
+
 .github-login-button {
   display: inline-flex;
   align-items: center;
@@ -117,6 +125,18 @@
   background: var(--color-ink);
   font-weight: 900;
   text-decoration: none;
+}
+
+.github-login-button.is-primary {
+  margin-bottom: 8px;
+  border-color: var(--color-accent);
+  color: var(--color-paper-deep);
+  background: var(--color-accent);
+}
+
+.github-login-button.is-ghost {
+  color: var(--color-ink);
+  background: transparent;
 }
 
 .github-login-button[aria-disabled="true"] {
@@ -173,6 +193,10 @@
   color: var(--color-ink-soft);
   font-size: 13px;
   line-height: 1.5;
+}
+
+.admin-auth-message.is-spaced {
+  margin-bottom: 12px;
 }
 
 .admin-auth-message[data-state="error"] {

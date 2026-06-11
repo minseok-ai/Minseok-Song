@@ -34,7 +34,9 @@ const visualMeta = {
 
 const externalHref = (href = "") => /^https?:\/\//.test(href);
 const configuredA1PreviewHref = import.meta.env.A1TRATEGIZE_PREVIEW_URL ?? "";
-const a1PreviewHref = configuredA1PreviewHref || "/a1trategize-mock/index.html";
+const a1PreviewHref =
+  configuredA1PreviewHref || (import.meta.env.DEV ? "/a1trategize-mock/index.html" : "");
+const appPreviewSandbox = "allow-scripts allow-forms allow-same-origin";
 const projectCode = (order) => `PX-${String(order ?? 0).padStart(2, "0")}`;
 const isA1trategizeProject = (entry) =>
   entry.id === "a1trategize" || entry.data.title.toLowerCase().includes("a1trategize");
@@ -110,7 +112,7 @@ const getPenta = (scores) => {
         const showAppPreview = isA1trategizeProject(project) && Boolean(a1PreviewHref);
 
         return (
-          <article class={`project-card reveal-up ${index === 0 ? 'bento-hero' : ''} ${showAppPreview ? 'has-app-preview' : ''}`} style={`--project-order: ${index};`} data-tone={visual.tone}>
+          <article class={`project-card reveal-up ${index === 0 ? 'bento-hero' : ''} ${showAppPreview ? 'has-app-preview' : ''}`} data-tone={visual.tone}>
             <div class="card-visual" aria-hidden="true">
               <svg class="tp-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
                 <circle cx="50" cy="54" r="32" class="tp-grid-circle" />
@@ -151,7 +153,7 @@ const getPenta = (scores) => {
                     title="A1trategize interactive frontend preview"
                     loading="lazy"
                     referrerpolicy="no-referrer"
-                    sandbox="allow-scripts allow-forms allow-same-origin allow-popups"
+                    sandbox={appPreviewSandbox}
                   ></iframe>
                 </div>
               </div>
@@ -178,7 +180,7 @@ const getPenta = (scores) => {
 )}
 
 {otherProjects.length > 0 && (
-  <section class="project-grid-section" style="margin-top: 64px;" aria-label="Academic & Research Projects">
+  <section class="project-grid-section research-grid-section" aria-label="Academic & Research Projects">
     <div class="project-grid-head">
       <p class="micro-label">Research & Academia</p>
       <h2>Engineering, AI Models, and Scientific Validation.</h2>
@@ -191,7 +193,7 @@ const getPenta = (scores) => {
         const pData = getPenta(project.data.pentaPoint);
 
         return (
-          <article class="project-card reveal-up" style={`--project-order: ${index};`} data-tone={visual.tone}>
+          <article class="project-card reveal-up" data-tone={visual.tone}>
             <div class="card-visual" aria-hidden="true">
               <svg class="tp-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
                 <circle cx="50" cy="54" r="32" class="tp-grid-circle" />
@@ -566,6 +568,10 @@ const getPenta = (scores) => {
   .project-grid-section {
     display: grid;
     gap: 24px;
+  }
+
+  .research-grid-section {
+    margin-top: 64px;
   }
 
   .project-links {

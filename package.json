@@ -6,9 +6,9 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "predev": "node sync_a1trategize.cjs",
+    "predev": "node scripts/sync-a1trategize.cjs",
     "dev": "astro dev",
-    "prebuild": "node sync_a1trategize.cjs",
+    "prebuild": "node scripts/sync-a1trategize.cjs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -24,5 +24,8 @@
     "auth-astro": "^4.2.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
+  },
+  "overrides": {
+    "path-to-regexp": "^6.3.0"
   }
 }

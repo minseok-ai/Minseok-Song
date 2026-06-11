@@ -43,22 +43,41 @@ const hero = page.hero ?? {
 </section>
 
 <script is:inline>
-  document.addEventListener("click", async (event) => {
-    const trigger = event.target.closest("[data-copy]");
+  const markCopied = (trigger) => {
+    trigger.setAttribute("data-copied", "true");
+    window.setTimeout(() => trigger.removeAttribute("data-copied"), 1400);
+  };
+
+  const copyTriggerValue = async (trigger) => {
     if (!trigger) return;
 
     const value = trigger.getAttribute("data-copy");
     if (!value) return;
 
-    event.preventDefault();
-
     try {
       await navigator.clipboard.writeText(value);
-      trigger.setAttribute("data-copied", "true");
-      window.setTimeout(() => trigger.removeAttribute("data-copied"), 1400);
+      markCopied(trigger);
     } catch {
       trigger.removeAttribute("data-copied");
     }
+  };
+
+  document.addEventListener("click", async (event) => {
+    const trigger = event.target.closest("[data-copy]");
+    if (!trigger) return;
+
+    event.preventDefault();
+    await copyTriggerValue(trigger);
+  });
+
+  document.addEventListener("keydown", async (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+
+    const trigger = event.target.closest("[data-copy]");
+    if (!trigger) return;
+
+    event.preventDefault();
+    await copyTriggerValue(trigger);
   });
 </script>
 

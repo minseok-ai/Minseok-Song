@@ -34,11 +34,16 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     </p>
     <div class="hero-actions" aria-label="Primary actions">
       <a class="primary-action" href={siteConfig.a1FirmPath}>Open A1trategize</a>
-      <a class="secondary-action" href="#surfaces">Explore surfaces <span class="arrow-shifted">→</span></a>
+      <a class="secondary-action" href="#surfaces">
+        Explore surfaces
+        <svg class="arrow-shifted" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
     </div>
   </div>
 
-  <aside class="hero-brief fade-in-up" style="animation-delay: 150ms;" aria-label="Current focus">
+  <aside class="hero-brief fade-in-up stagger-brief" aria-label="Current focus">
     <div class="brief-glow"></div>
     <div class="brief-content">
       <div class="focus-title-wrap">
@@ -57,22 +62,28 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
       <!-- Multi-LLM Routing Telemetry -->
       <div class="telemetry-bar">
         <div class="telemetry-pipeline">
-          <div class="telemetry-node active" style="--node-color: var(--color-accent);">
+          <div class="telemetry-node active tone-accent">
             <span class="telemetry-dot"></span>
             <span class="telemetry-label">solar-pro</span>
           </div>
-          <span class="telemetry-arrow">➔</span>
-          <div class="telemetry-node active" style="--node-color: var(--color-blue);">
+          <span class="telemetry-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </span>
+          <div class="telemetry-node active tone-blue">
             <span class="telemetry-dot"></span>
             <span class="telemetry-label">sonar-pro</span>
           </div>
-          <span class="telemetry-arrow">➔</span>
-          <div class="telemetry-node active" style="--node-color: var(--color-coral);">
+          <span class="telemetry-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </span>
+          <div class="telemetry-node active tone-coral">
             <span class="telemetry-dot"></span>
             <span class="telemetry-label">gemini-pro</span>
           </div>
-          <span class="telemetry-arrow">➔</span>
-          <div class="telemetry-node active" style="--node-color: var(--color-purple);">
+          <span class="telemetry-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </span>
+          <div class="telemetry-node active tone-purple">
             <span class="telemetry-dot"></span>
             <span class="telemetry-label">deepseek-v4</span>
           </div>
@@ -135,13 +146,13 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
   .hero-system::after {
     content: "";
     position: absolute;
-    top: -200px;
-    left: -100px;
-    width: 800px;
-    height: 800px;
-    background: radial-gradient(circle, rgba(var(--rgb-warm), 0.04) 0%, transparent 60%);
+    right: var(--space-page);
+    bottom: 0;
+    left: var(--space-page);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(var(--rgb-warm), 0.22), transparent);
     pointer-events: none;
-    z-index: -1;
+    z-index: 1;
   }
 
   .hero-copy-panel {
@@ -225,6 +236,8 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
   }
 
   .secondary-action .arrow-shifted {
+    width: 16px;
+    height: 16px;
     margin-left: 6px;
     transition: transform var(--motion-fast) var(--easing-smooth);
     display: inline-block;
@@ -270,11 +283,11 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
 
   .brief-glow {
     position: absolute;
-    top: -50px;
-    right: -50px;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(var(--rgb-warm), 0.1) 0%, transparent 70%);
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(var(--rgb-warm), 0.36), transparent);
     pointer-events: none;
   }
 
@@ -370,6 +383,22 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     gap: 6px;
   }
 
+  .telemetry-node.tone-accent {
+    --node-color: var(--color-accent);
+  }
+
+  .telemetry-node.tone-blue {
+    --node-color: var(--color-blue);
+  }
+
+  .telemetry-node.tone-coral {
+    --node-color: var(--color-coral);
+  }
+
+  .telemetry-node.tone-purple {
+    --node-color: var(--color-purple);
+  }
+
   .telemetry-dot {
     width: 5px;
     height: 5px;
@@ -387,8 +416,21 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
   }
 
   .telemetry-arrow {
-    font-size: 9px;
+    display: inline-flex;
+    width: 13px;
+    height: 13px;
     color: var(--color-ink-muted);
+  }
+
+  .telemetry-arrow svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   .telemetry-status {
@@ -467,6 +509,10 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
 
   .fade-in-up {
     animation: fadeInUp var(--motion-slow) var(--easing-smooth) both;
+  }
+
+  .stagger-brief {
+    animation-delay: 150ms;
   }
 
   @keyframes fadeInUp {

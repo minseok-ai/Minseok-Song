@@ -6,6 +6,14 @@ import { writingSchema } from "../../../lib/schemas/content";
 
 const writingDirectory = new URL("../../../content/writings/", import.meta.url);
 
+const isTrustedWriteOrigin = (request: Request) => {
+  const origin = request.headers.get("origin");
+
+  if (!origin) return true;
+
+  return origin === new URL(request.url).origin;
+};
+
 const slugify = (value: string) => {
   const slug = value
     .toLowerCase()
@@ -20,6 +28,15 @@ const slugify = (value: string) => {
 
 export const POST: APIRoute = async ({ request }) => {
   const session = await getSession(request);
+
+  if (!isTrustedWriteOrigin(request)) {
+    return Response.json(
+      {
+        error: "Cross-origin admin writes are not allowed."
+      },
+      { status: 403 }
+    );
+  }
 
   if (!isAllowedAuthAdminSession(session, import.meta.env)) {
     return Response.json(
@@ -36,6 +53,17 @@ export const POST: APIRoute = async ({ request }) => {
         error: "Local file publishing is only enabled in development."
       },
       { status: 501 }
+    );
+  }
+
+  const contentType = request.headers.get("content-type") ?? "";
+
+  if (!contentType.toLowerCase().includes("application/json")) {
+    return Response.json(
+      {
+        error: "Admin writing saves require an application/json payload."
+      },
+      { status: 415 }
     );
   }
 

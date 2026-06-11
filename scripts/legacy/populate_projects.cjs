@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const projectsDir = path.join(__dirname, 'src', 'content', 'projects');
+const root = path.resolve(__dirname, '..', '..');
+const projectsDir = path.join(root, 'src', 'content', 'projects');
 
 const newProjects = [
   {

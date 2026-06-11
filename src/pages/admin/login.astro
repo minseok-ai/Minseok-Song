@@ -49,24 +49,24 @@ const errorMessage =
               <span>Admin</span>
             </div>
             
-            <div class="admin-login-options" style="margin-top: 32px;">
-              <a href="/admin/writings" class="github-login-button" style="background: var(--color-accent); border-color: var(--color-accent); color: var(--color-paper-deep); margin-bottom: 8px;">
+            <div class="admin-login-options is-authorized">
+              <a href="/admin/writings" class="github-login-button is-primary">
                 Open Writing Desk
               </a>
-              <SignOut class="github-login-button" style="background: transparent; color: var(--color-ink);">
+              <SignOut class="github-login-button is-ghost">
                 Sign out
               </SignOut>
             </div>
           </>
         ) : (
           <>
-            <div class="admin-auth-message" data-state="error" style="margin-bottom: 12px;">
+            <div class="admin-auth-message is-spaced" data-state="error">
               Access Denied: Your GitHub account ({adminLabel}) does not have administrator privileges.
             </div>
             <p>
               If you believe this is an error, please ensure you are logged into the correct GitHub account.
             </p>
-            <div class="admin-login-options" style="margin-top: 24px;">
+            <div class="admin-login-options is-compact">
               <SignOut class="github-login-button">
                 Sign out
               </SignOut>

@@ -102,13 +102,14 @@ const jsonLd = {
         </nav>
 
         <div class="header-utility">
-          <button 
-            id="theme-toggle" 
-            class="theme-toggle" 
+          <button
+            id="theme-toggle"
+            class="theme-toggle"
+            type="button"
             aria-label="Toggle dark/light mode"
-            style="background: none; border: none; cursor: pointer; padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--color-ink-soft); transition: all 0.3s ease;"
+            aria-pressed="false"
           >
-            <svg id="theme-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="theme-icon theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="5"></circle>
               <line x1="12" y1="1" x2="12" y2="3"></line>
               <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -119,6 +120,9 @@ const jsonLd = {
               <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
               <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
             </svg>
+            <svg class="theme-icon theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
           </button>
           <div class="login-link" aria-label="Client greeting">
             <picture>
@@ -128,7 +132,7 @@ const jsonLd = {
             <span>{session ? `Hi, ${session.user?.name || 'Minseok'}!` : 'Hi, Client!'}</span>
           </div>
           {session && (
-            <SignOut style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.6; cursor: pointer; background: none; border: none; color: inherit; padding: 0;">
+            <SignOut class="logout-button">
               Logout
             </SignOut>
           )}
@@ -166,56 +170,42 @@ const jsonLd = {
 
       // Theme toggle functionality
       const themeToggle = document.getElementById('theme-toggle');
-      const themeIcon = document.getElementById('theme-icon');
       
-      // Check for saved theme preference or system preference
-      const savedTheme = localStorage.getItem('theme');
+      // Check for saved theme preference or system preference.
+      const savedTheme = (() => {
+        try {
+          return localStorage.getItem('theme');
+        } catch {
+          return null;
+        }
+      })();
       const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       
-      // Set initial theme
+      const setTheme = (theme) => {
+        document.documentElement.setAttribute('data-theme', theme);
+        themeToggle?.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
+      };
+
+      // Set initial theme.
       if (savedTheme) {
-        document.documentElement.setAttribute('data-theme', savedTheme);
+        setTheme(savedTheme);
       } else if (systemPrefersDark) {
-        document.documentElement.setAttribute('data-theme', 'dark');
+        setTheme('dark');
+      } else {
+        setTheme('light');
       }
-      
-      // Update icon based on current theme
-      function updateThemeIcon(theme) {
-        if (theme === 'light') {
-          // Moon icon for light mode (to switch to dark)
-          themeIcon.innerHTML = `
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          `;
-        } else {
-          // Sun icon for dark mode (to switch to light)
-          themeIcon.innerHTML = `
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          `;
-        }
-      }
-      
-      // Initialize icon
-      const currentTheme = document.documentElement.getAttribute('data-theme') || (systemPrefersDark ? 'dark' : 'light');
-      updateThemeIcon(currentTheme);
-      
-      // Toggle theme on button click
+
+      // Toggle theme on button click.
       if (themeToggle) {
         themeToggle.addEventListener('click', async (e) => {
           const currentTheme = document.documentElement.getAttribute('data-theme');
           const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
           
           const switchTheme = () => {
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
+            setTheme(newTheme);
+            try {
+              localStorage.setItem('theme', newTheme);
+            } catch {}
           };
 
           if (!document.startViewTransition) {

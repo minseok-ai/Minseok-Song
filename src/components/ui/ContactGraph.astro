@@ -11,7 +11,7 @@ const { contactNodes, visibleChannels } = Astro.props;
         and the artifact you want to build. Short, concrete messages get
         answered fastest.
       </p>
-      <small>Response mode · Korean or English · project-first</small>
+      <small>Response mode / Korean or English / project first</small>
     </div>
 
     <div class="channel-graph-container">
@@ -55,11 +55,13 @@ const { contactNodes, visibleChannels } = Astro.props;
             const isCopyable = node.copyable;
             const isExternal = node.href?.startsWith("http");
             const linkProps = isCopyable
-              ? { role: "button", tabindex: "0" }
+              ? { tabindex: "-1", "aria-label": `Copy ${node.label}` }
               : {
                   href: node.href ?? "#",
                   target: isExternal ? "_blank" : undefined,
-                  rel: isExternal ? "noopener noreferrer" : undefined
+                  rel: isExternal ? "noopener noreferrer" : undefined,
+                  tabindex: "-1",
+                  "aria-label": `Open ${node.label}`
                 };
 
             return (
@@ -100,7 +102,9 @@ const { contactNodes, visibleChannels } = Astro.props;
         <small class="graph-hint">Click a copyable node or open the channel below.</small>
       </div>
     </div>
-  </section>  <section class="contact-grid">
+  </section>
+
+  <section class="contact-grid">
     {visibleChannels.map((channel, index) => {
       const CardTag = channel.copyable ? "button" : "a";
       return (
@@ -112,6 +116,7 @@ const { contactNodes, visibleChannels } = Astro.props;
           rel={!channel.copyable && channel.href?.startsWith("http") ? "noopener noreferrer" : undefined}
           data-copy={channel.copyable ? channel.value : undefined}
           type={channel.copyable ? "button" : undefined}
+          aria-label={channel.copyable ? `Copy ${channel.label}` : `Open ${channel.label}`}
         >
           <div class="card-inner">
             <div class="card-header">
@@ -210,55 +215,6 @@ const { contactNodes, visibleChannels } = Astro.props;
     });
   });
 
-  // Success checkmark feedback for SVG text nodes on copy click
-  document.addEventListener("click", (event) => {
-    const trigger = event.target.closest(".graph-edge-link[data-copy]");
-    if (!trigger) return;
-
-    const textNode = trigger.querySelector('.node-label-text');
-    if (textNode && !trigger.hasAttribute('data-text-updating')) {
-      trigger.setAttribute('data-text-updating', 'true');
-      const originalText = textNode.textContent;
-      textNode.textContent = `${originalText} ✓`;
-      setTimeout(() => {
-        textNode.textContent = originalText;
-        trigger.removeAttribute('data-text-updating');
-      }, 1400);
-    }
-  });
-
-  // Keyboard accessibility support for copying
-  document.addEventListener("keydown", async (event) => {
-    if (event.key === "Enter" || event.key === " ") {
-      const trigger = event.target.closest("[data-copy]");
-      if (!trigger) return;
-      
-      event.preventDefault();
-      const value = trigger.getAttribute("data-copy");
-      if (!value) return;
-
-      try {
-        await navigator.clipboard.writeText(value);
-        trigger.setAttribute("data-copied", "true");
-        
-        // Handle text label checkmark if it's the graph edge link
-        const textNode = trigger.querySelector('.node-label-text');
-        if (textNode && !trigger.hasAttribute('data-text-updating')) {
-          trigger.setAttribute('data-text-updating', 'true');
-          const originalText = textNode.textContent;
-          textNode.textContent = `${originalText} ✓`;
-          setTimeout(() => {
-            textNode.textContent = originalText;
-            trigger.removeAttribute('data-text-updating');
-          }, 1400);
-        }
-
-        window.setTimeout(() => trigger.removeAttribute("data-copied"), 1400);
-      } catch {
-        trigger.removeAttribute("data-copied");
-      }
-    }
-  });
 </script>
 
 <style>
