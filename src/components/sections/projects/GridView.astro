@@ -252,10 +252,11 @@ const getPenta = (scores) => {
       const sourceWidth = Number(shell.dataset.sourceWidth || 1440);
       const shellWidth = Math.max(1, shell.clientWidth);
       const shellHeight = Math.max(1, shell.clientHeight);
-      const scale = Math.min(1, shellWidth / sourceWidth);
+      // Add a 3px scale calculation buffer to ensure subpixel overlap on the edges
+      const scale = Math.min(1, (shellWidth + 3) / sourceWidth);
       shell.style.setProperty('--app-preview-scale', String(scale));
       shell.style.setProperty('--app-preview-width', `${sourceWidth}px`);
-      shell.style.setProperty('--app-preview-height', `${Math.ceil(shellHeight / scale)}px`);
+      shell.style.setProperty('--app-preview-height', `${Math.ceil(shellHeight / scale) + 2}px`);
     });
   }
 
@@ -298,6 +299,52 @@ const getPenta = (scores) => {
     });
 
     fitAppPreviewFrames();
+    initIframeThemeSync();
+  }
+
+  let syncRetries = 0;
+  function syncIframeTheme() {
+    const iframe = document.querySelector('.app-preview-shell iframe');
+    if (!iframe) return;
+    try {
+      if (iframe.contentWindow) {
+        if (typeof iframe.contentWindow.switchThemeUI === 'function') {
+          syncRetries = 0;
+          const parentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+          const targetTheme = parentTheme === 'light' ? 'nnfc' : 'mckinsey';
+          iframe.contentWindow.switchThemeUI(targetTheme);
+        } else if (syncRetries < 10) {
+          syncRetries++;
+          setTimeout(syncIframeTheme, 50);
+        }
+      }
+    } catch (e) {
+      console.warn("Iframe 테마 동기화 실패:", e);
+    }
+  }
+
+  function initIframeThemeSync() {
+    const iframe = document.querySelector('.app-preview-shell iframe');
+    if (!iframe) return;
+
+    iframe.addEventListener('load', () => {
+      syncRetries = 0;
+      syncIframeTheme();
+    });
+    syncIframeTheme();
+
+    if (window.__iframeThemeObserver) {
+      window.__iframeThemeObserver.disconnect();
+    }
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-theme') {
+          syncIframeTheme();
+        }
+      });
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    window.__iframeThemeObserver = observer;
   }
 
   initProjectCards();
@@ -765,9 +812,10 @@ const getPenta = (scores) => {
     border: 1px solid var(--color-line);
     border-radius: calc(var(--radius-card) - 2px);
     overflow: hidden;
-    background: #f4f6f9;
-    box-shadow: inset 0 0 28px rgba(13, 17, 23, 0.1);
+    background: var(--color-field);
+    box-shadow: inset 0 0 28px rgba(0, 0, 0, 0.15);
     isolation: isolate;
+    transition: background-color var(--motion-base) ease, border-color var(--motion-base) ease, box-shadow var(--motion-base) ease;
   }
 
   .app-preview-shell {
@@ -777,7 +825,8 @@ const getPenta = (scores) => {
     min-height: inherit;
     overflow: hidden;
     border-radius: inherit;
-    background: #f4f6f9;
+    background: var(--color-field);
+    transition: background-color var(--motion-base) ease;
   }
 
   .app-preview-shell::after {
@@ -798,6 +847,8 @@ const getPenta = (scores) => {
     width: var(--app-preview-width, 1440px);
     height: var(--app-preview-height, 980px);
     border: 0;
+    outline: none;
+    background: transparent;
     transform: scale(var(--app-preview-scale, 0.62));
     transform-origin: 0 0;
   }
@@ -825,20 +876,20 @@ const getPenta = (scores) => {
     pointer-events: none;
   }
 
-  .tp-grid-circle {
+  :global(.tp-grid-circle) {
     fill: none;
-    stroke: rgba(255, 255, 255, 0.1);
+    stroke: var(--color-line) !important;
     stroke-width: 0.5;
     stroke-dasharray: 2 2;
   }
 
-  .tp-axis-line {
-    stroke: rgba(255, 255, 255, 0.1);
+  :global(.tp-axis-line) {
+    stroke: var(--color-line) !important;
     stroke-width: 0.5;
   }
 
-  .tp-label {
-    fill: rgba(255, 255, 255, 0.5);
+  :global(.tp-label) {
+    fill: var(--color-ink-soft) !important;
     font-size: 6.5px;
     font-family: var(--font-mono);
     text-transform: uppercase;
@@ -864,9 +915,9 @@ const getPenta = (scores) => {
     transition: fill 0.3s ease, stroke 0.3s ease;
   }
 
-  .tp-vertex {
-    fill: #fff;
-    filter: drop-shadow(0 0 2px rgba(255,255,255,0.8));
+  :global(.tp-vertex) {
+    fill: var(--color-ink) !important;
+    filter: drop-shadow(0 0 2px var(--color-accent-glow)) !important;
   }
 
   .project-card[data-tone="green"] .tp-polygon-core {

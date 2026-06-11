@@ -19,7 +19,10 @@ const { sectionCards } = Astro.props;
         <span class="surface-num">{item.num}</span>
         <span class="surface-glyph">{item.meta.glyph}</span>
         <div class="surface-content">
-          <small>{item.meta.line}</small>
+          <div class="surface-category">
+            <span class="pulse-dot"></span>
+            <small>{item.meta.line}</small>
+          </div>
           <h3>{item.label}</h3>
           <p>{item.page?.description ?? item.layoutType}</p>
         </div>
@@ -33,6 +36,46 @@ const { sectionCards } = Astro.props;
     ))}
   </div>
 </section>
+
+<script is:inline>
+  const initSurfaceCards = () => {
+    const cards = document.querySelectorAll('.surface-card');
+    cards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        // Dynamic tilt calculation (max ~4.5 degrees)
+        const rotateX = ((y - centerY) / centerY) * -4.5;
+        const rotateY = ((x - centerX) / centerX) * 4.5;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+        card.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease, background-color 0.6s ease, border-color 0.6s ease';
+      });
+      
+      card.addEventListener('mouseenter', () => {
+        card.style.transition = 'box-shadow 0.6s ease, background-color 0.6s ease, border-color 0.6s ease';
+      });
+    });
+  };
+
+  // Run on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSurfaceCards);
+  } else {
+    initSurfaceCards();
+  }
+</script>
 
 <style>
   .surface-index {
@@ -87,6 +130,8 @@ const { sectionCards } = Astro.props;
     backdrop-filter: var(--glass-blur);
     text-decoration: none;
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-style: preserve-3d;
+    will-change: transform;
     
     animation: fadeInUp 0.6s var(--easing-smooth) both;
   }
@@ -97,25 +142,53 @@ const { sectionCards } = Astro.props;
   .surface-step-4 { animation-delay: 300ms; }
   .surface-step-5 { animation-delay: 400ms; }
 
-  .surface-card[data-surface="about"] { --accent: var(--color-blue); }
-  .surface-card[data-surface="a1-firms"] { --accent: var(--color-warm); }
-  .surface-card[data-surface="projects"] { --accent: var(--color-green); }
-  .surface-card[data-surface="writings"] { --accent: var(--color-coral); }
-  .surface-card[data-surface="contacts"] { --accent: var(--color-purple); }
+  /* Map accents and RGB counterparts for gradient opacities */
+  .surface-card[data-surface="about"] { 
+    --accent: var(--color-blue); 
+    --rgb-accent: 107, 156, 242; 
+  }
+  .surface-card[data-surface="a1-firms"] { 
+    --accent: var(--color-warm); 
+    --rgb-accent: var(--rgb-warm); 
+  }
+  .surface-card[data-surface="projects"] { 
+    --accent: var(--color-green); 
+    --rgb-accent: 108, 163, 125; 
+  }
+  .surface-card[data-surface="writings"] { 
+    --accent: var(--color-coral); 
+    --rgb-accent: 239, 182, 141; 
+  }
+  .surface-card[data-surface="contacts"] { 
+    --accent: var(--color-purple); 
+    --rgb-accent: 179, 154, 251; 
+  }
 
+  /* Spotlight Background Glow */
   .surface-card::before {
     content: '';
     position: absolute;
-    top: 24px;
-    right: 0;
-    bottom: 24px;
-    width: 2px;
-    background: linear-gradient(180deg, transparent, var(--accent), transparent);
-    opacity: 0.16;
+    inset: 0;
+    background: radial-gradient(
+      350px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(var(--rgb-accent), 0.08),
+      transparent 80%
+    );
+    opacity: 0;
     transition: opacity 0.5s ease;
     pointer-events: none;
+    z-index: 0;
   }
 
+  [data-theme="light"] .surface-card::before {
+    background: radial-gradient(
+      350px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      rgba(var(--rgb-accent), 0.12),
+      transparent 80%
+    );
+  }
+
+  /* Spotlight Border Glow using CSS mask */
   .surface-card::after {
     content: '';
     position: absolute;
@@ -129,6 +202,7 @@ const { sectionCards } = Astro.props;
     opacity: 0.5;
     transition: opacity 0.5s ease, background-image 0.5s ease;
     pointer-events: none;
+    z-index: 1;
   }
 
   .shimmer-sweep {
@@ -159,16 +233,28 @@ const { sectionCards } = Astro.props;
     grid-column: span 2;
   }
 
+  /* Upgraded background floating glyph */
   .surface-glyph {
     position: absolute;
-    top: 36px;
+    top: 32px;
     right: 36px;
-    color: var(--accent);
-    font-size: 56px;
-    font-weight: 900;
+    font-size: 72px;
+    font-weight: 950;
     line-height: 1;
-    opacity: 0.5;
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: var(--font-sans);
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, var(--accent) 0%, rgba(var(--rgb-accent), 0.15) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0.08;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 0;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  [data-theme="light"] .surface-glyph {
+    opacity: 0.12;
   }
 
   .surface-num {
@@ -177,29 +263,70 @@ const { sectionCards } = Astro.props;
     color: var(--color-ink-muted);
     letter-spacing: 0.05em;
     font-family: var(--font-mono);
+    z-index: 1;
   }
 
   .surface-content {
     position: relative;
-    z-index: 1;
+    z-index: 2;
+    transform: translateZ(20px); /* slightly lifts text on 3D tilt */
+  }
+
+  .surface-category {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  /* Pulsing dot indicator */
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--accent);
+    position: relative;
+    display: inline-block;
+  }
+
+  .pulse-dot::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    opacity: 0.8;
+    animation: dotPulse 2.2s infinite cubic-bezier(0.25, 0, 0, 1);
+  }
+
+  @keyframes dotPulse {
+    0% {
+      transform: scale(0.6);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(2.4);
+      opacity: 0;
+    }
   }
 
   .surface-card small {
     color: var(--accent);
     font-size: 11px;
-    font-weight: 800;
+    font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    opacity: 0.9;
+    letter-spacing: 0.16em;
+    opacity: 0.95;
   }
 
   .surface-card h3 {
-    margin: 14px 0 16px;
+    margin: 10px 0 16px;
     font-size: 3.2rem;
     font-weight: 800;
-    line-height: 1;
+    line-height: 1.05;
     letter-spacing: -0.02em;
     color: var(--color-ink);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .surface-card p {
@@ -211,40 +338,76 @@ const { sectionCards } = Astro.props;
     transition: color 0.3s ease;
   }
 
+  /* Pill-button styling for commands */
   .surface-command {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     color: var(--color-ink-muted);
-    font-size: 12px;
-    font-weight: 700;
+    font-size: 11px;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    display: flex;
+    letter-spacing: 0.08em;
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.01);
+    width: fit-content;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateZ(15px);
   }
 
   .surface-command svg {
     display: block;
-    width: 16px;
-    height: 16px;
-    transition: transform var(--motion-fast) ease;
+    width: 14px;
+    height: 14px;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
+  /* Card Hover Styles */
   .surface-card:hover {
-    transform: translateY(-6px);
-    box-shadow: inset 0 1px 0 var(--color-line-strong), 0 24px 60px var(--glass-shadow);
+    box-shadow: 
+      inset 0 1px 0 var(--color-line-strong), 
+      0 24px 60px var(--glass-shadow),
+      0 0 50px -10px rgba(var(--rgb-accent), 0.12);
     background: var(--color-panel-solid);
-    border-color: var(--color-line-strong);
+    border-color: rgba(var(--rgb-accent), 0.25);
+  }
+
+  [data-theme="light"] .surface-card:hover {
+    box-shadow: 
+      inset 0 1px 0 var(--color-line-strong), 
+      0 24px 60px var(--glass-shadow),
+      0 0 50px -10px rgba(var(--rgb-accent), 0.16);
+    background: var(--color-panel-solid);
+    border-color: rgba(var(--rgb-accent), 0.3);
   }
 
   .surface-card:hover::before {
-    opacity: 0.45;
+    opacity: 1;
   }
 
   .surface-card:hover::after {
     opacity: 1;
-    background: linear-gradient(135deg, var(--accent) 0%, transparent 50%, rgba(255, 255, 255, 0.15) 100%);
+    background: 
+      radial-gradient(
+        250px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(var(--rgb-accent), 0.48),
+        transparent 70%
+      ),
+      linear-gradient(135deg, var(--color-line-strong) 0%, transparent 40%, transparent 60%, var(--color-line) 100%);
+  }
+
+  [data-theme="light"] .surface-card:hover::after {
+    background: 
+      radial-gradient(
+        250px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(var(--rgb-accent), 0.6),
+        transparent 70%
+      ),
+      linear-gradient(135deg, var(--color-line-strong) 0%, transparent 40%, transparent 60%, var(--color-line) 100%);
   }
 
   .surface-card:hover .shimmer-sweep {
@@ -253,13 +416,28 @@ const { sectionCards } = Astro.props;
   }
 
   .surface-card:hover .surface-glyph {
-    transform: scale(1.1) rotate(5deg);
-    opacity: 0.65;
+    transform: scale(1.15) translateY(-4px) rotate(4deg);
+    opacity: 0.25;
+    filter: drop-shadow(0 8px 16px rgba(var(--rgb-accent), 0.2));
   }
 
-  .surface-card:hover p,
-  .surface-card:hover .surface-command {
+  [data-theme="light"] .surface-card:hover .surface-glyph {
+    opacity: 0.3;
+  }
+
+  .surface-card:hover h3 {
+    transform: translateY(-2px);
+  }
+
+  .surface-card:hover p {
     color: var(--color-ink-soft);
+  }
+
+  .surface-card:hover .surface-command {
+    color: var(--color-ink);
+    border-color: rgba(var(--rgb-accent), 0.4);
+    background: rgba(var(--rgb-accent), 0.08);
+    box-shadow: 0 4px 12px rgba(var(--rgb-accent), 0.1);
   }
 
   .surface-card:hover .surface-command svg {

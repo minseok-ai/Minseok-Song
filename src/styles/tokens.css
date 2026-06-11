@@ -450,6 +450,7 @@ select {
 }
 
 .numbered-nav {
+  position: relative;
   display: flex;
   justify-self: center;
   justify-content: space-between;
@@ -459,44 +460,44 @@ select {
 
 .numbered-nav a {
   position: relative;
-  display: inline-grid;
-  gap: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: 68px;
-  padding: 8px 0;
+  padding: 8px 4px;
   color: var(--color-ink-muted);
   text-decoration: none;
-  transition:
-    color var(--motion-fast) ease,
-    transform var(--motion-fast) ease;
+  transition: color var(--motion-fast) ease, transform var(--motion-fast) ease;
 }
 
-.numbered-nav a::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  bottom: 4px;
-  left: 0;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--motion-base) ease;
-}
 
 .numbered-nav a:hover,
 .numbered-nav a[aria-current="page"] {
   color: var(--color-ink);
-  transform: translateY(-1px);
 }
 
-.numbered-nav a:hover::after,
-.numbered-nav a[aria-current="page"]::after {
-  transform: scaleX(1);
+.nav-indicator-line {
+  position: absolute;
+  bottom: 0px; /* precise vertical height positioning */
+  left: 0;
+  width: 0;
+  height: 1.5px; /* thinner, more premium stroke height */
+  background: var(--color-accent);
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: 
+    left 0.38s cubic-bezier(0.16, 1, 0.3, 1), 
+    width 0.38s cubic-bezier(0.16, 1, 0.3, 1), 
+    opacity 0.25s ease;
 }
 
 .nav-label {
   font-size: 13px;
   font-weight: 700;
+  position: relative;
+  display: inline-block;
+  padding: 2px 0;
 }
 
 .site-main {
@@ -549,6 +550,7 @@ select {
 .header-utility .theme-toggle:hover {
   background: var(--color-accent-soft);
   color: var(--color-accent);
+  transform: rotate(30deg) scale(1.05);
 }
 
 .logout-button {

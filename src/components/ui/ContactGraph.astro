@@ -82,10 +82,11 @@ const { contactNodes, visibleChannels } = Astro.props;
                     />
                   </circle>
                   <text 
-                    x={node.x} 
-                    y={node.y - 3.8} 
+                    x={node.labelX ?? node.x} 
+                    y={node.labelY ?? node.y - 5.6} 
                     class="node-label-text"
-                    text-anchor="middle"
+                    text-anchor={node.labelAnchor ?? "middle"}
+                    dominant-baseline="middle"
                   >
                     {node.label}
                   </text>
@@ -413,8 +414,12 @@ const { contactNodes, visibleChannels } = Astro.props;
     font-size: 3.5px;
     font-weight: 700;
     letter-spacing: -0.01em;
+    paint-order: stroke;
+    stroke: var(--color-paper);
+    stroke-width: 0.7px;
+    stroke-linejoin: round;
     pointer-events: none;
-    transition: fill var(--motion-fast) ease;
+    transition: fill var(--motion-fast) ease, stroke var(--motion-fast) ease;
   }
 
   .graph-edge-link:hover .node-label-text,

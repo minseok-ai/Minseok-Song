@@ -158,8 +158,8 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
   }
   
   .newsletter-stats span:hover {
-    border-color: var(--color-coral);
-    background: var(--color-coral-soft);
+    border-color: var(--color-accent);
+    background: var(--color-accent-soft);
   }
 
   .admin-entry-link {
@@ -184,8 +184,8 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
   }
 
   .admin-entry-link:hover {
-    border-color: var(--color-coral);
-    background: var(--color-coral-soft);
+    border-color: var(--color-accent);
+    background: var(--color-accent-soft);
     transform: translateY(-1px);
   }
 
@@ -234,12 +234,12 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
 
   .pipeline-meter .pipeline-step:hover {
     background: var(--color-panel-solid);
-    box-shadow: inset 0 0 0 1px var(--color-coral-soft), inset 0 0 24px rgba(239, 182, 141, 0.05);
+    box-shadow: inset 0 0 0 1px var(--color-accent-soft), inset 0 0 24px rgba(var(--rgb-warm), 0.05);
     z-index: 2;
   }
   
   .pipeline-meter .pipeline-step:hover strong {
-    color: var(--color-coral);
+    color: var(--color-accent);
   }
 
   .pipeline-meter .pipeline-step:last-child {
@@ -281,7 +281,7 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     bottom: 0;
     left: 0;
     width: 2px;
-    background: var(--color-coral);
+    background: var(--color-accent);
     opacity: 0;
     transition: opacity var(--motion-fast) ease;
   }
@@ -290,7 +290,7 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(232, 168, 124, 0.1), transparent 45%);
+    background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(var(--rgb-warm), 0.1), transparent 45%);
     opacity: 0;
     transition: opacity var(--motion-fast) ease;
     pointer-events: none;
@@ -308,8 +308,8 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
 
   /* Interactive highlights */
   .newsletter-row.pipeline-highlight {
-    border-color: var(--color-coral);
-    background-color: rgba(232, 168, 124, 0.06);
+    border-color: var(--color-accent);
+    background-color: rgba(var(--rgb-warm), 0.06);
     transform: translateX(6px);
     z-index: 2;
   }
@@ -401,7 +401,7 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
   }
 
   .newsletter-row:hover .row-arrow {
-    color: var(--color-coral);
+    color: var(--color-accent);
     transform: translateX(3px);
   }
 

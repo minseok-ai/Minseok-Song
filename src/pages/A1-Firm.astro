@@ -128,25 +128,62 @@ const operatingLoop = [
       <div class="domains-grid">
         <article class="domain-card reveal-up stagger-1">
           <span class="micro-label">Domain 01</span>
-          <h3 class="domain-title"><span class="domain-glyph">BIZ</span> Business Strategy</h3>
+          <h3 class="domain-title">
+            <span class="domain-glyph" title="Business Strategy">
+              <svg class="dg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+            </span>
+            Business Strategy
+          </h3>
           <p>McKinsey-style outlines, market size models, competitive landscaping, and growth initiative recommendations.</p>
         </article>
 
         <article class="domain-card reveal-up stagger-2">
           <span class="micro-label">Domain 02</span>
-          <h3 class="domain-title"><span class="domain-glyph">FAB</span> NNFC Semiconductor</h3>
+          <h3 class="domain-title">
+            <span class="domain-glyph" title="NNFC Semiconductor">
+              <svg class="dg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                <rect x="9" y="9" width="6" height="6"></rect>
+                <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"></path>
+              </svg>
+            </span>
+            NNFC Semiconductor
+          </h3>
           <p>Recipe parameter mapping. Cross-checks wafer sizes, temperatures, and gases against 183 fabrication tools.</p>
         </article>
 
         <article class="domain-card reveal-up stagger-3">
           <span class="micro-label">Domain 03</span>
-          <h3 class="domain-title"><span class="domain-glyph">IP</span> IP & Patent Strategy</h3>
+          <h3 class="domain-title">
+            <span class="domain-glyph" title="IP & Patent Strategy">
+              <svg class="dg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="12" y1="2" x2="12" y2="22"></line>
+                <line x1="5" y1="7" x2="19" y2="7"></line>
+                <path d="M19 7c0 4.5-2.5 8-7 8s-7-3.5-7-8"></path>
+                <path d="M5 7L2 15h6L5 7z"></path>
+                <path d="M19 7l-3 8h6l-3-8z"></path>
+              </svg>
+            </span>
+            IP & Patent Strategy
+          </h3>
           <p>Prior-art query matching, KIPO patent claim structuring, and draft patent background composition.</p>
         </article>
 
         <article class="domain-card reveal-up stagger-4">
           <span class="micro-label">Domain 04</span>
-          <h3 class="domain-title"><span class="domain-glyph">CV</span> Career Coaching</h3>
+          <h3 class="domain-title">
+            <span class="domain-glyph" title="Career Coaching">
+              <svg class="dg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="8.5" cy="7" r="4"></circle>
+                <polyline points="17 11 19 13 23 9"></polyline>
+              </svg>
+            </span>
+            Career Coaching
+          </h3>
           <p>Resume bullet impact audits, technical skill gap analysis, and global tech company interview prep.</p>
         </article>
       </div>
@@ -237,7 +274,7 @@ const operatingLoop = [
     font-size: clamp(3rem, 4.8vw, 4.6rem);
     font-weight: 600;
     letter-spacing: -0.01em;
-    line-height: 1.05;
+    line-height: 1.25;
     background: linear-gradient(180deg, var(--color-ink) 0%, var(--color-ink-soft) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -626,17 +663,24 @@ const operatingLoop = [
     align-items: center;
     justify-content: center;
     flex: 0 0 auto;
-    min-width: 34px;
-    min-height: 24px;
-    padding: 0 7px;
+    width: 32px;
+    height: 32px;
     border: 1px solid var(--color-line-strong);
-    border-radius: 6px;
+    border-radius: 8px;
     color: var(--color-accent-ink);
     background: var(--color-accent-soft);
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 850;
-    line-height: 1;
+    transition: transform var(--motion-fast) ease, border-color var(--motion-fast) ease;
+  }
+
+  .domain-card:hover .domain-glyph {
+    transform: scale(1.06);
+    border-color: var(--color-accent);
+  }
+
+  .dg-icon {
+    width: 15px;
+    height: 15px;
+    stroke-width: 1.8;
   }
 
   .domain-card p {

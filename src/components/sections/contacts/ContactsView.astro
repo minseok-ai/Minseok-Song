@@ -8,12 +8,12 @@ const visibleChannels = contactEntries.flatMap((entry) =>
 );
 
 const contactNodePositions = [
-  { x: 50, y: 16 }, // Top
-  { x: 80, y: 66 }, // Bottom Right
-  { x: 20, y: 66 }, // Bottom Left
-  { x: 84, y: 34 },
-  { x: 16, y: 34 },
-  { x: 50, y: 90 }
+  { x: 50, y: 16, labelX: 50, labelY: 9.8, labelAnchor: "middle" }, // Top
+  { x: 80, y: 66, labelX: 84.2, labelY: 66.2, labelAnchor: "start" }, // Bottom Right
+  { x: 20, y: 66, labelX: 15.8, labelY: 66.2, labelAnchor: "end" }, // Bottom Left
+  { x: 84, y: 34, labelX: 88.2, labelY: 33.4, labelAnchor: "start" },
+  { x: 16, y: 34, labelX: 11.8, labelY: 33.4, labelAnchor: "end" },
+  { x: 50, y: 90, labelX: 50, labelY: 96.2, labelAnchor: "middle" }
 ];
 
 const contactNodes = visibleChannels.map((channel, index) => ({
