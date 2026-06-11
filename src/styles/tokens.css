@@ -192,6 +192,10 @@
   box-sizing: border-box;
 }
 
+body, .site-header, .panel, button, input, textarea, select, a, svg, circle, line, path, .signal-strip div {
+  transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease, stroke 0.6s ease, fill 0.6s ease, background 0.6s ease;
+}
+
 html {
   min-width: 320px;
   background: var(--color-paper);
