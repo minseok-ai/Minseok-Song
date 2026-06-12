@@ -41,7 +41,8 @@ const jsonLd = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#050505" />
-    <link rel="icon" type="image/png" href={`/A1Firm-logo.png?v=${faviconVersion}`} />
+    <link rel="icon" type="image/png" href={`/A1Firm-logo.png?v=${faviconVersion}`} media="(prefers-color-scheme: dark)" />
+    <link rel="icon" type="image/png" href={`/A1Firm-logo_light.png?v=${faviconVersion}`} media="(prefers-color-scheme: light)" />
     <link rel="shortcut icon" type="image/png" href={`/A1Firm-logo.png?v=${faviconVersion}`} />
     <link rel="apple-touch-icon" href={`/A1Firm-logo.png?v=${faviconVersion}`} />
     <link rel="canonical" href={canonicalUrl} />
@@ -141,9 +142,13 @@ const jsonLd = {
             </svg>
           </button>
           <div class="login-link" aria-label="Client greeting">
-            <picture>
+            <picture class="logo-dark">
               <source srcset="/A1Firm-logo.webp" type="image/webp" />
               <img class="utility-logo" src="/A1Firm-logo.png" alt="" width="28" height="28" />
+            </picture>
+            <picture class="logo-light">
+              <source srcset="/A1Firm-logo_light.webp" type="image/webp" />
+              <img class="utility-logo" src="/A1Firm-logo_light.png" alt="" width="28" height="28" />
             </picture>
             <span>{session ? `Hi, ${session.user?.name || 'Minseok'}!` : 'Hi, Client!'}</span>
           </div>

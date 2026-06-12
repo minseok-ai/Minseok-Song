@@ -1,5 +1,85 @@
 "use strict";
 
+const IS_STATIC_A1_MOCK = window.location.pathname.includes("/a1trategize-mock/");
+
+const localStorage = (() => {
+  try {
+    const storage = window.localStorage;
+    const key = "__a1_mock_storage_probe__";
+    storage.setItem(key, "1");
+    storage.removeItem(key);
+    return storage;
+  } catch {
+    const memory = new Map();
+    return {
+      getItem(key) {
+        return memory.has(key) ? memory.get(key) : null;
+      },
+      setItem(key, value) {
+        memory.set(key, String(value));
+      },
+      removeItem(key) {
+        memory.delete(key);
+      }
+    };
+  }
+})();
+
+const STATIC_DOMAIN_REGISTRY = [
+  { key: "business", label: "Business Strategy", icon_id: "mode-business", description: "Market analysis, growth strategy, and executive brief generation." },
+  { key: "career", label: "Career & Interview", icon_id: "mode-career", description: "Resume review, interview preparation, and career positioning." },
+  { key: "ip", label: "IP & Patent", icon_id: "mode-ip", description: "Prior-art review, patent drafting, and IP strategy." },
+  { key: "nnfc", label: "NNFC Recipe", icon_id: "mode-nnfc", description: "Semiconductor process validation against an equipment catalog." }
+];
+
+const STATIC_MODEL_CATALOG = {
+  "solar-pro3": { display_name: "Solar Pro 3", provider: "upstage", supports_search: false },
+  "sonar-pro": { display_name: "Sonar Pro", provider: "perplexity", supports_search: true },
+  "gemini-2.5-pro": { display_name: "Gemini 2.5 Pro", provider: "google", supports_search: false },
+  "deepseek-v4-pro": { display_name: "DeepSeek V4 Pro", provider: "alibaba", supports_search: false },
+  "ax4-consult": { display_name: "A.X Consult", provider: "skt", supports_search: false }
+};
+
+const STATIC_MODEL_ASSIGNMENTS = {
+  classification: "solar-pro3",
+  query_expansion: "solar-pro3",
+  research: "sonar-pro",
+  supplementary_research: "sonar-pro",
+  review: "deepseek-v4-pro",
+  qa: "deepseek-v4-pro",
+  draft: "gemini-2.5-pro",
+  revision: "gemini-2.5-pro",
+  critic: "deepseek-v4-pro",
+  presentation: "ax4-consult"
+};
+
+const STATIC_EQUIPMENT = [
+  {
+    eqpmnt_id: 101,
+    equipment_name: "PECVD Oxide Demo Tool",
+    basic_info: {},
+    structured_specs: {
+      equipment_category: "Deposition",
+      supported_wafer_size: ["4 inch", "6 inch"],
+      target_materials: ["SiO2", "SiN"],
+      max_temperature_celsius: 400,
+      critical_constraints: "Static portfolio preview data."
+    }
+  },
+  {
+    eqpmnt_id: 202,
+    equipment_name: "Mask Aligner Demo Tool",
+    basic_info: {},
+    structured_specs: {
+      equipment_category: "Lithography",
+      supported_wafer_size: ["4 inch"],
+      target_materials: ["Photoresist"],
+      max_temperature_celsius: 120,
+      critical_constraints: "Static portfolio preview data."
+    }
+  }
+];
+
 const BASE_STEPS = [
   { key: "mode_selected", label: "Team Setup", num: 1 },
   { key: "query_expanded", label: "Prompt", num: 2 },
@@ -315,6 +395,12 @@ window.toggleLivePanel = function(id) {
 };
 
 async function loadDomains() {
+  if (IS_STATIC_A1_MOCK) {
+    domainRegistry = STATIC_DOMAIN_REGISTRY;
+    renderDomainControls(domainRegistry);
+    return;
+  }
+
   try {
     const res = await fetch("/api/domains");
     const data = await res.json();
@@ -565,6 +651,11 @@ function isNearPageBottom() {
 }
 
 async function loadModels() {
+  if (IS_STATIC_A1_MOCK) {
+    renderModelConfig(STATIC_MODEL_CATALOG, STATIC_MODEL_ASSIGNMENTS);
+    return;
+  }
+
   const container = document.getElementById("model-config");
   if (container) {
     container.innerHTML = `<div class="sidebar-note">모델 목록을 불러오는 중입니다.</div>`;
@@ -606,7 +697,7 @@ function renderModelConfig(catalog, assignments) {
     }
   }
 }
-async function assignModel(role, modelKey) { try { await fetch("/api/models/assign", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ role, model_key: modelKey }) }); } catch (e) { console.error("Failed to assign model:", e); } }
+async function assignModel(role, modelKey) { if (IS_STATIC_A1_MOCK) return; try { await fetch("/api/models/assign", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ role, model_key: modelKey }) }); } catch (e) { console.error("Failed to assign model:", e); } }
 
 function providerBadge(provider) {
   const iconName = PROVIDER_ICON_MAP[provider] || "auxiliary";
@@ -670,6 +761,12 @@ function setPipelineUiActive(active) {
 }
 
 async function loadSessions() {
+  if (IS_STATIC_A1_MOCK) {
+    savedSessions = [];
+    renderSessionHistory(savedSessions);
+    return;
+  }
+
   try {
     const res = await fetch("/api/sessions");
     const data = await res.json();
@@ -1736,6 +1833,22 @@ function toggleEquipBrowser() {
 }
 
 async function loadEquipment(category, q) {
+  if (IS_STATIC_A1_MOCK) {
+    const normalizedQuery = String(q || "").toLowerCase();
+    const selectedCategory = category || equipActiveCat;
+
+    equipmentData = STATIC_EQUIPMENT.filter((item) => {
+      const itemCategory = item.structured_specs?.equipment_category || "";
+      const inCategory = !selectedCategory || selectedCategory === "All" || itemCategory === selectedCategory;
+      const inQuery = !normalizedQuery || item.equipment_name.toLowerCase().includes(normalizedQuery);
+      return inCategory && inQuery;
+    });
+    equipmentCategories = [...new Set(STATIC_EQUIPMENT.map((item) => item.structured_specs?.equipment_category).filter(Boolean))];
+    equipVisibleCount = EQUIPMENT_PAGE_SIZE;
+    renderEquipment();
+    return;
+  }
+
   try {
     let url = "/api/equipment"; const params = [];
     if (category && category !== "All") params.push(`category=${encodeURIComponent(category)}`);

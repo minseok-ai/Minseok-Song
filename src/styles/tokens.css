@@ -862,3 +862,22 @@ select {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* Logo Theme Support */
+html body .logo-light {
+  display: none;
+}
+html[data-theme="light"] body .logo-light {
+  display: inline-block;
+}
+html[data-theme="light"] body .logo-dark {
+  display: none;
+}
+@media (prefers-color-scheme: light) {
+  html:not([data-theme="dark"]) body .logo-light {
+    display: inline-block;
+  }
+  html:not([data-theme="dark"]) body .logo-dark {
+    display: none;
+  }
+}

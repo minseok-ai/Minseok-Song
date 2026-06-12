@@ -79,7 +79,7 @@ const timelineEvents = experienceTimelineBlock
     <ol>
       {timelineEvents.map((event, index) => (
         <li class={`reveal-in stagger-${(index % 5) + 1} ${index === 0 ? "is-current" : ""}`}>
-          {event.title.includes('A1trategize') && <img src="/A1Firm-logo.webp" alt="A1trategize" class="timeline-logo" />}
+          {event.title.includes('A1trategize') && <><img src="/A1Firm-logo.webp" alt="A1trategize" class="timeline-logo logo-dark" /><img src="/A1Firm-logo_light.webp" alt="A1trategize" class="timeline-logo logo-light" /></>}
           {event.title.includes('NNFC') && <img src="/NNFC-logo.webp" alt="KAIST NNFC" class="timeline-logo" />}
           {event.title.includes('KRISS') && <img src="/KRISS-logo.webp" alt="KRISS" class="timeline-logo" />}
           {event.title.includes('Chungnam National University') && <img src="/CNU-logo.webp" alt="CNU" class="timeline-logo" />}
