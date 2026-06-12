@@ -5,7 +5,7 @@ import "../styles/tokens.css";
 import { visibleNavigationItems } from "../config/navigation";
 import { siteConfig } from "../config/site";
 import Analytics from '@vercel/analytics/astro';
-import ChatbotNavigation from "../features/a1-navigator/ChatbotNavigation.astro";
+import A1Chan from "../features/a1-chan/A1Chan.astro";
 
 const session = await getSession(Astro.request);
 const {
@@ -171,7 +171,7 @@ const jsonLd = {
         <span>{siteConfig.title}</span>
       </footer>
     </div>
-    <ChatbotNavigation />
+    <A1Chan />
     <script is:inline>
       document.addEventListener("click", (event) => {
         const link = event.target.closest("a");

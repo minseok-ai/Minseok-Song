@@ -88,52 +88,28 @@ const focusStats = [
     <div class="reveal-up stagger-2"><SurfaceGrid sectionCards={sectionCards} /></div>
 
     <section id="product-band" class="product-band reveal-up stagger-3" aria-label="A1trategize">
-      <div class="band-grid-bg" aria-hidden="true"></div>
-      <div>
+      <div class="band-content">
         <p class="micro-label">Flagship product</p>
         <h2>{a1Firms?.hero?.title ?? "A1trategize"}</h2>
+        <div class="band-rule"></div>
       </div>
-      <p>
-        A1trategize remains the working application surface. This site gives it
-        a sharper public layer: context, proof, writing, and product memory.
-      </p>
-      <a class="primary-action" href={siteConfig.a1FirmPath}>
-        Enter product
-        <svg class="arrow-shifted" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </a>
+      <div class="band-desc">
+        <p>
+          A1trategize remains the working application surface. This site gives it
+          a sharper public layer: context, proof, writing, and product memory.
+        </p>
+      </div>
+      <div class="band-action">
+        <a class="primary-action" href={siteConfig.a1FirmPath}>
+          Enter product
+          <svg class="arrow-shifted" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+      </div>
     </section>
   </section>
 </Layout>
-
-<script is:inline>
-  const productBand = document.getElementById('product-band');
-  if (productBand) {
-    productBand.addEventListener('mousemove', (e) => {
-      const rect = productBand.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      
-      const rotateX = ((y - centerY) / centerY) * -4;
-      const rotateY = ((x - centerX) / centerX) * 4;
-      
-      // We keep the translateY(-3px) from the hover effect and add perspective
-      productBand.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`;
-    });
-    
-    productBand.addEventListener('mouseleave', () => {
-      productBand.style.transform = '';
-      productBand.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.6s ease, box-shadow 0.6s ease';
-    });
-    
-    productBand.addEventListener('mouseenter', () => {
-      productBand.style.transition = 'border-color 0.6s ease, box-shadow 0.6s ease';
-    });
-  }
-</script>
 
 <style>
   .home-page {
@@ -146,155 +122,90 @@ const focusStats = [
   }
 
   .product-band {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.72fr) auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     gap: 48px;
     align-items: center;
-    padding: 64px 48px;
+    padding: 64px 56px;
     margin: 0 auto 112px;
-    width: min(calc(100% - 48px), var(--max-site));
+    width: calc(100% - (var(--space-page) * 2));
+    max-width: calc(var(--max-site) - (var(--space-page) * 2));
     border-radius: var(--radius-lg);
-    background: var(--glass-bg);
+    background: var(--color-panel);
     border: 1px solid var(--glass-border);
-    box-shadow: 
-      inset 0 1px 0 var(--glass-border),
-      0 24px 60px var(--glass-shadow),
-      0 0 0 1px var(--color-accent-soft);
-    backdrop-filter: blur(24px);
+    box-shadow: 0 12px 32px var(--glass-shadow);
+    backdrop-filter: var(--glass-blur);
     position: relative;
     overflow: hidden;
-    transition: transform 0.6s var(--easing-spring), border-color 0.6s ease, box-shadow 0.6s ease;
     z-index: 1;
+    transition: border-color var(--motion-base) ease, box-shadow var(--motion-base) ease;
   }
-
-  .product-band > div:not(.band-grid-bg) {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .product-band > p {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  .product-band > .primary-action {
-    grid-column: 3;
-    grid-row: 1;
-  }
-
+  
   .product-band:hover {
-    transform: translateY(-3px);
-    border-color: var(--color-accent-soft);
-    box-shadow: 
-      inset 0 1px 0 var(--glass-border),
-      0 32px 80px var(--glass-shadow),
-      0 0 0 1px var(--color-accent);
+    border-color: var(--color-line-strong);
+    box-shadow: 0 24px 48px var(--glass-shadow);
   }
 
-  .band-grid-bg {
-    position: absolute;
-    inset: 0;
-    background-image: 
-      linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
-    background-size: 48px 48px;
-    background-position: center;
-    mask-image: radial-gradient(circle at 15% 50%, black 10%, rgba(0, 0, 0, 0.1) 85%);
-    -webkit-mask-image: radial-gradient(circle at 15% 50%, black 10%, rgba(0, 0, 0, 0.1) 85%);
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.4;
-    animation: gridFloat 20s ease-in-out infinite;
+  .band-content {
+    flex: 1 1 280px;
   }
 
-  @keyframes gridFloat {
-    0%, 100% { background-position: center; }
-    50% { background-position: 52px 52px; }
-  }
-
-  .product-band::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 3px;
-    height: 100%;
-    background: linear-gradient(180deg, transparent, var(--color-accent), transparent);
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.72;
-  }
-
-  .product-band::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 50%, rgba(255, 255, 255, 0.05) 100%);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    transition: background var(--motion-base) ease;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .product-band:hover::after {
-    background: linear-gradient(135deg, rgba(107, 156, 242, 0.5) 0%, transparent 60%, rgba(255, 255, 255, 0.2) 100%);
+  .product-band .micro-label {
+    margin: 0 0 12px 0;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: var(--color-ink-muted);
+    text-transform: uppercase;
   }
 
   .product-band h2 {
-    margin: 12px 0 0;
-    font-size: 5.2rem;
-    font-weight: 900;
+    margin: 0 0 20px 0;
+    font-size: clamp(3.5rem, 6vw, 6rem);
+    font-weight: 850;
     line-height: 0.95;
-    letter-spacing: -0.02em;
-    background: linear-gradient(180deg, var(--color-ink) 0%, var(--color-ink-soft) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    position: relative;
-    z-index: 2;
+    letter-spacing: -0.03em;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
   }
 
-  .product-band h2::after {
-    content: "";
-    display: block;
-    width: 58px;
-    height: 2px;
-    margin-top: 20px;
+  .band-rule {
+    width: 64px;
+    height: 1px;
     background: linear-gradient(90deg, var(--color-accent), transparent);
   }
 
-  .product-band p {
+  .band-desc {
+    flex: 1 1 320px;
+  }
+
+  .product-band p:not(.micro-label) {
     margin: 0;
     color: var(--color-ink-soft);
-    line-height: 1.7;
-    font-size: 16px;
-    max-width: 480px;
-    position: relative;
-    z-index: 2;
+    line-height: 1.65;
+    font-size: 15px;
+    max-width: 440px;
+  }
+
+  .band-action {
+    flex: 0 0 auto;
   }
 
   .primary-action {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 52px;
-    padding: 0 32px;
-    border-radius: var(--radius-lg);
-    font-size: 15px;
-    font-weight: 800;
+    min-height: 48px;
+    padding: 0 28px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
     text-decoration: none;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    border: 1px solid var(--glass-border);
     color: var(--color-paper-deep);
     background: var(--color-ink);
-    box-shadow: 
-      0 8px 20px var(--glass-shadow),
-      0 0 0 1px var(--color-accent-soft);
-    position: relative;
-    z-index: 2;
+    border: 1px solid transparent;
   }
 
   .primary-action .arrow-shifted {
@@ -302,14 +213,14 @@ const focusStats = [
     height: 16px;
     margin-left: 8px;
     transition: transform var(--motion-fast) var(--easing-smooth);
-    display: inline-block;
   }
 
   .primary-action:hover {
     transform: translateY(-2px);
-    box-shadow: 
-      0 12px 30px var(--glass-shadow),
-      0 0 0 1px var(--color-accent);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    background: transparent;
+    color: var(--color-ink);
+    border-color: var(--color-ink);
   }
 
   .primary-action:hover .arrow-shifted {
@@ -333,27 +244,28 @@ const focusStats = [
 
   @media (max-width: 1180px) {
     .product-band {
-      grid-template-columns: 1fr;
-      align-items: start;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 32px;
+      padding: 48px;
     }
     
-    .product-band > div:not(.band-grid-bg) {
-      grid-column: auto;
-      grid-row: auto;
+    .band-content,
+    .band-desc,
+    .band-action {
+      flex: 1 1 100%;
+      width: 100%;
     }
 
-    .product-band > p {
-      grid-column: auto;
-      grid-row: auto;
-    }
-
-    .product-band > .primary-action {
-      grid-column: auto;
-      grid-row: auto;
+    .band-action {
+      margin-top: 8px;
     }
   }
 
   @media (max-width: 640px) {
+    .product-band {
+      padding: 40px 32px;
+    }
     .product-band h2 {
       font-size: 3.1rem;
     }

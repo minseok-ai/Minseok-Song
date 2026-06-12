@@ -1,0 +1,489 @@
+---
+import "./a1-chan.css";
+import { visibleNavigationItems } from "../../config/navigation";
+import { pageEntriesById } from "../../lib/content/registry";
+import { siteConfig } from "../../config/site";
+import { createNavigatorRoutes } from "./route-engine";
+
+const routes = createNavigatorRoutes(visibleNavigationItems(), pageEntriesById);
+const routeJson = JSON.stringify(routes);
+---
+
+<aside
+  class="a1-navigator"
+  data-a1-navigator
+  data-routes={routeJson}
+  data-ai-status="unsupported"
+  data-agent="chan"
+  aria-label="A1 Chan site assistant"
+>
+  <button
+    class="a1-navigator__trigger"
+    type="button"
+    aria-label="Open A1 Chan"
+    aria-expanded="false"
+    aria-controls="a1-navigator-panel"
+    data-a1-trigger
+  >
+    <span class="a1-navigator__status" aria-hidden="true"></span>
+    <picture class="logo-dark">
+      <source srcset="/A1Firm-logo.webp" type="image/webp" />
+      <img src="/A1Firm-logo.png" alt="" width="34" height="34" loading="lazy" />
+    </picture>
+    <picture class="logo-light">
+      <source srcset="/A1Firm-logo_light.webp" type="image/webp" />
+      <img src="/A1Firm-logo_light.png" alt="" width="34" height="34" loading="lazy" />
+    </picture>
+  </button>
+
+  <section class="a1-navigator__panel" id="a1-navigator-panel" data-a1-panel hidden>
+    <header class="a1-navigator__header">
+      <a class="a1-navigator__brand" href={siteConfig.a1FirmPath}>
+        <span>
+          <strong data-a1-agent-name>A1 Chan</strong>
+          <small data-a1-agent-mode>Static site guide</small>
+        </span>
+      </a>
+      <button class="a1-navigator__close" type="button" aria-label="Close A1 Chan" data-a1-close>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6l12 12M18 6 6 18"></path>
+        </svg>
+      </button>
+    </header>
+
+    <div class="a1-navigator__context" aria-label="Assistant state">
+      <span data-a1-current-route>Current page</span>
+      <span data-a1-ai-status data-status="unsupported">Chan: static mode</span>
+    </div>
+
+    <div class="a1-navigator__body">
+      <div class="a1-navigator__feed" data-a1-feed aria-live="polite">
+        <article class="a1-message is-bot">
+          <span>
+            <div class="a1-message__logo">
+              <picture class="logo-dark">
+                <source srcset="/A1Firm-logo.webp" type="image/webp" />
+                <img src="/A1Firm-logo.png" alt="" width="20" height="20" loading="lazy" />
+              </picture>
+              <picture class="logo-light">
+                <source srcset="/A1Firm-logo_light.webp" type="image/webp" />
+                <img src="/A1Firm-logo_light.png" alt="" width="20" height="20" loading="lazy" />
+              </picture>
+            </div>
+          </span>
+          <p data-a1-greeting>A1 Chan입니다. 현재 사이트의 공개 내용을 기준으로 답하고 필요한 화면을 이어줍니다.</p>
+        </article>
+      </div>
+
+      <div class="a1-navigator__loading" data-a1-loading hidden>
+        <div class="a1-typing-indicator" aria-label="A1 assistant is thinking">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="a1-navigator__actions" data-a1-actions hidden></div>
+
+      <nav class="a1-navigator__routes" aria-label="Site sections">
+        {routes.map((route) => (
+          <a href={route.path} data-route-id={route.id}>
+            <span>{route.num}</span>
+            <strong>{route.label}</strong>
+          </a>
+        ))}
+      </nav>
+    </div>
+
+    <form class="a1-navigator__composer" data-a1-form>
+      <label class="sr-only" for="a1-navigator-query">Ask A1 Chan</label>
+      <input
+        id="a1-navigator-query"
+        name="query"
+        type="text"
+        inputmode="search"
+        autocomplete="off"
+        maxlength="260"
+        placeholder="Ask A1 Chan..."
+        data-a1-input
+      />
+      <button type="submit" aria-label="Send question">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6"></path>
+        </svg>
+      </button>
+    </form>
+  </section>
+</aside>
+
+<script>
+  import type { BrowserAiStatus } from "./browser-ai";
+  import {
+    extractGoQuery,
+    getNavigatorRoute,
+    getNavigatorRouteByPath,
+    isHelpQuery,
+    type NavigatorRoute
+  } from "./route-engine";
+  import type {
+    A1ChanAction,
+    A1ChanResult
+  } from "./shared";
+
+  const widget = document.querySelector<HTMLElement>("[data-a1-navigator]");
+  if (!widget) {
+    throw new Error("A1 Chan root is missing.");
+  }
+
+  const trigger = widget.querySelector<HTMLButtonElement>("[data-a1-trigger]");
+  const panel = widget.querySelector<HTMLElement>("[data-a1-panel]");
+  const closeButton = widget.querySelector<HTMLButtonElement>("[data-a1-close]");
+  const form = widget.querySelector<HTMLFormElement>("[data-a1-form]");
+  const input = widget.querySelector<HTMLInputElement>("[data-a1-input]");
+  const feed = widget.querySelector<HTMLElement>("[data-a1-feed]");
+  const bodyArea = widget.querySelector<HTMLElement>(".a1-navigator__body");
+  const greeting = widget.querySelector<HTMLElement>("[data-a1-greeting]");
+  const currentRouteState = widget.querySelector<HTMLElement>("[data-a1-current-route]");
+  const aiStatusState = widget.querySelector<HTMLElement>("[data-a1-ai-status]");
+  const agentName = widget.querySelector<HTMLElement>("[data-a1-agent-name]");
+  const agentMode = widget.querySelector<HTMLElement>("[data-a1-agent-mode]");
+  const routeLinks = Array.from(widget.querySelectorAll<HTMLAnchorElement>("[data-route-id]"));
+  const loadingIndicator = widget.querySelector<HTMLElement>("[data-a1-loading]");
+  const actionsPanel = widget.querySelector<HTMLElement>("[data-a1-actions]");
+  const routes = JSON.parse(widget.getAttribute("data-routes") || "[]") as NavigatorRoute[];
+
+  type ConversationItem = {
+    kind: "bot" | "user";
+    body: string;
+    timestamp: number;
+  };
+
+  const MAX_HISTORY = 10;
+  const intentRouteIds = ["a1-firms", "about", "projects", "writings", "contacts"];
+  const statusCopy: Record<BrowserAiStatus, string> = {
+    unsupported: "Chan: static mode",
+    unavailable: "Chan: static mode",
+    downloadable: "Chan: model downloadable",
+    downloading: "Chan: model downloading",
+    available: "Chan: browser AI ready",
+    error: "Chan: static fallback"
+  };
+
+  let currentRoute = getNavigatorRouteByPath(routes, window.location.pathname);
+  let lastRoute = currentRoute;
+  let conversationHistory: ConversationItem[] = [];
+  let aiPrepareStarted = false;
+
+  const setAgentIdentity = (status: BrowserAiStatus) => {
+    const isLocalAi = status === "available";
+    widget.dataset.agent = "chan";
+    if (agentName) agentName.textContent = "A1 Chan";
+    if (agentMode) {
+      agentMode.textContent = isLocalAi ? "Browser AI concierge" : "Static site guide";
+    }
+    trigger?.setAttribute("aria-label", "Open A1 Chan");
+    closeButton?.setAttribute("aria-label", "Close A1 Chan");
+  };
+
+  const setAiStatus = (status: BrowserAiStatus, progress?: number) => {
+    widget.dataset.aiStatus = status;
+    setAgentIdentity(status);
+    if (!aiStatusState) return;
+
+    const suffix =
+      status === "downloading" && typeof progress === "number"
+        ? ` ${Math.round(progress * 100)}%`
+        : "";
+
+    aiStatusState.dataset.status = status;
+    aiStatusState.textContent = `${statusCopy[status]}${suffix}`;
+  };
+
+  let aiNavigator: any = null;
+
+  const getAiNavigator = async () => {
+    if (aiNavigator) return aiNavigator;
+    const { createBrowserAiNavigator } = await import("./browser-ai");
+    aiNavigator = createBrowserAiNavigator({
+      routes,
+      onStatus: (status) => setAiStatus(status),
+      onDownloadProgress: (progress) => setAiStatus("downloading", progress)
+    });
+    return aiNavigator;
+  };
+
+  const prepareAiAfterUserAction = async () => {
+    if (aiPrepareStarted) return;
+    aiPrepareStarted = true;
+    const nav = await getAiNavigator();
+    void nav.prepare();
+  };
+
+  const getRecentUserHistory = () =>
+    conversationHistory
+      .filter((item) => item.kind === "user")
+      .slice(-3)
+      .map((item) => item.body);
+
+  const setOpen = (isOpen: boolean) => {
+    widget.classList.toggle("is-open", isOpen);
+    if (panel) panel.hidden = !isOpen;
+    trigger?.setAttribute("aria-expanded", String(isOpen));
+
+    if (isOpen) {
+      prepareAiAfterUserAction();
+      requestAnimationFrame(() => input?.focus({ preventScroll: true }));
+    }
+  };
+
+  const createBotBadge = () => {
+    const badge = document.createElement("span");
+    const logoContainer = document.createElement("div");
+    logoContainer.className = "a1-message__logo";
+
+    const logoDark = document.createElement("picture");
+    logoDark.className = "logo-dark";
+    logoDark.innerHTML = `
+      <source srcset="/A1Firm-logo.webp" type="image/webp" />
+      <img src="/A1Firm-logo.png" alt="" width="20" height="20" loading="lazy" />
+    `;
+
+    const logoLight = document.createElement("picture");
+    logoLight.className = "logo-light";
+    logoLight.innerHTML = `
+      <source srcset="/A1Firm-logo_light.webp" type="image/webp" />
+      <img src="/A1Firm-logo_light.png" alt="" width="20" height="20" loading="lazy" />
+    `;
+
+    logoContainer.append(logoDark, logoLight);
+    badge.appendChild(logoContainer);
+    return badge;
+  };
+
+  const appendMessage = (body: string, kind: "bot" | "user" = "bot") => {
+    if (!feed) return;
+
+    const message = document.createElement("article");
+    message.className = `a1-message is-${kind}`;
+
+    const badge = kind === "user" ? document.createElement("span") : createBotBadge();
+    if (kind === "user") {
+      badge.textContent = "You";
+    }
+
+    const text = document.createElement("p");
+    text.textContent = body;
+
+    message.append(badge, text);
+    feed.appendChild(message);
+    requestAnimationFrame(() => {
+      const scrollTarget = bodyArea ?? feed;
+      scrollTarget.scrollTop = scrollTarget.scrollHeight;
+    });
+
+    conversationHistory.push({ kind, body, timestamp: Date.now() });
+    if (conversationHistory.length > MAX_HISTORY) {
+      conversationHistory = conversationHistory.slice(-MAX_HISTORY);
+    }
+  };
+
+  const setActiveRoute = (routeId?: string) => {
+    routeLinks.forEach((link) => {
+      const active = Boolean(routeId) && link.getAttribute("data-route-id") === routeId;
+      link.classList.toggle("is-suggested", active);
+      if (active) {
+        link.setAttribute("aria-current", "page");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  };
+
+  const updateContext = () => {
+    if (currentRouteState) {
+      currentRouteState.textContent = `Now: ${currentRoute.label}`;
+    }
+  };
+
+  const updateActions = (actions: A1ChanAction[]) => {
+    if (!actionsPanel) return;
+    actionsPanel.innerHTML = "";
+
+    if (!actions.length) {
+      actionsPanel.hidden = true;
+      return;
+    }
+
+    for (const action of actions.slice(0, 3)) {
+      const link = document.createElement("a");
+      link.href = action.href;
+      link.textContent = action.label;
+      if (action.routeId) {
+        link.dataset.routeId = action.routeId;
+      }
+      actionsPanel.appendChild(link);
+    }
+
+    actionsPanel.hidden = false;
+  };
+
+  const setLoading = (isLoading: boolean) => {
+    if (loadingIndicator) {
+      loadingIndicator.hidden = !isLoading;
+    }
+  };
+
+  const buildContext = () => ({
+    currentRouteId: currentRoute.id,
+    lastRouteId: lastRoute.id,
+    userHistory: getRecentUserHistory()
+  });
+
+  const resolveConversation = async (query: string) => {
+    const context = buildContext();
+    
+    let staticResult: A1ChanResult | undefined;
+    try {
+      const response = await fetch("/api/a1-search", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query, context })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        staticResult = data.staticResult;
+      }
+    } catch (error) {
+      console.error("Failed to fetch A1 Chan context:", error);
+    }
+    
+    if (!staticResult) {
+      staticResult = {
+        mode: "clarify",
+        answer: "A1 Chan 서버에 연결할 수 없어요. 잠시 후 다시 시도해주세요.",
+        confidence: "low",
+        actions: [],
+        contextCards: [],
+        source: "static"
+      };
+    }
+
+    const nav = await getAiNavigator();
+    const chanResult = await nav.resolveConversation(query, context, staticResult);
+    return chanResult ?? staticResult;
+  };
+
+  const handleConversationResult = (result: A1ChanResult) => {
+    if (result.routeId) {
+      const route = getNavigatorRoute(routes, result.routeId);
+      lastRoute = route;
+      setActiveRoute(route.id);
+    }
+
+    updateActions(result.actions);
+    appendMessage(result.answer);
+  };
+
+  const handleQuery = async (query: string) => {
+    try {
+      appendMessage(query, "user");
+      setLoading(true);
+
+      if (isHelpQuery(query)) {
+        setLoading(false);
+        appendMessage("A1 Chan은 이 사이트의 공개 콘텐츠를 먼저 찾아보고 답합니다. 인물, 현재 페이지, A1 Firms, 프로젝트, 글, 연락 경로처럼 사이트 안의 주제를 자연어로 물어보면 됩니다. 브라우저 AI 모델이 준비되면 같은 근거를 바탕으로 답변 표현이 더 유연해집니다.");
+        return;
+      }
+
+      const goQuery = extractGoQuery(query);
+      const result = await resolveConversation(goQuery || query);
+      setLoading(false);
+      handleConversationResult(result);
+
+      if (goQuery && result.routeHref) {
+        window.setTimeout(() => {
+          window.location.href = result.routeHref as string;
+        }, 420);
+      }
+    } catch (error) {
+      console.error("A1 Chan error:", error);
+      setLoading(false);
+      appendMessage("처리 중 오류가 생겼어요. 그래도 아래 route chip으로 주요 화면은 바로 열 수 있습니다.");
+    }
+  };
+
+  currentRoute = getNavigatorRouteByPath(routes, window.location.pathname);
+  lastRoute = currentRoute;
+  setActiveRoute(currentRoute.id);
+  updateContext();
+  setAiStatus("unsupported");
+
+  if (greeting) {
+    greeting.textContent = `A1 Chan입니다. 현재 ${currentRoute.label} 화면을 보고 있어요. 사이트의 공개 내용과 현재 페이지 맥락을 기준으로 답합니다.`;
+  }
+
+  trigger?.addEventListener("click", () => setOpen(!widget.classList.contains("is-open")));
+  closeButton?.addEventListener("click", () => setOpen(false));
+
+  document.addEventListener("click", (event) => {
+    if (!widget.classList.contains("is-open")) return;
+    if (event.target instanceof Node && widget.contains(event.target)) return;
+    setOpen(false);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && widget.classList.contains("is-open")) {
+      setOpen(false);
+      trigger?.focus({ preventScroll: true });
+      return;
+    }
+
+    if (!(event.ctrlKey || event.metaKey)) return;
+
+    if (event.key.toLowerCase() === "k") {
+      event.preventDefault();
+      setOpen(!widget.classList.contains("is-open"));
+      return;
+    }
+
+    if (!widget.classList.contains("is-open")) return;
+
+    const numericKey = Number(event.key);
+    if (!Number.isInteger(numericKey) || numericKey < 1 || numericKey > intentRouteIds.length) {
+      return;
+    }
+
+    event.preventDefault();
+    const route = getNavigatorRoute(routes, intentRouteIds[numericKey - 1]);
+    handleConversationResult({
+      mode: "navigate",
+      answer: `${route.label} 화면으로 이어서 보면 좋아요. ${route.response}`,
+      routeId: route.id,
+      routeHref: route.path,
+      confidence: "high",
+      actions: [{ label: `${route.label} 열기`, href: route.path, routeId: route.id }],
+      contextCards: [],
+      source: "static"
+    });
+  });
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    prepareAiAfterUserAction();
+
+    const query = input?.value.trim() ?? "";
+    if (!query) {
+      await handleQuery("");
+      return;
+    }
+
+    if (input) input.value = "";
+    await handleQuery(query);
+  });
+
+  window.addEventListener("pagehide", () => {
+    if (aiNavigator) {
+      aiNavigator.destroy();
+    }
+  });
+</script>

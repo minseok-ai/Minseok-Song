@@ -2,7 +2,7 @@
 const { contactNodes, visibleChannels } = Astro.props;
 ---
 
-<div class="contact-module fade-in-up">
+<div id="contact-graph" class="contact-module fade-in-up">
   <section class="contact-hero">
     <div class="contact-copy">
       <h1>Open to specific, serious product conversations.</h1>
@@ -418,7 +418,8 @@ const { contactNodes, visibleChannels } = Astro.props;
     stroke: var(--color-paper);
     stroke-width: 0.7px;
     stroke-linejoin: round;
-    pointer-events: none;
+    pointer-events: auto;
+    user-select: none;
     transition: fill var(--motion-fast) ease, stroke var(--motion-fast) ease;
   }
 

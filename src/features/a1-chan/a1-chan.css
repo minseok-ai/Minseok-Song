@@ -13,8 +13,7 @@
   box-sizing: border-box;
 }
 
-.a1-navigator__trigger,
-.a1-navigator__panel {
+.a1-navigator__trigger {
   pointer-events: auto;
 }
 
@@ -75,6 +74,19 @@
   box-shadow: 0 0 10px var(--color-green-glow);
 }
 
+.a1-navigator[data-ai-status="unsupported"] .a1-navigator__status,
+.a1-navigator[data-ai-status="unavailable"] .a1-navigator__status,
+.a1-navigator[data-ai-status="error"] .a1-navigator__status {
+  background: var(--color-ink-muted);
+  box-shadow: none;
+}
+
+.a1-navigator[data-ai-status="downloadable"] .a1-navigator__status,
+.a1-navigator[data-ai-status="downloading"] .a1-navigator__status {
+  background: var(--color-accent);
+  box-shadow: 0 0 10px var(--color-accent-glow);
+}
+
 .a1-navigator__panel {
   position: absolute;
   right: 0;
@@ -88,7 +100,7 @@
   border-radius: var(--radius-lg);
   background:
     linear-gradient(145deg, var(--color-accent-soft), transparent 40%),
-    var(--color-panel);
+    var(--color-panel-solid);
   box-shadow:
     0 26px 70px var(--glass-shadow),
     inset 0 1px 0 var(--color-line-strong);
@@ -96,14 +108,23 @@
   transform: translateY(10px) scale(0.96);
   transform-origin: bottom right;
   opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
   transition:
     transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-    opacity 0.25s ease;
+    opacity 0.25s ease,
+    visibility 0.25s ease;
 }
 
 .a1-navigator.is-open .a1-navigator__panel {
   transform: translateY(0) scale(1);
   opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.25s ease,
+    visibility 0s ease;
 }
 
 .a1-navigator__header {
@@ -172,10 +193,17 @@
   text-transform: uppercase;
 }
 
-.a1-navigator.has-chrome-bridge .a1-navigator__context span:first-child {
+.a1-navigator__context [data-a1-ai-status][data-status="available"] {
   color: var(--color-green);
   border-color: var(--color-green-soft);
   background: var(--color-green-soft);
+}
+
+.a1-navigator__context [data-a1-ai-status][data-status="downloadable"],
+.a1-navigator__context [data-a1-ai-status][data-status="downloading"] {
+  color: var(--color-accent-ink);
+  border-color: var(--color-accent-soft);
+  background: var(--color-accent-soft);
 }
 
 .a1-navigator__close,
@@ -228,10 +256,8 @@
 .a1-navigator__feed {
   display: grid;
   gap: 10px;
-  max-height: 150px;
-  overflow: auto;
+  overflow: visible;
   padding-right: 2px;
-  scrollbar-width: thin;
 }
 
 .a1-navigator__loading {
@@ -242,6 +268,89 @@
 
 .a1-navigator__loading[hidden] {
   display: none !important;
+}
+
+.a1-navigator__deeplink {
+  display: flex;
+  min-width: 0;
+}
+
+.a1-navigator__deeplink[hidden] {
+  display: none !important;
+}
+
+.a1-navigator__deeplink a {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  min-height: 34px;
+  padding: 0 11px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  color: var(--color-ink);
+  background: var(--glass-bg);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.1;
+  text-decoration: none;
+}
+
+.a1-navigator__deeplink a::before {
+  content: "#";
+  margin-right: 7px;
+  color: var(--color-accent-ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.a1-navigator__deeplink a:hover,
+.a1-navigator__deeplink a:focus-visible {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  outline: none;
+}
+
+.a1-navigator__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  min-width: 0;
+}
+
+.a1-navigator__actions[hidden] {
+  display: none !important;
+}
+
+.a1-navigator__actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  max-width: 100%;
+  padding: 0 10px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  color: var(--color-ink);
+  background: var(--glass-bg);
+  font-size: 11px;
+  font-weight: 850;
+  line-height: 1.1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.a1-navigator__actions a::before {
+  content: ">";
+  margin-right: 7px;
+  color: var(--color-accent-ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.a1-navigator__actions a:hover,
+.a1-navigator__actions a:focus-visible {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  outline: none;
 }
 
 .a1-typing-indicator {
