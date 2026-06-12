@@ -20,6 +20,7 @@
     "@auth/core": "^0.37.4",
     "@types/react": "^19.2.16",
     "@types/react-dom": "^19.2.3",
+    "@vercel/analytics": "^2.0.1",
     "astro": "^6.4.4",
     "auth-astro": "^4.2.0",
     "react": "^19.2.7",

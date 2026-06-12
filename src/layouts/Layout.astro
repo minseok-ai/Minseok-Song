@@ -4,6 +4,7 @@ import { SignOut } from 'auth-astro/components';
 import "../styles/tokens.css";
 import { visibleNavigationItems } from "../config/navigation";
 import { siteConfig } from "../config/site";
+import Analytics from '@vercel/analytics/astro';
 
 const session = await getSession(Astro.request);
 const {
@@ -92,6 +93,7 @@ const jsonLd = {
     </style>
   </head>
   <body>
+    <Analytics />
     <div class="site-shell">
       <header class="site-header">
         <a class="brand-lockup" href="/" aria-label="Minseok Song home">
