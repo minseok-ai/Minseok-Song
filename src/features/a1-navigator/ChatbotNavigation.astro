@@ -1,0 +1,536 @@
+---
+import "./chatbot-nav.css";
+import { visibleNavigationItems } from "../../config/navigation";
+import { pageEntriesById } from "../../lib/content/registry";
+import { siteConfig } from "../../config/site";
+
+const routeMetadata = {
+  home: {
+    aliases: ["home", "start", "overview", "map", "홈", "처음", "개요", "지도"],
+    response: "전체 구조와 A1 Firms의 공용 운영 레이어를 빠르게 파악할 수 있어요.",
+    prompt: "site overview"
+  },
+  about: {
+    aliases: ["about", "profile", "career", "resume", "cv", "person", "경력", "프로필", "소개", "이력"],
+    response: "프로필, 현재 역할, 연구와 창업 타임라인을 확인하기 좋은 화면입니다.",
+    prompt: "career profile"
+  },
+  "a1-firms": {
+    aliases: ["strategy", "consulting", "firm", "a1", "product", "business", "전략", "컨설팅", "제품", "사업"],
+    response: "A1trategize 제품 방향, Multi-LLM 파이프라인, 프레임 적용을 볼 수 있어요.",
+    prompt: "strategy system"
+  },
+  projects: {
+    aliases: ["project", "research", "patent", "portfolio", "build", "논문", "연구", "특허", "프로젝트"],
+    response: "특허, 연구, 제품 빌드 로그를 프로젝트 단위로 비교할 수 있습니다.",
+    prompt: "research projects"
+  },
+  writings: {
+    aliases: ["writing", "article", "newsletter", "note", "source", "글", "뉴스레터", "리뷰", "노트"],
+    response: "뉴스레터, 소스 리뷰, 기술/전략 노트를 읽는 화면입니다.",
+    prompt: "writing notes"
+  },
+  contacts: {
+    aliases: ["contact", "email", "linkedin", "github", "call", "연락", "메일", "협업", "미팅"],
+    response: "협업, 자문, 제품 대화를 시작할 수 있는 채널입니다.",
+    prompt: "contact channel"
+  }
+};
+
+const routes = visibleNavigationItems().map((item) => {
+  const page = pageEntriesById.get(item.contentEntry);
+  const metadata = routeMetadata[item.id as keyof typeof routeMetadata];
+
+  return {
+    id: item.id,
+    label: item.label,
+    path: item.path,
+    num: item.num,
+    description: page?.description ?? item.label,
+    aliases: metadata?.aliases ?? [],
+    response: metadata?.response ?? page?.description ?? item.label,
+    prompt: metadata?.prompt ?? item.label.toLowerCase()
+  };
+});
+
+const routeJson = JSON.stringify(routes);
+---
+
+<aside class="a1-navigator" data-a1-navigator data-routes={routeJson} aria-label="A1 navigation assistant">
+  <button
+    class="a1-navigator__trigger"
+    type="button"
+    aria-label="Open A1 Navigator"
+    aria-expanded="false"
+    aria-controls="a1-navigator-panel"
+    data-a1-trigger
+  >
+    <span class="a1-navigator__status" aria-hidden="true"></span>
+    <picture class="logo-dark">
+      <source srcset="/A1Firm-logo.webp" type="image/webp" />
+      <img src="/A1Firm-logo.png" alt="" width="34" height="34" loading="lazy" />
+    </picture>
+    <picture class="logo-light">
+      <source srcset="/A1Firm-logo_light.webp" type="image/webp" />
+      <img src="/A1Firm-logo_light.png" alt="" width="34" height="34" loading="lazy" />
+    </picture>
+  </button>
+
+  <section class="a1-navigator__panel" id="a1-navigator-panel" data-a1-panel hidden>
+    <header class="a1-navigator__header">
+      <a class="a1-navigator__brand" href={siteConfig.a1FirmPath}>
+        <span>
+          <strong>A1 Navigator</strong>
+          <small>Local site navigator</small>
+        </span>
+      </a>
+      <button class="a1-navigator__close" type="button" aria-label="Close A1 Navigator" data-a1-close>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6l12 12M18 6 6 18" />
+        </svg>
+      </button>
+    </header>
+
+    <div class="a1-navigator__context" aria-label="Navigator state">
+      <span data-a1-current-route>Current page</span>
+    </div>
+
+    <div class="a1-navigator__body">
+      <div class="a1-navigator__feed" data-a1-feed aria-live="polite">
+        <article class="a1-message is-bot">
+          <span>
+            <div class="a1-message__logo">
+              <picture class="logo-dark">
+                <source srcset="/A1Firm-logo.webp" type="image/webp" />
+                <img src="/A1Firm-logo.png" alt="" width="20" height="20" loading="lazy" />
+              </picture>
+              <picture class="logo-light">
+                <source srcset="/A1Firm-logo_light.webp" type="image/webp" />
+                <img src="/A1Firm-logo_light.png" alt="" width="20" height="20" loading="lazy" />
+              </picture>
+            </div>
+          </span>
+          <p data-a1-greeting>어떤 화면으로 이동할지 정리해드릴게요. 원하는 목적을 말해보세요.</p>
+        </article>
+      </div>
+
+      <div class="a1-navigator__loading" data-a1-loading hidden>
+        <div class="a1-typing-indicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <nav class="a1-navigator__routes" aria-label="Site sections">
+        {routes.map((route) => (
+          <a href={route.path} data-route-id={route.id}>
+            <span>{route.num}</span>
+            <strong>{route.label}</strong>
+          </a>
+        ))}
+      </nav>
+    </div>
+
+    <form class="a1-navigator__composer" data-a1-form>
+      <label class="sr-only" for="a1-navigator-query">Ask for a site route</label>
+      <input
+        id="a1-navigator-query"
+        name="query"
+        type="text"
+        inputmode="search"
+        autocomplete="off"
+        maxlength="160"
+        placeholder="Ask: strategy, career, research..."
+        data-a1-input
+      />
+      <button type="submit" aria-label="Send route question">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </button>
+    </form>
+  </section>
+</aside>
+
+<script is:inline>
+  (() => {
+    const widget = document.querySelector("[data-a1-navigator]");
+    if (!widget) return;
+
+    const trigger = widget.querySelector("[data-a1-trigger]");
+    const panel = widget.querySelector("[data-a1-panel]");
+    const closeButton = widget.querySelector("[data-a1-close]");
+    const form = widget.querySelector("[data-a1-form]");
+    const input = widget.querySelector("[data-a1-input]");
+    const feed = widget.querySelector("[data-a1-feed]");
+    const greeting = widget.querySelector("[data-a1-greeting]");
+    const currentRouteState = widget.querySelector("[data-a1-current-route]");
+    const routeLinks = widget.querySelectorAll("[data-route-id]");
+    const loadingIndicator = widget.querySelector("[data-a1-loading]");
+    const routes = JSON.parse(widget.getAttribute("data-routes") || "[]");
+
+    let currentRoute = null;
+    let lastRoute = null;
+    let conversationHistory = [];
+    const MAX_HISTORY = 10;
+
+    const intentToRoute = {
+      strategy: "a1-firms",
+      profile: "about",
+      projects: "projects",
+      writings: "writings",
+      contact: "contacts"
+    };
+
+    const normalize = (value) =>
+      String(value || "")
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}\s:/-]/gu, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    const getRoute = (id) => routes.find((route) => route.id === id) || routes[0];
+
+    const getRouteByPath = () => {
+      const currentPath = window.location.pathname.replace(/\/$/, "") || "/";
+      return routes.find((route) => (route.path.replace(/\/$/, "") || "/") === currentPath) || routes[0];
+    };
+
+
+
+    const setOpen = (isOpen) => {
+      widget.classList.toggle("is-open", isOpen);
+      panel.hidden = !isOpen;
+      trigger.setAttribute("aria-expanded", String(isOpen));
+      trigger.setAttribute("aria-label", isOpen ? "Close A1 Navigator" : "Open A1 Navigator");
+
+      if (isOpen) {
+        requestAnimationFrame(() => input?.focus({ preventScroll: true }));
+      }
+    };
+
+    const appendMessage = (body, kind = "bot") => {
+      if (!feed) return;
+
+      const message = document.createElement("article");
+      message.className = `a1-message is-${kind}`;
+
+      const badge = document.createElement("span");
+      if (kind === "user") {
+        badge.textContent = "You";
+      } else {
+        const logoContainer = document.createElement("div");
+        logoContainer.className = "a1-message__logo";
+        const logoDark = document.createElement("picture");
+        logoDark.className = "logo-dark";
+        logoDark.innerHTML = `
+          <source srcset="/A1Firm-logo.webp" type="image/webp" />
+          <img src="/A1Firm-logo.png" alt="" width="20" height="20" loading="lazy" />
+        `;
+        const logoLight = document.createElement("picture");
+        logoLight.className = "logo-light";
+        logoLight.innerHTML = `
+          <source srcset="/A1Firm-logo_light.webp" type="image/webp" />
+          <img src="/A1Firm-logo_light.png" alt="" width="20" height="20" loading="lazy" />
+        `;
+        logoContainer.append(logoDark, logoLight);
+        badge.appendChild(logoContainer);
+      }
+
+      const text = document.createElement("p");
+      text.textContent = body;
+
+      message.append(badge, text);
+      feed.appendChild(message);
+      feed.scrollTop = feed.scrollHeight;
+
+      conversationHistory.push({ kind, body, timestamp: Date.now() });
+      if (conversationHistory.length > MAX_HISTORY) {
+        conversationHistory.shift();
+      }
+    };
+
+    const setActiveRoute = (id) => {
+      routeLinks.forEach((link) => {
+        const active = link.getAttribute("data-route-id") === id;
+        link.classList.toggle("is-suggested", active);
+        link.setAttribute("aria-current", active ? "true" : "false");
+      });
+    };
+
+    const updateContext = () => {
+      if (currentRouteState && currentRoute) {
+        currentRouteState.textContent = `Now: ${currentRoute.label}`;
+      }
+    };
+
+    const levenshteinDistance = (a, b) => {
+      const matrix = [];
+      for (let i = 0; i <= b.length; i++) {
+        matrix[i] = [i];
+      }
+      for (let j = 0; j <= a.length; j++) {
+        matrix[0][j] = j;
+      }
+      for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+          if (b.charAt(i - 1) === a.charAt(j - 1)) {
+            matrix[i][j] = matrix[i - 1][j - 1];
+          } else {
+            matrix[i][j] = Math.min(
+              matrix[i - 1][j - 1] + 1,
+              matrix[i][j - 1] + 1,
+              matrix[i - 1][j] + 1
+            );
+          }
+        }
+      }
+      return matrix[b.length][a.length];
+    };
+
+    const fuzzyMatch = (query, term) => {
+      const distance = levenshteinDistance(query, term);
+      const maxLen = Math.max(query.length, term.length);
+      const similarity = 1 - distance / maxLen;
+      return similarity;
+    };
+
+    const scoreRoute = (query, route) => {
+      const normalized = normalize(query);
+      if (!normalized) return 0;
+
+      const labels = [route.id, route.label, route.prompt, route.description, ...(route.aliases || [])]
+        .map(normalize)
+        .filter(Boolean);
+
+      let bestScore = 0;
+      for (const term of labels) {
+        if (!term) continue;
+        
+        if (normalized === term) {
+          bestScore = Math.max(bestScore, 8);
+        } else if (normalized.includes(term)) {
+          bestScore = Math.max(bestScore, 4);
+        } else if (term.includes(normalized) && normalized.length >= 3) {
+          bestScore = Math.max(bestScore, 2);
+        } else {
+          const similarity = fuzzyMatch(normalized, term);
+          if (similarity > 0.7) {
+            bestScore = Math.max(bestScore, Math.floor(similarity * 3));
+          }
+        }
+      }
+
+      return bestScore;
+    };
+
+    const recommendRoute = (query) => {
+      const ranked = routes
+        .map((route) => ({ route, score: scoreRoute(query, route) }))
+        .sort((a, b) => b.score - a.score);
+
+      if (ranked[0]?.score > 0) {
+        return { route: ranked[0].route, confidence: ranked[0].score >= 4 ? "high" : "medium" };
+      }
+
+      return { route: lastRoute || currentRoute || getRoute("a1-firms"), confidence: "low" };
+    };
+
+    const getContextualRecommendation = (query) => {
+      const recentQueries = conversationHistory
+        .filter(h => h.kind === "user")
+        .slice(-3)
+        .map(h => h.body);
+      
+      if (recentQueries.length > 0) {
+        const combinedQuery = [...recentQueries, query].join(" ");
+        const contextualResult = recommendRoute(combinedQuery);
+        if (contextualResult.confidence !== "low") {
+          return contextualResult;
+        }
+      }
+      
+      return recommendRoute(query);
+    };
+
+    const answerForRoute = (route, confidence = "high") => {
+      if (confidence === "low") {
+        return `정확히 맞는 섹션을 찾기 어려워요. 가장 가까운 ${route.label} 화면을 추천합니다.`;
+      }
+      return `${route.label}로 안내할게요. ${route.response || route.description}`;
+    };
+
+    const extractGoQuery = (query) => {
+      const patterns = [/^\/go\s+(.+)/i, /^go:\s*(.+)/i, /^이동\s+(.+)/i];
+      const match = patterns.map((pattern) => query.match(pattern)).find(Boolean);
+      return match?.[1]?.trim() || "";
+    };
+
+    const handleRoute = (route, confidence = "high") => {
+      lastRoute = route;
+      setActiveRoute(route.id);
+      appendMessage(answerForRoute(route, confidence));
+    };
+
+    const clearChat = () => {
+      if (!feed) return;
+      feed.innerHTML = "";
+      
+      const greetingMessage = document.createElement("article");
+      greetingMessage.className = "a1-message is-bot";
+      const badge = document.createElement("span");
+      const logoContainer = document.createElement("div");
+      logoContainer.className = "a1-message__logo";
+      const logoDark = document.createElement("picture");
+      logoDark.className = "logo-dark";
+      logoDark.innerHTML = `
+        <source srcset="/A1Firm-logo.webp" type="image/webp" />
+        <img src="/A1Firm-logo.png" alt="" width="20" height="20" loading="lazy" />
+      `;
+      const logoLight = document.createElement("picture");
+      logoLight.className = "logo-light";
+      logoLight.innerHTML = `
+        <source srcset="/A1Firm-logo_light.webp" type="image/webp" />
+        <img src="/A1Firm-logo_light.png" alt="" width="20" height="20" loading="lazy" />
+      `;
+      logoContainer.append(logoDark, logoLight);
+      badge.appendChild(logoContainer);
+      const text = document.createElement("p");
+      text.textContent = currentRoute 
+        ? `현재 ${currentRoute.label} 화면입니다. 찾는 목적을 말하면 가장 가까운 섹션으로 안내할게요.`
+        : "어떤 화면으로 이동할지 정리해드릴게요. 원하는 목적을 말해보세요.";
+      text.setAttribute("data-a1-greeting", "");
+      greetingMessage.append(badge, text);
+      feed.appendChild(greetingMessage);
+      
+      conversationHistory = [];
+    };
+
+    const setLoading = (isLoading) => {
+      if (loadingIndicator) {
+        loadingIndicator.hidden = !isLoading;
+      }
+    };
+
+    const handleQuery = async (query) => {
+      try {
+        appendMessage(query, "user");
+        setLoading(true);
+        
+        await new Promise(resolve => setTimeout(resolve, 450));
+        setLoading(false);
+
+        if (/^\/help$/i.test(query) || normalize(query) === "help") {
+          appendMessage("섹션명이나 목적을 입력하면 가장 가까운 화면을 추천합니다.");
+          return;
+        }
+
+        const goQuery = extractGoQuery(query);
+        if (goQuery) {
+          const result = getContextualRecommendation(goQuery);
+          handleRoute(result.route, result.confidence);
+          window.setTimeout(() => {
+            window.location.href = result.route.path;
+          }, 420);
+          return;
+        }
+
+
+
+        const result = getContextualRecommendation(query);
+        handleRoute(result.route, result.confidence);
+      } catch (error) {
+        console.error("Chatbot navigation error:", error);
+        appendMessage("죄송해요, 처리 중 오류가 발생했어요. 다시 시도해주세요.");
+      }
+    };
+
+    currentRoute = getRouteByPath();
+    lastRoute = currentRoute;
+    setActiveRoute(currentRoute.id);
+    updateContext();
+
+    if (greeting && currentRoute) {
+      greeting.textContent = `현재 ${currentRoute.label} 화면입니다. 찾는 목적을 말하면 가장 가까운 섹션으로 안내할게요.`;
+    }
+
+    trigger?.addEventListener("click", () => setOpen(!widget.classList.contains("is-open")));
+    closeButton?.addEventListener("click", () => setOpen(false));
+
+    document.addEventListener("click", (event) => {
+      if (!widget.classList.contains("is-open")) return;
+      if (widget.contains(event.target)) return;
+      setOpen(false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && widget.classList.contains("is-open")) {
+        setOpen(false);
+        trigger?.focus({ preventScroll: true });
+        return;
+      }
+
+      if (event.ctrlKey || event.metaKey) {
+        if (event.key === "k") {
+          event.preventDefault();
+          setOpen(!widget.classList.contains("is-open"));
+          if (widget.classList.contains("is-open")) {
+            input?.focus({ preventScroll: true });
+          }
+          return;
+        }
+
+        if (event.key === "1" && widget.classList.contains("is-open")) {
+          event.preventDefault();
+          const route = getRoute(intentToRoute.strategy);
+          handleRoute(route);
+          return;
+        }
+
+        if (event.key === "2" && widget.classList.contains("is-open")) {
+          event.preventDefault();
+          const route = getRoute(intentToRoute.profile);
+          handleRoute(route);
+          return;
+        }
+
+        if (event.key === "3" && widget.classList.contains("is-open")) {
+          event.preventDefault();
+          const route = getRoute(intentToRoute.projects);
+          handleRoute(route);
+          return;
+        }
+
+        if (event.key === "4" && widget.classList.contains("is-open")) {
+          event.preventDefault();
+          const route = getRoute(intentToRoute.writings);
+          handleRoute(route);
+          return;
+        }
+
+        if (event.key === "5" && widget.classList.contains("is-open")) {
+          event.preventDefault();
+          const route = getRoute(intentToRoute.contact);
+          handleRoute(route);
+          return;
+        }
+      }
+    });
+
+    form?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const query = input?.value.trim();
+      
+      if (!query) {
+        if (lastRoute) {
+          window.location.href = lastRoute.path;
+        }
+        return;
+      }
+
+      input.value = "";
+      await handleQuery(query);
+    });
+  })();
+</script>

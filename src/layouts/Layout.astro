@@ -5,6 +5,7 @@ import "../styles/tokens.css";
 import { visibleNavigationItems } from "../config/navigation";
 import { siteConfig } from "../config/site";
 import Analytics from '@vercel/analytics/astro';
+import ChatbotNavigation from "../features/a1-navigator/ChatbotNavigation.astro";
 
 const session = await getSession(Astro.request);
 const {
@@ -25,6 +26,7 @@ const shouldNoindex = noindex || pathname.startsWith("/admin");
 const locale = siteConfig.defaultLocale === "ko" ? "ko_KR" : siteConfig.defaultLocale;
 const currentYear = new Date().getFullYear();
 const faviconVersion = "20260612";
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -169,6 +171,7 @@ const jsonLd = {
         <span>{siteConfig.title}</span>
       </footer>
     </div>
+    <ChatbotNavigation />
     <script is:inline>
       document.addEventListener("click", (event) => {
         const link = event.target.closest("a");
