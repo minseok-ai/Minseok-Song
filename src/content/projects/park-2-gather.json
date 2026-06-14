@@ -18,5 +18,34 @@
     40,
     100,
     90
-  ]
+  ],
+  "knowledge": {
+    "ko": {
+      "aliases": [
+        "Predictive Parking Exit System",
+        "Park 2 Gather",
+        "Park-2-Gather",
+        "이중주차",
+        "BLE Beacon",
+        "특허 사업화"
+      ],
+      "oneLiner": "휴면 특허를 BLE Beacon 기반 이중주차 해결 구조로 재해석해 사업화한 프로젝트입니다.",
+      "problem": "이중주차는 출차 예측과 운전자 연결이 늦어질 때 갈등이 커지고, 기존 특허가 실제 서비스 구조로 이어지지 못하는 경우가 많습니다.",
+      "approach": "BLE Beacon 기반 아키텍처로 차량/위치 신호를 연결하고, 휴면 특허를 실제 출차 갈등 해결 서비스 구조로 전환했습니다.",
+      "technicalCore": "BLE beacon architecture, parking exit prediction, dormant patent commercialization, service design이 핵심입니다.",
+      "evidence": "CNU Grand Prize를 수상한 2023년 프로젝트로 등록되어 있습니다.",
+      "impact": "기술 아이디어를 사용자의 생활 문제와 사업화 구조로 연결한 사례입니다.",
+      "statusNote": "IoT와 business strategy가 결합된 patent commercialization 프로젝트입니다.",
+      "keywords": [
+        "parking",
+        "BLE",
+        "beacon",
+        "patent",
+        "commercialization",
+        "이중주차",
+        "출차",
+        "특허"
+      ]
+    }
+  }
 }

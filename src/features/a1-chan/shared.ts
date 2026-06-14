@@ -9,6 +9,18 @@ export type A1ChanAction = {
   routeId?: string;
 };
 
+export type A1ChanContextPack = {
+  query: string;
+  locale: "ko";
+  currentRouteId?: string | null;
+  intent: string;
+  primaryRecord?: A1ChanKnowledgeCard;
+  matchedRecords: A1ChanKnowledgeCard[];
+  evidence: string[];
+  suggestedActions: A1ChanAction[];
+  confidence: NavigatorConfidence;
+};
+
 export type A1ChanResult = {
   mode: A1ChanMode;
   answer: string;
@@ -18,6 +30,7 @@ export type A1ChanResult = {
   deepLink?: string;
   actions: A1ChanAction[];
   contextCards: A1ChanKnowledgeCard[];
+  contextPack?: A1ChanContextPack;
   source: NavigatorResultSource;
   reason?: string;
 };

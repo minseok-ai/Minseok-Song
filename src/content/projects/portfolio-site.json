@@ -19,5 +19,34 @@
     60,
     50,
     80
-  ]
+  ],
+  "knowledge": {
+    "ko": {
+      "aliases": [
+        "Dual-Engine Strategy Portfolio",
+        "portfolio site",
+        "포트폴리오 사이트",
+        "A1 Chan",
+        "Astro portfolio",
+        "curation engine"
+      ],
+      "oneLiner": "현재 웹사이트 자체를 Astro 기반 고신뢰 포트폴리오/큐레이션 엔진으로 설계한 프로젝트입니다.",
+      "problem": "개인 포트폴리오는 단순 이력 나열에 머물기 쉽고, 프로젝트·글·제품 맥락을 하나의 운영 표면으로 연결하기 어렵습니다.",
+      "approach": "Astro 기반 정적/서버 하이브리드 구조, 다크/라이트 테마 동기화, 콘텐츠 검증 스키마, 신호 큐레이션 흐름을 결합했습니다.",
+      "technicalCore": "Astro architecture, content validation schema, theme synchronization, embedded curation pipeline, A1 Chan integration이 핵심입니다.",
+      "evidence": "2026년 launched 프로젝트로 등록되어 있으며, 이 사이트의 실제 코드와 화면이 산출물입니다.",
+      "impact": "Minseok Song, A1 Firms, 프로젝트, 글, 연락 채널을 하나의 설명 가능한 공개 운영면으로 묶습니다.",
+      "statusNote": "현재 사이트에 배포된 launched UX/architecture 프로젝트입니다.",
+      "keywords": [
+        "Astro",
+        "portfolio",
+        "A1 Chan",
+        "content validation",
+        "theme sync",
+        "curation",
+        "포트폴리오",
+        "사이트"
+      ]
+    }
+  }
 }

@@ -171,6 +171,7 @@ const routeJson = JSON.stringify(routes);
 
   let currentRoute = getNavigatorRouteByPath(routes, window.location.pathname);
   let lastRoute = currentRoute;
+  let lastRecordId: string | null = null;
   let conversationHistory: ConversationItem[] = [];
   let aiPrepareStarted = false;
 
@@ -279,6 +280,18 @@ const routeJson = JSON.stringify(routes);
     requestAnimationFrame(() => {
       const scrollTarget = bodyArea ?? feed;
       scrollTarget.scrollTop = scrollTarget.scrollHeight;
+      if (kind === "bot") {
+        const alignBotMessage = () => {
+          const topGap = message.getBoundingClientRect().top - scrollTarget.getBoundingClientRect().top;
+          if (topGap < 14) {
+            scrollTarget.scrollTop = Math.max(0, scrollTarget.scrollTop + topGap - 14);
+          }
+        };
+        requestAnimationFrame(() => {
+          alignBotMessage();
+          requestAnimationFrame(alignBotMessage);
+        });
+      }
     });
 
     conversationHistory.push({ kind, body, timestamp: Date.now() });
@@ -336,6 +349,7 @@ const routeJson = JSON.stringify(routes);
   const buildContext = () => ({
     currentRouteId: currentRoute.id,
     lastRouteId: lastRoute.id,
+    lastRecordId,
     userHistory: getRecentUserHistory()
   });
 
@@ -379,6 +393,8 @@ const routeJson = JSON.stringify(routes);
       lastRoute = route;
       setActiveRoute(route.id);
     }
+
+    lastRecordId = result.contextPack?.primaryRecord?.id ?? lastRecordId;
 
     updateActions(result.actions);
     appendMessage(result.answer);

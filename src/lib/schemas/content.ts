@@ -207,7 +207,20 @@ export const projectSchema = z.object({
     z.number().min(0).max(100),
     z.number().min(0).max(100),
     z.number().min(0).max(100)
-  ]).default([20, 20, 20, 20, 20])
+  ]).default([20, 20, 20, 20, 20]),
+  knowledge: z.object({
+    ko: z.object({
+      aliases: z.array(z.string()).default([]),
+      oneLiner: z.string().default(""),
+      problem: z.string().default(""),
+      approach: z.string().default(""),
+      technicalCore: z.string().default(""),
+      evidence: z.string().default(""),
+      impact: z.string().default(""),
+      statusNote: z.string().default(""),
+      keywords: z.array(z.string()).default([])
+    }).optional()
+  }).optional()
 });
 
 export const writingSchema = z.object({

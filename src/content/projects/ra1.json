@@ -24,5 +24,34 @@
     80,
     20,
     40
-  ]
+  ],
+  "knowledge": {
+    "ko": {
+      "aliases": [
+        "RA1",
+        "RA1 Edge Robotics Control System",
+        "RA1 로봇",
+        "엣지 로보틱스",
+        "NPU power gating",
+        "physical hallucination"
+      ],
+      "oneLiner": "RA1은 로봇의 엣지 제어를 물리 기반 검증과 NPU 전력 제어 관점에서 설계한 A1 Firms 로보틱스 시스템 구상입니다.",
+      "problem": "로봇 AI는 언어 모델식 추론이 실제 물리 세계와 어긋나는 physical hallucination을 만들 수 있고, 엣지 장치에서는 전력도 제한됩니다.",
+      "approach": "모델 활성화를 vector resonance처럼 보고, 필요한 순간에 NPU 전력을 게이팅하며, 3D volume 기반 다층 검증으로 물리적 오류를 줄이는 구조를 구상했습니다.",
+      "technicalCore": "vector resonance activation, edge NPU gating, 3D volume verification, robotics control architecture가 핵심입니다.",
+      "evidence": "2026년 A1 Firms 계열 pending 프로젝트로 등록되어 있습니다.",
+      "impact": "로봇 제어에서 AI 추론, 하드웨어 전력, 물리 검증을 한 시스템 안에 묶으려는 방향을 제시합니다.",
+      "statusNote": "Pending 상태의 hardware AI/robotics architecture 프로젝트입니다.",
+      "keywords": [
+        "RA1",
+        "robotics",
+        "edge AI",
+        "NPU",
+        "3D verification",
+        "physical hallucination",
+        "로봇",
+        "엣지"
+      ]
+    }
+  }
 }

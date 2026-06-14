@@ -43,26 +43,26 @@ type PageLike = {
 
 const routeMetadata: Record<string, Omit<NavigatorRoute, "id" | "label" | "path" | "num" | "description">> = {
   home: {
-    aliases: ["home", "start", "overview", "map", "surface", "sections", "홈", "처음", "개요", "지도", "구조", "섹션"],
-    response: "전체 구조와 A1 Firms의 공용 운영 레이어를 빠르게 파악할 수 있어요.",
+    aliases: ["home", "start", "overview", "site", "map", "홈", "처음", "개요", "사이트", "구조"],
+    response: "사이트 전체 구조와 주요 섹션을 빠르게 훑어볼 수 있는 시작 화면입니다.",
     prompt: "site overview",
     deepLinks: [
-      { label: "Site surfaces", hash: "#surfaces", terms: ["surface", "section", "map", "site", "구조", "섹션", "지도"] },
+      { label: "Site surfaces", hash: "#surfaces", terms: ["surface", "section", "map", "site", "구조", "섹션"] },
       { label: "A1trategize band", hash: "#product-band", terms: ["product", "a1trategize", "전략", "제품"] }
     ]
   },
   about: {
-    aliases: ["about", "profile", "career", "resume", "cv", "person", "경력", "프로필", "소개", "이력", "커리어"],
-    response: "프로필, 현재 역할, 연구와 창업 타임라인을 확인하기 좋은 화면입니다.",
+    aliases: ["about", "profile", "career", "resume", "cv", "person", "민석", "송민석", "사람", "프로필", "경력", "소개"],
+    response: "Minseok Song의 현재 역할, 연구 경험, 창업/제품 맥락을 설명하는 프로필 화면입니다.",
     prompt: "career profile",
     deepLinks: [
       { label: "Profile overview", hash: "#profile-overview", terms: ["profile", "overview", "소개", "프로필"] },
-      { label: "Operating thesis", hash: "#profile-thesis", terms: ["thesis", "career", "경력", "관점", "타임라인"] }
+      { label: "Operating thesis", hash: "#profile-thesis", terms: ["thesis", "career", "경력", "관점", "철학"] }
     ]
   },
   "a1-firms": {
-    aliases: ["strategy", "consulting", "firm", "a1", "product", "business", "전략", "컨설팅", "제품", "사업", "서비스"],
-    response: "A1trategize 제품 방향, Multi-LLM 파이프라인, 프레임 적용을 볼 수 있어요.",
+    aliases: ["strategy", "consulting", "firm", "a1", "product", "business", "전략", "컨설팅", "제품", "사업", "A1 Firms"],
+    response: "A1 Firms와 A1trategize의 제품 방향, 전략 시스템, 운영 맥락을 설명하는 화면입니다.",
     prompt: "strategy system",
     deepLinks: [
       { label: "LLM router", hash: "#llm-router", terms: ["llm", "router", "model", "gemini", "pipeline", "모델", "라우터", "파이프라인"] },
@@ -71,7 +71,7 @@ const routeMetadata: Record<string, Omit<NavigatorRoute, "id" | "label" | "path"
   },
   projects: {
     aliases: ["project", "research", "patent", "portfolio", "build", "논문", "연구", "특허", "프로젝트", "포트폴리오"],
-    response: "특허, 연구, 제품 빌드 로그를 프로젝트 단위로 비교할 수 있습니다.",
+    response: "15개의 공개 프로젝트를 A1 Firms 제품, 연구, 하드웨어, 사업화 관점으로 모아 둔 프로젝트 인덱스입니다.",
     prompt: "research projects",
     deepLinks: [
       { label: "Project ledger", hash: "#project-overview", terms: ["ledger", "overview", "status", "개요", "현황"] },
@@ -89,7 +89,7 @@ const routeMetadata: Record<string, Omit<NavigatorRoute, "id" | "label" | "path"
   },
   contacts: {
     aliases: ["contact", "email", "linkedin", "github", "call", "연락", "메일", "협업", "미팅", "문의"],
-    response: "협업, 자문, 제품 대화를 시작할 수 있는 채널입니다.",
+    response: "협업, 자문, 제품 대화를 시작할 수 있는 공개 연락 채널입니다.",
     prompt: "contact channel",
     deepLinks: [
       { label: "Contact graph", hash: "#contact-graph", terms: ["graph", "channel", "email", "linkedin", "연락", "채널", "메일"] }
@@ -127,6 +127,7 @@ export function createNavigatorRoutes(
 export function normalizeNavigatorText(value: unknown) {
   return String(value || "")
     .toLowerCase()
+    .normalize("NFKC")
     .replace(/[^\p{L}\p{N}\s:/-]/gu, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -152,7 +153,7 @@ export function getNavigatorRouteByPath(routes: NavigatorRoute[], pathname: stri
 }
 
 export function extractGoQuery(query: string) {
-  const patterns = [/^\/go\s+(.+)/i, /^go:\s*(.+)/i, /^이동\s+(.+)/i];
+  const patterns = [/^\/go\s+(.+)/i, /^go:\s*(.+)/i, /^이동\s+(.+)/i, /^열어\s+(.+)/i];
   const match = patterns.map((pattern) => query.match(pattern)).find(Boolean);
   return match?.[1]?.trim() || "";
 }
@@ -245,7 +246,7 @@ export function buildNavigatorResult(
 ): NavigatorIntentResult {
   const link = deepLink ? route.deepLinks.find((item) => item.hash === deepLink) : undefined;
   const routeHref = resolveRouteHref(route, deepLink);
-  const linkCopy = link ? ` 먼저 ${link.label}부터 보면 좋아요.` : "";
+  const linkCopy = link ? ` 먼저 ${link.label} 쪽을 보면 좋겠습니다.` : "";
 
   if (confidence === "low") {
     return {

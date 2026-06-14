@@ -18,5 +18,33 @@
     60,
     90,
     80
-  ]
+  ],
+  "knowledge": {
+    "ko": {
+      "aliases": [
+        "OBD-II Pedal Evidence Blackbox",
+        "OBD-II 블랙박스",
+        "페달 블랙박스",
+        "급발진 증거",
+        "HUD evidence"
+      ],
+      "oneLiner": "OBD-II 데이터를 HUD에 투영해 급발진 분쟁에서 페달 조작 증거를 남기려는 저비용 하드웨어/법기술 프로젝트입니다.",
+      "problem": "급발진 분쟁에서는 운전자 조작과 차량 상태를 사후에 입증하기 어려워, 저비용으로 확인 가능한 증거 체계가 필요합니다.",
+      "approach": "차량 OBD-II 데이터를 가져와 페달/운행 정보를 HUD 형태로 시각화하고, 블랙박스 영상과 함께 증거로 남기는 구조를 설계했습니다.",
+      "technicalCore": "OBD-II data capture, HUD projection, automotive evidence workflow, low-cost hardware architecture가 핵심입니다.",
+      "evidence": "2024년 hardware/automotive/legal tech 프로젝트로 등록되어 있습니다.",
+      "impact": "자동차 사고 분쟁에서 기술 데이터와 법적 입증 사이를 연결하는 문제 해결 방향을 제시합니다.",
+      "statusNote": "저비용 evidence system 설계 프로젝트입니다.",
+      "keywords": [
+        "OBD-II",
+        "pedal",
+        "blackbox",
+        "HUD",
+        "automotive",
+        "legal tech",
+        "급발진",
+        "증거"
+      ]
+    }
+  }
 }

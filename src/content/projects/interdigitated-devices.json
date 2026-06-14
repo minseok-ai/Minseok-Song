@@ -18,5 +18,34 @@
     80,
     40,
     0
-  ]
+  ],
+  "knowledge": {
+    "ko": {
+      "aliases": [
+        "Planar Micro-Battery Architecture",
+        "평면형 마이크로 배터리",
+        "interdigitated cell",
+        "interdigitated devices",
+        "KAIST NNFC",
+        "미세전지"
+      ],
+      "oneLiner": "KAIST NNFC에서 평면 interdigitated cell 구조를 통해 차세대 마이크로 배터리를 개발하는 연구 프로젝트입니다.",
+      "problem": "마이크로 배터리는 소형화와 성능 안정성을 동시에 만족해야 하며, 전해질 열화와 구조적 한계를 줄이는 설계가 중요합니다.",
+      "approach": "평면형 interdigitated 전극 구조를 활용해 미세 전지의 구조와 열화 문제를 연구하는 방향으로 접근합니다.",
+      "technicalCore": "planar interdigitated cell architecture, micro-battery fabrication, electrolyte degradation mitigation이 핵심입니다.",
+      "evidence": "About 페이지의 KAIST NNFC R&D Intern 경험과 연결되는 2026년 연구 프로젝트입니다.",
+      "impact": "반도체/에너지 융합 소자의 소형 전원 구조를 개선하는 연구 기반이 됩니다.",
+      "statusNote": "KAIST NNFC와 연결된 진행 중 research 프로젝트입니다.",
+      "keywords": [
+        "micro-battery",
+        "interdigitated",
+        "KAIST NNFC",
+        "semiconductor",
+        "electrolyte",
+        "마이크로 배터리",
+        "전해질",
+        "미세전지"
+      ]
+    }
+  }
 }

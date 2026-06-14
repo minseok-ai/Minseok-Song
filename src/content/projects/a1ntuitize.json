@@ -24,5 +24,34 @@
     25,
     30,
     60
-  ]
+  ],
+  "knowledge": {
+    "ko": {
+      "aliases": [
+        "A1ntuitize",
+        "A1 엔튜이타이즈",
+        "Vision Memory Engine",
+        "비전 메모리 엔진",
+        "직관 메모리",
+        "3D 좌표 기억"
+      ],
+      "oneLiner": "A1ntuitize는 실제 시각 인상을 3D 좌표와 감정 벡터로 저장해 직관처럼 다시 떠올리는 메모리 엔진 구상입니다.",
+      "problem": "일반적인 AI 메모리는 텍스트 기록에는 강하지만, 사람이 장면을 기억하는 공간감, 감정 잔상, 반복 학습, 망각 과정을 함께 다루기 어렵습니다.",
+      "approach": "시각 인상을 3D 좌표계의 입자처럼 배치하고, attention, repetition, entropy, Ebbinghaus식 감쇠를 결합해 기억 강도를 계산합니다.",
+      "technicalCore": "3D coordinate memory, emotion-vector particle, attention weighting, repetition reinforcement, entropy decay가 핵심 개념입니다.",
+      "evidence": "2026년 A1 Firms 계열의 pending 프로젝트로 등록되어 있으며, 현재는 개념 설계와 메모리 모델링 단계입니다.",
+      "impact": "사용자의 장면 기억, 감각적 단서, 반복 경험을 더 인간적인 방식으로 재활용하는 개인화 AI 메모리로 확장될 수 있습니다.",
+      "statusNote": "Pending 상태의 AI memory engine 프로젝트입니다.",
+      "keywords": [
+        "A1ntuitize",
+        "memory engine",
+        "intuition",
+        "vision",
+        "3D memory",
+        "emotion vector",
+        "직관",
+        "기억"
+      ]
+    }
+  }
 }

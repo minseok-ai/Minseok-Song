@@ -18,5 +18,33 @@
     30,
     90,
     100
-  ]
+  ],
+  "knowledge": {
+    "ko": {
+      "aliases": [
+        "Deep-Learning Noise Enforcement",
+        "딥러닝 소음 단속",
+        "소음 차량 식별",
+        "Greenlight Noise",
+        "KOSAF"
+      ],
+      "oneLiner": "영상 센서와 딥러닝 기반 음원 위치 추정을 결합해 소음 위반 차량을 식별하려는 B2G형 프로젝트입니다.",
+      "problem": "도로 소음 단속은 소리의 발생 위치와 실제 차량을 연결해야 해서, 단일 센서만으로는 책임 차량을 특정하기 어렵습니다.",
+      "approach": "이미징 센서와 딥러닝 sound localization을 결합해 소음 발생 방향과 차량 후보를 연결하는 구조로 접근했습니다.",
+      "technicalCore": "imaging sensor fusion, sound localization, deep learning inference, noise enforcement workflow가 핵심입니다.",
+      "evidence": "KOSAF Special Award 수상 이력이 있는 open innovation 프로젝트입니다.",
+      "impact": "교통 소음 민원과 단속 행정에서 책임 차량 식별의 실효성을 높이는 방향을 제안했습니다.",
+      "statusNote": "2024년 B2G/open innovation 성격의 수상 프로젝트입니다.",
+      "keywords": [
+        "noise",
+        "sound localization",
+        "deep learning",
+        "B2G",
+        "KOSAF",
+        "소음",
+        "차량",
+        "단속"
+      ]
+    }
+  }
 }

@@ -18,5 +18,34 @@
     100,
     30,
     10
-  ]
+  ],
+  "knowledge": {
+    "ko": {
+      "aliases": [
+        "Ultrasonic Glucose Monitoring",
+        "초음파 혈당 모니터링",
+        "비침습 혈당",
+        "ultrasonic velocity",
+        "KRISS",
+        "KSNT"
+      ],
+      "oneLiner": "초음파 속도 분석을 이용해 비침습적으로 포도당 농도 변화를 추정하려는 독립 연구 프로젝트입니다.",
+      "problem": "혈당 측정은 보통 침습적 방식에 의존하므로, 반복 측정 부담을 줄이는 비침습 계측 가능성이 중요합니다.",
+      "approach": "초음파가 매질을 통과할 때의 속도 변화와 농도 변화를 연결해 분석하고, 실험/발표 형태로 연구를 정리했습니다.",
+      "technicalCore": "ultrasonic velocity analysis, 비침습 센싱, 농도 변화에 따른 물성 신호 해석이 핵심입니다.",
+      "evidence": "KRISS 관련 독립 연구 경험으로 등록되어 있고, KSNT에서 1st Author로 발표한 프로젝트입니다.",
+      "impact": "의료/계측 영역에서 침습 부담을 줄이는 센싱 접근을 탐색했습니다.",
+      "statusNote": "2024년 연구 발표 이력이 있는 medical tech 프로젝트입니다.",
+      "keywords": [
+        "glucose",
+        "ultrasound",
+        "KRISS",
+        "KSNT",
+        "non-invasive",
+        "혈당",
+        "초음파",
+        "비침습"
+      ]
+    }
+  }
 }

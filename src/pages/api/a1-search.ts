@@ -30,7 +30,10 @@ export const POST: APIRoute = async ({ request }) => {
       source: "static"
     });
 
-    return new Response(JSON.stringify({ staticResult }), {
+    return new Response(JSON.stringify({
+      contextPack: staticResult.contextPack,
+      staticResult
+    }), {
       status: 200,
       headers: {
         "Content-Type": "application/json"

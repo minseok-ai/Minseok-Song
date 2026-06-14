@@ -24,5 +24,34 @@
     10,
     85,
     95
-  ]
+  ],
+  "knowledge": {
+    "ko": {
+      "aliases": [
+        "A1trategize",
+        "A1 트래티자이즈",
+        "Strategy Intelligence OS",
+        "전략 인텔리전스 OS",
+        "컨설팅 보고서 자동화",
+        "멀티 LLM 전략 시스템"
+      ],
+      "oneLiner": "A1trategize는 기업 전략 리서치와 컨설팅 보고서 생성을 자동화하는 B2B 전략 인텔리전스 시스템입니다.",
+      "problem": "일반 LLM만으로는 사용자의 애매한 의도를 전략 질문으로 확장하고, 논리적 결함이 적은 보고서 구조까지 안정적으로 만들기 어렵습니다.",
+      "approach": "사용자 의도를 동적으로 확장한 뒤 여러 LLM의 역할을 나누어 리서치, 구조화, 검토, 보고서 생성을 협업시키는 방식으로 설계했습니다.",
+      "technicalCore": "동적 프롬프트 확장, 다중 LLM 라우팅, 보고서 구조 검증, 전략 프레임워크 기반 출력 흐름이 핵심입니다.",
+      "evidence": "2026년 공개 서비스로 운영 중이며, 프로젝트 카드의 primary link는 a1trategize.com 앱으로 연결됩니다.",
+      "impact": "반복적인 전략 문서 작성 시간을 줄이고, 사용자가 컨설팅식 사고 구조로 문제를 정리하도록 돕는 것을 목표로 합니다.",
+      "statusNote": "Launched 상태의 A1 Firms 핵심 제품 프로젝트입니다.",
+      "keywords": [
+        "A1trategize",
+        "strategy",
+        "consulting",
+        "LLM",
+        "prompt expansion",
+        "보고서",
+        "전략",
+        "컨설팅"
+      ]
+    }
+  }
 }

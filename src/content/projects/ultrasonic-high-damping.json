@@ -18,5 +18,33 @@
     100,
     20,
     0
-  ]
+  ],
+  "knowledge": {
+    "ko": {
+      "aliases": [
+        "Cross-Axis Ultrasonic Identification",
+        "초음파 고감쇠 재료 식별",
+        "cross-axis measurement",
+        "polymer blind test",
+        "KRISS ultrasonic"
+      ],
+      "oneLiner": "고감쇠 재료에서 초음파 신호가 약해지는 문제를 cross-axis measurement로 극복해 고분자 재료를 식별한 프로젝트입니다.",
+      "problem": "고감쇠 재료는 초음파 신호가 빠르게 약해져 일반적인 측정 방향만으로는 재료 식별 정확도가 떨어질 수 있습니다.",
+      "approach": "측정 축을 바꾸는 cross-axis measurement를 적용해 신호 감쇠 문제를 줄이고 blind test에서 고분자 재료를 구분했습니다.",
+      "technicalCore": "ultrasonic measurement, signal attenuation handling, cross-axis setup, polymer material identification이 핵심입니다.",
+      "evidence": "KRISS 관련 2024년 research/materials 프로젝트로 등록되어 있습니다.",
+      "impact": "초음파 계측에서 신호가 약한 재료를 다루는 실험 설계와 해석 역량을 보여줍니다.",
+      "statusNote": "재료 식별과 계측 실험 중심의 연구 프로젝트입니다.",
+      "keywords": [
+        "ultrasonic",
+        "cross-axis",
+        "attenuation",
+        "polymer",
+        "materials",
+        "KRISS",
+        "초음파",
+        "고감쇠"
+      ]
+    }
+  }
 }
