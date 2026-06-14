@@ -35,10 +35,6 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
   )}
 </section>
 
-<section class="writings-ad-preview" aria-label="Reserved advertisement placement">
-  <span>Advertisement</span>
-</section>
-
 <section id="writing-index" class="newsletter-instrument">
   <div class="pipeline-meter" id="pipeline-meter">
     {articleTags.map((tag, index) => (
@@ -191,28 +187,6 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     border-color: var(--color-accent);
     background: var(--color-accent-soft);
     transform: translateY(-1px);
-  }
-
-  .writings-ad-preview {
-    display: grid;
-    place-items: center;
-    justify-self: center;
-    width: min(728px, 100%);
-    min-height: 90px;
-    padding: 14px 18px;
-    border: 1px dashed var(--color-line-strong);
-    border-radius: var(--radius-card);
-    background: rgba(248, 247, 242, 0.38);
-    box-shadow: 0 18px 52px rgba(12, 14, 18, 0.04);
-    backdrop-filter: var(--glass-blur);
-  }
-
-  .writings-ad-preview span {
-    color: var(--color-ink-muted);
-    font-size: 10px;
-    font-weight: 850;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
   }
 
   .newsletter-instrument {
@@ -462,11 +436,6 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
 
     .newsletter-hero {
       gap: 22px;
-    }
-
-    .writings-ad-preview {
-      width: 100%;
-      min-height: 82px;
     }
 
     .pipeline-meter {
