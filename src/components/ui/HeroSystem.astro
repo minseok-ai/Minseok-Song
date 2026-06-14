@@ -199,6 +199,8 @@ const telemetryNodes = [
     position: relative;
     z-index: 2;
     align-self: center;
+    min-width: 0;
+    width: 100%;
     max-width: 800px;
     grid-column: 1;
     grid-row: 1;
@@ -877,6 +879,24 @@ const telemetryNodes = [
   }
 
   @media (max-width: 640px) {
+    .hero-system {
+      grid-template-columns: minmax(0, 1fr);
+      width: 100%;
+      min-width: 0;
+      padding-right: 18px;
+      padding-left: 18px;
+    }
+
+    .hero-copy-panel h1 {
+      font-size: 2.46rem;
+      line-height: 1.12;
+    }
+
+    .hero-copy-panel p.hero-desc {
+      max-width: 100%;
+      font-size: 15.5px;
+    }
+
     .hero-actions {
       flex-direction: column;
       width: 100%;
