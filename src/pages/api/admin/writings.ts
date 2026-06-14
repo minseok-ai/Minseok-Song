@@ -3,6 +3,7 @@ import type { APIRoute } from "astro";
 import { getSession } from "auth-astro/server";
 import { isAllowedAuthAdminSession } from "../../../lib/auth/admin";
 import { writingSchema } from "../../../lib/schemas/content";
+import { createRateLimiter, createRateLimitHeaders, getClientIdentifier } from "../../../lib/rate-limiter";
 
 const writingDirectory = new URL("../../../content/writings/", import.meta.url);
 
@@ -26,7 +27,27 @@ const slugify = (value: string) => {
   return slug || `writing-${Date.now()}`;
 };
 
+const rateLimiter = createRateLimiter({
+  windowMs: 60_000,
+  maxRequests: 60,
+});
+
 export const POST: APIRoute = async ({ request }) => {
+  const identifier = getClientIdentifier(request);
+  const rateLimitResult = rateLimiter(identifier);
+
+  if (!rateLimitResult.success) {
+    return Response.json(
+      {
+        error: "Too many requests. Please try again later.",
+      },
+      {
+        status: 429,
+        headers: createRateLimitHeaders(rateLimitResult),
+      }
+    );
+  }
+
   const session = await getSession(request);
 
   if (!isTrustedWriteOrigin(request)) {

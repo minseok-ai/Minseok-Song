@@ -124,6 +124,46 @@
   }
 }
 
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --color-paper: #030407;
+    --color-paper-deep: #010102;
+    --color-ink: #f2f5f9;
+    --color-ink-soft: rgba(242, 245, 249, 0.72);
+    --color-ink-muted: rgba(242, 245, 249, 0.45);
+    --color-panel: rgba(8, 10, 15, 0.75);
+    --color-panel-solid: #0b0e14;
+    --color-field: #06080c;
+    --color-line: rgba(255, 255, 255, 0.08);
+    --color-line-strong: rgba(255, 255, 255, 0.16);
+    --color-line-dark: rgba(13, 17, 23, 0.18);
+
+    --color-accent: #6b9cf2;
+    --color-accent-ink: #a6c4f9;
+    --color-accent-soft: rgba(107, 156, 242, 0.12);
+    --color-accent-glow: rgba(107, 156, 242, 0.45);
+
+    --color-warm: #6b9cf2;
+    --rgb-warm: 107, 156, 242;
+    --color-warm-soft: rgba(107, 156, 242, 0.15);
+    --color-warm-glow: rgba(107, 156, 242, 0.45);
+
+    --header-glow: rgba(107, 156, 242, 0.08);
+
+    --body-bg-gradient:
+      radial-gradient(circle at top left, rgba(107, 156, 242, 0.06) 0%, transparent 40%),
+      radial-gradient(circle at bottom right, rgba(179, 154, 251, 0.05) 0%, transparent 40%);
+    --body-bg-veil:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+}
+
 /* Resolved theme support */
 html[data-theme="light"] {
   color-scheme: light;

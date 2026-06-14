@@ -10,8 +10,32 @@ import {
 import { createNavigatorRoutes } from "../../features/a1-chan/route-engine";
 import { createA1ChanKnowledge } from "../../features/a1-chan/site-knowledge";
 import { createStaticA1ChanResponse } from "../../features/a1-chan/conversation-engine";
+import { createRateLimiter, createRateLimitHeaders, getClientIdentifier } from "../../lib/rate-limiter";
+
+const rateLimiter = createRateLimiter({
+  windowMs: 60_000,
+  maxRequests: 300,
+});
 
 export const POST: APIRoute = async ({ request }) => {
+  const identifier = getClientIdentifier(request);
+  const rateLimitResult = rateLimiter(identifier);
+
+  if (!rateLimitResult.success) {
+    return new Response(
+      JSON.stringify({
+        error: "Too many requests. Please try again later.",
+      }),
+      {
+        status: 429,
+        headers: {
+          "Content-Type": "application/json",
+          ...createRateLimitHeaders(rateLimitResult),
+        },
+      }
+    );
+  }
+
   try {
     const body = await request.json();
     const { query, context } = body;
