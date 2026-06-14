@@ -986,4 +986,24 @@ const telemetryNodes = [
       width: 100%;
     }
   }
+
+  @media (max-width: 820px) {
+    .telemetry-pipeline .telemetry-node:first-child .telemetry-tooltip {
+      left: 0;
+      right: auto;
+      transform: translateX(0) translateY(10px);
+    }
+    .telemetry-pipeline .telemetry-node:first-child:hover .telemetry-tooltip {
+      transform: translateX(0) translateY(0);
+    }
+
+    .telemetry-pipeline .telemetry-node:last-child .telemetry-tooltip {
+      left: auto;
+      right: 0;
+      transform: translateX(0) translateY(10px);
+    }
+    .telemetry-pipeline .telemetry-node:last-child:hover .telemetry-tooltip {
+      transform: translateX(0) translateY(0);
+    }
+  }
 </style>
