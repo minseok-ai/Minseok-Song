@@ -24,6 +24,7 @@ const siteUrl = (import.meta.env.SITE_URL || siteConfig.url).replace(/\/$/, "");
 const canonicalUrl = new URL(Astro.url.pathname, `${siteUrl}/`).toString();
 const imageUrl = new URL(image, `${siteUrl}/`).toString();
 const shouldNoindex = noindex || pathname.startsWith("/admin");
+const contentProtectionEnabled = !pathname.startsWith("/admin");
 const locale = siteConfig.defaultLocale === "ko" ? "ko_KR" : siteConfig.defaultLocale;
 const currentYear = new Date().getFullYear();
 const faviconVersion = "20260612";
@@ -43,8 +44,7 @@ const jsonLd = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <!-- Theme still follows prefers-color-scheme; only light prevents mobile UA auto-dark repaint. -->
-    <meta name="color-scheme" content="only light" />
+    <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#030407" id="theme-color" />
     <script is:inline>
       (() => {
@@ -52,25 +52,26 @@ const jsonLd = {
         const sessionKey = "theme-override";
         const legacyKey = "theme";
         const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
-        const isTheme = (value) => value === "dark" || value === "light";
-        const systemTheme = darkQuery.matches ? "dark" : "light";
-        let sessionTheme = null;
+        const isSamsungBrowser = /SamsungBrowser/i.test(navigator.userAgent);
 
         try {
-          const storedSessionTheme = sessionStorage.getItem(sessionKey);
-          sessionTheme = isTheme(storedSessionTheme) ? storedSessionTheme : null;
+          sessionStorage.removeItem(sessionKey);
           localStorage.removeItem(legacyKey);
         } catch {}
 
-        const theme = sessionTheme || systemTheme;
-        root.setAttribute("data-theme", theme);
-        root.setAttribute("data-theme-source", sessionTheme ? "manual" : "system");
-        // Visual theme comes from data-theme tokens; this only disables browser auto-dark overrides.
-        root.style.colorScheme = "only light";
+        const systemTheme = darkQuery.matches ? "dark" : "light";
+        if (isSamsungBrowser) {
+          root.setAttribute("data-theme", systemTheme);
+          root.setAttribute("data-theme-source", "samsung-system");
+        } else {
+          root.removeAttribute("data-theme");
+          root.removeAttribute("data-theme-source");
+        }
+        root.style.colorScheme = "";
 
         const metaThemeColor = document.getElementById("theme-color");
         if (metaThemeColor) {
-          metaThemeColor.setAttribute("content", theme === "dark" ? "#030407" : "#EBEAE4");
+          metaThemeColor.setAttribute("content", systemTheme === "dark" ? "#030407" : "#EBEAE4");
         }
       })();
     </script>
@@ -125,7 +126,7 @@ const jsonLd = {
       }
     </style>
   </head>
-  <body>
+  <body data-content-protection={contentProtectionEnabled ? "enabled" : "disabled"}>
     <Analytics />
     <SpeedInsights />
     <div class="site-shell">
@@ -204,6 +205,77 @@ const jsonLd = {
     </div>
     <A1Chan />
     <script is:inline>
+      (() => {
+        if (document.body?.dataset.contentProtection !== "enabled") return;
+
+        const selectableSelector = [
+          "input",
+          "textarea",
+          "select",
+          "[contenteditable]",
+          ".allow-select",
+          "[data-allow-selection]"
+        ].join(",");
+
+        const getElement = (target) => {
+          if (target instanceof Element) return target;
+          if (target instanceof Node) return target.parentElement;
+          return null;
+        };
+
+        const isSelectableTarget = (target) => Boolean(getElement(target)?.closest(selectableSelector));
+
+        const blockDefault = (event) => {
+          if (isSelectableTarget(event.target)) return;
+          event.preventDefault();
+          event.stopPropagation();
+        };
+
+        const blockSecondaryPointer = (event) => {
+          if (isSelectableTarget(event.target)) return;
+          if (event.button === 1 || event.button === 2) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+        };
+
+        ["contextmenu", "selectstart", "dragstart", "drop", "copy", "cut"].forEach((eventName) => {
+          document.addEventListener(eventName, blockDefault, { capture: true });
+        });
+
+        ["mousedown", "pointerdown", "auxclick"].forEach((eventName) => {
+          document.addEventListener(eventName, blockSecondaryPointer, { capture: true });
+        });
+
+        document.addEventListener("selectionchange", () => {
+          const selection = document.getSelection();
+          if (!selection || selection.isCollapsed) return;
+          if (isSelectableTarget(selection.anchorNode) || isSelectableTarget(selection.focusNode)) return;
+          selection.removeAllRanges();
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (isSelectableTarget(event.target)) return;
+
+          const key = event.key.toLowerCase();
+          const usesCommand = event.ctrlKey || event.metaKey;
+          const blockedShortcut =
+            key === "f12" ||
+            key === "printscreen" ||
+            (usesCommand && ["a", "c", "x", "s", "p", "u"].includes(key)) ||
+            (usesCommand && event.shiftKey && ["c", "i", "j"].includes(key));
+
+          if (blockedShortcut) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+        }, { capture: true });
+
+        document.querySelectorAll("img, svg, canvas, video").forEach((element) => {
+          element.setAttribute("draggable", "false");
+        });
+      })();
+
       document.addEventListener("click", (event) => {
         const link = event.target.closest("a");
 
@@ -228,58 +300,107 @@ const jsonLd = {
       const themeMedia = window.matchMedia('(prefers-color-scheme: dark)');
       const themeSessionKey = 'theme-override';
       const legacyThemeKey = 'theme';
-      const isValidTheme = (theme) => theme === 'dark' || theme === 'light';
+      const isSamsungBrowser = /SamsungBrowser/i.test(navigator.userAgent);
+      const samsungSystemSource = 'samsung-system';
+      const samsungResyncKey = 'samsung-theme-resync-at';
       const getSystemTheme = () => themeMedia.matches ? 'dark' : 'light';
+      let lastKnownSystemTheme = getSystemTheme();
+      let lastSamsungBlurAt = 0;
 
-      const readSessionTheme = () => {
-        try {
-          const theme = sessionStorage.getItem(themeSessionKey);
-          return isValidTheme(theme) ? theme : null;
-        } catch {
-          return null;
-        }
-      };
-
-      const writeSessionTheme = (theme) => {
-        try {
-          if (theme === getSystemTheme()) {
-            sessionStorage.removeItem(themeSessionKey);
-          } else {
-            sessionStorage.setItem(themeSessionKey, theme);
-          }
-        } catch {}
-      };
-
-      const clearSessionTheme = () => {
+      const clearStoredTheme = () => {
         try { sessionStorage.removeItem(themeSessionKey); } catch {}
+        try { localStorage.removeItem(legacyThemeKey); } catch {}
       };
 
-      try { localStorage.removeItem(legacyThemeKey); } catch {}
-      
-      const setTheme = (theme, source = 'system') => {
-        document.documentElement.setAttribute('data-theme', theme);
-        document.documentElement.setAttribute('data-theme-source', source);
-        document.documentElement.style.colorScheme = 'only light';
+      const getThemeSource = () => document.documentElement.getAttribute('data-theme-source');
+
+      const getEffectiveTheme = () => (
+        document.documentElement.getAttribute('data-theme') || getSystemTheme()
+      );
+
+      const updateThemeChrome = (theme = getEffectiveTheme()) => {
         themeToggle?.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
         themeToggle?.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
-        
+
         const metaThemeColor = document.getElementById('theme-color');
         if (metaThemeColor) {
           metaThemeColor.setAttribute('content', theme === 'dark' ? '#030407' : '#EBEAE4');
         }
       };
 
-      const applyPreferredTheme = () => {
-        const sessionTheme = readSessionTheme();
-        setTheme(sessionTheme || getSystemTheme(), sessionTheme ? 'manual' : 'system');
+      const applySystemTheme = () => {
+        const systemTheme = getSystemTheme();
+        clearStoredTheme();
+        if (isSamsungBrowser) {
+          document.documentElement.setAttribute('data-theme', systemTheme);
+          document.documentElement.setAttribute('data-theme-source', samsungSystemSource);
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+          document.documentElement.removeAttribute('data-theme-source');
+        }
+        document.documentElement.style.colorScheme = '';
+        updateThemeChrome(systemTheme);
       };
 
-      applyPreferredTheme();
+      const setManualTheme = (theme) => {
+        clearStoredTheme();
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.setAttribute('data-theme-source', 'manual');
+        document.documentElement.style.colorScheme = '';
+        updateThemeChrome(theme);
+      };
+
+      applySystemTheme();
 
       // Live sync with OS
       const syncWithSystem = (e) => {
-        clearSessionTheme();
-        setTheme(e.matches ? 'dark' : 'light');
+        const systemTheme = e?.matches ? 'dark' : getSystemTheme();
+        lastKnownSystemTheme = systemTheme;
+        applySystemTheme();
+      };
+
+      const reconcileSystemTheme = () => {
+        const systemTheme = getSystemTheme();
+        const systemChanged = systemTheme !== lastKnownSystemTheme;
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const themeSource = getThemeSource();
+        lastKnownSystemTheme = systemTheme;
+
+        if (
+          systemChanged ||
+          themeSource !== 'manual' && (
+            !currentTheme ||
+            isSamsungBrowser && (themeSource !== samsungSystemSource || currentTheme !== systemTheme)
+          )
+        ) {
+          applySystemTheme();
+        }
+      };
+
+      const resyncSamsungSystemTheme = () => {
+        if (!isSamsungBrowser || getThemeSource() === 'manual') return;
+        const beforeTheme = getEffectiveTheme();
+
+        window.setTimeout(() => {
+          if (document.visibilityState === 'hidden' || getThemeSource() === 'manual') return;
+
+          reconcileSystemTheme();
+
+          const currentTheme = getEffectiveTheme();
+          const blurElapsed = Date.now() - lastSamsungBlurAt;
+          if (!lastSamsungBlurAt || beforeTheme !== 'light' || currentTheme !== 'light' || blurElapsed < 600) return;
+
+          try {
+            const lastReloadAt = Number(sessionStorage.getItem(samsungResyncKey) || '0');
+            const now = Date.now();
+            if (now - lastReloadAt < 30000) return;
+            sessionStorage.setItem(samsungResyncKey, String(now));
+          } catch {
+            return;
+          }
+
+          window.location.reload();
+        }, 700);
       };
       
       if (typeof themeMedia.addEventListener === 'function') {
@@ -288,22 +409,40 @@ const jsonLd = {
         themeMedia.addListener(syncWithSystem);
       }
       document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible' && !readSessionTheme()) {
-          setTheme(getSystemTheme(), 'system');
+        if (document.visibilityState === 'visible') {
+          reconcileSystemTheme();
+          resyncSamsungSystemTheme();
+        } else if (isSamsungBrowser) {
+          lastSamsungBlurAt = Date.now();
         }
       });
+      window.addEventListener('blur', () => {
+        if (isSamsungBrowser) {
+          lastSamsungBlurAt = Date.now();
+        }
+      });
+      window.addEventListener('focus', () => {
+        reconcileSystemTheme();
+        resyncSamsungSystemTheme();
+      });
+      window.addEventListener('pageshow', () => {
+        reconcileSystemTheme();
+        resyncSamsungSystemTheme();
+      });
+      window.addEventListener('resize', reconcileSystemTheme);
+      window.addEventListener('orientationchange', reconcileSystemTheme);
+      window.setInterval(reconcileSystemTheme, 750);
 
       // Toggle theme on button click.
       if (themeToggle) {
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
         themeToggle.addEventListener('click', async (event) => {
-          const currentTheme = document.documentElement.getAttribute('data-theme');
+          const currentTheme = getEffectiveTheme();
           const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
           
           const switchTheme = () => {
-            writeSessionTheme(newTheme);
-            setTheme(newTheme, readSessionTheme() ? 'manual' : 'system');
+            setManualTheme(newTheme);
           };
 
           if (!document.startViewTransition || reducedMotion.matches) {
