@@ -43,9 +43,7 @@ const jsonLd = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#EBEAE4" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#030407" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#050505" />
     <link rel="icon" type="image/png" href={`/A1Firm-logo_light.png?v=${faviconVersion}`} media="(prefers-color-scheme: light)" />
     <link rel="icon" type="image/png" href={`/A1Firm-logo.png?v=${faviconVersion}`} media="(prefers-color-scheme: dark)" />
     <link rel="apple-touch-icon" href={`/A1Firm-logo.png?v=${faviconVersion}`} />
@@ -198,6 +196,7 @@ const jsonLd = {
       // Theme toggle functionality
       const themeToggle = document.getElementById('theme-toggle');
       
+      // Check for saved theme preference or system preference.
       const savedTheme = (() => {
         try {
           return localStorage.getItem('theme');
@@ -210,30 +209,16 @@ const jsonLd = {
       const setTheme = (theme) => {
         document.documentElement.setAttribute('data-theme', theme);
         themeToggle?.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
-        
-        // Remove media queries from meta tags so manual override applies
-        document.querySelectorAll('meta[name="theme-color"]').forEach(meta => {
-          meta.removeAttribute('media');
-          meta.setAttribute('content', theme === 'dark' ? '#030407' : '#EBEAE4');
-        });
       };
 
-      // Set initial theme ONLY if user manually saved one.
-      // Otherwise, leave data-theme empty so native CSS @media tracking works perfectly.
+      // Set initial theme.
       if (savedTheme) {
         setTheme(savedTheme);
+      } else if (systemPrefersDark) {
+        setTheme('dark');
       } else {
-        // Just sync the toggle button state
-        themeToggle?.setAttribute('aria-pressed', systemPrefersDark ? 'false' : 'true');
+        setTheme('light');
       }
-
-      // Always force-sync with OS if the OS theme changes, overriding any manual toggle.
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        setTheme(e.matches ? 'dark' : 'light');
-        try {
-          localStorage.removeItem('theme');
-        } catch {}
-      });
 
       // Toggle theme on button click.
       if (themeToggle) {
@@ -241,9 +226,7 @@ const jsonLd = {
 
         themeToggle.addEventListener('click', async (event) => {
           const currentTheme = document.documentElement.getAttribute('data-theme');
-          // If no data-theme is set, infer from system
-          const activeTheme = currentTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-          const newTheme = activeTheme === 'dark' ? 'light' : 'dark';
+          const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
           
           const switchTheme = () => {
             setTheme(newTheme);

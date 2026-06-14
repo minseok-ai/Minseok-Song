@@ -2,32 +2,32 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=Noto+Serif+KR:wght@300;400;500;600;700;900&display=swap");
 
 :root {
-  color-scheme: light dark;
-  --color-paper: #EBEAE4;
-  --color-paper-deep: #E1DFD8;
-  --color-ink: #2A2722;
-  --color-ink-soft: rgba(42, 39, 34, 0.75);
-  --color-ink-muted: rgba(42, 39, 34, 0.5);
-  --color-panel: rgba(240, 238, 230, 0.75);
-  --color-panel-solid: #EBEAE4;
-  --color-field: #E4E2DA;
+  color-scheme: dark;
+  --color-paper: #030407;
+  --color-paper-deep: #010102;
+  --color-ink: #f2f5f9;
+  --color-ink-soft: rgba(242, 245, 249, 0.72);
+  --color-ink-muted: rgba(242, 245, 249, 0.45);
+  --color-panel: rgba(8, 10, 15, 0.75);
+  --color-panel-solid: #0b0e14;
+  --color-field: #06080c;
   --color-ivory: #fafbfa;
   --color-ivory-soft: #e8eae9;
   --color-ink-on-light: #0d1117;
   --color-muted-on-light: rgba(13, 17, 23, 0.58);
-  --color-line: rgba(198, 164, 104, 0.15);
-  --color-line-strong: rgba(198, 164, 104, 0.3);
-  --color-line-dark: rgba(198, 164, 104, 0.08);
+  --color-line: rgba(255, 255, 255, 0.08);
+  --color-line-strong: rgba(255, 255, 255, 0.16);
+  --color-line-dark: rgba(13, 17, 23, 0.18);
   
-  --color-accent: #B38A4D;
-  --color-accent-ink: #8F6932;
-  --color-accent-soft: rgba(179, 138, 77, 0.15);
-  --color-accent-glow: rgba(179, 138, 77, 0.45);
+  --color-accent: #6b9cf2;
+  --color-accent-ink: #a6c4f9;
+  --color-accent-soft: rgba(107, 156, 242, 0.12);
+  --color-accent-glow: rgba(107, 156, 242, 0.45);
   
-  --color-warm: #dcb87d;
-  --rgb-warm: 220, 184, 125;
-  --color-warm-soft: rgba(220, 184, 125, 0.15);
-  --color-warm-glow: rgba(220, 184, 125, 0.45);
+  --color-warm: #6b9cf2;
+  --rgb-warm: 107, 156, 242;
+  --color-warm-soft: rgba(107, 156, 242, 0.15);
+  --color-warm-glow: rgba(107, 156, 242, 0.45);
   
   --color-green: #6ca37d;
   --color-green-soft: rgba(108, 163, 125, 0.15);
@@ -43,21 +43,19 @@
   
   --color-blue: #6b9cf2;
   
-  --header-glow: rgba(179, 138, 77, 0.12);
+  --header-glow: rgba(107, 156, 242, 0.08);
   
-  /* Light mode gradients */
   --body-bg-gradient:
-    radial-gradient(circle at top left, rgba(179, 138, 77, 0.08) 0%, transparent 45%),
-    radial-gradient(circle at bottom right, rgba(229, 196, 139, 0.06) 0%, transparent 45%),
-    radial-gradient(circle at 50% 50%, rgba(239, 182, 141, 0.04) 0%, transparent 60%);
+    radial-gradient(circle at top left, rgba(107, 156, 242, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at bottom right, rgba(179, 154, 251, 0.05) 0%, transparent 40%);
   --body-bg-veil:
-    linear-gradient(90deg, rgba(198, 164, 104, 0.03) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(198, 164, 104, 0.03) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
   
-  /* Light mode glass morphism */
-  --glass-bg: rgba(252, 250, 246, 0.65);
-  --glass-border: rgba(198, 164, 104, 0.25);
-  --glass-shadow: 0 8px 32px rgba(179, 138, 77, 0.06);
+  /* Glass morphism effects */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   --glass-blur: blur(20px);
   
   --font-sans:
@@ -82,44 +80,47 @@
   --header-height: 64px;
 }
 
-/* System Dark Mode */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --color-paper: #030407;
-    --color-paper-deep: #010102;
-    --color-ink: #f2f5f9;
-    --color-ink-soft: rgba(242, 245, 249, 0.72);
-    --color-ink-muted: rgba(242, 245, 249, 0.45);
-    --color-panel: rgba(8, 10, 15, 0.75);
-    --color-panel-solid: #0b0e14;
-    --color-field: #06080c;
-    --color-line: rgba(255, 255, 255, 0.08);
-    --color-line-strong: rgba(255, 255, 255, 0.16);
-    --color-line-dark: rgba(13, 17, 23, 0.18);
+/* Light mode support */
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    --color-paper: #EBEAE4;
+    --color-paper-deep: #E1DFD8;
+    --color-ink: #2A2722;
+    --color-ink-soft: rgba(42, 39, 34, 0.75);
+    --color-ink-muted: rgba(42, 39, 34, 0.5);
+    --color-panel: rgba(240, 238, 230, 0.75);
+    --color-panel-solid: #EBEAE4;
+    --color-field: #E4E2DA;
+    --color-line: rgba(198, 164, 104, 0.15);
+    --color-line-strong: rgba(198, 164, 104, 0.3);
+    --color-line-dark: rgba(198, 164, 104, 0.08);
     
-    --color-accent: #6b9cf2;
-    --color-accent-ink: #a6c4f9;
-    --color-accent-soft: rgba(107, 156, 242, 0.12);
-    --color-accent-glow: rgba(107, 156, 242, 0.45);
+    --color-accent: #B38A4D;
+    --color-accent-ink: #8F6932;
+    --color-accent-soft: rgba(179, 138, 77, 0.15);
+    --color-accent-glow: rgba(179, 138, 77, 0.45);
     
-    --color-warm: #6b9cf2;
-    --rgb-warm: 107, 156, 242;
-    --color-warm-soft: rgba(107, 156, 242, 0.15);
-    --color-warm-glow: rgba(107, 156, 242, 0.45);
+    --color-warm: #dcb87d;
+    --rgb-warm: 220, 184, 125;
+    --color-warm-soft: rgba(220, 184, 125, 0.15);
+    --color-warm-glow: rgba(220, 184, 125, 0.45);
     
-    --header-glow: rgba(107, 156, 242, 0.08);
+    --header-glow: rgba(179, 138, 77, 0.12);
     
+    /* Light mode gradients */
     --body-bg-gradient:
-      radial-gradient(circle at top left, rgba(107, 156, 242, 0.06) 0%, transparent 40%),
-      radial-gradient(circle at bottom right, rgba(179, 154, 251, 0.05) 0%, transparent 40%);
+      radial-gradient(circle at top left, rgba(179, 138, 77, 0.08) 0%, transparent 45%),
+      radial-gradient(circle at bottom right, rgba(229, 196, 139, 0.06) 0%, transparent 45%),
+      radial-gradient(circle at 50% 50%, rgba(239, 182, 141, 0.04) 0%, transparent 60%);
     --body-bg-veil:
-      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+      linear-gradient(90deg, rgba(198, 164, 104, 0.03) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(198, 164, 104, 0.03) 1px, transparent 1px);
     
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    /* Light mode glass morphism */
+    --glass-bg: rgba(252, 250, 246, 0.65);
+    --glass-border: rgba(198, 164, 104, 0.25);
+    --glass-shadow: 0 8px 32px rgba(179, 138, 77, 0.06);
   }
 }
 
@@ -150,7 +151,6 @@
   
   --header-glow: rgba(179, 138, 77, 0.12);
   
-  /* Light mode gradients */
   --body-bg-gradient:
     radial-gradient(circle at top left, rgba(179, 138, 77, 0.08) 0%, transparent 45%),
     radial-gradient(circle at bottom right, rgba(229, 196, 139, 0.06) 0%, transparent 45%),
@@ -159,7 +159,6 @@
     linear-gradient(90deg, rgba(198, 164, 104, 0.03) 1px, transparent 1px),
     linear-gradient(180deg, rgba(198, 164, 104, 0.03) 1px, transparent 1px);
   
-  /* Light mode glass morphism */
   --glass-bg: rgba(252, 250, 246, 0.65);
   --glass-border: rgba(198, 164, 104, 0.25);
   --glass-shadow: 0 8px 32px rgba(179, 138, 77, 0.06);
