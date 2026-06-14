@@ -309,6 +309,8 @@ const createCapabilityRadarChart = (scores) => {
         if (typeof iframe.contentWindow.switchThemeUI === 'function') {
           syncRetries = 0;
           const parentTheme =
+            (typeof window.__getResolvedSiteTheme === 'function' && window.__getResolvedSiteTheme()) ||
+            document.documentElement.dataset.resolvedTheme ||
             document.documentElement.getAttribute('data-theme') ||
             (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
           const targetTheme = parentTheme === 'light' ? 'nnfc' : 'mckinsey';
@@ -338,13 +340,18 @@ const createCapabilityRadarChart = (scores) => {
     }
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'data-theme') {
+        if (mutation.attributeName === 'data-theme' || mutation.attributeName === 'data-resolved-theme') {
           syncIframeTheme();
         }
       });
     });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-resolved-theme'] });
     window.__iframeThemeObserver = observer;
+
+    if (!window.__projectPreviewThemeEventBound) {
+      window.addEventListener('site-theme-change', syncIframeTheme);
+      window.__projectPreviewThemeEventBound = true;
+    }
   }
 
   initProjectCards();

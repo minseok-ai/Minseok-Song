@@ -49,34 +49,27 @@ const jsonLd = {
     <script is:inline>
       (() => {
         const root = document.documentElement;
-        const sessionKey = "theme-override";
-        const legacyKey = "theme";
-        const systemThemeQuery = "(prefers-color-scheme: dark)";
-        const darkQuery = window.matchMedia(systemThemeQuery);
-        const isSamsungBrowser = /SamsungBrowser/i.test(navigator.userAgent);
+        const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+        let savedTheme = null;
 
         try {
-          sessionStorage.removeItem(sessionKey);
-          localStorage.removeItem(legacyKey);
+          const value = localStorage.getItem("theme");
+          savedTheme = value === "light" || value === "dark" ? value : null;
         } catch {}
 
-        const systemTheme = darkQuery.matches ? "dark" : "light";
-        if (isSamsungBrowser) {
-          root.setAttribute("data-theme-source", "samsung-system");
-          if (systemTheme === "dark") {
-            root.setAttribute("data-theme", "dark");
-          } else {
-            root.removeAttribute("data-theme");
-          }
+        const resolvedTheme = savedTheme || (darkQuery.matches ? "dark" : "light");
+        root.dataset.themeMode = savedTheme ? "manual" : "system";
+        root.dataset.resolvedTheme = resolvedTheme;
+        if (savedTheme) {
+          root.setAttribute("data-theme", resolvedTheme);
         } else {
           root.removeAttribute("data-theme");
-          root.removeAttribute("data-theme-source");
         }
-        root.style.colorScheme = "";
+        root.style.colorScheme = resolvedTheme === "dark" ? "only dark" : "only light";
 
         const metaThemeColor = document.getElementById("theme-color");
         if (metaThemeColor) {
-          metaThemeColor.setAttribute("content", systemTheme === "dark" ? "#030407" : "#EBEAE4");
+          metaThemeColor.setAttribute("content", resolvedTheme === "dark" ? "#030407" : "#EBEAE4");
         }
       })();
     </script>
@@ -300,33 +293,36 @@ const jsonLd = {
         }, 180);
       });
 
-      // Theme toggle functionality
       const themeToggle = document.getElementById('theme-toggle');
       const systemThemeQuery = '(prefers-color-scheme: dark)';
       const themeMedia = window.matchMedia(systemThemeQuery);
-      const themeSessionKey = 'theme-override';
-      const legacyThemeKey = 'theme';
-      const isSamsungBrowser = /SamsungBrowser/i.test(navigator.userAgent);
-      const samsungSystemSource = 'samsung-system';
-      const samsungResyncKey = 'samsung-theme-resync-at';
-      const readSystemTheme = (scope = window) => (
-        scope.matchMedia?.(systemThemeQuery).matches ? 'dark' : 'light'
-      );
-      const getSystemTheme = () => readSystemTheme();
-      let lastKnownSystemTheme = getSystemTheme();
-      let lastSamsungBlurAt = 0;
-      let samsungProbePending = null;
+      const themeStorageKey = 'theme';
+      const root = document.documentElement;
 
-      const clearStoredTheme = () => {
-        try { sessionStorage.removeItem(themeSessionKey); } catch {}
-        try { localStorage.removeItem(legacyThemeKey); } catch {}
+      const readSavedTheme = () => {
+        try {
+          const value = localStorage.getItem(themeStorageKey);
+          return value === 'light' || value === 'dark' ? value : null;
+        } catch {
+          return null;
+        }
       };
 
-      const getThemeSource = () => document.documentElement.getAttribute('data-theme-source');
+      const saveManualTheme = (theme) => {
+        try {
+          localStorage.setItem(themeStorageKey, theme);
+        } catch {}
+      };
 
-      const getEffectiveTheme = () => (
-        document.documentElement.getAttribute('data-theme') || getSystemTheme()
-      );
+      const clearSavedTheme = () => {
+        try {
+          localStorage.removeItem(themeStorageKey);
+        } catch {}
+      };
+
+      const getSystemTheme = () => themeMedia.matches ? 'dark' : 'light';
+      const getThemeMode = () => root.dataset.themeMode === 'manual' ? 'manual' : 'system';
+      const getEffectiveTheme = () => root.dataset.resolvedTheme || readSavedTheme() || getSystemTheme();
 
       const updateThemeChrome = (theme = getEffectiveTheme()) => {
         themeToggle?.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
@@ -338,196 +334,62 @@ const jsonLd = {
         }
       };
 
-      const applySystemTheme = (resolvedTheme = getSystemTheme()) => {
-        clearStoredTheme();
-        if (isSamsungBrowser) {
-          document.documentElement.setAttribute('data-theme-source', samsungSystemSource);
-          if (resolvedTheme === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-          } else {
-            document.documentElement.removeAttribute('data-theme');
-          }
+      const publishThemeChange = (theme) => {
+        window.__getResolvedSiteTheme = () => getEffectiveTheme();
+        window.dispatchEvent(new CustomEvent('site-theme-change', {
+          detail: { theme, mode: getThemeMode() }
+        }));
+      };
+
+      const applyTheme = (theme, mode) => {
+        root.dataset.themeMode = mode;
+        root.dataset.resolvedTheme = theme;
+
+        if (mode === 'manual') {
+          root.setAttribute('data-theme', theme);
         } else {
-          document.documentElement.removeAttribute('data-theme');
-          document.documentElement.removeAttribute('data-theme-source');
+          root.removeAttribute('data-theme');
         }
-        document.documentElement.style.colorScheme = '';
-        updateThemeChrome(resolvedTheme);
-      };
 
-      const setManualTheme = (theme) => {
-        clearStoredTheme();
-        document.documentElement.setAttribute('data-theme', theme);
-        document.documentElement.setAttribute('data-theme-source', 'manual');
-        document.documentElement.style.colorScheme = '';
+        root.style.colorScheme = theme === 'dark' ? 'only dark' : 'only light';
         updateThemeChrome(theme);
+        publishThemeChange(theme);
       };
 
-      applySystemTheme();
-
-      // Live sync with OS
-      const syncWithSystem = (e) => {
-        const systemTheme = e?.matches ? 'dark' : getSystemTheme();
-        lastKnownSystemTheme = systemTheme;
-        applySystemTheme(systemTheme);
+      const applySavedOrSystemTheme = () => {
+        const savedTheme = readSavedTheme();
+        applyTheme(savedTheme || getSystemTheme(), savedTheme ? 'manual' : 'system');
       };
 
-      const reconcileSystemTheme = () => {
-        const systemTheme = getSystemTheme();
-        const systemChanged = systemTheme !== lastKnownSystemTheme;
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const themeSource = getThemeSource();
-        const samsungSystemNeedsSync =
-          isSamsungBrowser && (
-            themeSource !== samsungSystemSource ||
-            systemTheme === 'dark' && currentTheme !== 'dark' ||
-            systemTheme === 'light' && Boolean(currentTheme)
-          );
-        lastKnownSystemTheme = systemTheme;
-
-        if (
-          systemChanged ||
-          themeSource !== 'manual' && (
-            !isSamsungBrowser && !currentTheme ||
-            samsungSystemNeedsSync
-          )
-        ) {
-          applySystemTheme();
+      const setPreferredTheme = (theme) => {
+        if (theme === getSystemTheme()) {
+          clearSavedTheme();
+          applyTheme(theme, 'system');
+          return;
         }
+
+        saveManualTheme(theme);
+        applyTheme(theme, 'manual');
       };
 
-      const probeSamsungSystemTheme = () => {
-        if (!isSamsungBrowser) return Promise.resolve(getSystemTheme());
-        if (samsungProbePending) return samsungProbePending;
+      applySavedOrSystemTheme();
 
-        samsungProbePending = new Promise((resolve) => {
-          const iframe = document.createElement('iframe');
-          let settled = false;
-
-          const finish = () => {
-            if (settled) return;
-            settled = true;
-
-            let probedTheme = getSystemTheme();
-            try {
-              probedTheme = readSystemTheme(iframe.contentWindow);
-            } catch {}
-
-            iframe.remove();
-            samsungProbePending = null;
-            resolve(probedTheme);
-          };
-
-          iframe.setAttribute('aria-hidden', 'true');
-          iframe.tabIndex = -1;
-          Object.assign(iframe.style, {
-            position: 'absolute',
-            width: '0',
-            height: '0',
-            border: '0',
-            opacity: '0',
-            pointerEvents: 'none'
-          });
-          iframe.onload = () => requestAnimationFrame(finish);
-          iframe.srcdoc = '<!doctype html><meta name="color-scheme" content="light dark">';
-          document.documentElement.appendChild(iframe);
-          window.setTimeout(finish, 160);
-        });
-
-        return samsungProbePending;
+      const syncWithSystem = (event) => {
+        if (getThemeMode() === 'manual') return;
+        applyTheme(event.matches ? 'dark' : 'light', 'system');
       };
 
-      const refreshSamsungSystemTheme = () => {
-        if (!isSamsungBrowser || getThemeSource() === 'manual') return;
-
-        probeSamsungSystemTheme().then((probedTheme) => {
-          if (getThemeSource() === 'manual') return;
-
-          const currentTheme = document.documentElement.getAttribute('data-theme');
-          const themeSource = getThemeSource();
-          const shouldApply =
-            probedTheme !== lastKnownSystemTheme ||
-            probedTheme === 'dark' && currentTheme !== 'dark' ||
-            probedTheme === 'light' && currentTheme ||
-            themeSource !== samsungSystemSource;
-
-          lastKnownSystemTheme = probedTheme;
-          if (shouldApply) {
-            applySystemTheme(probedTheme);
-          }
-        });
-      };
-
-      const resyncSamsungSystemTheme = () => {
-        if (!isSamsungBrowser || getThemeSource() === 'manual') return;
-        const beforeTheme = getEffectiveTheme();
-
-        window.setTimeout(() => {
-          if (document.visibilityState === 'hidden' || getThemeSource() === 'manual') return;
-
-          reconcileSystemTheme();
-          refreshSamsungSystemTheme();
-
-          const currentTheme = getEffectiveTheme();
-          const blurElapsed = Date.now() - lastSamsungBlurAt;
-          if (!lastSamsungBlurAt || beforeTheme !== 'light' || currentTheme !== 'light' || blurElapsed < 600) return;
-
-          try {
-            const lastReloadAt = Number(sessionStorage.getItem(samsungResyncKey) || '0');
-            const now = Date.now();
-            if (now - lastReloadAt < 30000) return;
-            sessionStorage.setItem(samsungResyncKey, String(now));
-          } catch {
-            return;
-          }
-
-          window.location.reload();
-        }, 700);
-      };
-      
       if (typeof themeMedia.addEventListener === 'function') {
         themeMedia.addEventListener('change', syncWithSystem);
       } else if (typeof themeMedia.addListener === 'function') {
         themeMedia.addListener(syncWithSystem);
       }
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') {
-          reconcileSystemTheme();
-          refreshSamsungSystemTheme();
-          resyncSamsungSystemTheme();
-        } else if (isSamsungBrowser) {
-          lastSamsungBlurAt = Date.now();
+      window.addEventListener('storage', (event) => {
+        if (event.key === themeStorageKey) {
+          applySavedOrSystemTheme();
         }
       });
-      window.addEventListener('blur', () => {
-        if (isSamsungBrowser) {
-          lastSamsungBlurAt = Date.now();
-        }
-      });
-      window.addEventListener('focus', () => {
-        reconcileSystemTheme();
-        refreshSamsungSystemTheme();
-        resyncSamsungSystemTheme();
-      });
-      window.addEventListener('pageshow', () => {
-        reconcileSystemTheme();
-        refreshSamsungSystemTheme();
-        resyncSamsungSystemTheme();
-      });
-      window.addEventListener('resize', () => {
-        reconcileSystemTheme();
-        refreshSamsungSystemTheme();
-      });
-      window.addEventListener('orientationchange', () => {
-        reconcileSystemTheme();
-        refreshSamsungSystemTheme();
-      });
-      window.setInterval(() => {
-        reconcileSystemTheme();
-        refreshSamsungSystemTheme();
-      }, 750);
 
-      // Toggle theme on button click.
       if (themeToggle) {
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -536,7 +398,7 @@ const jsonLd = {
           const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
           
           const switchTheme = () => {
-            setManualTheme(newTheme);
+            setPreferredTheme(newTheme);
           };
 
           if (!document.startViewTransition || reducedMotion.matches) {
