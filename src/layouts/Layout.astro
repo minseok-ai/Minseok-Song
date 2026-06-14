@@ -43,7 +43,8 @@ const jsonLd = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#050505" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#030407" />
     <link rel="icon" type="image/png" href={`/A1Firm-logo_light.png?v=${faviconVersion}`} media="(prefers-color-scheme: light)" />
     <link rel="icon" type="image/png" href={`/A1Firm-logo.png?v=${faviconVersion}`} media="(prefers-color-scheme: dark)" />
     <link rel="apple-touch-icon" href={`/A1Firm-logo.png?v=${faviconVersion}`} />
@@ -196,29 +197,40 @@ const jsonLd = {
       // Theme toggle functionality
       const themeToggle = document.getElementById('theme-toggle');
       
-      // Check for saved theme preference or system preference.
-      const savedTheme = (() => {
-        try {
-          return localStorage.getItem('theme');
-        } catch {
-          return null;
-        }
-      })();
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const getSystemTheme = () => window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       
       const setTheme = (theme) => {
         document.documentElement.setAttribute('data-theme', theme);
         themeToggle?.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
+        
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        if (metaThemeColor) {
+          metaThemeColor.setAttribute('content', theme === 'dark' ? '#030407' : '#EBEAE4');
+        }
       };
 
-      // Set initial theme.
+      const savedTheme = (() => {
+        try { return localStorage.getItem('theme'); } catch { return null; }
+      })();
+      
       if (savedTheme) {
         setTheme(savedTheme);
-      } else if (systemPrefersDark) {
-        setTheme('dark');
       } else {
-        setTheme('light');
+        setTheme(getSystemTheme());
       }
+
+      // Live sync with OS
+      const syncWithSystem = (e) => {
+        setTheme(e.matches ? 'dark' : 'light');
+        try { localStorage.removeItem('theme'); } catch {}
+      };
+      
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', syncWithSystem);
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && !localStorage.getItem('theme')) {
+          setTheme(getSystemTheme());
+        }
+      });
 
       // Toggle theme on button click.
       if (themeToggle) {
