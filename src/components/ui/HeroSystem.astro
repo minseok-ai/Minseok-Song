@@ -55,11 +55,11 @@ const telemetryNodes = [
 
   <div class="hero-copy-panel fade-in-up">
     <p class="micro-label">Minseok Song / A1 Firms</p>
-    <h1>
+    <h1 class="hero-title">
       Hello, I bridge<br/>
-      cognitive strategy<br/>
-      &amp;<br/>
-      <span class="h1-highlight">proactive execution.</span>
+      <span class="nowrap">cognitive&nbsp;strategy</span>
+      <span class="ampersand-wrap">&amp;</span>
+      <span class="h1-highlight nowrap">proactive&nbsp;execution.</span>
     </h1>
     <p class="hero-desc">
       The foundational operating layer fusing cognitive strategy with physical edge robotics. I engineer the autonomous core for next-generation enterprises.
@@ -207,31 +207,73 @@ const telemetryNodes = [
     grid-row: 1;
   }
 
-  .hero-copy-panel h1 {
-    margin: 12px 0 20px;
-    font-size: clamp(2.8rem, 4.8vw, 5.2rem);
+  .hero-copy-panel .hero-title {
+    margin: 12px 0 24px;
+    font-size: clamp(1.2rem, 7.5vw, 4.2rem);
     font-weight: 400;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
+    font-style: normal;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
     font-family: "Noto Serif KR", "Noto Serif", serif;
-    color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+    color: color-mix(in srgb, var(--color-ink) 70%, transparent);
     word-break: keep-all;
+    text-wrap: balance;
+  }
+
+  .nowrap {
+    white-space: nowrap;
+  }
+
+  .ampersand-wrap {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    font-family: inherit;
+    font-weight: 400;
+    font-style: normal;
+    color: color-mix(in srgb, var(--color-ink) 45%, transparent);
+    margin: 0.35em 0 0.05em;
+    line-height: 1;
+    font-size: 0.85em;
+  }
+
+  .ampersand-wrap::after {
+    content: "";
+    display: block;
+    width: 8.5em;
+    height: 1.5px;
+    background-color: color-mix(in srgb, var(--color-ink) 8%, transparent);
+    background-image: linear-gradient(90deg, 
+      transparent, 
+      var(--color-accent), 
+      transparent
+    );
+    background-size: 35% 100%;
+    background-repeat: no-repeat;
+    animation: ampersandPulse 3.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.85;
+    border-radius: 1px;
+  }
+
+  @keyframes ampersandPulse {
+    0% { background-position: -50% 0; }
+    60%, 100% { background-position: 150% 0; }
   }
 
   .h1-highlight {
     display: inline-block;
     font-weight: 600;
+    font-style: normal;
     background: linear-gradient(135deg, var(--color-ink) 20%, var(--color-ink-soft) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    letter-spacing: -0.04em;
-    padding-bottom: 0.15em;
-    margin-bottom: -0.15em;
-    margin-top: 0.05em;
+    letter-spacing: -0.03em;
+    padding-bottom: 0.1em;
+    margin-bottom: -0.1em;
     transition: filter var(--motion-base) ease;
   }
 
-  .hero-copy-panel h1:hover .h1-highlight {
+  .hero-copy-panel .hero-title:hover .h1-highlight {
     filter: drop-shadow(0 0 16px rgba(var(--rgb-warm), 0.4));
   }
 
@@ -239,7 +281,7 @@ const telemetryNodes = [
     max-width: 580px;
     margin: 0;
     color: var(--color-ink-soft);
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1.6;
     letter-spacing: 0.01em;
     font-weight: 400;
@@ -250,7 +292,7 @@ const telemetryNodes = [
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
-    margin-top: 16px;
+    margin-top: 26px;
   }
 
   .primary-action,

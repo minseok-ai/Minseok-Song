@@ -5,6 +5,7 @@ import "../styles/tokens.css";
 import { visibleNavigationItems } from "../config/navigation";
 import { siteConfig } from "../config/site";
 import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 import A1Chan from "../features/a1-chan/A1Chan.astro";
 
 const session = await getSession(Astro.request);
@@ -96,6 +97,7 @@ const jsonLd = {
   </head>
   <body>
     <Analytics />
+    <SpeedInsights />
     <div class="site-shell">
       <header class="site-header">
         <a class="brand-lockup" href="/" aria-label="Minseok Song home">
