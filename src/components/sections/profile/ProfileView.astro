@@ -317,20 +317,24 @@ const timelineEvents = experienceTimelineBlock
 
     let isDragging = false;
     let lastMouseX = 0, lastMouseY = 0;
+    let activePointerId = null;
     const maxRotX = 0.35, maxRotY = 0.5;
 
     latticeWrapper.style.cursor = 'grab';
 
-    latticeWrapper.addEventListener('mousedown', (e) => {
+    const startDrag = (e) => {
       isDragging = true;
+      activePointerId = e.pointerId;
       lastMouseX = e.clientX;
       lastMouseY = e.clientY;
       latticeWrapper.style.cursor = 'grabbing';
-      e.preventDefault(); // Prevent text selection while dragging
-    });
+      latticeWrapper.setPointerCapture?.(e.pointerId);
+      e.preventDefault();
+    };
 
-    window.addEventListener('mousemove', (e) => {
+    const moveDrag = (e) => {
       if (!isDragging) return;
+      if (activePointerId !== null && e.pointerId !== activePointerId) return;
       
       const deltaX = e.clientX - lastMouseX;
       const deltaY = e.clientY - lastMouseY;
@@ -345,12 +349,21 @@ const timelineEvents = experienceTimelineBlock
       
       lastMouseX = e.clientX;
       lastMouseY = e.clientY;
-    });
+      e.preventDefault();
+    };
 
-    window.addEventListener('mouseup', () => {
+    const endDrag = (e) => {
+      if (activePointerId !== null && e.pointerId !== activePointerId) return;
       isDragging = false;
+      activePointerId = null;
       latticeWrapper.style.cursor = 'grab';
-    });
+      latticeWrapper.releasePointerCapture?.(e.pointerId);
+    };
+
+    latticeWrapper.addEventListener('pointerdown', startDrag);
+    window.addEventListener('pointermove', moveDrag, { passive: false });
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
 
     const FL = 800;
     function renderLoop() {
@@ -680,6 +693,7 @@ const timelineEvents = experienceTimelineBlock
     display: flex;
     align-items: center;
     justify-content: center;
+    touch-action: none;
   }
 
   .ra1-thm-chip .chip-dot {
@@ -786,6 +800,24 @@ const timelineEvents = experienceTimelineBlock
   }
 
   @media (max-width: 768px) {
+    .about-statement.card-view {
+      padding: 34px 28px 38px;
+    }
+
+    .lattice-interaction-area {
+      min-height: clamp(180px, 56vw, 230px);
+      margin-inline: -10px;
+    }
+
+    .about-statement svg {
+      width: min(112%, 360px);
+      max-width: none;
+    }
+
+    .about-intro-section {
+      margin-top: -92px;
+    }
+
     .intro-card.card-view {
       padding: 32px 24px;
     }

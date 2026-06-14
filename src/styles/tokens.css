@@ -212,10 +212,14 @@ body, .site-header, .panel, button, input, textarea, select, a, svg, circle, lin
 
 html {
   min-width: 320px;
+  max-width: 100%;
+  overflow-x: clip;
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
   text-rendering: geometricPrecision;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
@@ -223,6 +227,8 @@ html {
 
 body {
   margin: 0;
+  max-width: 100%;
+  overflow-x: clip;
   min-height: 100vh;
   background-color: var(--color-paper);
   background-image: var(--body-bg-gradient);
