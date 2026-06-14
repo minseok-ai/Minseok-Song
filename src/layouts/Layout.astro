@@ -226,6 +226,13 @@ const jsonLd = {
         setTheme('light');
       }
 
+      // Listen for system theme changes.
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+          setTheme(e.matches ? 'dark' : 'light');
+        }
+      });
+
       // Toggle theme on button click.
       if (themeToggle) {
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -237,7 +244,16 @@ const jsonLd = {
           const switchTheme = () => {
             setTheme(newTheme);
             try {
-              localStorage.setItem('theme', newTheme);
+              const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+              const systemTheme = systemDark ? 'dark' : 'light';
+              
+              if (newTheme === systemTheme) {
+                // If user toggles back to system preference, remove manual override
+                localStorage.removeItem('theme');
+              } else {
+                // Save manual override
+                localStorage.setItem('theme', newTheme);
+              }
             } catch {}
           };
 
