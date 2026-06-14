@@ -43,7 +43,8 @@ const jsonLd = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="color-scheme" content="light dark" />
+    <!-- Theme still follows prefers-color-scheme; only light prevents mobile UA auto-dark repaint. -->
+    <meta name="color-scheme" content="only light" />
     <meta name="theme-color" content="#030407" id="theme-color" />
     <script is:inline>
       (() => {
@@ -64,7 +65,8 @@ const jsonLd = {
         const theme = sessionTheme || systemTheme;
         root.setAttribute("data-theme", theme);
         root.setAttribute("data-theme-source", sessionTheme ? "manual" : "system");
-        root.style.colorScheme = theme;
+        // Visual theme comes from data-theme tokens; this only disables browser auto-dark overrides.
+        root.style.colorScheme = "only light";
 
         const metaThemeColor = document.getElementById("theme-color");
         if (metaThemeColor) {
@@ -257,7 +259,7 @@ const jsonLd = {
       const setTheme = (theme, source = 'system') => {
         document.documentElement.setAttribute('data-theme', theme);
         document.documentElement.setAttribute('data-theme-source', source);
-        document.documentElement.style.colorScheme = theme;
+        document.documentElement.style.colorScheme = 'only light';
         themeToggle?.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
         themeToggle?.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
         
