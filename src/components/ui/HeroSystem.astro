@@ -940,6 +940,42 @@ const telemetryNodes = [
       font-size: 15.5px;
     }
 
+    .hero-brief {
+      padding: 26px 22px 28px;
+    }
+
+    .telemetry-bar {
+      padding: 14px 12px;
+      border-radius: 14px;
+    }
+
+    .telemetry-pipeline {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .telemetry-pipeline .telemetry-node {
+      width: 100%;
+      min-width: 0;
+      padding: 9px 6px;
+      gap: 5px;
+    }
+
+    .telemetry-pipeline .telemetry-label {
+      min-width: 0;
+      font-size: 8.5px;
+      letter-spacing: 0.02em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .telemetry-log {
+      font-size: 7.5px;
+      gap: 6px;
+      letter-spacing: 0.08em;
+    }
+
     .hero-actions {
       flex-direction: column;
       width: 100%;
