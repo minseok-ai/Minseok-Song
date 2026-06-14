@@ -14,7 +14,7 @@
   },
   "blocks": [
     {
-      "id": "a1-firms-placeholder",
+      "id": "a1-firms-product-direction",
       "type": "text",
       "title": "Product direction",
       "body": "A1 Firms is the public product and operating thesis around A1trategize. The app itself is operated as a separate service at a1trategize.com, while this site explains the product context, work, and writing around it.",

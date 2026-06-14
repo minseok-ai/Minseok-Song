@@ -201,7 +201,7 @@ export const projectSchema = z.object({
     alt: z.string().default("")
   }).optional(),
   visual: z.enum(["graph", "deck", "console", "paper", "blank"]).default("blank"),
-  pentaPoint: z.tuple([
+  capabilityScores: z.tuple([
     z.number().min(0).max(100),
     z.number().min(0).max(100),
     z.number().min(0).max(100),

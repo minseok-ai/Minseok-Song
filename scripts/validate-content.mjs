@@ -115,11 +115,11 @@ function validateProject(fileName) {
   assert(Number.isInteger(project.order), `${fileName}: order must be an integer`);
   assert(Array.isArray(project.tags), `${fileName}: tags must be an array`);
   assert(allowedProjectVisuals.has(project.visual ?? "blank"), `${fileName}: invalid visual`);
-  assert(Array.isArray(project.pentaPoint), `${fileName}: pentaPoint must be an array`);
-  assert(project.pentaPoint.length === 5, `${fileName}: pentaPoint must have 5 values`);
+  assert(Array.isArray(project.capabilityScores), `${fileName}: capabilityScores must be an array`);
+  assert(project.capabilityScores.length === 5, `${fileName}: capabilityScores must have 5 values`);
 
-  for (const [index, value] of project.pentaPoint.entries()) {
-    assert(typeof value === "number" && value >= 0 && value <= 100, `${fileName}: pentaPoint[${index}] must be 0-100`);
+  for (const [index, value] of project.capabilityScores.entries()) {
+    assert(typeof value === "number" && value >= 0 && value <= 100, `${fileName}: capabilityScores[${index}] must be 0-100`);
   }
 
   for (const [index, link] of (project.links ?? []).entries()) {

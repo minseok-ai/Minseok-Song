@@ -6,10 +6,10 @@ const { writing, slug } = Astro.props as {
   slug: string;
 };
 
-const fallbackBlocks: WritingBlock[] = writing.body
+const bodyFallbackBlocks: WritingBlock[] = writing.body
   ? [
       {
-        id: "legacy-body",
+        id: "body-fallback",
         type: "paragraph",
         hidden: false,
         variant: "body",
@@ -18,7 +18,7 @@ const fallbackBlocks: WritingBlock[] = writing.body
     ]
   : [];
 
-const visibleBlocks = (writing.blocks?.length ? writing.blocks : fallbackBlocks).filter(
+const visibleBlocks = (writing.blocks?.length ? writing.blocks : bodyFallbackBlocks).filter(
   (block) => !block.hidden
 );
 

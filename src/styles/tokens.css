@@ -411,34 +411,37 @@ select {
 
 .login-link {
   display: inline-flex;
-  gap: 7px;
+  gap: 8px;
   align-items: center;
-  min-height: 30px;
-  padding: 0 10px 0 5px;
-  border: 1px solid var(--glass-border);
+  min-height: 32px;
+  padding: 0 14px 0 10px;
+  border: 1px solid color-mix(in srgb, var(--color-line) 50%, transparent);
   border-radius: 999px;
-  color: var(--color-ink-soft);
+  color: var(--color-ink);
+  background: var(--glass-bg);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px) saturate(140%);
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 850;
+  letter-spacing: 0.02em;
   line-height: 1;
   text-decoration: none;
   text-transform: uppercase;
-  transition:
-    border-color var(--motion-fast) ease,
-    color var(--motion-fast) ease,
-    background var(--motion-fast) ease;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .login-link picture {
   display: block;
-  width: 21px;
-  height: 21px;
+  width: 16px;
+  height: 16px;
 }
 
 .utility-logo {
   display: block;
-  width: 21px;
-  height: 21px;
+  width: 16px;
+  height: 16px;
   object-fit: contain;
   opacity: 0.92;
 }
@@ -446,7 +449,11 @@ select {
 .login-link:hover {
   border-color: var(--color-accent);
   color: var(--color-ink);
-  background: var(--color-accent-soft);
+  background: color-mix(in srgb, var(--color-accent-soft) 80%, transparent);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
 }
 
 .numbered-nav {
@@ -574,31 +581,41 @@ select {
 
 .header-utility .login-link {
   display: inline-flex;
-  gap: 7px;
+  gap: 8px;
   align-items: center;
-  min-height: 30px;
-  padding: 0 10px 0 5px;
-  border: 1px solid var(--glass-border);
+  min-height: 32px;
+  padding: 0 14px 0 10px;
+  border: 1px solid color-mix(in srgb, var(--color-line) 50%, transparent);
   border-radius: 999px;
-  color: var(--color-ink-soft);
+  color: var(--color-ink);
+  background: var(--glass-bg);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px) saturate(140%);
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 850;
+  letter-spacing: 0.02em;
   line-height: 1;
   text-decoration: none;
   text-transform: uppercase;
-  transition: all var(--motion-fast) ease;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .header-utility .login-link:hover {
   border-color: var(--color-accent);
   color: var(--color-ink);
-  background: var(--color-accent-soft);
+  background: color-mix(in srgb, var(--color-accent-soft) 80%, transparent);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
 }
 
 .header-utility .utility-logo {
   display: block;
-  width: 21px;
-  height: 21px;
+  width: 16px;
+  height: 16px;
   object-fit: contain;
   opacity: 0.92;
 }

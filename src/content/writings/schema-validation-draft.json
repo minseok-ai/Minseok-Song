@@ -1,0 +1,10 @@
+{
+  "title": "Writing Schema Validation Draft",
+  "summary": "Hidden draft entry retained to exercise the writing content schema.",
+  "order": 1,
+  "status": "draft",
+  "hidden": true,
+  "date": "2026-06-07",
+  "tags": ["System"],
+  "body": "This hidden draft keeps the writing content contract represented in versioned content."
+}

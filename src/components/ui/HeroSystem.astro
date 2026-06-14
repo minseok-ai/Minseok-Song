@@ -1,5 +1,35 @@
 ---
+import { projectEntries } from "../../lib/content/registry";
+
 const { a1Firms, focusStats, siteConfig } = Astro.props;
+
+const a1trategize = projectEntries.find(p => p.id === "a1trategize")?.data;
+const a1ntuitize = projectEntries.find(p => p.id === "a1ntuitize")?.data;
+const ra1 = projectEntries.find(p => p.id === "ra1")?.data;
+
+const telemetryNodes = [
+  { 
+    id: 'a1trategize', 
+    label: 'A1trategize', 
+    tone: 'tone-blue', 
+    status: a1trategize?.tags?.includes("Launched") ? 'LAUNCHED' : 'PENDING', 
+    desc: 'Automates consulting reports via intent-based LLM routing.'
+  },
+  { 
+    id: 'a1ntuitize', 
+    label: 'A1ntuitize', 
+    tone: 'tone-coral', 
+    status: a1ntuitize?.tags?.includes("Pending") ? 'PENDING' : 'ACTIVE', 
+    desc: '3D vision memory engine modeling human intuition.'
+  },
+  { 
+    id: 'ra1', 
+    label: 'RA1', 
+    tone: 'tone-purple', 
+    status: ra1?.tags?.includes("Pending") ? 'PENDING' : 'ACTIVE', 
+    desc: 'Physics-inspired edge robotics control system.'
+  }
+];
 ---
 
 <section class="hero-system" aria-label="A1 Firms overview">
@@ -26,18 +56,18 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
   <div class="hero-copy-panel fade-in-up">
     <p class="micro-label">Minseok Song / A1 Firms</p>
     <h1>
-      Strategy systems for <span>AI-native firms.</span>
+      Hello, I bridge<br/>
+      cognitive strategy &<br/>
+      <span class="h1-highlight">proactive execution.</span>
     </h1>
-    <p>
-      A public operating layer for A1trategize, selected work, field notes,
-      and the strategic intelligence loop behind them.
+    <p class="hero-desc">
+      The foundational operating layer fusing cognitive strategy with physical edge robotics. I engineer the autonomous core for next-generation enterprises.
     </p>
     <div class="hero-actions" aria-label="Primary actions">
-      <a class="primary-action" href={siteConfig.a1FirmPath}>Open A1trategize</a>
-      <a class="secondary-action" href="#surfaces">
-        Explore surfaces
+      <a class="primary-action" href="#surfaces">
+        Discover the system
         <svg class="arrow-shifted" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </a>
     </div>
@@ -48,62 +78,72 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     <div class="brief-content">
       <div class="focus-title-wrap">
         <p class="micro-label">Current focus</p>
-        <span class="live-indicator">
-          <span class="indicator-dot"></span>
-          Live
-        </span>
+        <div class="focus-badges">
+          <!-- Site Assistant Chip (Minimal) -->
+          <div class="site-assistant-minimal telemetry-node active tone-accent group">
+            <span class="telemetry-dot"></span>
+            <span class="telemetry-label">A1 Chan <span class="mvp-text">MVP</span></span>
+            
+            <div class="telemetry-tooltip">
+              <div class="tooltip-header">
+                <span class="tooltip-title">A1 Chan</span>
+                <span class="tooltip-badge badge-active">CHROME 127+</span>
+              </div>
+              <p class="tooltip-desc">
+                Local SLM powered by Chrome Built-in AI. Ensures privacy-first, offline conversational routing.
+              </p>
+            </div>
+          </div>
+          
+          <span class="live-indicator">
+            <span class="indicator-dot"></span>
+            Live
+          </span>
+        </div>
       </div>
       <h2>{a1Firms?.hero?.title ?? "A1trategize"}</h2>
-      <p>
-        The working product remains separate. This site explains the context,
-        proof, writing, and product memory around it.
+      <p class="ecosystem-desc">
+        A unified intelligence architecture fusing cognitive strategy, spatial intuition, and physical execution into a seamless flow.
       </p>
 
       <!-- Multi-LLM Routing Telemetry -->
       <div class="telemetry-bar">
         <div class="telemetry-pipeline">
-          <div class="telemetry-node active tone-accent">
-            <span class="telemetry-dot"></span>
-            <span class="telemetry-label">solar-pro</span>
-          </div>
-          <span class="telemetry-arrow" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-          </span>
-          <div class="telemetry-node active tone-blue">
-            <span class="telemetry-dot"></span>
-            <span class="telemetry-label">sonar-pro</span>
-          </div>
-          <span class="telemetry-arrow" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-          </span>
-          <div class="telemetry-node active tone-coral">
-            <span class="telemetry-dot"></span>
-            <span class="telemetry-label">gemini-pro</span>
-          </div>
-          <span class="telemetry-arrow" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-          </span>
-          <div class="telemetry-node active tone-purple">
-            <span class="telemetry-dot"></span>
-            <span class="telemetry-label">deepseek-v4</span>
-          </div>
+          {telemetryNodes.map((node) => (
+            <div class:list={["telemetry-node active group", node.tone]}>
+              <span class="telemetry-dot"></span>
+              <span class="telemetry-label">{node.label}</span>
+              
+              <div class="telemetry-tooltip">
+                <div class="tooltip-header">
+                  <span class="tooltip-title">{node.label}</span>
+                  <span class:list={["tooltip-badge", `badge-${node.status.toLowerCase()}`]}>{node.status}</span>
+                </div>
+                <p class="tooltip-desc">{node.desc}</p>
+              </div>
+            </div>
+          ))}
         </div>
         <div class="telemetry-status">
-          <span class="telemetry-log">ROUTING CONTEXT / LATENCY 420ms</span>
+          <span class="telemetry-log">
+            <span class="pulse-dot"></span>
+            A1 FIRMS ECOSYSTEM / ROUTING ENGAGED
+            <span class="pulse-dot"></span>
+          </span>
           <span class="telemetry-progress-track">
             <span class="telemetry-progress-bar"></span>
           </span>
         </div>
       </div>
 
-      <dl>
+      <div class="focus-stats-clean">
         {focusStats.map(([label, value]) => (
-          <div>
-            <dt>{label}</dt>
-            <dd>{value}</dd>
+          <div class="stat-row-clean">
+            <span class="label-clean">{label}</span>
+            <span class="value-clean">{value}</span>
           </div>
         ))}
-      </dl>
+      </div>
     </div>
   </aside>
 </section>
@@ -113,15 +153,15 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     position: relative;
     display: grid;
     grid-template-columns: minmax(0, 0.95fr) minmax(420px, 0.78fr);
-    grid-template-rows: 1fr auto;
+    align-content: center;
     gap: 42px 62px;
     width: min(100%, var(--max-site));
     margin: 0 auto;
     padding-right: var(--space-page);
     padding-left: var(--space-page);
-    min-height: calc(100svh - var(--header-height) - 40px);
-    padding-top: 56px;
-    padding-bottom: 28px;
+    min-height: calc(100svh - var(--header-height));
+    padding-top: 64px;
+    padding-bottom: 64px;
     overflow: hidden;
   }
 
@@ -165,41 +205,49 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
   }
 
   .hero-copy-panel h1 {
-    margin: 18px 0 24px;
-    font-size: clamp(3.2rem, 7vw, 6.8rem);
+    margin: 12px 0 20px;
+    font-size: clamp(2.8rem, 4.8vw, 5.2rem);
     font-weight: 400;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     line-height: 1.1;
     font-family: "Noto Serif KR", "Noto Serif", serif;
-    color: var(--color-ink-muted);
+    color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+    word-break: keep-all;
   }
 
-  .hero-copy-panel h1 span {
+  .h1-highlight {
     display: inline-block;
-    background: linear-gradient(135deg, var(--color-ink) 30%, var(--color-accent-ink) 100%);
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--color-ink) 20%, var(--color-ink-soft) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-weight: 700;
+    letter-spacing: -0.04em;
+    padding-bottom: 0.15em;
+    margin-bottom: -0.15em;
+    margin-top: 0.05em;
     transition: filter var(--motion-base) ease;
   }
 
-  .hero-copy-panel h1:hover span {
-    filter: drop-shadow(0 0 12px rgba(var(--rgb-warm), 0.35));
+  .hero-copy-panel h1:hover .h1-highlight {
+    filter: drop-shadow(0 0 16px rgba(var(--rgb-warm), 0.4));
   }
 
-  .hero-copy-panel p:not(.micro-label) {
-    max-width: 650px;
+  .hero-copy-panel p.hero-desc {
+    max-width: 580px;
     margin: 0;
     color: var(--color-ink-soft);
-    font-size: 18px;
-    line-height: 1.72;
+    font-size: 17px;
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+    font-weight: 400;
+    text-wrap: pretty;
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
-    margin-top: 36px;
+    margin-top: 16px;
   }
 
   .primary-action,
@@ -208,56 +256,62 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
-    padding: 0 32px;
-    border-radius: 4px;
-    font-size: 13px;
-    font-weight: 700;
+    min-height: 52px;
+    padding: 0 40px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 850;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.12em;
     text-decoration: none;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
     overflow: hidden;
   }
 
   .primary-action {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--color-paper-deep);
-    background: var(--color-ink);
-    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
+    border: 1px solid color-mix(in srgb, var(--color-line) 60%, transparent);
+    color: var(--color-ink);
+    background: var(--glass-bg, rgba(255, 255, 255, 0.15));
+    backdrop-filter: blur(16px) saturate(180%);
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
   .secondary-action {
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: var(--color-ink);
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(12px);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 8px 20px rgba(0, 0, 0, 0.2);
+    border: 1px solid transparent;
+    color: var(--color-ink-soft);
+    background: transparent;
   }
 
+  .primary-action .arrow-shifted,
   .secondary-action .arrow-shifted {
-    width: 16px;
-    height: 16px;
-    margin-left: 6px;
+    width: 14px;
+    height: 14px;
+    margin-left: 8px;
     transition: transform var(--motion-fast) var(--easing-smooth);
     display: inline-block;
   }
 
   .primary-action:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.25);
-    background: #ffffff;
+    box-shadow: 
+      0 12px 32px rgba(var(--rgb-warm), 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border-color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent-soft) 80%, transparent);
+  }
+
+  .primary-action:hover .arrow-shifted,
+  .secondary-action:hover .arrow-shifted {
+    transform: translateX(4px);
   }
 
   .secondary-action:hover {
-    transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-  }
-
-  .secondary-action:hover .arrow-shifted {
-    transform: translateX(4px);
+    transform: translateY(-1px);
+    color: var(--color-ink);
+    background: rgba(255, 255, 255, 0.04);
   }
 
   .hero-brief {
@@ -270,7 +324,6 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     transition:
       transform var(--motion-base) var(--easing-spring),
       box-shadow var(--motion-base) var(--easing-spring);
-    overflow: hidden;
     z-index: 2;
     grid-column: 2;
     grid-row: 1;
@@ -299,20 +352,44 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
   .focus-title-wrap {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .focus-badges {
+    display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .hero-brief .micro-label {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 800;
+    color: var(--color-ink-muted);
+    margin: 0;
   }
 
   .live-indicator {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
     font-size: 9px;
+    line-height: 1;
     text-transform: uppercase;
     font-weight: 800;
     color: var(--color-green);
     letter-spacing: 0.1em;
     background: rgba(108, 163, 125, 0.08);
-    padding: 3px 8px;
+    height: 22px;
+    padding: 0 10px;
+    box-sizing: border-box;
     border-radius: 999px;
     border: 1px solid rgba(108, 163, 125, 0.15);
   }
@@ -320,6 +397,9 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
   .indicator-dot {
     width: 5px;
     height: 5px;
+    min-width: 5px;
+    min-height: 5px;
+    flex-shrink: 0;
     background: var(--color-green);
     border-radius: 50%;
     position: relative;
@@ -343,114 +423,334 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
 
   .hero-brief h2 {
     font-family: "Noto Serif KR", "Noto Serif", serif;
-    font-size: 2.6rem;
-    margin: 12px 0 16px;
+    font-size: 3rem;
+    margin: 10px 0 16px;
     font-weight: 500;
-    letter-spacing: -0.01em;
-    color: var(--color-ink);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--color-ink) 30%, var(--color-ink-soft) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   
   .hero-brief p {
     color: var(--color-ink-soft);
     font-size: 15px;
     line-height: 1.65;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .hero-brief p.ecosystem-desc {
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 32px;
+    letter-spacing: -0.01em;
+    color: color-mix(in srgb, var(--color-ink) 85%, transparent);
+    text-align: left;
+  }
+  
+  .ecosystem-desc strong {
+    color: var(--color-ink);
+    font-weight: 600;
   }
 
-  /* Sleek Multi-LLM Routing Telemetry Styles */
   .telemetry-bar {
-    margin-bottom: 24px;
-    padding: 14px 18px;
-    border-radius: 6px;
-    background: var(--color-field);
-    border: 1px solid var(--color-line);
-    box-shadow: inset 0 1px 2px var(--color-line-dark);
+    margin-bottom: 16px;
+    padding: 16px 20px;
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--color-ink) 2%, var(--color-panel));
+    backdrop-filter: blur(16px);
+    border: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.15),
+      inset 0 1px 0 color-mix(in srgb, var(--color-ink) 5%, transparent);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+    position: relative;
+  }
+  
+  .telemetry-bar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    z-index: 1;
+    border-radius: inherit;
+  }
+
+  .site-assistant-minimal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 22px;
+    padding: 0 10px 0 8px;
+    box-sizing: border-box;
+    border-radius: 999px;
+    background: var(--glass-bg, rgba(255, 255, 255, 0.4));
+    border: 1px solid rgba(var(--rgb-ink), 0.08);
+    cursor: default;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .site-assistant-minimal:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: rgba(var(--rgb-ink), 0.15);
+    background: var(--color-panel);
+  }
+
+  .site-assistant-minimal .telemetry-label {
+    font-size: 9px;
+    line-height: 1;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    transform: translateY(0.5px);
+  }
+  
+  .mvp-text {
+    opacity: 0.6;
+    margin-left: 4px;
+    font-size: 8px;
+  }
+  
+  .site-assistant-minimal .telemetry-dot {
+    width: 6px !important;
+    height: 6px !important;
+    min-width: 6px;
+    min-height: 6px;
+    flex-shrink: 0;
+    display: block;
+    position: relative;
+  }
+
+  .site-assistant-minimal .telemetry-dot::after {
+    top: -3px !important;
+    left: -3px !important;
+    right: -3px !important;
+    bottom: -3px !important;
+    border-radius: 50% !important;
+  }
+
+  .site-assistant-minimal .telemetry-tooltip {
+    bottom: auto;
+    top: calc(100% + 12px);
+    transform: translateX(-50%) translateY(-10px);
+  }
+  
+  .site-assistant-minimal:hover .telemetry-tooltip {
+    transform: translateX(-50%) translateY(0);
   }
 
   .telemetry-pipeline {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 4px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
   }
 
-  .telemetry-node {
+  .telemetry-pipeline .telemetry-node {
     display: flex;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    cursor: default;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: var(--glass-bg, rgba(255, 255, 255, 0.4));
+    border: 1px solid rgba(var(--rgb-ink), 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s ease;
+  }
+
+  .telemetry-pipeline .telemetry-node:hover {
+    background: var(--color-panel);
+    border-color: rgba(var(--rgb-ink), 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   }
 
   .telemetry-node.tone-accent {
-    --node-color: var(--color-accent);
+    --node-color: #3b82f6; /* Guide Blue */
   }
 
   .telemetry-node.tone-blue {
-    --node-color: var(--color-accent);
+    --node-color: #10b981; /* Green */
   }
 
   .telemetry-node.tone-coral {
-    --node-color: var(--color-warm);
+    --node-color: #f59e0b; /* Amber */
   }
 
   .telemetry-node.tone-purple {
-    --node-color: var(--color-accent-ink);
+    --node-color: #8b5cf6; /* Purple */
   }
 
   .telemetry-dot {
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    background-color: var(--node-color, var(--color-accent));
-    box-shadow: 0 0 6px var(--node-color, var(--color-accent));
+    background-color: var(--node-color);
+    box-shadow: 0 0 10px var(--node-color), 0 0 4px rgba(255, 255, 255, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+  }
+  
+  .telemetry-node.active .telemetry-dot::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: var(--node-color);
+    opacity: 0.4;
+    animation: dotPulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
   .telemetry-label {
-    font-size: 9px;
-    color: var(--color-ink-soft);
+    font-size: 10.5px;
+    color: var(--color-ink);
     font-family: var(--font-mono);
-    font-weight: 500;
-    letter-spacing: -0.01em;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: color 0.3s ease;
+  }
+  
+  .telemetry-tooltip {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    width: 250px;
+    background: var(--color-panel);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1));
+    backdrop-filter: blur(40px) saturate(200%);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+    pointer-events: none;
+  }
+  
+  .telemetry-node:hover .telemetry-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  
+  .telemetry-node:hover .telemetry-dot {
+    transform: scale(1.4);
+    box-shadow: 0 0 14px var(--node-color);
+  }
+  
+  .telemetry-node:hover .telemetry-label {
+    color: var(--node-color);
   }
 
-  .telemetry-arrow {
-    display: inline-flex;
-    width: 13px;
-    height: 13px;
-    color: var(--color-ink-muted);
+  .tooltip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--color-line);
+    padding-bottom: 6px;
   }
-
-  .telemetry-arrow svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2.2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+  
+  .tooltip-title {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+  }
+  
+  .tooltip-badge {
+    font-size: 8px;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+  }
+  
+  .badge-launched {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+  
+  .badge-pending {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+  
+  .badge-active {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+  }
+  
+  .tooltip-desc {
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--color-ink-soft);
+    margin: 0;
+    padding-top: 4px;
+    white-space: normal;
+    text-wrap: pretty;
   }
 
   .telemetry-status {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px dashed rgba(var(--rgb-ink), 0.12);
+    position: relative;
   }
 
   .telemetry-log {
-    font-size: 8px;
+    font-size: 8.5px;
     color: var(--color-ink-muted);
     font-family: var(--font-mono);
     font-weight: 700;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.1em;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pulse-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow: 0 0 8px var(--color-accent);
+    animation: pulseDot 2s infinite;
+  }
+
+  @keyframes pulseDot {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.5); }
   }
 
   .telemetry-progress-track {
     width: 100%;
-    height: 1px;
-    background: var(--color-line);
+    height: 2px;
+    background: rgba(var(--rgb-ink), 0.04);
+    border-radius: 2px;
     position: relative;
     overflow: hidden;
   }
@@ -460,9 +760,10 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     top: 0;
     left: 0;
     height: 100%;
-    width: 30%;
+    width: 40%;
     background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
-    animation: telemetrySweep 3s infinite linear;
+    border-radius: 2px;
+    animation: telemetrySweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
 
   @keyframes telemetrySweep {
@@ -470,41 +771,66 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     100% { transform: translateX(350%); }
   }
 
-  .hero-brief dl {
-    display: grid;
-    margin: 0;
-    padding-top: 24px;
-    border-top: 1px solid rgba(var(--rgb-warm), 0.25);
+  .focus-stats-clean {
+    display: flex;
+    flex-direction: column;
+    margin-top: 24px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(var(--rgb-warm), 0.15);
   }
 
-  .hero-brief dl div {
+  .stat-row-clean {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--color-line);
+    align-items: center;
+    padding: 12px 8px;
+    border-bottom: 1px solid rgba(var(--rgb-warm), 0.08);
   }
 
-  .hero-brief dl div:last-child {
+  .stat-row-clean:last-child {
     border-bottom: none;
-    padding-bottom: 0;
   }
 
-  .hero-brief dt {
-    font-size: 10px;
+  .label-clean {
+    font-size: 12px;
     text-transform: uppercase;
     color: var(--color-ink-muted);
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.18em;
+    flex-shrink: 0;
   }
 
-  .hero-brief dd {
-    margin: 0;
+  .value-clean {
     font-family: "Noto Serif KR", "Noto Serif", serif;
     font-size: 18px;
     font-weight: 500;
     color: var(--color-ink);
     text-align: right;
+  }
+
+  .stat-divider {
+    color: rgba(255, 255, 255, 0.2);
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+
+  .inline-stats {
+    font-size: 11px;
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .inline-stats span::after {
+    content: ' / ';
+    color: rgba(var(--rgb-ink), 0.2);
+    margin: 0 8px;
+  }
+
+  .inline-stats span:last-child::after {
+    content: '';
+    margin: 0;
   }
 
   .fade-in-up {
@@ -547,6 +873,18 @@ const { a1Firms, focusStats, siteConfig } = Astro.props;
     .hero-system {
       min-height: auto;
       padding-top: 42px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    
+    .primary-action,
+    .secondary-action {
+      width: 100%;
     }
   }
 </style>

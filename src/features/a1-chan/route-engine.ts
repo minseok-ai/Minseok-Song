@@ -1,5 +1,5 @@
 export type NavigatorConfidence = "high" | "medium" | "low";
-export type NavigatorResultSource = "static" | "chrome-ai" | "lmstudio-dev";
+export type NavigatorResultSource = "static" | "chrome-ai";
 
 export type NavigatorDeepLink = {
   label: string;

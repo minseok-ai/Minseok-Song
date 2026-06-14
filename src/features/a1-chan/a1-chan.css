@@ -140,7 +140,7 @@
   bottom: 72px;
   display: flex;
   flex-direction: column;
-  width: min(430px, calc(100vw - 32px));
+  width: min(450px, calc(100vw - 32px));
   max-height: min(640px, calc(100svh - 100px));
   overflow: hidden;
   border: 1px solid var(--glass-border);

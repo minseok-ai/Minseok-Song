@@ -34,26 +34,26 @@ const visualMeta = {
 
 const externalHref = (href = "") => /^https?:\/\//.test(href);
 const configuredA1PreviewHref = import.meta.env.A1TRATEGIZE_PREVIEW_URL ?? "";
-const a1PreviewHref = configuredA1PreviewHref || "/a1trategize-mock/index.html";
+const a1PreviewHref = configuredA1PreviewHref || "/a1trategize-preview/index.html";
 const projectCode = (order) => `PX-${String(order ?? 0).padStart(2, "0")}`;
 const isA1trategizeProject = (entry) =>
   entry.id === "a1trategize" || entry.data.title.toLowerCase().includes("a1trategize");
 
 const degToRad = (deg) => (deg * Math.PI) / 180;
-const getPenta = (scores) => {
-  const p = scores || [20, 20, 20, 20, 20];
-  const rScale = 32; // max radius for vertices
+const createCapabilityRadarChart = (scores) => {
+  const normalizedScores = scores || [20, 20, 20, 20, 20];
+  const radiusScale = 32;
   
-  const ptAI = { x: 50 + (p[0]/100)*rScale * Math.cos(degToRad(-90)), y: 54 + (p[0]/100)*rScale * Math.sin(degToRad(-90)) };
-  const ptSemi = { x: 50 + (p[1]/100)*rScale * Math.cos(degToRad(-18)), y: 54 + (p[1]/100)*rScale * Math.sin(degToRad(-18)) };
-  const ptPhys = { x: 50 + (p[2]/100)*rScale * Math.cos(degToRad(54)), y: 54 + (p[2]/100)*rScale * Math.sin(degToRad(54)) };
-  const ptBiz = { x: 50 + (p[3]/100)*rScale * Math.cos(degToRad(126)), y: 54 + (p[3]/100)*rScale * Math.sin(degToRad(126)) };
-  const ptStrat = { x: 50 + (p[4]/100)*rScale * Math.cos(degToRad(198)), y: 54 + (p[4]/100)*rScale * Math.sin(degToRad(198)) };
+  const aiPoint = { x: 50 + (normalizedScores[0]/100)*radiusScale * Math.cos(degToRad(-90)), y: 54 + (normalizedScores[0]/100)*radiusScale * Math.sin(degToRad(-90)) };
+  const semiconductorPoint = { x: 50 + (normalizedScores[1]/100)*radiusScale * Math.cos(degToRad(-18)), y: 54 + (normalizedScores[1]/100)*radiusScale * Math.sin(degToRad(-18)) };
+  const researchPoint = { x: 50 + (normalizedScores[2]/100)*radiusScale * Math.cos(degToRad(54)), y: 54 + (normalizedScores[2]/100)*radiusScale * Math.sin(degToRad(54)) };
+  const productPoint = { x: 50 + (normalizedScores[3]/100)*radiusScale * Math.cos(degToRad(126)), y: 54 + (normalizedScores[3]/100)*radiusScale * Math.sin(degToRad(126)) };
+  const marketPoint = { x: 50 + (normalizedScores[4]/100)*radiusScale * Math.cos(degToRad(198)), y: 54 + (normalizedScores[4]/100)*radiusScale * Math.sin(degToRad(198)) };
   
   return {
-    polygon: `${ptAI.x},${ptAI.y} ${ptSemi.x},${ptSemi.y} ${ptPhys.x},${ptPhys.y} ${ptBiz.x},${ptBiz.y} ${ptStrat.x},${ptStrat.y}`,
-    pts: [ptAI, ptSemi, ptPhys, ptBiz, ptStrat],
-    scores: p
+    polygon: `${aiPoint.x},${aiPoint.y} ${semiconductorPoint.x},${semiconductorPoint.y} ${researchPoint.x},${researchPoint.y} ${productPoint.x},${productPoint.y} ${marketPoint.x},${marketPoint.y}`,
+    points: [aiPoint, semiconductorPoint, researchPoint, productPoint, marketPoint],
+    scores: normalizedScores
   };
 };
 ---
@@ -106,31 +106,31 @@ const getPenta = (scores) => {
       {a1FirmsProjects.map((project, index) => {
         const visual = visualMeta[project.data.visual] ?? visualMeta.blank;
         const primaryLink = project.data.links[0];
-        const pData = getPenta(project.data.pentaPoint);
+        const capabilityChart = createCapabilityRadarChart(project.data.capabilityScores);
         const showAppPreview = isA1trategizeProject(project) && Boolean(a1PreviewHref);
 
         return (
           <article id={`project-${project.id}`} class={`project-card reveal-up ${index === 0 ? 'bento-hero' : ''} ${showAppPreview ? 'has-app-preview' : ''}`} data-tone={visual.tone} data-project-id={project.id}>
             <div class="card-visual" aria-hidden="true">
-              <svg class="tp-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
-                <circle cx="50" cy="54" r="32" class="tp-grid-circle" />
-                <circle cx="50" cy="54" r="16" class="tp-grid-circle" />
+              <svg class="radar-chart" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+                <circle cx="50" cy="54" r="32" class="radar-grid-circle" />
+                <circle cx="50" cy="54" r="16" class="radar-grid-circle" />
                 
-                <g class="tp-rotating-group">
-                  <line x1="50" y1="54" x2="50" y2="22" class="tp-axis-line" />
-                  <line x1="50" y1="54" x2="80.43" y2="44.11" class="tp-axis-line" />
-                  <line x1="50" y1="54" x2="68.81" y2="79.89" class="tp-axis-line" />
-                  <line x1="50" y1="54" x2="31.19" y2="79.89" class="tp-axis-line" />
-                  <line x1="50" y1="54" x2="19.57" y2="44.11" class="tp-axis-line" />
+                <g class="radar-rotating-group">
+                  <line x1="50" y1="54" x2="50" y2="22" class="radar-axis-line" />
+                  <line x1="50" y1="54" x2="80.43" y2="44.11" class="radar-axis-line" />
+                  <line x1="50" y1="54" x2="68.81" y2="79.89" class="radar-axis-line" />
+                  <line x1="50" y1="54" x2="31.19" y2="79.89" class="radar-axis-line" />
+                  <line x1="50" y1="54" x2="19.57" y2="44.11" class="radar-axis-line" />
                   
-                  <polygon points={pData.polygon} class="tp-polygon-core" />
-                  {pData.pts.map(pt => <circle cx={pt.x} cy={pt.y} r="1.5" class="tp-vertex" />)}
+                  <polygon points={capabilityChart.polygon} class="radar-polygon-core" />
+                  {capabilityChart.points.map((point) => <circle cx={point.x} cy={point.y} r="1.5" class="radar-vertex" />)}
                   
-                  <text x="50" y="14" class="tp-label" text-anchor="middle">AI/SW {pData.scores[0]}</text>
-                  <text x="88" y="42" class="tp-label" text-anchor="middle">NANO/HW {pData.scores[1]}</text>
-                  <text x="74" y="88" class="tp-label" text-anchor="middle">R&D {pData.scores[2]}</text>
-                  <text x="26" y="88" class="tp-label" text-anchor="middle">PM {pData.scores[3]}</text>
-                  <text x="12" y="42" class="tp-label" text-anchor="middle">GTM {pData.scores[4]}</text>
+                  <text x="50" y="14" class="radar-label" text-anchor="middle">AI/SW {capabilityChart.scores[0]}</text>
+                  <text x="88" y="42" class="radar-label" text-anchor="middle">NANO/HW {capabilityChart.scores[1]}</text>
+                  <text x="74" y="88" class="radar-label" text-anchor="middle">R&D {capabilityChart.scores[2]}</text>
+                  <text x="26" y="88" class="radar-label" text-anchor="middle">PM {capabilityChart.scores[3]}</text>
+                  <text x="12" y="42" class="radar-label" text-anchor="middle">GTM {capabilityChart.scores[4]}</text>
                 </g>
               </svg>
             </div>
@@ -187,30 +187,30 @@ const getPenta = (scores) => {
       {otherProjects.map((project, index) => {
         const visual = visualMeta[project.data.visual] ?? visualMeta.blank;
         const primaryLink = project.data.links[0];
-        const pData = getPenta(project.data.pentaPoint);
+        const capabilityChart = createCapabilityRadarChart(project.data.capabilityScores);
 
         return (
           <article id={`project-${project.id}`} class="project-card reveal-up" data-tone={visual.tone} data-project-id={project.id}>
             <div class="card-visual" aria-hidden="true">
-              <svg class="tp-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
-                <circle cx="50" cy="54" r="32" class="tp-grid-circle" />
-                <circle cx="50" cy="54" r="16" class="tp-grid-circle" />
+              <svg class="radar-chart" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+                <circle cx="50" cy="54" r="32" class="radar-grid-circle" />
+                <circle cx="50" cy="54" r="16" class="radar-grid-circle" />
                 
-                <g class="tp-rotating-group">
-                  <line x1="50" y1="54" x2="50" y2="22" class="tp-axis-line" />
-                  <line x1="50" y1="54" x2="80.43" y2="44.11" class="tp-axis-line" />
-                  <line x1="50" y1="54" x2="68.81" y2="79.89" class="tp-axis-line" />
-                  <line x1="50" y1="54" x2="31.19" y2="79.89" class="tp-axis-line" />
-                  <line x1="50" y1="54" x2="19.57" y2="44.11" class="tp-axis-line" />
+                <g class="radar-rotating-group">
+                  <line x1="50" y1="54" x2="50" y2="22" class="radar-axis-line" />
+                  <line x1="50" y1="54" x2="80.43" y2="44.11" class="radar-axis-line" />
+                  <line x1="50" y1="54" x2="68.81" y2="79.89" class="radar-axis-line" />
+                  <line x1="50" y1="54" x2="31.19" y2="79.89" class="radar-axis-line" />
+                  <line x1="50" y1="54" x2="19.57" y2="44.11" class="radar-axis-line" />
                   
-                  <polygon points={pData.polygon} class="tp-polygon-core" />
-                  {pData.pts.map(pt => <circle cx={pt.x} cy={pt.y} r="1.5" class="tp-vertex" />)}
+                  <polygon points={capabilityChart.polygon} class="radar-polygon-core" />
+                  {capabilityChart.points.map((point) => <circle cx={point.x} cy={point.y} r="1.5" class="radar-vertex" />)}
                   
-                  <text x="50" y="14" class="tp-label" text-anchor="middle">AI/SW {pData.scores[0]}</text>
-                  <text x="88" y="42" class="tp-label" text-anchor="middle">NANO/HW {pData.scores[1]}</text>
-                  <text x="74" y="88" class="tp-label" text-anchor="middle">R&D {pData.scores[2]}</text>
-                  <text x="26" y="88" class="tp-label" text-anchor="middle">PM {pData.scores[3]}</text>
-                  <text x="12" y="42" class="tp-label" text-anchor="middle">GTM {pData.scores[4]}</text>
+                  <text x="50" y="14" class="radar-label" text-anchor="middle">AI/SW {capabilityChart.scores[0]}</text>
+                  <text x="88" y="42" class="radar-label" text-anchor="middle">NANO/HW {capabilityChart.scores[1]}</text>
+                  <text x="74" y="88" class="radar-label" text-anchor="middle">R&D {capabilityChart.scores[2]}</text>
+                  <text x="26" y="88" class="radar-label" text-anchor="middle">PM {capabilityChart.scores[3]}</text>
+                  <text x="12" y="42" class="radar-label" text-anchor="middle">GTM {capabilityChart.scores[4]}</text>
                 </g>
               </svg>
             </div>
@@ -262,37 +262,37 @@ const getPenta = (scores) => {
     const projectCards = document.querySelectorAll('.project-card');
     projectCards.forEach(card => {
       // Remove old listeners to prevent duplicates if astro:page-load fires multiple times
-      const newCard = card.cloneNode(true);
+      const interactiveCard = card.cloneNode(true);
       if (card.parentNode) {
-        card.parentNode.replaceChild(newCard, card);
+        card.parentNode.replaceChild(interactiveCard, card);
       }
 
-      if (newCard.classList.contains('has-app-preview')) {
+      if (interactiveCard.classList.contains('has-app-preview')) {
         return;
       }
       
-      newCard.addEventListener('mousemove', (e) => {
-        const rect = newCard.getBoundingClientRect();
+      interactiveCard.addEventListener('mousemove', (e) => {
+        const rect = interactiveCard.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        newCard.style.setProperty('--mouse-x', `${x}px`);
-        newCard.style.setProperty('--mouse-y', `${y}px`);
+        interactiveCard.style.setProperty('--mouse-x', `${x}px`);
+        interactiveCard.style.setProperty('--mouse-y', `${y}px`);
         
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
         const rotateX = ((y - centerY) / centerY) * -3;
         const rotateY = ((x - centerX) / centerX) * 3;
         
-        newCard.style.transform = `perspective(1000px) scale3d(1.02, 1.02, 1.02) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        interactiveCard.style.transform = `perspective(1000px) scale3d(1.02, 1.02, 1.02) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
       });
 
-      newCard.addEventListener('mouseenter', () => {
-        newCard.style.transition = 'transform 0.1s ease-out, box-shadow 0.3s ease, border-color 0.3s ease';
+      interactiveCard.addEventListener('mouseenter', () => {
+        interactiveCard.style.transition = 'transform 0.1s ease-out, box-shadow 0.3s ease, border-color 0.3s ease';
       });
 
-      newCard.addEventListener('mouseleave', () => {
-        newCard.style.transition = 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s ease, border-color 0.6s ease, background 0.6s ease';
-        newCard.style.transform = `perspective(1000px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg)`;
+      interactiveCard.addEventListener('mouseleave', () => {
+        interactiveCard.style.transition = 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s ease, border-color 0.6s ease, background 0.6s ease';
+        interactiveCard.style.transform = `perspective(1000px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg)`;
       });
     });
 
@@ -872,7 +872,7 @@ const getPenta = (scores) => {
     background-size: 200% 200%;
   }
 
-  .tp-svg {
+  .radar-chart {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -880,19 +880,19 @@ const getPenta = (scores) => {
     pointer-events: none;
   }
 
-  :global(.tp-grid-circle) {
+  :global(.radar-grid-circle) {
     fill: none;
     stroke: var(--color-line) !important;
     stroke-width: 0.5;
     stroke-dasharray: 2 2;
   }
 
-  :global(.tp-axis-line) {
+  :global(.radar-axis-line) {
     stroke: var(--color-line) !important;
     stroke-width: 0.5;
   }
 
-  :global(.tp-label) {
+  :global(.radar-label) {
     fill: var(--color-ink-soft) !important;
     font-size: 6.5px;
     font-family: var(--font-mono);
@@ -900,18 +900,18 @@ const getPenta = (scores) => {
     letter-spacing: 0.5px;
   }
 
-  @keyframes spinTriplePoint {
+  @keyframes rotateCapabilityRadar {
     0% { transform: rotate(-10deg); }
     50% { transform: rotate(10deg); }
     100% { transform: rotate(-10deg); }
   }
 
-  .tp-rotating-group {
+  .radar-rotating-group {
     transform-origin: 50px 54px;
-    animation: spinTriplePoint 12s ease-in-out infinite;
+    animation: rotateCapabilityRadar 12s ease-in-out infinite;
   }
 
-  .tp-polygon-core {
+  .radar-polygon-core {
     fill: rgba(107, 156, 242, 0.25);
     stroke: rgba(107, 156, 242, 0.8);
     stroke-width: 1;
@@ -919,19 +919,19 @@ const getPenta = (scores) => {
     transition: fill 0.3s ease, stroke 0.3s ease;
   }
 
-  :global(.tp-vertex) {
+  :global(.radar-vertex) {
     fill: var(--color-ink) !important;
     filter: drop-shadow(0 0 2px var(--color-accent-glow)) !important;
   }
 
-  .project-card[data-tone="green"] .tp-polygon-core {
+  .project-card[data-tone="green"] .radar-polygon-core {
     fill: rgba(108, 163, 125, 0.25);
     stroke: rgba(108, 163, 125, 0.8);
     filter: drop-shadow(0 0 4px rgba(108, 163, 125, 0.5));
   }
   
-  .project-card[data-tone="warm"] .tp-polygon-core,
-  .project-card[data-tone="paper"] .tp-polygon-core {
+  .project-card[data-tone="warm"] .radar-polygon-core,
+  .project-card[data-tone="paper"] .radar-polygon-core {
     fill: rgba(var(--rgb-warm), 0.25);
     stroke: rgba(var(--rgb-warm), 0.8);
     filter: drop-shadow(0 0 4px rgba(var(--rgb-warm), 0.5));

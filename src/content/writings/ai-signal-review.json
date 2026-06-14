@@ -1,6 +1,6 @@
 {
   "title": "AI Signal Review",
-  "summary": "A sample issue format for reviewing a noteworthy AI article after crawling the full source and extracting the claim, evidence, and implication.",
+  "summary": "A published issue format for reviewing a noteworthy AI article after crawling the full source and extracting the claim, evidence, and implication.",
   "order": 1,
   "status": "published",
   "hidden": false,

@@ -18,7 +18,7 @@
     }
   ],
   "visual": "graph",
-  "pentaPoint": [
+  "capabilityScores": [
     85,
     95,
     80,

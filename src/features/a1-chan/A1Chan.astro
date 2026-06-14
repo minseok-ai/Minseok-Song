@@ -38,7 +38,7 @@ const routeJson = JSON.stringify(routes);
 
   <section class="a1-navigator__panel" id="a1-navigator-panel" data-a1-panel hidden>
     <header class="a1-navigator__header">
-      <a class="a1-navigator__brand" href={siteConfig.a1FirmPath}>
+      <a class="a1-navigator__brand" href={siteConfig.a1FirmsPath}>
         <span>
           <strong data-a1-agent-name>A1 Chan</strong>
           <small data-a1-agent-mode>Static site guide</small>
@@ -358,7 +358,7 @@ const routeJson = JSON.stringify(routes);
     
     let staticResult: A1ChanResult | undefined;
     try {
-      const response = await fetch("/api/a1-search", {
+      const response = await fetch("/api/a1-chan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query, context })

@@ -1,11 +1,11 @@
 "use strict";
 
-const IS_STATIC_A1_MOCK = window.location.pathname.includes("/a1trategize-mock/");
+const IS_STATIC_A1_PREVIEW = window.location.pathname.includes("/a1trategize-preview/");
 
 const localStorage = (() => {
   try {
     const storage = window.localStorage;
-    const key = "__a1_mock_storage_probe__";
+    const key = "__a1_preview_storage_probe__";
     storage.setItem(key, "1");
     storage.removeItem(key);
     return storage;
@@ -287,7 +287,7 @@ const MODE_SHORT_LABELS = {
 const SUBMIT_ICON_SVG = iconSvg("send", "submit-svg");
 
 function domainLogoSrc(key) {
-  return key === "nnfc" ? "/a1trategize-mock/NNFC.png" : "/a1trategize-mock/A1Firm.png";
+  return key === "nnfc" ? "/a1trategize-preview/NNFC.png" : "/a1trategize-preview/A1Firm.png";
 }
 
 function domainLogoAlt(key) {
@@ -395,7 +395,7 @@ window.toggleLivePanel = function(id) {
 };
 
 async function loadDomains() {
-  if (IS_STATIC_A1_MOCK) {
+  if (IS_STATIC_A1_PREVIEW) {
     domainRegistry = STATIC_DOMAIN_REGISTRY;
     renderDomainControls(domainRegistry);
     return;
@@ -651,7 +651,7 @@ function isNearPageBottom() {
 }
 
 async function loadModels() {
-  if (IS_STATIC_A1_MOCK) {
+  if (IS_STATIC_A1_PREVIEW) {
     renderModelConfig(STATIC_MODEL_CATALOG, STATIC_MODEL_ASSIGNMENTS);
     return;
   }
@@ -697,7 +697,7 @@ function renderModelConfig(catalog, assignments) {
     }
   }
 }
-async function assignModel(role, modelKey) { if (IS_STATIC_A1_MOCK) return; try { await fetch("/api/models/assign", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ role, model_key: modelKey }) }); } catch (e) { console.error("Failed to assign model:", e); } }
+async function assignModel(role, modelKey) { if (IS_STATIC_A1_PREVIEW) return; try { await fetch("/api/models/assign", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ role, model_key: modelKey }) }); } catch (e) { console.error("Failed to assign model:", e); } }
 
 function providerBadge(provider) {
   const iconName = PROVIDER_ICON_MAP[provider] || "auxiliary";
@@ -761,7 +761,7 @@ function setPipelineUiActive(active) {
 }
 
 async function loadSessions() {
-  if (IS_STATIC_A1_MOCK) {
+  if (IS_STATIC_A1_PREVIEW) {
     savedSessions = [];
     renderSessionHistory(savedSessions);
     return;
@@ -1833,7 +1833,7 @@ function toggleEquipBrowser() {
 }
 
 async function loadEquipment(category, q) {
-  if (IS_STATIC_A1_MOCK) {
+  if (IS_STATIC_A1_PREVIEW) {
     const normalizedQuery = String(q || "").toLowerCase();
     const selectedCategory = category || equipActiveCat;
 

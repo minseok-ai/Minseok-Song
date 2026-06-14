@@ -48,28 +48,43 @@ const timelineEvents = experienceTimelineBlock
     </figcaption>
   </figure>
 
-  <div class="about-statement">
-    <svg viewBox="0 0 800 240" aria-hidden="true" class="true-3d-lattice">
-      <defs>
-        <filter id="neural-glow" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="3.5" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur"/>
-            <feMergeNode in="SourceGraphic"/>
-          </feMerge>
-        </filter>
-      </defs>
+  <div class="about-statement card-view">
+    <div class="statement-header">
+      <p class="micro-label">Core Philosophy</p>
+      <div class="ra1-thm-chip">
+        <span class="chip-dot"></span>
+        <span>RA1 <span class="chip-muted">THM</span></span>
+      </div>
+    </div>
+    <div class="lattice-interaction-area">
+      <svg viewBox="0 0 800 440" aria-hidden="true" class="true-3d-lattice" style="overflow: visible; margin-top: 10px;">
+        <defs>
+          <filter id="neural-glow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="3.5" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
 
-      <g filter="url(#neural-glow)">
-        <g class="edges-group"></g>
-        <g class="nodes-group"></g>
-        <g class="particles-group"></g>
-      </g>
-    </svg>
-    <blockquote>
+        <g filter="url(#neural-glow)">
+          <g class="edges-group"></g>
+          <g class="nodes-group"></g>
+          <g class="particles-group"></g>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- Independent Intro Card directly below the hero section -->
+<section class="about-intro-section">
+  <div class="intro-card card-view">
+    <p class="intro-text">
       {calloutBlock?.body ??
-        "A1 Firms is organized around one practical question: how can ambiguous strategy work become clearer decisions, better tools, and repeatable operating habits?"}
-    </blockquote>
+        "My strength is Proactive Execution—transforming complex technical challenges into valuable Deep Tech strategies. I want to be someone who values hands-on experience over just words."}
+    </p>
   </div>
 </section>
 
@@ -172,7 +187,7 @@ const timelineEvents = experienceTimelineBlock
   });
 
   // 3D True Perspective Engine for SVG
-  const latticeWrapper = document.querySelector('.about-statement');
+  const latticeWrapper = document.querySelector('.lattice-interaction-area');
   const svg3d = document.querySelector('.true-3d-lattice');
   
   if (latticeWrapper && svg3d) {
@@ -202,8 +217,7 @@ const timelineEvents = experienceTimelineBlock
     ];
 
     // Z-coordinates for L1 (Front), L2 (Middle), L3 (Back)
-    // Negative Z is closer to the camera in this projection formula.
-    const layersZ = [-110, 0, 110];
+    const layersZ = [-150, 0, 150];
     const allNodes = [];
     const allEdges = [];
 
@@ -224,25 +238,38 @@ const timelineEvents = experienceTimelineBlock
           type: 'intra', layer: lIdx 
         });
       });
-      // Inter-layer vertical hopping
+      // Inter-layer vertical hopping & synaptic connections for perceptron feel
       if (lIdx < 2) {
+        // Fully Connected (Dense) layer connections
         for(let i=0; i<13; i++) {
-          allEdges.push({
-            from: i + lIdx * L_OFFSET,
-            to: i + (lIdx + 1) * L_OFFSET,
-            type: 'inter'
-          });
+          for(let j=0; j<13; j++) {
+            if (i === j) {
+              // 1. Direct vertical hopping
+              allEdges.push({
+                from: i + lIdx * L_OFFSET,
+                to: j + (lIdx + 1) * L_OFFSET,
+                type: 'inter'
+              });
+            } else {
+              // 2. Dense perceptron connections (every node connects to every node in next layer)
+              allEdges.push({
+                from: i + lIdx * L_OFFSET,
+                to: j + (lIdx + 1) * L_OFFSET,
+                type: 'synapse'
+              });
+            }
+          }
         }
       }
     });
 
-    // SNN Hopping Particles
+    // SNN Hopping Particles State Machine
     const particles = [
-      { path: [0, 1, 4, 6, 8, 11, 12], progress: 0, speed: 0.004, color: 'var(--color-accent)', glow: true },
-      { path: [0, 14, 17, 32, 34, 37, 38], progress: 0.4, speed: 0.0035, color: 'var(--color-accent-ink)', glow: false },
-      { path: [26, 28, 18, 6, 7, 23, 25], progress: 0.8, speed: 0.0045, color: 'var(--color-ink)', glow: false },
-      { path: [5, 7, 9, 10, 12, 8, 6], progress: 0.2, speed: 0.0038, color: 'var(--color-warm)', glow: true },
-      { path: [2, 4, 6, 8, 10, 12, 11], progress: 0.6, speed: 0.0042, color: 'var(--color-green)', glow: false }
+      { path: [0, 1, 4, 6, 8, 11, 12], currentIndex: 0, state: 'CHARGING', charge: 0.1, chargeRate: 0.015, color: 'var(--color-accent)' },
+      { path: [0, 14, 17, 32, 34, 37, 38], currentIndex: 0, state: 'CHARGING', charge: 0.4, chargeRate: 0.012, color: 'var(--color-accent-ink)' },
+      { path: [26, 28, 18, 6, 7, 23, 25], currentIndex: 0, state: 'CHARGING', charge: 0.8, chargeRate: 0.018, color: 'var(--color-ink)' },
+      { path: [5, 7, 9, 10, 12, 8, 6], currentIndex: 0, state: 'CHARGING', charge: 0.2, chargeRate: 0.014, color: 'var(--color-warm)' },
+      { path: [2, 4, 6, 8, 10, 12, 11], currentIndex: 0, state: 'CHARGING', charge: 0.6, chargeRate: 0.02, color: 'var(--color-green)' }
     ];
 
     // DOM Generation
@@ -253,6 +280,10 @@ const timelineEvents = experienceTimelineBlock
         line.setAttribute("stroke-opacity", "0.3");
         line.setAttribute("stroke-width", "1");
         line.setAttribute("stroke-dasharray", "2 4");
+      } else if (e.type === 'synapse') {
+        line.setAttribute("stroke", "var(--color-warm)");
+        line.setAttribute("stroke-opacity", "0.15"); // Make it clearly visible
+        line.setAttribute("stroke-width", "0.8"); // Slightly thicker to be seen easily
       } else {
         line.setAttribute("stroke", "var(--color-warm)");
         line.setAttribute("stroke-opacity", e.layer === 0 ? "0.5" : e.layer === 1 ? "0.2" : "0.1");
@@ -264,8 +295,7 @@ const timelineEvents = experienceTimelineBlock
 
     const nodeEls = allNodes.map(n => {
       const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      circle.setAttribute("fill", "var(--color-paper)");
-      circle.setAttribute("stroke", "var(--color-warm)");
+      circle.setAttribute("class", "lattice-node");
       circle.setAttribute("stroke-width", "1.5");
       circle.setAttribute("opacity", n.layer === 0 ? "0.8" : n.layer === 1 ? "0.4" : "0.15");
       nodesGroup.appendChild(circle);
@@ -274,10 +304,8 @@ const timelineEvents = experienceTimelineBlock
 
     const particleEls = particles.map(p => {
       const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      circle.setAttribute("fill", p.color);
-      if (p.glow) {
-        circle.setAttribute("filter", "url(#neural-glow)");
-      }
+      circle.setAttribute("class", "lattice-particle");
+      circle.setAttribute("filter", "url(#neural-glow)");
       particlesGroup.appendChild(circle);
       return circle;
     });
@@ -287,18 +315,41 @@ const timelineEvents = experienceTimelineBlock
     // Base angle with 0 yaw (RotY = 0) so the lattice aligns perfectly horizontally.
     const baseRotX = -0.6, baseRotY = 0;
 
-    latticeWrapper.addEventListener('mousemove', (e) => {
-      const rect = latticeWrapper.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      
-      // Multi-axis rotation kept within reasonable bounds
-      targetRotY = ((e.clientX - cx) / window.innerWidth) * 0.35; 
-      targetRotX = ((e.clientY - cy) / window.innerHeight) * -0.35;
+    let isDragging = false;
+    let lastMouseX = 0, lastMouseY = 0;
+    const maxRotX = 0.35, maxRotY = 0.5;
+
+    latticeWrapper.style.cursor = 'grab';
+
+    latticeWrapper.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+      latticeWrapper.style.cursor = 'grabbing';
+      e.preventDefault(); // Prevent text selection while dragging
     });
 
-    latticeWrapper.addEventListener('mouseleave', () => {
-      targetRotX = 0; targetRotY = 0;
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      
+      const deltaX = e.clientX - lastMouseX;
+      const deltaY = e.clientY - lastMouseY;
+      
+      // Update target rotations continuously relative to previous targets
+      targetRotY += deltaX * 0.005;
+      targetRotX += deltaY * 0.005;
+      
+      // Clamp to limits to avoid flipping the diagram over
+      targetRotY = Math.max(-maxRotY, Math.min(maxRotY, targetRotY));
+      targetRotX = Math.max(-maxRotX, Math.min(maxRotX, targetRotX));
+      
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+      latticeWrapper.style.cursor = 'grab';
     });
 
     const FL = 800;
@@ -319,7 +370,7 @@ const timelineEvents = experienceTimelineBlock
         
         // Orthographic projection (scale = 1.0) ensures all Z-lines remain 
         // perfectly parallel, creating a clean, aligned architectural diagram look.
-        return { x: x1 + 400, y: y2 + 120, scale: 1.0 };
+        return { x: x1 + 400, y: y2 + 220, scale: 1.0 };
       });
 
       allEdges.forEach((e, i) => {
@@ -335,20 +386,67 @@ const timelineEvents = experienceTimelineBlock
       });
 
       particles.forEach((p, i) => {
-        p.progress += p.speed;
-        if (p.progress >= 1) p.progress = 0;
-
         const totalSegments = p.path.length - 1;
-        const segmentFloat = p.progress * totalSegments;
-        const segmentIndex = Math.floor(segmentFloat);
-        const segmentProgress = segmentFloat - segmentIndex;
+        const n1 = projNodes[p.path[p.currentIndex]];
+        const n2 = projNodes[p.path[Math.min(p.currentIndex + 1, totalSegments)]];
+        
+        let cx = n1.x;
+        let cy = n1.y;
+        let r = 0;
+        let opacity = 1;
 
-        const n1 = projNodes[p.path[segmentIndex]];
-        const n2 = projNodes[p.path[Math.min(segmentIndex + 1, totalSegments)]];
+        if (p.state === 'CHARGING') {
+          p.charge += p.chargeRate;
+          r = 2 + (p.charge * 3); // Swell up as potential increases
+          opacity = 0.3 + (p.charge * 0.7);
+          
+          if (p.charge >= 1) {
+            p.state = 'HOPPING';
+            p.hopProgress = 0;
+          }
+        } else if (p.state === 'HOPPING') {
+          p.hopProgress += 0.08; // Smooth and fast spike
+          
+          // Ease-in-out for a more polished transition along the straight edge
+          const t = p.hopProgress < 0.5 
+            ? 2 * p.hopProgress * p.hopProgress 
+            : 1 - Math.pow(-2 * p.hopProgress + 2, 2) / 2;
+          
+          // Straight line interpolation (no arc)
+          cx = n1.x + (n2.x - n1.x) * t;
+          cy = n1.y + (n2.y - n1.y) * t;
+          
+          // Spiking visual (slight glow and size increase, no massive pump)
+          r = 2.5 + Math.sin(t * Math.PI) * 2; 
+          opacity = 1;
+          
+          if (p.hopProgress >= 1) {
+            p.currentIndex++;
+            if (p.currentIndex >= totalSegments) {
+               p.currentIndex = 0; 
+            }
+            p.state = 'COOLING';
+            p.coolTimer = 0;
+          }
+        } else if (p.state === 'COOLING') {
+          p.coolTimer += 0.05;
+          cx = n1.x; // Stay at the new node
+          cy = n1.y;
+          r = 1.5; 
+          opacity = 0.15; 
+          
+          if (p.coolTimer >= 1) {
+             p.state = 'CHARGING';
+             p.charge = 0;
+             // Add randomness to next charge rate to simulate asynchronous SNN firing
+             p.chargeRate = 0.008 + Math.random() * 0.015;
+          }
+        }
 
-        particleEls[i].setAttribute("cx", n1.x + (n2.x - n1.x) * segmentProgress);
-        particleEls[i].setAttribute("cy", n1.y + (n2.y - n1.y) * segmentProgress);
-        particleEls[i].setAttribute("r", 4 * ((n1.scale + n2.scale) / 2));
+        particleEls[i].setAttribute("cx", cx);
+        particleEls[i].setAttribute("cy", cy);
+        particleEls[i].setAttribute("r", r * ((n1.scale + n2.scale) / 2));
+        particleEls[i].setAttribute("opacity", opacity);
       });
 
       requestAnimationFrame(renderLoop);
@@ -362,7 +460,8 @@ const timelineEvents = experienceTimelineBlock
     display: grid;
     grid-template-columns: minmax(300px, 0.85fr) minmax(0, 1.35fr);
     gap: 72px;
-    align-items: end;
+    align-items: flex-start;
+    padding-top: 16px;
     min-height: 650px;
   }
 
@@ -404,7 +503,8 @@ const timelineEvents = experienceTimelineBlock
     overflow: hidden;
     border: 1px solid rgba(var(--rgb-warm), 0.3);
     border-radius: 50%;
-    box-shadow: 0 0 50px rgba(var(--rgb-warm), 0.08), inset 0 0 20px rgba(0, 0, 0, 0.8);
+    background-color: var(--color-panel, #dfdbd2);
+    box-shadow: 0 0 50px rgba(var(--rgb-warm), 0.08), inset 0 0 40px rgba(0, 0, 0, 0.5);
   }
 
   .profile-bg,
@@ -421,8 +521,10 @@ const timelineEvents = experienceTimelineBlock
     background-image: url("/profile.jpg");
     background-position: center;
     background-size: cover;
-    /* Beauty retouch CSS: brightens, warms up skin tones, and enhances vibrancy */
-    filter: brightness(1.08) contrast(1.05) saturate(1.15) sepia(5%);
+    /* Editorial monochrome filter to blend the casual group photo into the warm theme */
+    filter: grayscale(1) sepia(0.15) contrast(1.1) brightness(0.9);
+    mix-blend-mode: luminosity;
+    opacity: 0.85;
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
@@ -433,7 +535,7 @@ const timelineEvents = experienceTimelineBlock
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(var(--rgb-warm), 0.8), transparent);
     filter: drop-shadow(0 0 4px rgba(var(--rgb-warm), 0.4));
-    opacity: 0.6;
+    opacity: 0.15;
     pointer-events: none;
     animation: profileScanner 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
@@ -500,21 +602,138 @@ const timelineEvents = experienceTimelineBlock
     text-transform: uppercase;
   }
 
-  .about-statement {
+  .about-statement.card-view {
     position: relative;
-    display: grid;
-    gap: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
     perspective: 1400px;
+    padding: 42px 48px;
+    border-radius: 24px;
+    margin-top: 0;
+    background: var(--color-panel);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+
+  .statement-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(var(--rgb-warm), 0.15);
+    padding-bottom: 16px;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .statement-header .micro-label {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: var(--color-ink-muted);
+    text-transform: uppercase;
+  }
+
+  .ra1-thm-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(138, 180, 248, 0.12);
+    border: 1px solid rgba(138, 180, 248, 0.05);
+    font-family: var(--font-mono, monospace);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--color-ink); /* Theme-aware text color */
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    --ra1-color: #8b5cf6; /* RA1 Purple */
+  }
+
+  .ra1-thm-chip:hover {
+    background: rgba(138, 180, 248, 0.2);
+    border-color: rgba(138, 180, 248, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(138, 180, 248, 0.15);
+  }
+
+  html[data-theme="light"] .ra1-thm-chip {
+    background: rgba(26, 115, 232, 0.1);
+    border-color: rgba(26, 115, 232, 0.15);
+  }
+
+  html[data-theme="light"] .ra1-thm-chip:hover {
+    background: rgba(26, 115, 232, 0.15);
+    border-color: rgba(26, 115, 232, 0.3);
+    box-shadow: 0 4px 12px rgba(26, 115, 232, 0.15);
+  }
+
+  .lattice-interaction-area {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ra1-thm-chip .chip-dot {
+    width: 6px;
+    height: 6px;
+    min-width: 6px;
+    min-height: 6px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background-color: var(--ra1-color);
+    box-shadow: 0 0 10px var(--ra1-color), 0 0 4px rgba(255, 255, 255, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+  }
+
+  .ra1-thm-chip .chip-dot::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: var(--ra1-color);
+    opacity: 0.4;
+    animation: ra1DotPulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes ra1DotPulse {
+    0% { transform: scale(0.8); opacity: 0.5; }
+    50% { transform: scale(1.5); opacity: 0; }
+    100% { transform: scale(0.8); opacity: 0; }
+  }
+
+  .ra1-thm-chip .chip-muted {
+    color: var(--color-ink-muted); /* Theme-aware muted color */
+    font-weight: 500;
+  }
+
+  .card-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-accent, #10b981);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
   }
 
   .about-statement svg {
-    width: min(800px, 100%);
+    width: 100%;
+    max-width: 700px;
     height: auto;
+    margin: 0 auto;
     color: var(--color-ink-soft);
     transform-style: preserve-3d;
     transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     will-change: transform;
-    filter: drop-shadow(0 15px 40px rgba(138, 180, 248, 0.15));
+    filter: drop-shadow(0 10px 30px rgba(138, 180, 248, 0.1));
   }
 
   .about-statement polyline {
@@ -525,47 +744,51 @@ const timelineEvents = experienceTimelineBlock
     to { stroke-dashoffset: -10; }
   }
 
-  .about-statement circle {
-    fill: var(--color-paper);
-    stroke: currentColor;
+  /* Global styles for dynamically injected SVG elements */
+  .true-3d-lattice :global(.lattice-node) {
+    fill: var(--color-paper, #dfdbd2);
+    stroke: #8b5cf6; /* RA1 Purple */
+  }
+  
+  html[data-theme="light"] .true-3d-lattice :global(.lattice-node) {
+    stroke: var(--color-warm, #a0a0a0);
   }
 
-  .about-statement blockquote {
-    position: relative;
+  .true-3d-lattice :global(.lattice-particle) {
+    fill: #8b5cf6; /* RA1 Purple for moving particles */
+  }
+
+  html[data-theme="light"] .true-3d-lattice :global(.lattice-particle) {
+    fill: var(--color-accent, #1a73e8);
+  }
+
+  /* Intro Card Section */
+  .about-intro-section {
+    margin-top: -64px;
+    margin-bottom: 24px;
+  }
+
+  .intro-card.card-view {
+    padding: 40px 48px;
+    background: var(--color-panel);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.05);
+  }
+
+  .intro-card .intro-text {
     margin: 0;
-    max-width: 860px;
-    font-family: "Noto Serif KR", "Noto Serif", serif;
-    font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+    font-family: var(--font-sans, system-ui);
+    font-size: 1.1rem;
     font-weight: 400;
-    font-style: italic;
-    line-height: 1.65;
+    line-height: 1.7;
     color: var(--color-ink);
-    padding-left: 48px;
-    letter-spacing: -0.01em;
   }
 
-  .about-statement blockquote::before {
-    content: '\201C';
-    position: absolute;
-    top: -24px;
-    left: -16px;
-    font-family: "Noto Serif", serif;
-    font-size: 7rem;
-    color: rgba(var(--rgb-warm), 0.3);
-    line-height: 1;
-    font-style: normal;
-  }
-
-  .about-statement blockquote::after {
-    content: '\201D';
-    position: absolute;
-    bottom: -50px;
-    right: 10px;
-    font-family: "Noto Serif", serif;
-    font-size: 7rem;
-    color: rgba(var(--rgb-warm), 0.15);
-    line-height: 1;
-    font-style: normal;
+  @media (max-width: 768px) {
+    .intro-card.card-view {
+      padding: 32px 24px;
+    }
   }
 
   .about-thesis {

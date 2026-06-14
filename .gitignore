@@ -9,7 +9,6 @@ dist/
 # Local environment and secrets
 .env
 .env.*
-!.env.example
 
 # Logs and diagnostics
 logs/
