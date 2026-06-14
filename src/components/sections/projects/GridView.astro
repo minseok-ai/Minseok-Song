@@ -308,7 +308,9 @@ const createCapabilityRadarChart = (scores) => {
       if (iframe.contentWindow) {
         if (typeof iframe.contentWindow.switchThemeUI === 'function') {
           syncRetries = 0;
-          const parentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+          const parentTheme =
+            document.documentElement.getAttribute('data-theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
           const targetTheme = parentTheme === 'light' ? 'nnfc' : 'mckinsey';
           iframe.contentWindow.switchThemeUI(targetTheme);
         } else if (syncRetries < 10) {

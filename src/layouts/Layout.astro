@@ -44,7 +44,34 @@ const jsonLd = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#030407" />
+    <meta name="theme-color" content="#030407" id="theme-color" />
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        const sessionKey = "theme-override";
+        const legacyKey = "theme";
+        const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+        const isTheme = (value) => value === "dark" || value === "light";
+        const systemTheme = darkQuery.matches ? "dark" : "light";
+        let sessionTheme = null;
+
+        try {
+          const storedSessionTheme = sessionStorage.getItem(sessionKey);
+          sessionTheme = isTheme(storedSessionTheme) ? storedSessionTheme : null;
+          localStorage.removeItem(legacyKey);
+        } catch {}
+
+        const theme = sessionTheme || systemTheme;
+        root.setAttribute("data-theme", theme);
+        root.setAttribute("data-theme-source", sessionTheme ? "manual" : "system");
+        root.style.colorScheme = theme;
+
+        const metaThemeColor = document.getElementById("theme-color");
+        if (metaThemeColor) {
+          metaThemeColor.setAttribute("content", theme === "dark" ? "#030407" : "#EBEAE4");
+        }
+      })();
+    </script>
     <link rel="icon" type="image/png" href={`/A1Firm-logo_light.png?v=${faviconVersion}`} media="(prefers-color-scheme: light)" />
     <link rel="icon" type="image/png" href={`/A1Firm-logo.png?v=${faviconVersion}`} media="(prefers-color-scheme: dark)" />
     <link rel="apple-touch-icon" href={`/A1Firm-logo.png?v=${faviconVersion}`} />
@@ -196,39 +223,71 @@ const jsonLd = {
 
       // Theme toggle functionality
       const themeToggle = document.getElementById('theme-toggle');
+      const themeMedia = window.matchMedia('(prefers-color-scheme: dark)');
+      const themeSessionKey = 'theme-override';
+      const legacyThemeKey = 'theme';
+      const isValidTheme = (theme) => theme === 'dark' || theme === 'light';
+      const getSystemTheme = () => themeMedia.matches ? 'dark' : 'light';
+
+      const readSessionTheme = () => {
+        try {
+          const theme = sessionStorage.getItem(themeSessionKey);
+          return isValidTheme(theme) ? theme : null;
+        } catch {
+          return null;
+        }
+      };
+
+      const writeSessionTheme = (theme) => {
+        try {
+          if (theme === getSystemTheme()) {
+            sessionStorage.removeItem(themeSessionKey);
+          } else {
+            sessionStorage.setItem(themeSessionKey, theme);
+          }
+        } catch {}
+      };
+
+      const clearSessionTheme = () => {
+        try { sessionStorage.removeItem(themeSessionKey); } catch {}
+      };
+
+      try { localStorage.removeItem(legacyThemeKey); } catch {}
       
-      const getSystemTheme = () => window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      
-      const setTheme = (theme) => {
+      const setTheme = (theme, source = 'system') => {
         document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.setAttribute('data-theme-source', source);
+        document.documentElement.style.colorScheme = theme;
         themeToggle?.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
+        themeToggle?.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
         
-        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+        const metaThemeColor = document.getElementById('theme-color');
         if (metaThemeColor) {
           metaThemeColor.setAttribute('content', theme === 'dark' ? '#030407' : '#EBEAE4');
         }
       };
 
-      const savedTheme = (() => {
-        try { return localStorage.getItem('theme'); } catch { return null; }
-      })();
-      
-      if (savedTheme) {
-        setTheme(savedTheme);
-      } else {
-        setTheme(getSystemTheme());
-      }
+      const applyPreferredTheme = () => {
+        const sessionTheme = readSessionTheme();
+        setTheme(sessionTheme || getSystemTheme(), sessionTheme ? 'manual' : 'system');
+      };
+
+      applyPreferredTheme();
 
       // Live sync with OS
       const syncWithSystem = (e) => {
+        clearSessionTheme();
         setTheme(e.matches ? 'dark' : 'light');
-        try { localStorage.removeItem('theme'); } catch {}
       };
       
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', syncWithSystem);
+      if (typeof themeMedia.addEventListener === 'function') {
+        themeMedia.addEventListener('change', syncWithSystem);
+      } else if (typeof themeMedia.addListener === 'function') {
+        themeMedia.addListener(syncWithSystem);
+      }
       document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible' && !localStorage.getItem('theme')) {
-          setTheme(getSystemTheme());
+        if (document.visibilityState === 'visible' && !readSessionTheme()) {
+          setTheme(getSystemTheme(), 'system');
         }
       });
 
@@ -241,10 +300,8 @@ const jsonLd = {
           const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
           
           const switchTheme = () => {
-            setTheme(newTheme);
-            try {
-              localStorage.setItem('theme', newTheme);
-            } catch {}
+            writeSessionTheme(newTheme);
+            setTheme(newTheme, readSessionTheme() ? 'manual' : 'system');
           };
 
           if (!document.startViewTransition || reducedMotion.matches) {
@@ -266,8 +323,6 @@ const jsonLd = {
           });
 
           transition.ready.then(() => {
-            const targetBrightness = newTheme === 'dark' ? '0.4' : '1.5';
-            
             document.documentElement.animate(
               {
                 clipPath: [
@@ -286,7 +341,7 @@ const jsonLd = {
               {
                 filter: [
                   `blur(0px) brightness(1)`,
-                  `blur(12px) brightness(${targetBrightness})`
+                  `blur(12px) brightness(1)`
                 ]
               },
               {
