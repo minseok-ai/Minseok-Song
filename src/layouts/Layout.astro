@@ -50,18 +50,26 @@ const jsonLd = {
       (() => {
         const root = document.documentElement;
         const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
-        const isSamsungInternet = /SamsungBrowser/i.test(navigator.userAgent);
+        const themeStorageKey = "theme-session-preference";
+        const themeSystemStorageKey = "theme-session-system";
         let savedTheme = null;
+        const systemTheme = darkQuery.matches ? "dark" : "light";
 
         try {
-          const value = localStorage.getItem("theme");
-          savedTheme = value === "light" || value === "dark" ? value : null;
+          localStorage.removeItem("theme");
         } catch {}
 
-        const resolvedTheme = savedTheme || (darkQuery.matches ? "dark" : "light");
-        if (isSamsungInternet) {
-          root.dataset.browser = "samsung-internet";
-        }
+        try {
+          const value = sessionStorage.getItem(themeStorageKey);
+          const savedSystemTheme = sessionStorage.getItem(themeSystemStorageKey);
+          savedTheme = (value === "light" || value === "dark") && savedSystemTheme === systemTheme ? value : null;
+          if (!savedTheme) {
+            sessionStorage.removeItem(themeStorageKey);
+            sessionStorage.removeItem(themeSystemStorageKey);
+          }
+        } catch {}
+
+        const resolvedTheme = savedTheme || systemTheme;
         root.dataset.themeMode = savedTheme ? "manual" : "system";
         root.dataset.resolvedTheme = resolvedTheme;
         if (savedTheme) {
@@ -130,63 +138,6 @@ const jsonLd = {
     <slot name="head" />
   </head>
   <body data-content-protection={contentProtectionEnabled ? "enabled" : "disabled"}>
-    <script is:inline>
-      (() => {
-        const root = document.documentElement;
-        if (!/SamsungBrowser/i.test(navigator.userAgent) || !document.body) return;
-
-        const parseRgb = (value) => {
-          const channels = String(value || "").match(/[\d.]+/g)?.slice(0, 3).map(Number);
-          return channels?.length === 3 && channels.every(Number.isFinite) ? channels : null;
-        };
-
-        const canvasIsLight = (value) => {
-          const channels = parseRgb(value);
-          if (!channels) return false;
-          const [red, green, blue] = channels;
-          const luminance = (red * 0.2126) + (green * 0.7152) + (blue * 0.0722);
-          return luminance >= 245;
-        };
-
-        const detector = document.createElement("div");
-        detector.setAttribute("aria-hidden", "true");
-        detector.style.cssText = [
-          "position:absolute",
-          "left:-9999px",
-          "top:-9999px",
-          "width:1px",
-          "height:1px",
-          "pointer-events:none",
-          "background-color:canvas",
-          "color-scheme:light"
-        ].join(";");
-
-        document.body.appendChild(detector);
-        const forceDarkActive = !canvasIsLight(getComputedStyle(detector).backgroundColor);
-        detector.remove();
-
-        root.dataset.browser = "samsung-internet";
-        root.dataset.samsungForceDark = forceDarkActive ? "active" : "inactive";
-
-        if (!forceDarkActive) return;
-
-        let savedTheme = null;
-        try {
-          const value = localStorage.getItem("theme");
-          savedTheme = value === "light" || value === "dark" ? value : null;
-        } catch {}
-
-        root.dataset.themeMode = savedTheme ? "manual" : "system";
-        root.dataset.resolvedTheme = "dark";
-        root.setAttribute("data-theme", "dark");
-        root.style.colorScheme = "only dark";
-
-        const metaThemeColor = document.getElementById("theme-color");
-        if (metaThemeColor) {
-          metaThemeColor.setAttribute("content", "#030407");
-        }
-      })();
-    </script>
     <Analytics />
     <SpeedInsights />
     <div class="site-shell">
@@ -358,15 +309,27 @@ const jsonLd = {
       const themeToggle = document.getElementById('theme-toggle');
       const systemThemeQuery = '(prefers-color-scheme: dark)';
       const themeMedia = window.matchMedia(systemThemeQuery);
-      const themeStorageKey = 'theme';
+      const themeStorageKey = 'theme-session-preference';
+      const themeSystemStorageKey = 'theme-session-system';
+      const legacyThemeStorageKey = 'theme';
       const root = document.documentElement;
-      const isSamsungInternet = /SamsungBrowser/i.test(navigator.userAgent);
-      let samsungForceDarkActive = root.dataset.samsungForceDark === 'active';
+      const getSystemTheme = () => themeMedia.matches ? 'dark' : 'light';
+      let lastSystemTheme = getSystemTheme();
 
       const readSavedTheme = () => {
         try {
-          const value = localStorage.getItem(themeStorageKey);
-          return value === 'light' || value === 'dark' ? value : null;
+          localStorage.removeItem(legacyThemeStorageKey);
+        } catch {}
+
+        try {
+          const value = sessionStorage.getItem(themeStorageKey);
+          const savedSystemTheme = sessionStorage.getItem(themeSystemStorageKey);
+          const savedTheme = (value === 'light' || value === 'dark') && savedSystemTheme === getSystemTheme() ? value : null;
+          if (!savedTheme) {
+            sessionStorage.removeItem(themeStorageKey);
+            sessionStorage.removeItem(themeSystemStorageKey);
+          }
+          return savedTheme;
         } catch {
           return null;
         }
@@ -374,69 +337,28 @@ const jsonLd = {
 
       const saveManualTheme = (theme) => {
         try {
-          localStorage.setItem(themeStorageKey, theme);
+          sessionStorage.setItem(themeStorageKey, theme);
+          sessionStorage.setItem(themeSystemStorageKey, getSystemTheme());
+        } catch {}
+
+        try {
+          localStorage.removeItem(legacyThemeStorageKey);
         } catch {}
       };
 
       const clearSavedTheme = () => {
         try {
-          localStorage.removeItem(themeStorageKey);
+          sessionStorage.removeItem(themeStorageKey);
+          sessionStorage.removeItem(themeSystemStorageKey);
+        } catch {}
+
+        try {
+          localStorage.removeItem(legacyThemeStorageKey);
         } catch {}
       };
 
-      const parseRgb = (value) => {
-        const channels = String(value || '').match(/[\d.]+/g)?.slice(0, 3).map(Number);
-        return channels?.length === 3 && channels.every(Number.isFinite) ? channels : null;
-      };
-
-      const canvasIsLight = (value) => {
-        const channels = parseRgb(value);
-        if (!channels) return false;
-        const [red, green, blue] = channels;
-        const luminance = (red * 0.2126) + (green * 0.7152) + (blue * 0.0722);
-        return luminance >= 245;
-      };
-
-      const detectSamsungForceDark = () => {
-        if (!isSamsungInternet || !document.body) return false;
-
-        const detector = document.createElement('div');
-        detector.setAttribute('aria-hidden', 'true');
-        detector.style.cssText = [
-          'position:absolute',
-          'left:-9999px',
-          'top:-9999px',
-          'width:1px',
-          'height:1px',
-          'pointer-events:none',
-          'background-color:canvas',
-          'color-scheme:light'
-        ].join(';');
-
-        document.body.appendChild(detector);
-        const backgroundColor = getComputedStyle(detector).backgroundColor;
-        detector.remove();
-
-        return !canvasIsLight(backgroundColor);
-      };
-
-      const refreshSamsungForceDark = () => {
-        if (!isSamsungInternet) return false;
-
-        const nextState = detectSamsungForceDark();
-        if (samsungForceDarkActive === nextState) return false;
-
-        samsungForceDarkActive = nextState;
-        root.dataset.samsungForceDark = nextState ? 'active' : 'inactive';
-        return true;
-      };
-
-      const getSystemTheme = () => samsungForceDarkActive || themeMedia.matches ? 'dark' : 'light';
       const getThemeMode = () => root.dataset.themeMode === 'manual' ? 'manual' : 'system';
       const getEffectiveTheme = () => root.dataset.resolvedTheme || readSavedTheme() || getSystemTheme();
-      const coerceSamsungTheme = (theme) => (
-        isSamsungInternet && samsungForceDarkActive && theme === 'light' ? 'dark' : theme
-      );
 
       const updateThemeChrome = (theme = getEffectiveTheme()) => {
         themeToggle?.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
@@ -459,7 +381,7 @@ const jsonLd = {
         root.dataset.themeMode = mode;
         root.dataset.resolvedTheme = theme;
 
-        if (mode === 'manual' || (isSamsungInternet && samsungForceDarkActive)) {
+        if (mode === 'manual') {
           root.setAttribute('data-theme', theme);
         } else {
           root.removeAttribute('data-theme');
@@ -473,39 +395,36 @@ const jsonLd = {
       const applySavedOrSystemTheme = () => {
         const savedTheme = readSavedTheme();
         const systemTheme = getSystemTheme();
-        const theme = coerceSamsungTheme(savedTheme || systemTheme);
+        const theme = savedTheme || systemTheme;
         applyTheme(theme, savedTheme ? 'manual' : 'system');
       };
 
       const setPreferredTheme = (theme) => {
         if (theme === getSystemTheme()) {
           clearSavedTheme();
-          applyTheme(coerceSamsungTheme(theme), 'system');
+          applyTheme(theme, 'system');
           return;
         }
 
         saveManualTheme(theme);
-        applyTheme(coerceSamsungTheme(theme), 'manual');
+        applyTheme(theme, 'manual');
       };
-
-      if (isSamsungInternet) {
-        root.dataset.browser = 'samsung-internet';
-        if (!root.dataset.samsungForceDark) {
-          root.dataset.samsungForceDark = samsungForceDarkActive ? 'active' : 'inactive';
-        }
-        refreshSamsungForceDark();
-      }
 
       applySavedOrSystemTheme();
 
       const syncWithSystem = () => {
-        const forceDarkChanged = refreshSamsungForceDark();
-        if (forceDarkChanged) {
-          applySavedOrSystemTheme();
-          return;
-        }
-        if (getThemeMode() === 'manual') return;
-        applyTheme(getSystemTheme(), 'system');
+        clearSavedTheme();
+        const systemTheme = getSystemTheme();
+        lastSystemTheme = systemTheme;
+        applyTheme(systemTheme, 'system');
+      };
+
+      const syncSystemIfChanged = () => {
+        const systemTheme = getSystemTheme();
+        if (systemTheme === lastSystemTheme) return;
+        clearSavedTheme();
+        lastSystemTheme = systemTheme;
+        applyTheme(systemTheme, 'system');
       };
 
       if (typeof themeMedia.addEventListener === 'function') {
@@ -514,32 +433,18 @@ const jsonLd = {
         themeMedia.addListener(syncWithSystem);
       }
       window.addEventListener('storage', (event) => {
-        if (event.key === themeStorageKey) {
-          refreshSamsungForceDark();
+        if ([themeStorageKey, themeSystemStorageKey, legacyThemeStorageKey].includes(event.key)) {
           applySavedOrSystemTheme();
         }
       });
 
-      if (isSamsungInternet) {
-        const syncSamsungForceDark = () => {
-          const changed = refreshSamsungForceDark();
-          if (changed && getThemeMode() !== 'manual') {
-            applyTheme(getSystemTheme(), 'system');
-          } else if (changed) {
-            applySavedOrSystemTheme();
-          }
-        };
-
-        window.addEventListener('pageshow', syncSamsungForceDark);
-        window.addEventListener('focus', syncSamsungForceDark);
-        document.addEventListener('visibilitychange', () => {
-          if (document.visibilityState === 'visible') {
-            syncSamsungForceDark();
-          }
-        });
-        window.setTimeout(syncSamsungForceDark, 120);
-        window.setTimeout(syncSamsungForceDark, 600);
-      }
+      window.addEventListener('pageshow', syncSystemIfChanged);
+      window.addEventListener('focus', syncSystemIfChanged);
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          syncSystemIfChanged();
+        }
+      });
 
       if (themeToggle) {
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');

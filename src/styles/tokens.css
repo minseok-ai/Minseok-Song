@@ -242,45 +242,6 @@ html[data-theme="dark"] {
   --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
-html[data-browser="samsung-internet"][data-samsung-force-dark="active"] {
-  color-scheme: only dark !important;
-  --color-paper: #030407 !important;
-  --color-paper-deep: #010102 !important;
-  --color-ink: #f2f5f9 !important;
-  --color-ink-soft: rgba(242, 245, 249, 0.72) !important;
-  --color-ink-muted: rgba(242, 245, 249, 0.45) !important;
-  --color-panel: rgba(8, 10, 15, 0.75) !important;
-  --color-panel-solid: #0b0e14 !important;
-  --color-field: #06080c !important;
-  --color-line: rgba(255, 255, 255, 0.08) !important;
-  --color-line-strong: rgba(255, 255, 255, 0.16) !important;
-  --color-line-dark: rgba(13, 17, 23, 0.18) !important;
-  --color-accent: #6b9cf2 !important;
-  --color-accent-ink: #a6c4f9 !important;
-  --color-accent-soft: rgba(107, 156, 242, 0.12) !important;
-  --color-accent-glow: rgba(107, 156, 242, 0.45) !important;
-  --color-warm: #6b9cf2 !important;
-  --rgb-warm: 107, 156, 242 !important;
-  --color-warm-soft: rgba(107, 156, 242, 0.15) !important;
-  --color-warm-glow: rgba(107, 156, 242, 0.45) !important;
-  --header-glow: rgba(107, 156, 242, 0.08) !important;
-  --body-bg-gradient:
-    radial-gradient(circle at top left, rgba(107, 156, 242, 0.06) 0%, transparent 40%),
-    radial-gradient(circle at bottom right, rgba(179, 154, 251, 0.05) 0%, transparent 40%) !important;
-  --body-bg-veil:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px) !important;
-  --glass-bg: rgba(255, 255, 255, 0.03) !important;
-  --glass-border: rgba(255, 255, 255, 0.08) !important;
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
-}
-
-html[data-browser="samsung-internet"][data-samsung-force-dark="active"],
-html[data-browser="samsung-internet"][data-samsung-force-dark="active"] body {
-  background-color: #030407 !important;
-  color: #f2f5f9 !important;
-}
-
 * {
   box-sizing: border-box;
 }
