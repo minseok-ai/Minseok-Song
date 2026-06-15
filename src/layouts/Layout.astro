@@ -50,6 +50,7 @@ const jsonLd = {
       (() => {
         const root = document.documentElement;
         const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+        const isSamsungInternet = /SamsungBrowser/i.test(navigator.userAgent);
         let savedTheme = null;
 
         try {
@@ -58,6 +59,9 @@ const jsonLd = {
         } catch {}
 
         const resolvedTheme = savedTheme || (darkQuery.matches ? "dark" : "light");
+        if (isSamsungInternet) {
+          root.dataset.browser = "samsung-internet";
+        }
         root.dataset.themeMode = savedTheme ? "manual" : "system";
         root.dataset.resolvedTheme = resolvedTheme;
         if (savedTheme) {
@@ -126,6 +130,63 @@ const jsonLd = {
     <slot name="head" />
   </head>
   <body data-content-protection={contentProtectionEnabled ? "enabled" : "disabled"}>
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        if (!/SamsungBrowser/i.test(navigator.userAgent) || !document.body) return;
+
+        const parseRgb = (value) => {
+          const channels = String(value || "").match(/[\d.]+/g)?.slice(0, 3).map(Number);
+          return channels?.length === 3 && channels.every(Number.isFinite) ? channels : null;
+        };
+
+        const canvasIsLight = (value) => {
+          const channels = parseRgb(value);
+          if (!channels) return false;
+          const [red, green, blue] = channels;
+          const luminance = (red * 0.2126) + (green * 0.7152) + (blue * 0.0722);
+          return luminance >= 245;
+        };
+
+        const detector = document.createElement("div");
+        detector.setAttribute("aria-hidden", "true");
+        detector.style.cssText = [
+          "position:absolute",
+          "left:-9999px",
+          "top:-9999px",
+          "width:1px",
+          "height:1px",
+          "pointer-events:none",
+          "background-color:canvas",
+          "color-scheme:light"
+        ].join(";");
+
+        document.body.appendChild(detector);
+        const forceDarkActive = !canvasIsLight(getComputedStyle(detector).backgroundColor);
+        detector.remove();
+
+        root.dataset.browser = "samsung-internet";
+        root.dataset.samsungForceDark = forceDarkActive ? "active" : "inactive";
+
+        if (!forceDarkActive) return;
+
+        let savedTheme = null;
+        try {
+          const value = localStorage.getItem("theme");
+          savedTheme = value === "light" || value === "dark" ? value : null;
+        } catch {}
+
+        root.dataset.themeMode = savedTheme ? "manual" : "system";
+        root.dataset.resolvedTheme = "dark";
+        root.setAttribute("data-theme", "dark");
+        root.style.colorScheme = "only dark";
+
+        const metaThemeColor = document.getElementById("theme-color");
+        if (metaThemeColor) {
+          metaThemeColor.setAttribute("content", "#030407");
+        }
+      })();
+    </script>
     <Analytics />
     <SpeedInsights />
     <div class="site-shell">
@@ -300,7 +361,7 @@ const jsonLd = {
       const themeStorageKey = 'theme';
       const root = document.documentElement;
       const isSamsungInternet = /SamsungBrowser/i.test(navigator.userAgent);
-      let samsungForceDarkActive = false;
+      let samsungForceDarkActive = root.dataset.samsungForceDark === 'active';
 
       const readSavedTheme = () => {
         try {
@@ -323,6 +384,19 @@ const jsonLd = {
         } catch {}
       };
 
+      const parseRgb = (value) => {
+        const channels = String(value || '').match(/[\d.]+/g)?.slice(0, 3).map(Number);
+        return channels?.length === 3 && channels.every(Number.isFinite) ? channels : null;
+      };
+
+      const canvasIsLight = (value) => {
+        const channels = parseRgb(value);
+        if (!channels) return false;
+        const [red, green, blue] = channels;
+        const luminance = (red * 0.2126) + (green * 0.7152) + (blue * 0.0722);
+        return luminance >= 245;
+      };
+
       const detectSamsungForceDark = () => {
         if (!isSamsungInternet || !document.body) return false;
 
@@ -343,7 +417,7 @@ const jsonLd = {
         const backgroundColor = getComputedStyle(detector).backgroundColor;
         detector.remove();
 
-        return backgroundColor !== 'rgb(255, 255, 255)';
+        return !canvasIsLight(backgroundColor);
       };
 
       const refreshSamsungForceDark = () => {
@@ -416,14 +490,20 @@ const jsonLd = {
 
       if (isSamsungInternet) {
         root.dataset.browser = 'samsung-internet';
-        root.dataset.samsungForceDark = 'inactive';
+        if (!root.dataset.samsungForceDark) {
+          root.dataset.samsungForceDark = samsungForceDarkActive ? 'active' : 'inactive';
+        }
         refreshSamsungForceDark();
       }
 
       applySavedOrSystemTheme();
 
-      const syncWithSystem = (event) => {
-        refreshSamsungForceDark();
+      const syncWithSystem = () => {
+        const forceDarkChanged = refreshSamsungForceDark();
+        if (forceDarkChanged) {
+          applySavedOrSystemTheme();
+          return;
+        }
         if (getThemeMode() === 'manual') return;
         applyTheme(getSystemTheme(), 'system');
       };
