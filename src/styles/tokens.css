@@ -322,6 +322,19 @@ body[data-content-protection="enabled"] {
   user-select: none;
 }
 
+@media (hover: none), (pointer: coarse) {
+  body[data-content-protection="enabled"] {
+    -webkit-touch-callout: default;
+    -webkit-user-select: auto;
+    user-select: auto;
+  }
+
+  body[data-content-protection="enabled"] ::selection {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+}
+
 body[data-content-protection="enabled"] input,
 body[data-content-protection="enabled"] textarea,
 body[data-content-protection="enabled"] select,

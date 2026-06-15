@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import HeroSystem from "../components/ui/HeroSystem.astro";
 import OperatingLoop from "../components/ui/OperatingLoop.astro";
 import SurfaceGrid from "../components/ui/SurfaceGrid.astro";
+import TechToolsRail from "../components/ui/TechToolsRail.astro";
 import { visibleNavigationItems } from "../config/navigation";
 import { siteConfig } from "../config/site";
 import { pageEntriesById } from "../lib/content/registry";
@@ -82,12 +83,14 @@ const focusStats = [
 >
   <section class="home-page">
     <div class="reveal-up"><HeroSystem a1Firms={a1Firms} focusStats={focusStats} siteConfig={siteConfig} /></div>
-    
-    <div class="reveal-up stagger-1"><OperatingLoop signalLoop={signalLoop} /></div>
-    
-    <div class="reveal-up stagger-2"><SurfaceGrid sectionCards={sectionCards} /></div>
 
-    <section id="product-band" class="product-band reveal-up stagger-3" aria-label="A1trategize">
+    <div class="reveal-up stagger-1"><TechToolsRail /></div>
+
+    <div class="reveal-up stagger-2"><OperatingLoop signalLoop={signalLoop} /></div>
+
+    <div class="reveal-up stagger-3"><SurfaceGrid sectionCards={sectionCards} /></div>
+
+    <section id="product-band" class="product-band reveal-up stagger-4" aria-label="A1trategize">
       <div class="band-content">
         <p class="micro-label">Flagship product</p>
         <h2>{a1Firms?.hero?.title ?? "A1trategize"}</h2>
@@ -141,7 +144,7 @@ const focusStats = [
     z-index: 1;
     transition: border-color var(--motion-base) ease, box-shadow var(--motion-base) ease;
   }
-  
+
   .product-band:hover {
     border-color: var(--color-line-strong);
     box-shadow: 0 24px 48px var(--glass-shadow);
@@ -249,7 +252,7 @@ const focusStats = [
       gap: 32px;
       padding: 48px;
     }
-    
+
     .band-content,
     .band-desc,
     .band-action {
