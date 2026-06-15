@@ -1170,5 +1170,20 @@ const timelineEvents = experienceTimelineBlock
     .signal-strip {
       grid-template-columns: 1fr;
     }
+
+    .signal-strip {
+      gap: 0;
+    }
+
+    .signal-strip div {
+      border: 0;
+      border-radius: 0;
+      border-bottom: 1px solid var(--color-line);
+      box-shadow: none;
+    }
+
+    .signal-strip div:last-child {
+      border-bottom: 0;
+    }
   }
 </style>
