@@ -40,11 +40,11 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang="ko" style="color-scheme: only light;">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="color-scheme" content="only light" />
+    <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#030407" id="theme-color" />
     <script is:inline>
       (() => {
@@ -299,6 +299,8 @@ const jsonLd = {
       const themeMedia = window.matchMedia(systemThemeQuery);
       const themeStorageKey = 'theme';
       const root = document.documentElement;
+      const isSamsungInternet = /SamsungBrowser/i.test(navigator.userAgent);
+      let samsungForceDarkActive = false;
 
       const readSavedTheme = () => {
         try {
@@ -321,9 +323,46 @@ const jsonLd = {
         } catch {}
       };
 
-      const getSystemTheme = () => themeMedia.matches ? 'dark' : 'light';
+      const detectSamsungForceDark = () => {
+        if (!isSamsungInternet || !document.body) return false;
+
+        const detector = document.createElement('div');
+        detector.setAttribute('aria-hidden', 'true');
+        detector.style.cssText = [
+          'position:absolute',
+          'left:-9999px',
+          'top:-9999px',
+          'width:1px',
+          'height:1px',
+          'pointer-events:none',
+          'background-color:canvas',
+          'color-scheme:light'
+        ].join(';');
+
+        document.body.appendChild(detector);
+        const backgroundColor = getComputedStyle(detector).backgroundColor;
+        detector.remove();
+
+        return backgroundColor !== 'rgb(255, 255, 255)';
+      };
+
+      const refreshSamsungForceDark = () => {
+        if (!isSamsungInternet) return false;
+
+        const nextState = detectSamsungForceDark();
+        if (samsungForceDarkActive === nextState) return false;
+
+        samsungForceDarkActive = nextState;
+        root.dataset.samsungForceDark = nextState ? 'active' : 'inactive';
+        return true;
+      };
+
+      const getSystemTheme = () => samsungForceDarkActive || themeMedia.matches ? 'dark' : 'light';
       const getThemeMode = () => root.dataset.themeMode === 'manual' ? 'manual' : 'system';
       const getEffectiveTheme = () => root.dataset.resolvedTheme || readSavedTheme() || getSystemTheme();
+      const coerceSamsungTheme = (theme) => (
+        isSamsungInternet && samsungForceDarkActive && theme === 'light' ? 'dark' : theme
+      );
 
       const updateThemeChrome = (theme = getEffectiveTheme()) => {
         themeToggle?.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
@@ -346,7 +385,7 @@ const jsonLd = {
         root.dataset.themeMode = mode;
         root.dataset.resolvedTheme = theme;
 
-        if (mode === 'manual') {
+        if (mode === 'manual' || (isSamsungInternet && samsungForceDarkActive)) {
           root.setAttribute('data-theme', theme);
         } else {
           root.removeAttribute('data-theme');
@@ -359,25 +398,34 @@ const jsonLd = {
 
       const applySavedOrSystemTheme = () => {
         const savedTheme = readSavedTheme();
-        applyTheme(savedTheme || getSystemTheme(), savedTheme ? 'manual' : 'system');
+        const systemTheme = getSystemTheme();
+        const theme = coerceSamsungTheme(savedTheme || systemTheme);
+        applyTheme(theme, savedTheme ? 'manual' : 'system');
       };
 
       const setPreferredTheme = (theme) => {
         if (theme === getSystemTheme()) {
           clearSavedTheme();
-          applyTheme(theme, 'system');
+          applyTheme(coerceSamsungTheme(theme), 'system');
           return;
         }
 
         saveManualTheme(theme);
-        applyTheme(theme, 'manual');
+        applyTheme(coerceSamsungTheme(theme), 'manual');
       };
+
+      if (isSamsungInternet) {
+        root.dataset.browser = 'samsung-internet';
+        root.dataset.samsungForceDark = 'inactive';
+        refreshSamsungForceDark();
+      }
 
       applySavedOrSystemTheme();
 
       const syncWithSystem = (event) => {
+        refreshSamsungForceDark();
         if (getThemeMode() === 'manual') return;
-        applyTheme(event.matches ? 'dark' : 'light', 'system');
+        applyTheme(getSystemTheme(), 'system');
       };
 
       if (typeof themeMedia.addEventListener === 'function') {
@@ -387,9 +435,31 @@ const jsonLd = {
       }
       window.addEventListener('storage', (event) => {
         if (event.key === themeStorageKey) {
+          refreshSamsungForceDark();
           applySavedOrSystemTheme();
         }
       });
+
+      if (isSamsungInternet) {
+        const syncSamsungForceDark = () => {
+          const changed = refreshSamsungForceDark();
+          if (changed && getThemeMode() !== 'manual') {
+            applyTheme(getSystemTheme(), 'system');
+          } else if (changed) {
+            applySavedOrSystemTheme();
+          }
+        };
+
+        window.addEventListener('pageshow', syncSamsungForceDark);
+        window.addEventListener('focus', syncSamsungForceDark);
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') {
+            syncSamsungForceDark();
+          }
+        });
+        window.setTimeout(syncSamsungForceDark, 120);
+        window.setTimeout(syncSamsungForceDark, 600);
+      }
 
       if (themeToggle) {
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
