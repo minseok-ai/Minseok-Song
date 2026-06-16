@@ -135,6 +135,19 @@ const jsonLd = {
         clip-path: circle(0px);
       }
 
+      /* Fix mobile navigation disappearing by moving header to its own transition layer */
+      html.is-animating-theme .site-header {
+        view-transition-name: site-header;
+        transform: translateZ(0); /* Force hardware composition */
+      }
+
+      ::view-transition-old(site-header),
+      ::view-transition-new(site-header) {
+        animation-duration: 600ms;
+        animation-timing-function: cubic-bezier(0.86, 0, 0.07, 1);
+        mix-blend-mode: normal;
+      }
+
       .browser-recommendation-toast {
         position: fixed;
         z-index: 1000;
