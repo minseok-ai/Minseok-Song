@@ -317,22 +317,47 @@ const iconSvg = {
     letter-spacing: 0.01em;
     line-height: 1;
     white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    will-change: transform, box-shadow;
+    transform: translateZ(0);
     transition:
       border-color 0.3s ease,
       color 0.3s ease,
       transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-      background 0.3s ease,
       box-shadow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
-  .tech-chip:hover {
+  .tech-chip > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .tech-chip::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: color-mix(in srgb, #edf0f5 85%, var(--group-accent, var(--color-accent)) 15%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .tech-list li:hover .tech-chip,
+  .tech-list li:focus-within .tech-chip {
     border-color: color-mix(in srgb, var(--group-accent, var(--color-accent)) 40%, transparent);
     color: #0f1219;
-    background: color-mix(in srgb, #edf0f5 85%, var(--group-accent, var(--color-accent)) 15%);
     transform: translateY(-2px) scale(1.02);
     box-shadow: 
       0 8px 20px color-mix(in srgb, var(--group-accent, #6b9cf2) 16%, transparent),
       0 2px 6px color-mix(in srgb, var(--group-accent, #6b9cf2) 10%, transparent);
+  }
+
+  .tech-list li:hover .tech-chip::before,
+  .tech-list li:focus-within .tech-chip::before {
+    opacity: 1;
   }
 
   .tech-icon {
@@ -362,10 +387,14 @@ const iconSvg = {
       0 4px 12px rgba(0, 0, 0, 0.2);
   }
 
-  html[data-theme="light"] .tech-chip:hover {
+  html[data-theme="light"] .tech-chip::before {
+    background: color-mix(in srgb, #1a1e24 80%, var(--group-accent, var(--color-accent)) 20%);
+  }
+
+  html[data-theme="light"] .tech-list li:hover .tech-chip,
+  html[data-theme="light"] .tech-list li:focus-within .tech-chip {
     border-color: color-mix(in srgb, var(--group-accent, var(--color-accent)) 58%, rgba(255, 255, 255, 0.18));
     color: #ffffff;
-    background: color-mix(in srgb, #1a1e24 80%, var(--group-accent, var(--color-accent)) 20%);
     box-shadow: 0 8px 24px color-mix(in srgb, var(--group-accent, #6b9cf2) 15%, transparent), 0 0 0 1px color-mix(in srgb, var(--group-accent, #6b9cf2) 30%, transparent);
   }
 
@@ -378,10 +407,15 @@ const iconSvg = {
         inset 0 1px 0 rgba(255, 255, 255, 0.08),
         0 4px 12px rgba(0, 0, 0, 0.2);
     }
-    html:not([data-theme]) .tech-chip:hover {
+    
+    html:not([data-theme]) .tech-chip::before {
+      background: color-mix(in srgb, #1a1e24 80%, var(--group-accent, var(--color-accent)) 20%);
+    }
+
+    html:not([data-theme]) .tech-list li:hover .tech-chip,
+    html:not([data-theme]) .tech-list li:focus-within .tech-chip {
       border-color: color-mix(in srgb, var(--group-accent, var(--color-accent)) 58%, rgba(255, 255, 255, 0.18));
       color: #ffffff;
-      background: color-mix(in srgb, #1a1e24 80%, var(--group-accent, var(--color-accent)) 20%);
       box-shadow: 0 8px 24px color-mix(in srgb, var(--group-accent, #6b9cf2) 15%, transparent), 0 0 0 1px color-mix(in srgb, var(--group-accent, #6b9cf2) 30%, transparent);
     }
   }
