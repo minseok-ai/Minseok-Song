@@ -2,6 +2,13 @@
   "title": "Writings",
   "navLabel": "Writings",
   "description": "Newsletter reviews, crawled article sources, and editorial signals.",
+  "assistant": {
+    "summary": "뉴스레터, 기술/전략 노트, 글 목록을 확인하는 화면입니다.",
+    "shortAnswer": "Writings 화면은 공개된 글과 뉴스레터성 노트를 읽는 곳입니다.",
+    "detailAnswer": "글 제목이나 주제를 물어보면 A1 Chan이 해당 writing 카드와 관련 화면을 찾아 이어줄 수 있습니다.",
+    "proofPoints": ["글 목록", "뉴스레터", "기술/전략 노트", "writing 카드"],
+    "nextQuestions": ["글은 어디서 봐?", "최근 글은 뭐가 있어?", "관련 프로젝트도 있어?"]
+  },
   "order": 4,
   "path": "/writings",
   "layoutType": "writingIndex",

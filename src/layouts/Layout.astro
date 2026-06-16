@@ -150,7 +150,7 @@ const jsonLd = {
 
       .browser-recommendation-toast {
         position: fixed;
-        z-index: 1000;
+        z-index: var(--z-toast);
         top: -96px;
         left: 0;
         right: 0;
@@ -462,18 +462,30 @@ const jsonLd = {
         toast.className = 'browser-recommendation-toast';
         toast.setAttribute('role', 'status');
         toast.setAttribute('aria-live', 'polite');
-        toast.innerHTML = [
-          '<div class="browser-recommendation-toast__mark" aria-hidden="true">',
-          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>',
-          '</div>',
-          '<div class="browser-recommendation-toast__copy">',
-          '<strong class="browser-recommendation-toast__title">Chrome 브라우저 권장</strong>',
-          '<span class="browser-recommendation-toast__message">삼성 인터넷의 강제 다크 모드로 인해 디자인이 왜곡될 수 있습니다.</span>',
-          '</div>',
-          '<button class="browser-recommendation-toast__close" aria-label="닫기">',
-          '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>',
-          '</button>'
-        ].join('');
+
+        const mark = document.createElement('div');
+        mark.className = 'browser-recommendation-toast__mark';
+        mark.setAttribute('aria-hidden', 'true');
+        mark.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>';
+
+        const copy = document.createElement('div');
+        copy.className = 'browser-recommendation-toast__copy';
+
+        const title = document.createElement('strong');
+        title.className = 'browser-recommendation-toast__title';
+        title.textContent = 'Chrome 브라우저 권장';
+
+        const message = document.createElement('span');
+        message.className = 'browser-recommendation-toast__message';
+        message.textContent = '삼성 인터넷의 강제 다크 모드로 인해 디자인이 왜곡될 수 있습니다.';
+
+        const toastCloseButton = document.createElement('button');
+        toastCloseButton.className = 'browser-recommendation-toast__close';
+        toastCloseButton.setAttribute('aria-label', '닫기');
+        toastCloseButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+
+        copy.append(title, message);
+        toast.append(mark, copy, toastCloseButton);
         document.body.appendChild(toast);
 
         window.getComputedStyle(toast).opacity;
@@ -487,13 +499,10 @@ const jsonLd = {
           }, 650);
         };
 
-        const closeBtn = toast.querySelector('.browser-recommendation-toast__close');
-        if (closeBtn) {
-          closeBtn.addEventListener('click', () => {
-            clearTimeout(timeoutId);
-            dismissToast();
-          });
-        }
+        toastCloseButton.addEventListener('click', () => {
+          clearTimeout(timeoutId);
+          dismissToast();
+        });
 
         window.requestAnimationFrame(() => {
           toast.classList.add('is-visible');

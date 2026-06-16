@@ -71,7 +71,7 @@ const routeMetadata: Record<string, Omit<NavigatorRoute, "id" | "label" | "path"
   },
   projects: {
     aliases: ["project", "research", "patent", "portfolio", "build", "논문", "연구", "특허", "프로젝트", "포트폴리오"],
-    response: "15개의 공개 프로젝트를 A1 Firms 제품, 연구, 하드웨어, 사업화 관점으로 모아 둔 프로젝트 인덱스입니다.",
+    response: "공개 프로젝트를 A1 Firms 제품, 연구, 하드웨어, 사업화 관점으로 모아 둔 프로젝트 인덱스입니다.",
     prompt: "research projects",
     deepLinks: [
       { label: "Project ledger", hash: "#project-overview", terms: ["ledger", "overview", "status", "개요", "현황"] },

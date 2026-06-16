@@ -232,7 +232,6 @@ const routeJson = JSON.stringify(routes);
     trigger?.setAttribute("aria-expanded", String(isOpen));
 
     if (isOpen) {
-      prepareAiAfterUserAction();
       requestAnimationFrame(() => input?.focus({ preventScroll: true }));
     }
   };
@@ -261,7 +260,45 @@ const routeJson = JSON.stringify(routes);
     return badge;
   };
 
-  const appendMessage = (body: string, kind: "bot" | "user" = "bot") => {
+  const createTextBlock = (body: string) => {
+    const text = document.createElement("p");
+    text.textContent = body;
+    return text;
+  };
+
+  const createBotContent = (body: string, result?: A1ChanResult) => {
+    const content = document.createElement("div");
+    content.className = "a1-message__content";
+
+    const parts = result?.answerParts?.length ? result.answerParts : [{ text: body }];
+    const intent = result?.contextPack?.intent;
+    const query = result?.contextPack?.query || "";
+    const wantsBreakdown = /분류|전체|카테고리|category|classify|breakdown/i.test(query);
+    const showStructuredParts = Boolean(
+      intent &&
+      parts.length > 1 &&
+      (intent === "detail" || (intent === "projectCollection" && wantsBreakdown))
+    );
+    const visibleParts = showStructuredParts ? parts.slice(0, 4) : [{ text: parts[0]?.text || body }];
+
+    for (const part of visibleParts) {
+      const block = document.createElement("section");
+      block.className = "a1-message__part";
+
+      if (part.label) {
+        const label = document.createElement("strong");
+        label.textContent = part.label;
+        block.appendChild(label);
+      }
+
+      block.appendChild(createTextBlock(part.text));
+      content.appendChild(block);
+    }
+
+    return content;
+  };
+
+  const appendMessage = (body: string, kind: "bot" | "user" = "bot", result?: A1ChanResult) => {
     if (!feed) return;
 
     const message = document.createElement("article");
@@ -272,10 +309,8 @@ const routeJson = JSON.stringify(routes);
       badge.textContent = "You";
     }
 
-    const text = document.createElement("p");
-    text.textContent = body;
-
-    message.append(badge, text);
+    const content = kind === "bot" ? createBotContent(body, result) : createTextBlock(body);
+    message.append(badge, content);
     feed.appendChild(message);
     requestAnimationFrame(() => {
       const scrollTarget = bodyArea ?? feed;
@@ -327,7 +362,7 @@ const routeJson = JSON.stringify(routes);
       return;
     }
 
-    for (const action of actions.slice(0, 3)) {
+    for (const action of actions.slice(0, 2)) {
       const link = document.createElement("a");
       link.href = action.href;
       link.textContent = action.label;
@@ -396,8 +431,14 @@ const routeJson = JSON.stringify(routes);
 
     lastRecordId = result.contextPack?.primaryRecord?.id ?? lastRecordId;
 
-    updateActions(result.actions);
-    appendMessage(result.answer);
+    const intent = result.contextPack?.intent;
+    const shouldShowActions =
+      result.mode === "navigate" ||
+      ["open", "contact", "writing", "projectCollection"].includes(intent || "") ||
+      (Boolean(result.routeId) && result.routeId !== currentRoute.id);
+
+    updateActions(shouldShowActions ? result.actions : []);
+    appendMessage(result.answer, "bot", result);
   };
 
   const handleQuery = async (query: string) => {

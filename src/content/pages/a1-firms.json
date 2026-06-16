@@ -2,6 +2,13 @@
   "title": "A1 Firms",
   "navLabel": "A1 Firms",
   "description": "The public product page for A1trategize, now operated as a standalone app at a1trategize.com.",
+  "assistant": {
+    "summary": "A1 Firms와 A1trategize의 제품 방향과 공개 운영 맥락을 설명하는 화면입니다.",
+    "shortAnswer": "A1 Firms 화면은 A1trategize의 제품 배경, 운영 방향, 실제 앱으로 이어지는 맥락을 설명합니다.",
+    "detailAnswer": "실제 앱은 a1trategize.com에서 운영되고, 이 화면은 제품을 둘러싼 공개 설명, 관련 프로젝트, 글, 연락 경로를 연결합니다.",
+    "proofPoints": ["A1trategize 제품 맥락", "별도 앱 연결", "제품 방향", "공개 운영면"],
+    "nextQuestions": ["A1trategize가 뭐야?", "실제 앱은 어디야?", "A1 Firms 프로젝트를 보여줘"]
+  },
   "order": 2,
   "path": "/A1-Firm",
   "layoutType": "product",

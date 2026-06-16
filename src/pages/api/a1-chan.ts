@@ -17,6 +17,58 @@ const rateLimiter = createRateLimiter({
   maxRequests: 300,
 });
 
+type A1ChanRequestBody = {
+  query?: unknown;
+  context?: {
+    currentRouteId?: unknown;
+    lastRouteId?: unknown;
+    lastRecordId?: unknown;
+    userHistory?: unknown;
+  };
+};
+
+let cachedContext:
+  | {
+      routes: ReturnType<typeof createNavigatorRoutes>;
+      knowledgeCards: ReturnType<typeof createA1ChanKnowledge>;
+    }
+  | undefined;
+
+function getA1ChanStaticContext() {
+  if (cachedContext) return cachedContext;
+
+  const routes = createNavigatorRoutes(visibleNavigationItems(), pageEntriesById);
+  const knowledgeCards = createA1ChanKnowledge({
+    routes,
+    pages: pageEntries,
+    projects: projectEntries,
+    writings: writingEntries,
+    contacts: contactEntries
+  });
+
+  cachedContext = { routes, knowledgeCards };
+  return cachedContext;
+}
+
+function cleanString(value: unknown, maxLength = 260) {
+  return String(value || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, maxLength);
+}
+
+function cleanContext(value: A1ChanRequestBody["context"] = {}) {
+  const context = value && typeof value === "object" ? value : {};
+  return {
+    currentRouteId: cleanString(context.currentRouteId, 80) || undefined,
+    lastRouteId: cleanString(context.lastRouteId, 80) || undefined,
+    lastRecordId: cleanString(context.lastRecordId, 140) || undefined,
+    userHistory: Array.isArray(context.userHistory)
+      ? context.userHistory.map((item) => cleanString(item, 180)).filter(Boolean).slice(-4)
+      : []
+  };
+}
+
 export const POST: APIRoute = async ({ request }) => {
   const identifier = getClientIdentifier(request);
   const rateLimitResult = rateLimiter(identifier);
@@ -37,19 +89,12 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   try {
-    const body = await request.json();
-    const { query, context } = body;
+    const body = (await request.json()) as A1ChanRequestBody;
+    const query = cleanString(body.query);
+    const context = cleanContext(body.context);
+    const { routes, knowledgeCards } = getA1ChanStaticContext();
 
-    const routes = createNavigatorRoutes(visibleNavigationItems(), pageEntriesById);
-    const knowledgeCards = createA1ChanKnowledge({
-      routes,
-      pages: pageEntries,
-      projects: projectEntries,
-      writings: writingEntries,
-      contacts: contactEntries
-    });
-
-    const staticResult = createStaticA1ChanResponse(query || "", routes, knowledgeCards, {
+    const staticResult = createStaticA1ChanResponse(query, routes, knowledgeCards, {
       ...context,
       source: "static"
     });

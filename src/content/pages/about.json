@@ -2,6 +2,13 @@
   "title": "About",
   "navLabel": "About",
   "description": "Founder @ A1trategize | R&D Intern @ KAIST NNFC",
+  "assistant": {
+    "summary": "Minseok Song의 현재 역할, 연구 경험, 창업/제품 맥락을 정리한 프로필 화면입니다.",
+    "shortAnswer": "About 화면은 Minseok Song의 현재 역할, 연구 경험, 학문적 기반, A1trategize 창업 맥락을 빠르게 파악하는 곳입니다.",
+    "detailAnswer": "KAIST NNFC R&D Intern, A1trategize Founder, KRISS/CNU 연구 경험, 특허와 발표 이력을 한 흐름으로 묶어 보여줍니다.",
+    "proofPoints": ["현재 역할", "연구 경험", "창업/제품 맥락", "주요 milestones"],
+    "nextQuestions": ["민석은 누구야?", "연구 프로젝트를 보여줘", "A1trategize와 어떤 관련이 있어?"]
+  },
   "order": 1,
   "path": "/about",
   "layoutType": "profile",

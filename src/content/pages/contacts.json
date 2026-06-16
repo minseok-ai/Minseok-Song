@@ -2,6 +2,13 @@
   "title": "Contact",
   "navLabel": "Contacts",
   "description": "Direct channels for specific collaboration, advisory work, and product conversations.",
+  "assistant": {
+    "summary": "협업, 자문, 제품 대화를 시작할 수 있는 공개 연락 채널 화면입니다.",
+    "shortAnswer": "Contacts 화면은 Email, LinkedIn, GitHub 같은 공개 연락 채널로 이어지는 곳입니다.",
+    "detailAnswer": "협업, 자문, 제품 대화처럼 목적이 분명한 연락은 Contacts 화면의 공개 채널에서 시작할 수 있습니다.",
+    "proofPoints": ["Email", "LinkedIn", "GitHub", "공개 연락 채널"],
+    "nextQuestions": ["연락하고 싶어", "이메일 주소 알려줘", "LinkedIn으로 연결해줘"]
+  },
   "order": 5,
   "path": "/contacts",
   "layoutType": "contact",

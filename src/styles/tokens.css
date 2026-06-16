@@ -78,6 +78,15 @@
   --easing-smooth: cubic-bezier(0.25, 1, 0.5, 1);
   --max-site: 1520px;
   --header-height: 64px;
+  --z-underlay: -1;
+  --z-background: 0;
+  --z-base: 1;
+  --z-raised: 2;
+  --z-local-overlay: 10;
+  --z-header: 40;
+  --z-floating: 90;
+  --z-page-curtain: 200;
+  --z-toast: 1000;
 }
 
 /* Light mode support */
@@ -280,7 +289,7 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: var(--z-background);
   pointer-events: none;
   background: var(--body-bg-veil);
   background-size: 25vw 100%, 100% 96px;
@@ -293,7 +302,7 @@ body::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 200;
+  z-index: var(--z-page-curtain);
   pointer-events: none;
   background: var(--color-paper-deep);
   transform: translateY(-100%);
@@ -406,7 +415,7 @@ body[data-content-protection="enabled"] [data-allow-selection] *::selection {
 
 .site-shell {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-base);
   min-height: 100vh;
   min-width: 0;
   display: grid;
@@ -416,7 +425,7 @@ body[data-content-protection="enabled"] [data-allow-selection] *::selection {
 .site-header {
   position: sticky;
   top: 24px;
-  z-index: 40;
+  z-index: var(--z-header);
   isolation: isolate;
   display: grid;
   grid-template-columns: minmax(220px, 0.9fr) minmax(560px, 1.15fr) minmax(220px, 0.9fr);
@@ -438,7 +447,7 @@ body[data-content-protection="enabled"] [data-allow-selection] *::selection {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: var(--z-underlay);
   border-radius: inherit;
   pointer-events: none;
   mask-image: linear-gradient(
@@ -599,7 +608,7 @@ body[data-content-protection="enabled"] [data-allow-selection] *::selection {
   height: 1.5px; /* thinner, more premium stroke height */
   background: var(--color-accent);
   pointer-events: none;
-  z-index: 10;
+  z-index: var(--z-local-overlay);
   opacity: 0;
   transition: 
     left 0.38s cubic-bezier(0.16, 1, 0.3, 1), 

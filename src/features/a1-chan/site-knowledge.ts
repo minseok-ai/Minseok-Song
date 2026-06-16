@@ -5,6 +5,8 @@ import type {
   WritingEntry
 } from "../../lib/content/registry";
 import type { NavigatorRoute } from "./route-engine";
+import { compactText, completeA1ChanCard, unique } from "./knowledge/card-utils";
+import { createSeedA1ChanCards } from "./knowledge/seed-cards";
 
 export type A1ChanKnowledgeKind =
   | "site"
@@ -22,7 +24,11 @@ export type A1ChanKnowledgeCard = {
   title: string;
   aliases: string[];
   summary: string;
+  shortAnswer?: string;
+  detailAnswer?: string;
   facts: string[];
+  proofPoints?: string[];
+  nextQuestions?: string[];
   keywords: string[];
   text: string;
   href: string;
@@ -51,29 +57,11 @@ type BlockLike = {
   stats?: Array<{ label: string; value: string; description?: string }>;
 };
 
-const routePathById = (routes: NavigatorRoute[], id: string) =>
+export const routePathById = (routes: NavigatorRoute[], id: string) =>
   routes.find((route) => route.id === id)?.path ?? "/";
 
 const pageRouteIdByPath = (routes: NavigatorRoute[], path: string) =>
   routes.find((route) => route.path === path)?.id ?? "home";
-
-function compactText(parts: Array<string | undefined>) {
-  return parts
-    .filter(Boolean)
-    .join(" ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function unique(values: Array<string | undefined>) {
-  return Array.from(
-    new Set(
-      values
-        .map((value) => String(value || "").trim())
-        .filter(Boolean)
-    )
-  );
-}
 
 function blockText(block: BlockLike) {
   if (block.hidden) return "";
@@ -93,41 +81,6 @@ function blockText(block: BlockLike) {
   return compactText([block.title, block.body]);
 }
 
-function termsFromText(value: string) {
-  return Array.from(
-    new Set(
-      value
-        .toLowerCase()
-        .normalize("NFKC")
-        .split(/[^\p{L}\p{N}]+/u)
-        .filter((term) => term.length >= 2)
-        .slice(0, 64)
-    )
-  );
-}
-
-function makeText(card: Pick<A1ChanKnowledgeCard, "title" | "aliases" | "summary" | "facts" | "keywords" | "tags">) {
-  return compactText([
-    card.title,
-    ...card.aliases,
-    card.summary,
-    ...card.facts,
-    ...card.keywords,
-    ...card.tags
-  ]);
-}
-
-function makeTerms(card: Pick<A1ChanKnowledgeCard, "title" | "aliases" | "summary" | "facts" | "keywords" | "tags" | "kind">) {
-  return unique([
-    card.kind,
-    card.title,
-    ...card.aliases,
-    ...card.keywords,
-    ...card.tags,
-    ...termsFromText(compactText([card.title, card.summary, ...card.facts]))
-  ]);
-}
-
 export function createA1ChanKnowledge({ routes, pages, projects, writings, contacts }: CreateKnowledgeOptions) {
   const cards: A1ChanKnowledgeCard[] = [];
   const publishedPages = pages.filter((entry) => entry.data.status === "published" && !entry.data.hidden);
@@ -145,115 +98,23 @@ export function createA1ChanKnowledge({ routes, pages, projects, writings, conta
     ...aboutBlocks.map(blockText)
   ]);
 
-  const siteCardBase = {
-    id: "site-overview",
-    kind: "site" as const,
-    locale: "ko" as const,
-    title: "A1 Firms public site",
-    aliases: ["A1 Firms", "Minseok Song site", "민석 포트폴리오", "사이트 개요"],
-    summary: "Minseok Song, A1 Firms, A1trategize, projects, writings, and contact channels are organized in one public site.",
-    facts: [
-      "이 사이트는 Minseok Song의 프로필, A1 Firms 제품 맥락, 15개 프로젝트, 글, 연락 채널을 묶은 공개 운영면입니다.",
-      "A1 Chan은 사이트 안의 공개 콘텐츠를 우선 검색하고, 가능하면 Chrome Built-in AI로 답변 표현을 보강합니다.",
-      "외부 서버 LLM API 없이도 기본 검색과 설명은 사이트 DB를 기반으로 동작해야 합니다."
-    ],
-    keywords: ["site", "overview", "A1 Firms", "A1 Chan", "포트폴리오", "프로젝트"],
-    href: "/",
-    routeId: "home",
-    tags: ["site", "overview", "A1 Firms"],
-    priority: 84,
-    source: "site"
-  };
-  cards.push({
-    ...siteCardBase,
-    text: makeText(siteCardBase),
-    terms: makeTerms(siteCardBase)
-  });
-
-  const personCardBase = {
-    id: "person-minseok-song",
-    kind: "person" as const,
-    locale: "ko" as const,
-    title: "Minseok Song",
-    aliases: ["Song Minseok", "민석", "송민석", "이 사람", "프로필", "경력"],
-    summary: "Founder of A1trategize and R&D Intern at KAIST NNFC, working across semiconductor-energy research, AI strategy systems, robotics, and independently filed patents.",
-    facts: [
-      "현재 KAIST NNFC R&D Intern으로 평면 interdigitated cell 기반 차세대 마이크로 배터리 연구를 수행합니다.",
-      "A1trategize Founder로 AI 기반 전략 시스템과 A1 Firms 제품 맥락을 구축하고 있습니다.",
-      "Physics and Semiconductor-Energy Convergence Science 기반을 갖고 있으며, KRISS/Chungnam National University 연구 경험이 있습니다.",
-      "독립적으로 기술 특허 2건을 self-filed했고, KSNT 1st Author 발표와 수상 이력이 있습니다."
-    ],
-    keywords: ["profile", "career", "KAIST NNFC", "A1trategize", "research", "patent", "경력", "연구"],
-    href: `${routePathById(routes, "about")}#profile-overview`,
-    routeId: "about",
-    tags: ["profile", "career", "KAIST NNFC", "A1trategize"],
-    priority: 100,
-    source: "content/pages/about.json"
-  };
-  cards.push({
-    ...personCardBase,
-    text: compactText([makeText(personCardBase), aboutText]),
-    terms: makeTerms(personCardBase)
-  });
-
-  const projectsOverviewBase = {
-    id: "projects-collection",
-    kind: "section" as const,
-    locale: "ko" as const,
-    title: "Projects collection",
-    aliases: ["프로젝트 목록", "프로젝트 전체", "15개 프로젝트", "project ledger", "portfolio projects"],
-    summary: projectsPage?.description || "Portfolio notes, build logs, research artifacts, and selected project writing.",
-    facts: [
-      `현재 공개된 프로젝트는 ${publishedProjects.length}개입니다.`,
-      "A1 Firms 제품/로보틱스 계열, AI/소프트웨어, 반도체/에너지 연구, 의료/계측, 사업화 프로젝트가 함께 정리되어 있습니다.",
-      "각 프로젝트는 별도 지식 레코드를 가지고 있어 특정 프로젝트 이름이나 문제 상황으로 질문할 수 있습니다."
-    ],
-    keywords: ["projects", "project ledger", "research", "A1 Firms", "프로젝트", "연구", "분류"],
-    href: `${routePathById(routes, "projects")}#project-overview`,
-    routeId: "projects",
-    tags: ["projects", "overview"],
-    priority: 91,
-    source: "content/pages/projects.json"
-  };
-  cards.push({
-    ...projectsOverviewBase,
-    text: makeText(projectsOverviewBase),
-    terms: makeTerms(projectsOverviewBase)
-  });
-
-  if (a1FirmsPage) {
-    const a1CardBase = {
-      id: "a1-firms-product-context",
-      kind: "section" as const,
-      locale: "ko" as const,
-      title: "A1 Firms and A1trategize product context",
-      aliases: ["A1 Firms", "A1 Firm", "A1trategize", "전략 시스템", "제품 방향"],
-      summary: a1FirmsPage.description,
-      facts: [
-        "A1 Firms는 A1trategize를 중심으로 한 공개 제품/운영 맥락입니다.",
-        "실제 앱은 a1trategize.com에서 별도로 운영되고, 이 사이트는 제품 배경, 프로젝트, 글, 연락 경로를 설명합니다.",
-        "A1trategize는 전략 리서치와 컨설팅 보고서 생성을 돕는 B2B 전략 인텔리전스 시스템입니다."
-      ],
-      keywords: ["A1 Firms", "A1trategize", "strategy", "consulting", "product", "전략", "제품"],
-      href: routePathById(routes, "a1-firms"),
-      routeId: "a1-firms",
-      tags: ["product", "strategy", "A1 Firms"],
-      priority: 94,
-      source: "content/pages/a1-firms.json"
-    };
-    cards.push({
-      ...a1CardBase,
-      text: makeText(a1CardBase),
-      terms: makeTerms(a1CardBase)
-    });
-  }
+  cards.push(
+    ...createSeedA1ChanCards({
+      routes,
+      publishedProjectsCount: publishedProjects.length,
+      aboutText,
+      projectsDescription: projectsPage?.description,
+      a1FirmsDescription: a1FirmsPage?.description
+    })
+  );
 
   for (const entry of publishedPages) {
     const routeId = pageRouteIdByPath(routes, entry.data.path);
     const hero = entry.data.hero;
+    const copy = entry.data.assistant;
     const visibleBlocks = entry.data.blocks.filter((block) => !block.hidden) as BlockLike[];
     const facts = unique([
-      entry.data.description,
+      copy?.summary,
       hero?.subtitle,
       ...visibleBlocks.map(blockText)
     ]).slice(0, 6);
@@ -263,8 +124,19 @@ export function createA1ChanKnowledge({ routes, pages, projects, writings, conta
       locale: "ko" as const,
       title: entry.data.title,
       aliases: unique([entry.data.title, entry.data.navLabel, entry.data.layoutType]),
-      summary: entry.data.description || hero?.subtitle || entry.data.title,
+      summary: copy?.summary || entry.data.description || hero?.subtitle || entry.data.title,
+      shortAnswer: copy?.shortAnswer || `${entry.data.navLabel} 화면은 공개 콘텐츠를 확인하는 섹션입니다.`,
+      detailAnswer: copy?.detailAnswer || compactText([
+        `${entry.data.navLabel} 화면에서는 사이트의 공개 맥락을 볼 수 있습니다.`,
+        visibleBlocks.length ? "본문 블록과 화면 내 섹션을 함께 근거로 삼아 현재 페이지 질문에 답합니다." : "필요한 경우 관련 route와 콘텐츠 카드로 이어집니다."
+      ]),
       facts,
+      proofPoints: copy?.proofPoints || unique([hero?.subtitle, ...visibleBlocks.map((block) => block.title)]).slice(0, 4),
+      nextQuestions: copy?.nextQuestions || [
+        "이 화면에서 중요한 건 뭐야?",
+        "관련 프로젝트는?",
+        "다음에 어디를 보면 돼?"
+      ],
       keywords: unique([entry.data.layoutType, entry.data.navLabel, "page", "화면", "페이지"]),
       href: entry.data.path,
       routeId,
@@ -272,11 +144,7 @@ export function createA1ChanKnowledge({ routes, pages, projects, writings, conta
       priority: routeId === "about" ? 82 : 74,
       source: `content/pages/${entry.id}.json`
     };
-    cards.push({
-      ...pageCardBase,
-      text: makeText(pageCardBase),
-      terms: makeTerms(pageCardBase)
-    });
+    cards.push(completeA1ChanCard(pageCardBase));
 
     for (const block of visibleBlocks) {
       const text = blockText(block);
@@ -288,7 +156,11 @@ export function createA1ChanKnowledge({ routes, pages, projects, writings, conta
         title: block.title || `${entry.data.title} section`,
         aliases: unique([block.title, block.id, entry.data.title, entry.data.navLabel]),
         summary: text.slice(0, 220),
+        shortAnswer: text.slice(0, 260),
+        detailAnswer: text,
         facts: [text],
+        proofPoints: [text.slice(0, 220)],
+        nextQuestions: ["이 섹션을 더 쉽게 설명해줘", `${entry.data.navLabel} 화면으로 안내해줘`],
         keywords: unique([entry.data.layoutType, entry.data.navLabel, block.type, "section", "섹션"]),
         href: entry.data.path,
         routeId,
@@ -296,11 +168,7 @@ export function createA1ChanKnowledge({ routes, pages, projects, writings, conta
         priority: 70,
         source: `content/pages/${entry.id}.json#${block.id ?? block.type}`
       };
-      cards.push({
-        ...sectionCardBase,
-        text: makeText(sectionCardBase),
-        terms: makeTerms(sectionCardBase)
-      });
+      cards.push(completeA1ChanCard(sectionCardBase));
     }
   }
 
@@ -323,18 +191,23 @@ export function createA1ChanKnowledge({ routes, pages, projects, writings, conta
       aliases: unique([entry.id, entry.data.title, ...(knowledge?.aliases ?? [])]),
       summary: knowledge?.oneLiner || entry.data.summary,
       facts,
+      shortAnswer: knowledge?.oneLiner || entry.data.summary,
+      detailAnswer: compactText([
+        knowledge?.oneLiner || entry.data.summary,
+        knowledge?.problem ? `문제의식: ${knowledge.problem}` : undefined,
+        knowledge?.approach ? `접근: ${knowledge.approach}` : undefined,
+        knowledge?.technicalCore ? `기술 핵심: ${knowledge.technicalCore}` : undefined
+      ]),
+      proofPoints: unique([knowledge?.evidence, knowledge?.impact, knowledge?.statusNote]).slice(0, 4),
+      nextQuestions: ["문제의식은?", "기술 핵심은?", "근거와 상태는?"],
       keywords: unique([...(knowledge?.keywords ?? []), ...entry.data.tags, entry.data.year, "project", "프로젝트"]),
       href: `${routePathById(routes, "projects")}#project-${entry.id}`,
       routeId: "projects",
       tags: unique([...entry.data.tags, entry.data.year]),
-      priority: entry.id === "a1trategize" ? 95 : entry.data.tags.includes("A1 Firms") ? 82 : 68,
+      priority: Math.max(entry.data.tags.includes("A1 Firms") ? 82 : 68, 96 - entry.data.order),
       source: `content/projects/${entry.id}.json`
     };
-    cards.push({
-      ...projectCardBase,
-      text: makeText(projectCardBase),
-      terms: makeTerms(projectCardBase)
-    });
+    cards.push(completeA1ChanCard(projectCardBase));
   }
 
   for (const entry of writings.filter((item) => item.data.status === "published" && !item.data.hidden)) {
@@ -345,7 +218,11 @@ export function createA1ChanKnowledge({ routes, pages, projects, writings, conta
       title: entry.data.title,
       aliases: unique([entry.data.title, entry.id, "글", "아티클", "뉴스레터"]),
       summary: entry.data.summary,
+      shortAnswer: `${entry.data.title} 글은 ${entry.data.summary}`,
+      detailAnswer: compactText([entry.data.summary, entry.data.body]).slice(0, 520),
       facts: unique([entry.data.summary, entry.data.body]).slice(0, 4),
+      proofPoints: unique([entry.data.date, ...entry.data.tags, entry.data.summary]).slice(0, 5),
+      nextQuestions: ["이 글 요약해줘", "다른 글은 어디서 봐?", "관련 프로젝트가 있어?"],
       keywords: unique([...entry.data.tags, "writing", "article", "글", "뉴스레터"]),
       href: `/writings/${entry.id}`,
       routeId: "writings",
@@ -353,11 +230,7 @@ export function createA1ChanKnowledge({ routes, pages, projects, writings, conta
       priority: 54,
       source: `content/writings/${entry.id}.json`
     };
-    cards.push({
-      ...writingCardBase,
-      text: makeText(writingCardBase),
-      terms: makeTerms(writingCardBase)
-    });
+    cards.push(completeA1ChanCard(writingCardBase));
   }
 
   for (const entry of contacts) {
@@ -370,7 +243,11 @@ export function createA1ChanKnowledge({ routes, pages, projects, writings, conta
       title: entry.data.title,
       aliases: ["contact", "email", "linkedin", "github", "연락", "메일", "협업", "문의"],
       summary: "협업, 자문, 제품 대화는 Email, LinkedIn, GitHub 채널로 시작할 수 있습니다.",
+      shortAnswer: "연락은 공개 채널 기준으로 Email, LinkedIn, GitHub에서 시작할 수 있습니다.",
+      detailAnswer: "협업, 자문, 제품 대화처럼 목적이 분명한 대화는 Contacts 화면의 공개 채널에서 이어가면 됩니다.",
       facts,
+      proofPoints: facts,
+      nextQuestions: ["이메일 주소 알려줘", "협업 문의는 어디로 해?", "LinkedIn으로 연결해줘"],
       keywords: unique(["contact", "email", "linkedin", "github", "collaboration", "연락", "협업", ...visibleChannels.map((channel) => channel.label)]),
       href: `${routePathById(routes, "contacts")}#contact-graph`,
       routeId: "contacts",
@@ -378,11 +255,7 @@ export function createA1ChanKnowledge({ routes, pages, projects, writings, conta
       priority: 76,
       source: `content/contacts/${entry.id}.json`
     };
-    cards.push({
-      ...contactCardBase,
-      text: makeText(contactCardBase),
-      terms: makeTerms(contactCardBase)
-    });
+    cards.push(completeA1ChanCard(contactCardBase));
   }
 
   return cards;

@@ -2,6 +2,13 @@
   "title": "Projects",
   "navLabel": "Projects",
   "description": "Portfolio notes, build logs, research artifacts, and selected project writing.",
+  "assistant": {
+    "summary": "공개 프로젝트, 연구 산출물, 제품 구상, 사업화 경험을 모아 둔 프로젝트 인덱스입니다.",
+    "shortAnswer": "Projects 화면은 A1 Firms 계열, 연구/공학, 제품/사업화 프로젝트를 한곳에서 비교해 보는 곳입니다.",
+    "detailAnswer": "각 프로젝트는 별도 카드와 anchor로 연결되며, A1 Chan은 프로젝트별 문제의식, 접근, 기술 핵심, 근거, 상태를 설명할 수 있습니다.",
+    "proofPoints": ["프로젝트 카드", "분류형 인덱스", "개별 anchor", "지식 레코드"],
+    "nextQuestions": ["프로젝트 전체를 분류해줘", "RA1 자세히 설명해줘", "연구 프로젝트만 보여줘"]
+  },
   "order": 3,
   "path": "/projects",
   "layoutType": "projectIndex",

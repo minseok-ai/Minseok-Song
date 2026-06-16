@@ -165,6 +165,13 @@ export const pageSchema = z.object({
   title: z.string().min(1),
   navLabel: z.string().min(1),
   description: z.string().default(""),
+  assistant: z.object({
+    summary: z.string().default(""),
+    shortAnswer: z.string().default(""),
+    detailAnswer: z.string().default(""),
+    proofPoints: z.array(z.string()).default([]),
+    nextQuestions: z.array(z.string()).default([])
+  }).optional(),
   order: z.number().int().nonnegative(),
   path: z.string().startsWith("/"),
   layoutType: layoutTypeSchema,

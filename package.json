@@ -12,7 +12,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "validate:content": "node scripts/validate-content.mjs"
+    "validate:content": "node scripts/validate-content.mjs",
+    "eval:a1-chan": "node scripts/evaluate-a1-chan.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.7",

@@ -230,12 +230,13 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     border-right: 1px solid var(--color-line-strong);
     transition: background var(--motion-fast) ease, box-shadow var(--motion-fast) ease;
     position: relative;
+    isolation: isolate;
   }
 
   .pipeline-meter .pipeline-step:hover {
     background: var(--color-panel-solid);
     box-shadow: inset 0 0 0 1px var(--color-accent-soft), inset 0 0 24px rgba(var(--rgb-warm), 0.05);
-    z-index: 2;
+    z-index: var(--z-raised);
   }
   
   .pipeline-meter .pipeline-step:hover strong {
@@ -294,7 +295,7 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     opacity: 0;
     transition: opacity var(--motion-fast) ease;
     pointer-events: none;
-    z-index: 0;
+    z-index: var(--z-background);
   }
 
   .newsletter-row:hover::before {
@@ -311,7 +312,7 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     border-color: var(--color-accent);
     background-color: rgba(var(--rgb-warm), 0.06);
     transform: translateX(6px);
-    z-index: 2;
+    z-index: var(--z-raised);
   }
 
   .newsletter-row.pipeline-dim {
@@ -339,7 +340,7 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
     opacity: 0;
     box-shadow: 0 12px 36px var(--glass-shadow);
     transition: opacity 0.3s var(--easing-smooth), transform 0.3s var(--easing-smooth);
-    z-index: 100;
+    z-index: var(--z-local-overlay);
   }
 
   .step-tooltip::after {
@@ -360,7 +361,7 @@ const articleTags = ["Source", "Crawl", "Review", "Publish"];
 
   .newsletter-row > * {
     position: relative;
-    z-index: 1;
+    z-index: var(--z-base);
   }
 
   .newsletter-row span,
