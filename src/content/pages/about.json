@@ -1,13 +1,13 @@
 {
   "title": "About",
   "navLabel": "About",
-  "description": "Founder @ A1trategize | R&D Intern @ KAIST NNFC",
+  "description": "Founder @ Minseok Song & Company | Research Intern @ KAIST NNFC",
   "assistant": {
     "summary": "Minseok Song의 현재 역할, 연구 경험, 창업/제품 맥락을 정리한 프로필 화면입니다.",
-    "shortAnswer": "About 화면은 Minseok Song의 현재 역할, 연구 경험, 학문적 기반, A1trategize 창업 맥락을 빠르게 파악하는 곳입니다.",
-    "detailAnswer": "KAIST NNFC R&D Intern, A1trategize Founder, KRISS/CNU 연구 경험, 특허와 발표 이력을 한 흐름으로 묶어 보여줍니다.",
+    "shortAnswer": "About 화면은 Minseok Song의 현재 역할, 연구 경험, 학문적 기반, Minseok Song & Company 창업 맥락을 빠르게 파악하는 곳입니다.",
+    "detailAnswer": "KAIST NNFC Research Intern, Minseok Song & Company Founder, KRISS Collaborator/Research Intern, CNU 연구 경험, 특허와 발표 이력을 한 흐름으로 묶어 보여줍니다.",
     "proofPoints": ["현재 역할", "연구 경험", "창업/제품 맥락", "주요 milestones"],
-    "nextQuestions": ["민석은 누구야?", "연구 프로젝트를 보여줘", "A1trategize와 어떤 관련이 있어?"]
+    "nextQuestions": ["민석은 누구야?", "연구 프로젝트를 보여줘", "Minseok Song & Company와 어떤 관련이 있어?"]
   },
   "order": 1,
   "path": "/about",
@@ -17,7 +17,7 @@
   "hero": {
     "eyebrow": "01 / Profile",
     "title": "Minseok Song",
-    "subtitle": "Founder @ A1trategize | R&D Intern @ KAIST NNFC"
+    "subtitle": "Founder @ Minseok Song & Company | Research Intern @ KAIST NNFC"
   },
   "blocks": [
     {
@@ -31,7 +31,7 @@
       "id": "about-lead",
       "type": "text",
       "title": "Lead",
-      "body": "I am currently an R&D Intern at KAIST NNFC and Founder of A1trategize, with a strong foundation in Physics and Semiconductor-Energy Convergence Science from Chungnam National University.",
+      "body": "I am currently a Research Intern at KAIST NNFC and Founder of Minseok Song & Company, with a strong foundation in Physics and Semiconductor-Energy Convergence Science from Chungnam National University.",
       "variant": "lead"
     },
     {
@@ -55,18 +55,23 @@
       "events": [
         {
           "date": "Apr 2026 - Present",
-          "title": "R&D Intern @ KAIST NNFC",
-          "body": "Developing next-generation micro-batteries via planar interdigitated cell architecture."
+          "title": "Research Intern @ KAIST NNFC",
+          "body": "Assisting next-generation micro-battery fabrication through planar interdigitated cell architecture and thin-film process execution."
         },
         {
           "date": "Jan 2026 - Present",
-          "title": "Founder @ A1trategize",
-          "body": "Digital Transformation & Business Consulting. Self-filed two independent patents."
+          "title": "Founder @ Minseok Song & Company",
+          "body": "Building AI strategy systems and deep-tech business assets while self-filing two independent patents."
         },
         {
-          "date": "Jul 2024 - Nov 2024",
-          "title": "RA & Collaborator @ KRISS",
-          "body": "Independent research on non-invasive glucose monitoring using ultrasonic velocity analysis."
+          "date": "Sep 2024 - Nov 2024",
+          "title": "Collaborator @ KRISS",
+          "body": "Worked as an independent student researcher and first author on ultrasonic glucose research after classes during the semester, with the supervising PhD researcher's verbal approval."
+        },
+        {
+          "date": "Jul 2024 - Aug 2024",
+          "title": "Research Intern @ KRISS",
+          "body": "Completed ultrasonic velocity measurement and high-damping specimen identification work during a KRISS research internship."
         },
         {
           "date": "Mar 2024 - Aug 2024",

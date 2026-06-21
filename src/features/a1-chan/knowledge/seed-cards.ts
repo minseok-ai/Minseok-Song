@@ -53,24 +53,26 @@ export function createSeedA1ChanCards({
     locale: "ko" as const,
     title: "Minseok Song",
     aliases: ["Song Minseok", "민석", "송민석", "이 사람", "프로필", "경력"],
-    summary: "Founder of A1trategize and R&D Intern at KAIST NNFC, working across semiconductor-energy research, AI strategy systems, robotics, and independently filed patents.",
-    shortAnswer: "Minseok Song은 A1trategize Founder이자 KAIST NNFC R&D Intern으로, 반도체/에너지 연구와 AI 전략 시스템을 함께 다루고 있습니다.",
-    detailAnswer: "물리와 반도체-에너지 융합 기반 위에서 마이크로 배터리, 초음파/센서 연구, 로보틱스 제어 구상, A1 Firms 제품 맥락을 연결해 온 프로필입니다.",
+    summary: "Founder of Minseok Song & Company and Research Intern at KAIST NNFC, working across semiconductor-energy research, AI strategy systems, KRISS ultrasonic research, robotics, and independently filed patents.",
+    shortAnswer: "Minseok Song은 Minseok Song & Company Founder이자 KAIST NNFC Research Intern으로, 반도체/에너지 연구와 AI 전략 시스템을 함께 다루고 있습니다.",
+    detailAnswer: "물리와 반도체-에너지 융합 기반 위에서 마이크로 배터리, KRISS 초음파 연구, 로보틱스 제어 구상, Minseok Song & Company 제품 맥락을 연결해 온 프로필입니다.",
     facts: [
-      "현재 KAIST NNFC R&D Intern으로 평면 interdigitated cell 기반 차세대 마이크로 배터리 연구를 수행합니다.",
-      "A1trategize Founder로 AI 기반 전략 시스템과 A1 Firms 제품 맥락을 구축하고 있습니다.",
-      "Physics and Semiconductor-Energy Convergence Science 기반을 갖고 있으며, KRISS/Chungnam National University 연구 경험이 있습니다.",
+      "현재 KAIST NNFC Research Intern으로 평면 interdigitated cell 기반 차세대 마이크로 배터리 연구를 수행합니다.",
+      "Minseok Song & Company Founder로 AI 기반 전략 시스템과 A1 Firms 제품 맥락을 구축하고 있습니다.",
+      "2024년 9월부터 11월까지 KRISS Collaborator로 학기 병행 중 지도 박사의 구두 허락 하에 독립 학생 연구원으로 출근하며 초음파 혈당 연구를 1저자로 수행했습니다.",
+      "2024년 7월부터 8월까지 KRISS Research Intern으로 초음파 계측과 고감쇠 시편 식별 경험을 수행했습니다.",
+      "Physics and Semiconductor-Energy Convergence Science 기반을 갖고 있으며, Chungnam National University 연구 경험이 있습니다.",
       "독립적으로 기술 특허 2건을 self-filed했고, KSNT 1st Author 발표와 수상 이력이 있습니다."
     ],
     proofPoints: [
-      "About 페이지의 timeline과 key milestones가 KAIST NNFC, A1trategize, KRISS, CNU 이력을 연결합니다.",
+      "About 페이지의 timeline과 key milestones가 KAIST NNFC, Minseok Song & Company, KRISS, CNU 이력을 연결합니다.",
       "Projects에는 A1trategize, RA1, 마이크로 배터리, 초음파 계측 등 연결 프로젝트가 공개되어 있습니다."
     ],
-    nextQuestions: ["A1trategize와 어떤 관련이 있어?", "연구 프로젝트를 보여줘", "연락하고 싶어"],
-    keywords: ["profile", "career", "KAIST NNFC", "A1trategize", "research", "patent", "경력", "연구"],
+    nextQuestions: ["Minseok Song & Company와 어떤 관련이 있어?", "연구 프로젝트를 보여줘", "연락하고 싶어"],
+    keywords: ["profile", "career", "KAIST NNFC", "Minseok Song & Company", "KRISS Collaborator", "Research Intern", "research", "patent", "경력", "연구"],
     href: `${routePathById(routes, "about")}#profile-overview`,
     routeId: "about",
-    tags: ["profile", "career", "KAIST NNFC", "A1trategize"],
+    tags: ["profile", "career", "KAIST NNFC", "Minseok Song & Company", "KRISS"],
     priority: 100,
     source: "content/pages/about.json"
   };

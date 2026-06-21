@@ -210,9 +210,12 @@ function answerPartsForProjectsCollection(cards: A1ChanKnowledgeCard[]): A1ChanA
 
 function answerPartsForPerson(card: A1ChanKnowledgeCard): A1ChanAnswerPart[] {
   return [
-    { text: card.shortAnswer || `${card.title}은 A1trategize Founder이자 KAIST NNFC R&D Intern입니다.` },
+    { text: card.shortAnswer || `${card.title}은 Minseok Song & Company Founder이자 KAIST NNFC Research Intern입니다.` },
     { label: "현재 축", text: sentenceFromFacts(card, 0, 2) },
-    { label: "연결 프로젝트", text: "A1trategize, RA1, 마이크로 배터리, 초음파/센서 연구, 특허 사업화 경험이 함께 연결됩니다." }
+    ...(card.facts[2] || card.facts[3]
+      ? [{ label: "KRISS 이력", text: sentenceFromFacts(card, 2, 2) }]
+      : []),
+    { label: "연결 프로젝트", text: "A1trategize 제품, RA1, 마이크로 배터리, KRISS 초음파/센서 연구, 특허 사업화 경험이 함께 연결됩니다." }
   ];
 }
 

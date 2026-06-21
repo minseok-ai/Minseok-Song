@@ -19,6 +19,8 @@ const timelineEvents = experienceTimelineBlock
         body: "Design, product, and operating systems are being composed into one public surface."
       }
     ];
+const isCompanyFounderEvent = (event) =>
+  event.title.includes("A1trategize") || event.title.includes("Minseok Song & Company");
 ---
 
 <div class="page-kicker">
@@ -94,7 +96,7 @@ const timelineEvents = experienceTimelineBlock
     <ol>
       {timelineEvents.map((event, index) => (
         <li class={`reveal-in stagger-${(index % 5) + 1} ${index === 0 ? "is-current" : ""}`}>
-          {event.title.includes('A1trategize') && <><img src="/A1Firm-logo.webp" alt="A1trategize" class="timeline-logo logo-dark" /><img src="/A1Firm-logo_light.webp" alt="A1trategize" class="timeline-logo logo-light" /></>}
+          {isCompanyFounderEvent(event) && <><img src="/A1Firm-logo.webp" alt="Minseok Song & Company" class="timeline-logo logo-dark" /><img src="/A1Firm-logo_light.webp" alt="Minseok Song & Company" class="timeline-logo logo-light" /></>}
           {event.title.includes('NNFC') && <img src="/NNFC-logo.webp" alt="KAIST NNFC" class="timeline-logo" />}
           {event.title.includes('KRISS') && <img src="/KRISS-logo.webp" alt="KRISS" class="timeline-logo" />}
           {(event.title.includes('Chungnam National University') || event.title.includes('Semiconductor Sensor Lab')) && <img src="/CNU-logo.webp" alt="CNU" class="timeline-logo" />}
@@ -825,8 +827,8 @@ const timelineEvents = experienceTimelineBlock
 
   .about-thesis {
     display: grid;
-    grid-template-columns: 340px minmax(0, 1fr);
-    gap: 64px;
+    grid-template-columns: 380px minmax(0, 1fr);
+    gap: 56px;
     align-items: start;
   }
 
