@@ -23,6 +23,10 @@ const intentTerms: Record<Exclude<A1ChanIntent, "empty" | "knowledgeQuestion">, 
     "song",
     "프로필",
     "경력",
+    "인턴",
+    "연구원",
+    "collaborator",
+    "research intern",
     "career",
     "resume"
   ],
@@ -39,6 +43,40 @@ const intentTerms: Record<Exclude<A1ChanIntent, "empty" | "knowledgeQuestion">, 
     "project",
     "project list",
     "portfolio"
+  ],
+  compare: [
+    "비교",
+    "차이",
+    "공통점",
+    "다른 점",
+    "versus",
+    "vs",
+    "compare",
+    "difference",
+    "similarity"
+  ],
+  recommendation: [
+    "추천",
+    "뭘 보면",
+    "어디를 보면",
+    "먼저 보면",
+    "중요한 프로젝트",
+    "대표 프로젝트",
+    "best",
+    "recommend",
+    "suggest",
+    "highlight"
+  ],
+  summary: [
+    "요약",
+    "핵심만",
+    "짧게",
+    "간단히",
+    "summarize",
+    "summary",
+    "brief",
+    "tl dr",
+    "tldr"
   ],
   smalltalk: [
     "안녕",
@@ -74,6 +112,9 @@ const intentTerms: Record<Exclude<A1ChanIntent, "empty" | "knowledgeQuestion">, 
     "디테일",
     "기술적으로",
     "구체적으로",
+    "세부",
+    "세부 공정",
+    "공정",
     "문제의식",
     "접근",
     "근거",
@@ -96,6 +137,9 @@ const intentTerms: Record<Exclude<A1ChanIntent, "empty" | "knowledgeQuestion">, 
     "a1 chan",
     "chan",
     "챈",
+    "챗봇",
+    "assistant",
+    "site assistant",
     "무엇을 할 수",
     "뭐 할 수",
     "사용법",
@@ -132,7 +176,15 @@ const intentTerms: Record<Exclude<A1ChanIntent, "empty" | "knowledgeQuestion">, 
 
 export function includesAny(query: string, terms: string[]) {
   const normalized = normalizeNavigatorText(query);
-  return terms.some((term) => normalized.includes(normalizeNavigatorText(term)));
+  const words = normalized.split(/\s+/).filter(Boolean);
+  return terms.some((term) => {
+    const normalizedTerm = normalizeNavigatorText(term);
+    if (!normalizedTerm) return false;
+    if (/^[a-z]{1,2}$/.test(normalizedTerm)) {
+      return words.includes(normalizedTerm);
+    }
+    return normalized.includes(normalizedTerm);
+  });
 }
 
 export function detectLanguage(query: string): A1ChanDetectedLanguage {
@@ -145,6 +197,9 @@ export function detectLanguage(query: string): A1ChanDetectedLanguage {
 export function detectIntent(query: string): A1ChanIntent {
   if (!query.trim()) return "empty";
   if (includesAny(query, intentTerms.capability)) return "capability";
+  if (includesAny(query, intentTerms.compare)) return "compare";
+  if (includesAny(query, intentTerms.recommendation)) return "recommendation";
+  if (includesAny(query, intentTerms.summary)) return "summary";
   if (includesAny(query, intentTerms.detail)) return "detail";
   if (includesAny(query, intentTerms.currentPage)) return "currentPage";
   if (includesAny(query, intentTerms.person)) return "person";

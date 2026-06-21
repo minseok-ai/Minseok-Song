@@ -175,11 +175,11 @@
   bottom: 72px;
   display: flex;
   flex-direction: column;
-  width: min(450px, calc(100vw - 32px));
+  width: min(430px, calc(100vw - 32px));
   max-height: min(640px, calc(100svh - 100px));
   overflow: hidden;
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
+  border-radius: 14px;
   background:
     linear-gradient(145deg, color-mix(in srgb, var(--color-accent-soft) 80%, transparent), transparent 50%),
     color-mix(in srgb, var(--color-panel-solid) 85%, transparent);
@@ -216,8 +216,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  min-height: 64px;
-  padding: 14px 14px 12px 16px;
+  min-height: 58px;
+  padding: 13px 14px 11px 18px;
   border-bottom: 1px solid var(--color-line);
 }
 
@@ -243,14 +243,16 @@
 }
 
 .a1-navigator__brand strong {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 850;
   line-height: 1;
+  word-spacing: 2px;
+  white-space: nowrap;
 }
 
 .a1-navigator__brand small {
   color: var(--color-ink-muted);
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 800;
   line-height: 1.1;
   text-transform: uppercase;
@@ -259,35 +261,38 @@
 .a1-navigator__context {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  padding: 10px 16px 0;
+  gap: 6px;
+  padding: 10px 18px 0;
 }
 
 .a1-navigator__context span {
   display: inline-flex;
   align-items: center;
-  min-height: 24px;
+  min-height: 22px;
+  max-width: 100%;
   padding: 0 9px;
   border: 1px solid var(--color-line);
   border-radius: 999px;
   color: var(--color-ink-muted);
   background: var(--glass-bg);
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 850;
+  line-height: 1;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .a1-navigator__context [data-a1-ai-status][data-status="available"] {
-  color: var(--color-green);
-  border-color: var(--color-green-soft);
-  background: var(--color-green-soft);
+  color: color-mix(in srgb, var(--color-green) 72%, var(--color-ink));
+  border-color: color-mix(in srgb, var(--color-green-soft) 72%, var(--color-line));
+  background: color-mix(in srgb, var(--color-green-soft) 52%, var(--glass-bg));
 }
 
 .a1-navigator__context [data-a1-ai-status][data-status="downloadable"],
 .a1-navigator__context [data-a1-ai-status][data-status="downloading"] {
-  color: var(--color-accent-ink);
-  border-color: var(--color-accent-soft);
-  background: var(--color-accent-soft);
+  color: color-mix(in srgb, var(--color-accent-ink) 76%, var(--color-ink));
+  border-color: color-mix(in srgb, var(--color-accent-soft) 78%, var(--color-line));
+  background: color-mix(in srgb, var(--color-accent-soft) 48%, var(--glass-bg));
 }
 
 .a1-navigator__close,
@@ -329,10 +334,10 @@
 
 .a1-navigator__body {
   display: grid;
-  gap: 14px;
+  gap: 12px;
   flex: 1;
   min-height: 0;
-  padding: 16px;
+  padding: 14px 18px 16px;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
@@ -354,7 +359,7 @@
 
 .a1-navigator__feed {
   display: grid;
-  gap: 10px;
+  gap: 11px;
   overflow: visible;
   padding-right: 2px;
 }
@@ -495,8 +500,8 @@
 
 .a1-message {
   display: grid;
-  grid-template-columns: 34px minmax(0, 1fr);
-  gap: 10px;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 9px;
   align-items: start;
   animation: a1-message-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
@@ -515,8 +520,8 @@
 .a1-message > span {
   display: inline-grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border: 1px solid var(--color-line);
   border-radius: 50%;
   color: var(--color-ink-muted);
@@ -545,28 +550,28 @@
 .a1-message p {
   min-width: 0;
   margin: 0;
-  padding: 12px 16px;
+  padding: 11px 14px;
   border: 1px solid color-mix(in srgb, var(--color-line) 50%, transparent);
   border-radius: 4px 16px 16px 16px;
   color: var(--color-ink-soft);
   background: color-mix(in srgb, var(--color-field) 85%, transparent);
   box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-  font-size: 13.5px;
-  line-height: 1.6;
+  font-size: 13px;
+  line-height: 1.58;
   letter-spacing: 0;
   overflow-wrap: anywhere;
 }
 
 .a1-message__content {
   min-width: 0;
-  padding: 12px 16px;
+  padding: 12px 14px;
   border: 1px solid color-mix(in srgb, var(--color-line) 50%, transparent);
   border-radius: 4px 16px 16px 16px;
   color: var(--color-ink-soft);
   background: color-mix(in srgb, var(--color-field) 85%, transparent);
   box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-  font-size: 13.5px;
-  line-height: 1.6;
+  font-size: 13px;
+  line-height: 1.58;
   letter-spacing: 0;
   overflow-wrap: anywhere;
 }
@@ -593,7 +598,7 @@
 .a1-message__part strong {
   display: block;
   margin-bottom: 3px;
-  color: var(--color-ink);
+  color: color-mix(in srgb, var(--color-ink) 84%, var(--color-accent-ink));
   font-size: 10px;
   font-weight: 900;
   line-height: 1.3;
@@ -648,7 +653,7 @@
 }
 
 .a1-message.is-user {
-  grid-template-columns: minmax(0, 1fr) 34px;
+  grid-template-columns: minmax(0, 1fr) 30px;
 }
 
 .a1-message.is-user > span {
@@ -671,8 +676,8 @@
 
 .a1-navigator__routes {
   display: flex;
-  gap: 4px;
-  padding-top: 4px;
+  gap: 3px;
+  padding-top: 2px;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -687,7 +692,7 @@
   border-radius: 4px;
   color: var(--color-ink-muted);
   background: transparent;
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 500;
   text-decoration: none;
   text-transform: uppercase;
@@ -717,15 +722,15 @@
 
 .a1-navigator__composer {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 40px;
-  gap: 8px;
-  padding: 14px 16px 16px;
+  grid-template-columns: minmax(0, 1fr) 42px;
+  gap: 9px;
+  padding: 14px 18px 18px;
   border-top: 1px solid var(--color-line);
 }
 
 .a1-navigator__composer input {
   width: 100%;
-  min-height: 44px;
+  min-height: 42px;
   min-width: 0;
   padding: 0 16px;
   border: 1px solid var(--color-line);
@@ -744,9 +749,9 @@
 }
 
 .a1-navigator__composer button {
-  width: 44px;
-  height: 44px;
-  border: none;
+  width: 42px;
+  height: 42px;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
   border-radius: 22px;
   color: var(--color-paper-deep);
   background: linear-gradient(135deg, var(--color-ink), color-mix(in srgb, var(--color-ink) 80%, #000));

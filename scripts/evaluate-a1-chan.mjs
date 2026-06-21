@@ -14,16 +14,29 @@ const cases = [
     expect: { mode: "answer", intent: "capability", primaryId: "site-overview" }
   },
   {
+    name: "semantic hint capability routing",
+    query: "너에 대해 알려줘",
+    semanticHint: {
+      intent: "capability",
+      language: "ko",
+      entities: ["A1 Chan", "site assistant"],
+      answerMode: "direct",
+      confidence: "high"
+    },
+    context: { currentRouteId: "home", lastRouteId: "home", userHistory: [] },
+    expect: { mode: "answer", intent: "capability", primaryId: "site-overview", includes: "A1 Chan" }
+  },
+  {
     name: "home current page",
     query: "이 페이지는 뭐야?",
     context: { currentRouteId: "home", lastRouteId: "home", userHistory: [] },
     expect: { intent: "currentPage", routeId: "home", primaryId: "site-overview" }
   },
   {
-    name: "projects current page",
-    query: "현재 페이지 핵심 알려줘",
+    name: "projects current page summary",
+    query: "현재 페이지 핵심만 요약해줘",
     context: { currentRouteId: "projects", lastRouteId: "projects", userHistory: [] },
-    expect: { intent: "currentPage", routeId: "projects", primaryId: "projects-collection" }
+    expect: { intent: "summary", routeId: "projects", primaryId: "projects-collection" }
   },
   {
     name: "writings route",
@@ -74,10 +87,16 @@ const cases = [
     expect: { intent: "projectCollection", routeId: "projects", primaryId: "projects-collection", dynamicProjectCount: true }
   },
   {
-    name: "plain project count",
-    query: "프로젝트",
+    name: "compare projects",
+    query: "KRISS 초음파 연구랑 배터리 프로젝트 비교해줘",
     context: { currentRouteId: "projects", lastRouteId: "projects", userHistory: [] },
-    expect: { intent: "projectCollection", routeId: "projects", primaryId: "projects-collection", dynamicProjectCount: true }
+    expect: { intent: "compare", routeId: "projects", primaryKind: "project", minProjectCards: 2 }
+  },
+  {
+    name: "recommend projects",
+    query: "대표 프로젝트 추천해줘",
+    context: { currentRouteId: "projects", lastRouteId: "projects", userHistory: [] },
+    expect: { intent: "recommendation", routeId: "projects", minProjectCards: 3 }
   },
   {
     name: "english ra1",
@@ -90,14 +109,62 @@ const cases = [
     query: "초음파 혈당 연구 설명해줘",
     context: { currentRouteId: "home", lastRouteId: "home", userHistory: [] },
     expect: { routeId: "projects", primaryId: "project-glucose-ultrasound" }
+  },
+  {
+    name: "FINAN SEE english title",
+    query: "FINAN SEE가 뭐야?",
+    context: { currentRouteId: "projects", lastRouteId: "projects", userHistory: [] },
+    expect: { routeId: "projects", primaryId: "project-finance-see", includes: "FINAN SEE" }
+  },
+  {
+    name: "KRISS collaborator timeline",
+    query: "KRISS Collaborator 경력 설명해줘",
+    context: { currentRouteId: "about", lastRouteId: "about", userHistory: [] },
+    expect: { routeId: "about", primaryId: "person-minseok-song", includes: "Collaborator" }
+  },
+  {
+    name: "KRISS intern timeline",
+    query: "KRISS 인턴 연구원도 있었어?",
+    context: { currentRouteId: "about", lastRouteId: "about", userHistory: [] },
+    expect: { routeId: "about", primaryId: "person-minseok-song", includes: "Research Intern" }
+  },
+  {
+    name: "patent filing",
+    query: "특허 출원 프로젝트 설명해줘",
+    context: { currentRouteId: "projects", lastRouteId: "projects", userHistory: [] },
+    expect: { routeId: "projects", primaryId: "project-patent-filings" }
+  },
+  {
+    name: "locked micro battery",
+    query: "Planar Micro-Battery Architecture 세부 공정 알려줘",
+    context: { currentRouteId: "projects", lastRouteId: "projects", userHistory: [] },
+    expect: {
+      routeId: "projects",
+      primaryId: "project-interdigitated-devices",
+      locked: true,
+      forbidden: ["AZ5214", "V2O5", "NCM811", "SORONA", "rpm", "mJ/cm", "sccm"]
+    }
+  },
+  {
+    name: "explicit entity overrides last detail context",
+    query: "Planar Micro-Battery Architecture 세부 공정 알려줘",
+    context: { currentRouteId: "projects", lastRouteId: "projects", lastRecordId: "project-finance-see", userHistory: ["FINAN SEE가 뭐야?"] },
+    expect: {
+      routeId: "projects",
+      primaryId: "project-interdigitated-devices",
+      locked: true,
+      forbidden: ["AZ5214", "V2O5", "NCM811", "SORONA", "rpm", "mJ/cm", "sccm"]
+    }
   }
 ];
 
 const forbiddenAnswerFragments = [
-  "에 대한 설명입니다.",
   "Direct channels for specific collaboration",
   "Portfolio notes, build logs",
-  "The public product page for A1trategize"
+  "The public product page for A1trategize",
+  "C:\\tmp",
+  "Chrome User Data",
+  "weights.bin"
 ];
 
 async function postCase(testCase) {
@@ -106,7 +173,8 @@ async function postCase(testCase) {
     headers: { "content-type": "application/json; charset=utf-8" },
     body: JSON.stringify({
       query: testCase.query,
-      context: testCase.context
+      context: testCase.context,
+      semanticHint: testCase.semanticHint
     })
   });
 
@@ -159,6 +227,41 @@ for (const testCase of cases) {
       } else if (!answer.includes(`${projectCount}개 공개 프로젝트`)) {
         errors.push(`answer: expected dynamic project count ${projectCount}`);
       }
+    }
+
+    if (testCase.expect.minProjectCards) {
+      const projectCount = Array.isArray(result?.contextCards)
+        ? result.contextCards.filter((card) => card.kind === "project").length
+        : 0;
+      if (projectCount < testCase.expect.minProjectCards) {
+        errors.push(`project card count: expected at least ${testCase.expect.minProjectCards}, got ${projectCount}`);
+      }
+    }
+
+    if (testCase.expect.locked) {
+      if (!Array.isArray(payload.lockedNotices) || payload.lockedNotices.length === 0) {
+        errors.push("lockedNotices: expected locked notice metadata");
+      }
+      if (!Array.isArray(result?.qualityFlags) || !result.qualityFlags.includes("locked-record")) {
+        errors.push("qualityFlags: expected locked-record");
+      }
+      for (const fragment of testCase.expect.forbidden ?? []) {
+        if (answer.includes(fragment)) {
+          errors.push(`locked answer leaked forbidden fragment: ${fragment}`);
+        }
+      }
+    }
+
+    if (!Array.isArray(payload.evidenceCards) || payload.evidenceCards.length === 0) {
+      errors.push("evidenceCards: expected one or more source cards");
+    }
+
+    if (!Array.isArray(payload.retrievalScores)) {
+      errors.push("retrievalScores: expected array metadata");
+    }
+
+    if (!pack?.answerPlan || !Array.isArray(pack.answerPlan.evidenceIds)) {
+      errors.push("answerPlan: expected structured answer plan");
     }
 
     if (!Array.isArray(result?.answerParts) || result.answerParts.length === 0) {

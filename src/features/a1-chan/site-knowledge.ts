@@ -37,6 +37,8 @@ export type A1ChanKnowledgeCard = {
   terms: string[];
   priority: number;
   source: string;
+  access?: "public" | "summaryOnly" | "pendingLocked";
+  lockedNotice?: string;
 };
 
 type CreateKnowledgeOptions = {
@@ -222,7 +224,11 @@ export function createA1ChanKnowledge({ routes, pages, projects, writings, conta
       routeId: "projects",
       tags: unique([...entry.data.tags, entry.data.year, ...(isPendingLockedProject ? ["Pending", "Locked"] : [])]),
       priority: Math.max(entry.data.tags.includes("A1 Firms") ? 82 : 68, 96 - entry.data.order),
-      source: `content/projects/${entry.id}.json`
+      source: `content/projects/${entry.id}.json`,
+      access: isPendingLockedProject ? "pendingLocked" as const : "public" as const,
+      lockedNotice: isPendingLockedProject
+        ? "This project is pending and locked. A1 Chan can only discuss the public summary and will not expose detailed fabrication/process information."
+        : undefined
     };
     cards.push(completeA1ChanCard(projectCardBase));
   }

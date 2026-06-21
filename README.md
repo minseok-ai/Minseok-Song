@@ -35,6 +35,23 @@ A1TRATEGIZE_STATIC_DIR=C:\Projects\A1trategize\static
 Historical content migration helpers live in `scripts/legacy`. They are kept
 for audit history and should not be wired into dev, build, or deployment hooks.
 
+## A1 Chan Runtime Boundaries
+
+A1 Chan is the portfolio site's in-page chatbot. It uses the site's own content
+registry as the source of truth, then optionally improves answer planning and
+phrasing through Chrome Built-in AI capabilities exposed in the current browser.
+The implementation must detect browser capabilities, not hard-code a specific
+local AI file, model version, or Chrome user-data path.
+
+`public` is a deployed static asset directory. Logos, profile media, favicon
+files, and the static `a1trategize-preview` surface may live there because they
+are browser-addressable. Private research material, raw certificates, Chrome
+profile data, and local AI cache files must not be added to `public`.
+
+`C:\tmp` is only a local scratch area for Codex, screenshots, logs, temporary
+browser profiles, and verification artifacts. It is not a feature store, not a
+deployment source, and not an A1 Chan source of truth.
+
 ## Domains
 
 This repository powers the portfolio site:

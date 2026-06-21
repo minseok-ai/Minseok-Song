@@ -3,6 +3,25 @@ import type { A1ChanKnowledgeCard } from "./site-knowledge";
 
 export type A1ChanMode = "answer" | "navigate" | "clarify" | "smalltalk";
 
+export type ChromeAiCapabilityKey =
+  | "prompt"
+  | "summarize"
+  | "translate"
+  | "detectLanguage"
+  | "rewrite"
+  | "write"
+  | "proofread";
+
+export type ChromeAiCapabilityState =
+  | "unsupported"
+  | "unavailable"
+  | "downloadable"
+  | "downloading"
+  | "available"
+  | "error";
+
+export type ChromeAiCapabilities = Record<ChromeAiCapabilityKey, ChromeAiCapabilityState>;
+
 export type A1ChanAction = {
   label: string;
   href: string;
@@ -22,6 +41,36 @@ export type A1ChanSourceCard = {
   source: string;
 };
 
+export type A1ChanRetrievalScore = {
+  id: string;
+  title: string;
+  kind: A1ChanKnowledgeCard["kind"];
+  score: number;
+  reasons: string[];
+};
+
+export type A1AnswerPlan = {
+  intent: string;
+  language: "ko" | "en" | "ja" | "unknown";
+  entities: string[];
+  targetSection?: string;
+  evidenceIds: string[];
+  answerMode: "direct" | "summary" | "comparison" | "recommendation" | "navigation" | "clarify";
+  routeAction?: A1ChanAction | null;
+  blockedFacts: string[];
+  confidence: NavigatorConfidence;
+  followups: string[];
+};
+
+export type A1ChanSemanticHint = {
+  intent?: string;
+  language?: "ko" | "en" | "ja" | "unknown";
+  entities?: string[];
+  targetRouteId?: string;
+  answerMode?: A1AnswerPlan["answerMode"];
+  confidence?: NavigatorConfidence;
+};
+
 export type A1ChanContextPack = {
   query: string;
   locale: "ko";
@@ -30,9 +79,13 @@ export type A1ChanContextPack = {
   primaryRecord?: A1ChanKnowledgeCard;
   matchedRecords: A1ChanKnowledgeCard[];
   evidence: string[];
+  evidenceCards?: A1ChanSourceCard[];
+  retrievalScores?: A1ChanRetrievalScore[];
+  lockedNotices?: string[];
   suggestedActions: A1ChanAction[];
   confidence: NavigatorConfidence;
   detectedLanguage?: "ko" | "en" | "ja" | "unknown";
+  answerPlan?: A1AnswerPlan;
   suggestedQuestions?: string[];
   qualityFlags?: string[];
 };
@@ -48,6 +101,9 @@ export type A1ChanResult = {
   actions: A1ChanAction[];
   contextCards: A1ChanKnowledgeCard[];
   sourceCards?: A1ChanSourceCard[];
+  retrievalScores?: A1ChanRetrievalScore[];
+  lockedNotices?: string[];
+  answerPlan?: A1AnswerPlan;
   suggestedQuestions?: string[];
   qualityFlags?: string[];
   detectedLanguage?: "ko" | "en" | "ja" | "unknown";

@@ -12,7 +12,11 @@ import {
   resultFromCard
 } from "./engine/answers";
 import { detectIntent, detectLanguage } from "./engine/intent";
-import { retrieveA1ChanContext } from "./engine/retrieval";
+import {
+  retrievalScoresFromMatches,
+  retrieveA1ChanContext,
+  retrieveA1ChanMatches
+} from "./engine/retrieval";
 import type { A1ChanContext, A1ChanIntent } from "./engine/types";
 import { normalizeNavigatorText } from "./route-engine";
 
@@ -68,6 +72,18 @@ function entityMatchScore(query: string, card: A1ChanKnowledgeCard) {
   return score;
 }
 
+function hasExplicitRecordReference(query: string, cards: A1ChanKnowledgeCard[]) {
+  const normalized = normalizeNavigatorText(query);
+  if (!normalized) return false;
+
+  return cards.some((card) =>
+    [card.id, card.title, ...card.aliases]
+      .map(normalizeNavigatorText)
+      .filter((term) => term.length >= 3)
+      .some((term) => normalized.includes(term))
+  );
+}
+
 function preferStrongEntityMatches(query: string, cards: A1ChanKnowledgeCard[]) {
   const ranked = cards
     .map((card, index) => ({ card, index, score: entityMatchScore(query, card) }))
@@ -80,13 +96,65 @@ function preferStrongEntityMatches(query: string, cards: A1ChanKnowledgeCard[]) 
   return ranked.map((item) => item.card);
 }
 
-function preferredCardForIntent(intent: A1ChanIntent, cards: A1ChanKnowledgeCard[], context: A1ChanContext) {
+function preferredCardForIntent(intent: A1ChanIntent, query: string, cards: A1ChanKnowledgeCard[], context: A1ChanContext) {
   if (intent === "currentPage") return currentPageRecord(cards, context.currentRouteId);
-  if (intent === "detail" || intent === "confusion") return cardById(cards, context.lastRecordId);
+  if (intent === "summary") {
+    if (hasExplicitRecordReference(query, cards)) return undefined;
+    return cardById(cards, context.lastRecordId) ?? currentPageRecord(cards, context.currentRouteId);
+  }
+  if (intent === "detail") {
+    if (hasExplicitRecordReference(query, cards)) return undefined;
+    return cardById(cards, context.lastRecordId);
+  }
+  if (intent === "confusion") return cardById(cards, context.lastRecordId);
   if (intent === "person") return cards.find((card) => card.id === "person-minseok-song");
   if (intent === "contact") return cards.find((card) => card.kind === "contact");
   if (intent === "writing") return firstRouteCard(cards, "writings");
   return undefined;
+}
+
+function coerceHintIntent(value: unknown): A1ChanIntent | undefined {
+  const allowed: A1ChanIntent[] = [
+    "currentPage",
+    "person",
+    "contact",
+    "projectCollection",
+    "compare",
+    "recommendation",
+    "summary",
+    "smalltalk",
+    "confusion",
+    "detail",
+    "siteQuestion",
+    "capability",
+    "writing",
+    "open",
+    "knowledgeQuestion"
+  ];
+
+  return allowed.includes(value as A1ChanIntent) ? value as A1ChanIntent : undefined;
+}
+
+function semanticSearchQuery(query: string, context: A1ChanContext) {
+  const entities = context.semanticHint?.entities ?? [];
+  return [query, ...entities].join(" ").trim();
+}
+
+function isWeakFullTextOnlyMatch(match: ReturnType<typeof retrieveA1ChanMatches>[number]) {
+  return match.reasons.length === 1 && match.reasons[0] === "full-text";
+}
+
+function gateWeakKnowledgeMatches(
+  matches: ReturnType<typeof retrieveA1ChanMatches>,
+  intent: A1ChanIntent,
+  context: A1ChanContext
+) {
+  if (intent !== "knowledgeQuestion" || context.semanticHint?.intent) {
+    return matches;
+  }
+
+  const gated = matches.filter((match) => !isWeakFullTextOnlyMatch(match));
+  return gated.length ? gated : [];
 }
 
 function actionsForRoute(routes: NavigatorRoute[], routeId: string, label?: string) {
@@ -197,8 +265,9 @@ export function createStaticA1ChanResponse(
   context: A1ChanContext = {}
 ): A1ChanResult {
   const trimmed = query.trim();
-  const intent = detectIntent(trimmed);
-  const detectedLanguage = detectLanguage(trimmed);
+  const intent = coerceHintIntent(context.semanticHint?.intent) ?? detectIntent(trimmed);
+  const detectedLanguage = context.semanticHint?.language ?? detectLanguage(trimmed);
+  const searchQuery = semanticSearchQuery(trimmed, context);
 
   if (intent === "empty") {
     return createEmptyResult(trimmed, routes, knowledgeCards, context);
@@ -212,18 +281,27 @@ export function createStaticA1ChanResponse(
     return createSmalltalkResult(trimmed, routes, knowledgeCards, context);
   }
 
-  const preferred = preferredCardForIntent(intent, knowledgeCards, context);
+  const preferred = preferredCardForIntent(intent, searchQuery, knowledgeCards, context);
   if (preferred) {
-    const related = retrieveA1ChanContext(trimmed, knowledgeCards, context, intent, 8);
+    const relatedMatches = retrieveA1ChanMatches(searchQuery, knowledgeCards, context, intent, 8);
+    const related = relatedMatches.map((match) => match.card);
     const merged = [preferred, ...related.filter((card) => card.id !== preferred.id)];
-    return resultFromCard(trimmed, intent, preferred, merged, routes, context, detectedLanguage);
+    return resultFromCard(trimmed, intent, preferred, merged, routes, {
+      ...context,
+      retrievalScores: retrievalScoresFromMatches(relatedMatches)
+    }, detectedLanguage);
   }
 
-  let retrieved = retrieveA1ChanContext(trimmed, knowledgeCards, context, intent, 8);
-  retrieved = preferStrongEntityMatches(trimmed, retrieved);
+  let retrievedMatches = gateWeakKnowledgeMatches(
+    retrieveA1ChanMatches(searchQuery, knowledgeCards, context, intent, 10),
+    intent,
+    context
+  );
+  let retrieved = retrievedMatches.map((match) => match.card);
+  retrieved = preferStrongEntityMatches(searchQuery, retrieved);
 
-  if (intent === "projectCollection") {
-    const specificProject = retrieved.find((card) => card.kind === "project" && entityMatchScore(trimmed, card) >= 500);
+  if (intent === "projectCollection" || intent === "recommendation") {
+    const specificProject = retrieved.find((card) => card.kind === "project" && entityMatchScore(searchQuery, card) >= 500);
 
     if (specificProject) {
       retrieved = [specificProject, ...retrieved.filter((card) => card.id !== specificProject.id)];
@@ -232,6 +310,16 @@ export function createStaticA1ChanResponse(
       const projects = knowledgeCards.filter((card) => card.kind === "project");
       retrieved = collection ? [collection, ...projects] : projects;
     }
+  }
+
+  if (intent === "compare") {
+    const projectCards = retrieved.filter((card) => card.kind === "project");
+    const fallbackProjects = knowledgeCards
+      .filter((card) => card.kind === "project")
+      .sort((a, b) => b.priority - a.priority);
+    retrieved = projectCards.length >= 2
+      ? projectCards
+      : [...projectCards, ...fallbackProjects.filter((card) => !projectCards.some((item) => item.id === card.id))].slice(0, 4);
   }
 
   if (intent === "writing" && !retrieved.some((card) => card.routeId === "writings")) {
@@ -254,7 +342,10 @@ export function createStaticA1ChanResponse(
       const projects = knowledgeCards.filter((card) => card.kind === "project");
       retrieved = [primary, ...projects];
     }
-    return resultFromCard(trimmed, intent, primary, retrieved, routes, context, detectedLanguage);
+    return resultFromCard(trimmed, intent, primary, retrieved, routes, {
+      ...context,
+      retrievalScores: retrievalScoresFromMatches(retrievedMatches)
+    }, detectedLanguage);
   }
 
   const routeOnlyIntent = intent === "open" || intent === "writing";

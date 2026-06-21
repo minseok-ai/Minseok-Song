@@ -6,9 +6,11 @@ import {
 } from "../route-engine";
 import type { A1ChanKnowledgeCard } from "../site-knowledge";
 import type {
+  A1AnswerPlan,
   A1ChanAction,
   A1ChanAnswerPart,
   A1ChanContextPack,
+  A1ChanRetrievalScore,
   A1ChanResult,
   A1ChanSourceCard
 } from "../shared";
@@ -208,6 +210,46 @@ function answerPartsForProjectsCollection(cards: A1ChanKnowledgeCard[]): A1ChanA
   ];
 }
 
+function answerPartsForProjectComparison(cards: A1ChanKnowledgeCard[]): A1ChanAnswerPart[] {
+  const projects = cards.filter((card) => card.kind === "project").slice(0, 4);
+  if (projects.length < 2) {
+    return answerPartsForProjectsCollection(cards);
+  }
+
+  return [
+    { text: `${projects.map((card) => card.title).join(", ")}를 기준으로 비교하면, 각 프로젝트는 문제 설정과 증거 방식이 다릅니다.` },
+    ...projects.slice(0, 3).map((card) => ({
+      label: card.title,
+      text: compact([
+        card.facts[0],
+        card.facts[3] ? `핵심: ${card.facts[3]}` : undefined,
+        card.proofPoints?.[0] ? `근거: ${card.proofPoints[0]}` : undefined
+      ].filter(Boolean).join(" "), 260)
+    }))
+  ];
+}
+
+function answerPartsForRecommendation(cards: A1ChanKnowledgeCard[]): A1ChanAnswerPart[] {
+  const projects = cards.filter((card) => card.kind === "project").slice(0, 5);
+  if (!projects.length) {
+    return answerPartsForProjectsCollection(cards);
+  }
+
+  return [
+    { text: "처음 본다면 현재 맥락과 증거가 강한 프로젝트부터 보는 편이 좋습니다." },
+    {
+      label: "추천 순서",
+      text: projects
+        .map((card, index) => `${index + 1}. ${card.title}`)
+        .join(" ")
+    },
+    {
+      label: "이유",
+      text: compact(projects.map((card) => `${card.title}: ${card.summary}`).join(" "), 420)
+    }
+  ];
+}
+
 function answerPartsForPerson(card: A1ChanKnowledgeCard): A1ChanAnswerPart[] {
   return [
     { text: card.shortAnswer || `${card.title}은 Minseok Song & Company Founder이자 KAIST NNFC Research Intern입니다.` },
@@ -241,6 +283,50 @@ function answerPartsForGenericCard(card: A1ChanKnowledgeCard, route: NavigatorRo
   ];
 }
 
+function answerModeForIntent(intent: A1ChanIntent, mode: A1ChanResult["mode"]): A1AnswerPlan["answerMode"] {
+  if (mode === "navigate" || intent === "open" || intent === "contact") return "navigation";
+  if (intent === "compare") return "comparison";
+  if (intent === "recommendation") return "recommendation";
+  if (intent === "summary") return "summary";
+  if (intent === "empty" || intent === "confusion") return "clarify";
+  return "direct";
+}
+
+function lockedNoticesFromCards(cards: A1ChanKnowledgeCard[]) {
+  return unique(cards.map((card) => card.lockedNotice));
+}
+
+function answerPlanFromContext({
+  intent,
+  mode,
+  cards,
+  actions,
+  confidence,
+  detectedLanguage,
+  suggestedQuestions
+}: {
+  intent: A1ChanIntent;
+  mode: A1ChanResult["mode"];
+  cards: A1ChanKnowledgeCard[];
+  actions: A1ChanAction[];
+  confidence: NavigatorConfidence;
+  detectedLanguage: A1ChanDetectedLanguage;
+  suggestedQuestions: string[];
+}): A1AnswerPlan {
+  return {
+    intent,
+    language: detectedLanguage,
+    entities: cards.slice(0, 5).map((card) => card.title),
+    targetSection: cards[0]?.routeId,
+    evidenceIds: cards.slice(0, 6).map((card) => card.id),
+    answerMode: answerModeForIntent(intent, mode),
+    routeAction: actions[0] ?? null,
+    blockedFacts: lockedNoticesFromCards(cards),
+    confidence,
+    followups: suggestedQuestions
+  };
+}
+
 function buildContextPack(
   query: string,
   intent: A1ChanIntent,
@@ -250,9 +336,13 @@ function buildContextPack(
   context: A1ChanContext,
   detectedLanguage: A1ChanDetectedLanguage,
   suggestedQuestions: string[],
-  qualityFlags: string[]
+  qualityFlags: string[],
+  answerPlan: A1AnswerPlan,
+  retrievalScores: A1ChanRetrievalScore[] = []
 ): A1ChanContextPack {
   const primaryRecord = cards[0];
+  const evidenceCards = sourceCardsFromCards(cards);
+  const lockedNotices = lockedNoticesFromCards(cards);
   return {
     query,
     locale: "ko",
@@ -261,9 +351,13 @@ function buildContextPack(
     primaryRecord,
     matchedRecords: cards,
     evidence: cards.flatMap((card) => [...card.facts.slice(0, 3), ...(card.proofPoints ?? []).slice(0, 2)]).slice(0, 8),
+    evidenceCards,
+    retrievalScores,
+    lockedNotices,
     suggestedActions: actions,
     confidence,
     detectedLanguage,
+    answerPlan,
     suggestedQuestions,
     qualityFlags
   };
@@ -297,12 +391,31 @@ export function resultFromCard(
   const actions = relatedActions([card, ...matchedCards.filter((item) => item.id !== card.id)], routes, intent);
   const answerParts = card.id === "projects-collection"
     ? answerPartsForProjectsCollection(matchedCards)
+    : intent === "compare"
+      ? answerPartsForProjectComparison(matchedCards)
+      : intent === "recommendation"
+        ? answerPartsForRecommendation(matchedCards)
     : answerPartsForGenericCard(card, route, intent);
   const suggestedQuestions = suggestedQuestionsFor(card, intent);
-  const qualityFlags = confidence === "low" ? ["low-confidence"] : [];
+  const qualityFlags = [
+    ...(confidence === "low" ? ["low-confidence"] : []),
+    ...lockedNoticesFromCards(matchedCards).map(() => "locked-record")
+  ];
+  const mode = intent === "open" || card.kind === "contact" ? "navigate" : "answer";
+  const answerPlan = answerPlanFromContext({
+    intent,
+    mode,
+    cards: matchedCards,
+    actions,
+    confidence,
+    detectedLanguage,
+    suggestedQuestions
+  });
+  const retrievalScores = context.retrievalScores ?? [];
+  const lockedNotices = lockedNoticesFromCards(matchedCards);
 
   return {
-    mode: intent === "open" || card.kind === "contact" ? "navigate" : "answer",
+    mode,
     answer: answerFromParts(answerParts),
     answerParts,
     routeId: route.id,
@@ -312,10 +425,13 @@ export function resultFromCard(
     actions,
     contextCards: matchedCards,
     sourceCards: sourceCardsFromCards(matchedCards),
+    retrievalScores,
+    lockedNotices,
+    answerPlan,
     suggestedQuestions,
     qualityFlags,
     detectedLanguage,
-    contextPack: buildContextPack(query, intent, matchedCards, actions, confidence, context, detectedLanguage, suggestedQuestions, qualityFlags),
+    contextPack: buildContextPack(query, intent, matchedCards, actions, confidence, context, detectedLanguage, suggestedQuestions, qualityFlags, answerPlan, retrievalScores),
     source
   };
 }
@@ -352,6 +468,20 @@ export function manualResult({
   const resolvedActions = actions ?? clarifyActions(routes);
   const suggestedQuestions = suggestedQuestionsFor(cards[0], intent);
   const route = routeId ? getRoute(routes, routeId) : undefined;
+  const lockedNotices = lockedNoticesFromCards(cards);
+  const finalQualityFlags = [
+    ...qualityFlags,
+    ...lockedNotices.map(() => "locked-record")
+  ];
+  const answerPlan = answerPlanFromContext({
+    intent,
+    mode,
+    cards,
+    actions: resolvedActions,
+    confidence,
+    detectedLanguage,
+    suggestedQuestions
+  });
 
   return {
     mode,
@@ -363,10 +493,13 @@ export function manualResult({
     actions: resolvedActions,
     contextCards: cards,
     sourceCards: sourceCardsFromCards(cards),
+    retrievalScores: context.retrievalScores ?? [],
+    lockedNotices,
+    answerPlan,
     suggestedQuestions,
-    qualityFlags,
+    qualityFlags: finalQualityFlags,
     detectedLanguage,
-    contextPack: buildContextPack(query, intent, cards, resolvedActions, confidence, context, detectedLanguage, suggestedQuestions, qualityFlags),
+    contextPack: buildContextPack(query, intent, cards, resolvedActions, confidence, context, detectedLanguage, suggestedQuestions, finalQualityFlags, answerPlan, context.retrievalScores ?? []),
     source: context.source ?? "static"
   };
 }

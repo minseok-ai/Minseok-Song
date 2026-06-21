@@ -41,7 +41,7 @@ const routeJson = JSON.stringify(routes);
       <a class="a1-navigator__brand" href={siteConfig.a1FirmsPath}>
         <span>
           <strong data-a1-agent-name>A1 Chan</strong>
-          <small data-a1-agent-mode>Static site guide</small>
+          <small data-a1-agent-mode>Standard site mode</small>
         </span>
       </a>
       <button class="a1-navigator__close" type="button" aria-label="Close A1 Chan" data-a1-close>
@@ -53,7 +53,7 @@ const routeJson = JSON.stringify(routes);
 
     <div class="a1-navigator__context" aria-label="Assistant state">
       <span data-a1-current-route>Current page</span>
-      <span data-a1-ai-status data-status="unsupported">Chan: static mode</span>
+      <span data-a1-ai-status data-status="unsupported">Standard site mode</span>
     </div>
 
     <div class="a1-navigator__body">
@@ -117,7 +117,7 @@ const routeJson = JSON.stringify(routes);
 </aside>
 
 <script>
-  import type { BrowserAiStatus } from "./browser-ai";
+  import type { BrowserAiStatus } from "./chrome-built-in-runtime";
   import {
     extractGoQuery,
     getNavigatorRoute,
@@ -127,7 +127,8 @@ const routeJson = JSON.stringify(routes);
   } from "./route-engine";
   import type {
     A1ChanAction,
-    A1ChanResult
+    A1ChanResult,
+    ChromeAiCapabilities
   } from "./shared";
 
   const widget = document.querySelector<HTMLElement>("[data-a1-navigator]");
@@ -161,12 +162,22 @@ const routeJson = JSON.stringify(routes);
   const MAX_HISTORY = 10;
   const intentRouteIds = ["a1-firms", "about", "projects", "writings", "contacts"];
   const statusCopy: Record<BrowserAiStatus, string> = {
-    unsupported: "Chan: static mode",
-    unavailable: "Chan: static mode",
-    downloadable: "Chan: model downloadable",
-    downloading: "Chan: model downloading",
-    available: "Chan: browser AI ready",
-    error: "Chan: static fallback"
+    unsupported: "Standard site mode",
+    unavailable: "Standard site mode",
+    downloadable: "Smart local ready",
+    downloading: "Preparing local AI",
+    available: "Smart local",
+    error: "Standard site mode"
+  };
+
+  const emptyCapabilities: ChromeAiCapabilities = {
+    prompt: "unsupported",
+    summarize: "unsupported",
+    translate: "unsupported",
+    detectLanguage: "unsupported",
+    rewrite: "unsupported",
+    write: "unsupported",
+    proofread: "unsupported"
   };
 
   let currentRoute = getNavigatorRouteByPath(routes, window.location.pathname);
@@ -174,16 +185,40 @@ const routeJson = JSON.stringify(routes);
   let lastRecordId: string | null = null;
   let conversationHistory: ConversationItem[] = [];
   let aiPrepareStarted = false;
+  let aiCapabilities: ChromeAiCapabilities = { ...emptyCapabilities };
 
   const setAgentIdentity = (status: BrowserAiStatus) => {
     const isLocalAi = status === "available";
     widget.dataset.agent = "chan";
     if (agentName) agentName.textContent = "A1 Chan";
     if (agentMode) {
-      agentMode.textContent = isLocalAi ? "Browser AI concierge" : "Static site guide";
+      agentMode.textContent = isLocalAi ? "Smart local site guide" : "Standard site mode";
     }
     trigger?.setAttribute("aria-label", "Open A1 Chan");
     closeButton?.setAttribute("aria-label", "Close A1 Chan");
+  };
+
+  const capabilityCopy = (status: BrowserAiStatus, progress?: number) => {
+    const availableTools = [
+      aiCapabilities.summarize === "available" ? "summary" : "",
+      aiCapabilities.translate === "available" ? "translate" : "",
+      aiCapabilities.detectLanguage === "available" ? "language" : "",
+      aiCapabilities.rewrite === "available" ? "rewrite" : ""
+    ].filter(Boolean);
+
+    const suffix =
+      status === "downloading" && typeof progress === "number"
+        ? ` ${Math.round(progress * 100)}%`
+        : "";
+
+    const toolSuffix = availableTools.length ? ` · ${availableTools.length} tools` : "";
+    return `${statusCopy[status]}${toolSuffix}${suffix}`;
+  };
+
+  const setAiCapabilities = (capabilities: ChromeAiCapabilities) => {
+    aiCapabilities = capabilities;
+    const status = widget.dataset.aiStatus as BrowserAiStatus | undefined;
+    if (status) setAiStatus(status);
   };
 
   const setAiStatus = (status: BrowserAiStatus, progress?: number) => {
@@ -191,23 +226,19 @@ const routeJson = JSON.stringify(routes);
     setAgentIdentity(status);
     if (!aiStatusState) return;
 
-    const suffix =
-      status === "downloading" && typeof progress === "number"
-        ? ` ${Math.round(progress * 100)}%`
-        : "";
-
     aiStatusState.dataset.status = status;
-    aiStatusState.textContent = `${statusCopy[status]}${suffix}`;
+    aiStatusState.textContent = capabilityCopy(status, progress);
   };
 
   let aiNavigator: any = null;
 
   const getAiNavigator = async () => {
     if (aiNavigator) return aiNavigator;
-    const { createBrowserAiNavigator } = await import("./browser-ai");
-    aiNavigator = createBrowserAiNavigator({
+    const { createChromeBuiltInRuntime } = await import("./chrome-built-in-runtime");
+    aiNavigator = createChromeBuiltInRuntime({
       routes,
       onStatus: (status) => setAiStatus(status),
+      onCapabilities: (capabilities) => setAiCapabilities(capabilities),
       onDownloadProgress: (progress) => setAiStatus("downloading", progress)
     });
     return aiNavigator;
@@ -277,7 +308,14 @@ const routeJson = JSON.stringify(routes);
     const showStructuredParts = Boolean(
       intent &&
       parts.length > 1 &&
-      (intent === "detail" || (intent === "projectCollection" && wantsBreakdown))
+      (intent === "detail" ||
+        intent === "person" ||
+        intent === "capability" ||
+        intent === "contact" ||
+        intent === "compare" ||
+        intent === "recommendation" ||
+        intent === "summary" ||
+        (intent === "projectCollection" && wantsBreakdown))
     );
     const visibleParts = showStructuredParts ? parts.slice(0, 4) : [{ text: parts[0]?.text || body }];
 
@@ -390,13 +428,15 @@ const routeJson = JSON.stringify(routes);
 
   const resolveConversation = async (query: string) => {
     const context = buildContext();
+    const nav = await getAiNavigator();
+    const semanticHint = await nav.resolveSemanticHint?.(query, context);
     
     let staticResult: A1ChanResult | undefined;
     try {
       const response = await fetch("/api/a1-chan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query, context })
+        body: JSON.stringify({ query, context, semanticHint })
       });
       if (response.ok) {
         const data = await response.json();
@@ -417,7 +457,6 @@ const routeJson = JSON.stringify(routes);
       };
     }
 
-    const nav = await getAiNavigator();
     const chanResult = await nav.resolveConversation(query, context, staticResult);
     return chanResult ?? staticResult;
   };
@@ -448,7 +487,7 @@ const routeJson = JSON.stringify(routes);
 
       if (isHelpQuery(query)) {
         setLoading(false);
-        appendMessage("A1 Chan은 이 사이트의 공개 콘텐츠를 먼저 찾아보고 답합니다. 인물, 현재 페이지, A1 Firms, 프로젝트, 글, 연락 경로처럼 사이트 안의 주제를 자연어로 물어보면 됩니다. 브라우저 AI 모델이 준비되면 같은 근거를 바탕으로 답변 표현이 더 유연해집니다.");
+        appendMessage("A1 Chan은 이 사이트의 공개 콘텐츠를 먼저 찾아보고 답합니다. 인물, 현재 페이지, A1 Firms, 프로젝트, 글, 연락 경로처럼 사이트 안의 주제를 자연어로 물어보면 됩니다. 최신 Chrome에서 Built-in AI 기능이 가능하면 같은 근거를 바탕으로 답변 표현과 비교·요약 품질이 더 유연해집니다.");
         return;
       }
 

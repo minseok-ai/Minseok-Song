@@ -19,6 +19,14 @@ const rateLimiter = createRateLimiter({
 
 type A1ChanRequestBody = {
   query?: unknown;
+  semanticHint?: {
+    intent?: unknown;
+    language?: unknown;
+    entities?: unknown;
+    targetRouteId?: unknown;
+    answerMode?: unknown;
+    confidence?: unknown;
+  };
   context?: {
     currentRouteId?: unknown;
     lastRouteId?: unknown;
@@ -69,6 +77,36 @@ function cleanContext(value: A1ChanRequestBody["context"] = {}) {
   };
 }
 
+function cleanSemanticHint(value: A1ChanRequestBody["semanticHint"]) {
+  if (!value || typeof value !== "object") return undefined;
+
+  const language = value.language === "ko" || value.language === "en" || value.language === "ja" || value.language === "unknown"
+    ? value.language
+    : undefined;
+  const confidence = value.confidence === "high" || value.confidence === "medium" || value.confidence === "low"
+    ? value.confidence
+    : undefined;
+  const answerMode = value.answerMode === "direct" ||
+    value.answerMode === "summary" ||
+    value.answerMode === "comparison" ||
+    value.answerMode === "recommendation" ||
+    value.answerMode === "navigation" ||
+    value.answerMode === "clarify"
+    ? value.answerMode
+    : undefined;
+
+  return {
+    intent: cleanString(value.intent, 80) || undefined,
+    language,
+    entities: Array.isArray(value.entities)
+      ? value.entities.map((item) => cleanString(item, 120)).filter(Boolean).slice(0, 6)
+      : [],
+    targetRouteId: cleanString(value.targetRouteId, 80) || undefined,
+    answerMode,
+    confidence
+  };
+}
+
 export const POST: APIRoute = async ({ request }) => {
   const identifier = getClientIdentifier(request);
   const rateLimitResult = rateLimiter(identifier);
@@ -92,16 +130,22 @@ export const POST: APIRoute = async ({ request }) => {
     const body = (await request.json()) as A1ChanRequestBody;
     const query = cleanString(body.query);
     const context = cleanContext(body.context);
+    const semanticHint = cleanSemanticHint(body.semanticHint);
     const { routes, knowledgeCards } = getA1ChanStaticContext();
 
     const staticResult = createStaticA1ChanResponse(query, routes, knowledgeCards, {
       ...context,
+      semanticHint,
       source: "static"
     });
 
     return new Response(JSON.stringify({
       contextPack: staticResult.contextPack,
-      staticResult
+      staticResult,
+      evidenceCards: staticResult.contextPack?.evidenceCards ?? staticResult.sourceCards ?? [],
+      retrievalScores: staticResult.contextPack?.retrievalScores ?? staticResult.retrievalScores ?? [],
+      lockedNotices: staticResult.contextPack?.lockedNotices ?? staticResult.lockedNotices ?? [],
+      suggestedActions: staticResult.contextPack?.suggestedActions ?? staticResult.actions ?? []
     }), {
       status: 200,
       headers: {
