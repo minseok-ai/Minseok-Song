@@ -1,49 +1,53 @@
 {
   "title": "Graphene Dirac Cone Analysis",
-  "summary": "Theoretical analysis of electron behavior in crystal lattices, deriving energy levels and investigating Graphene conductivity.",
-  "order": 14,
+  "summary": "Analyzed electron behavior in crystal lattices using Bloch's theorem, Brillouin zones, tight-binding logic, and the nearly-free-electron model.",
+  "order": 16,
   "status": "published",
   "hidden": false,
   "year": "2023",
   "tags": [
     "Physics",
     "Quantum Mechanics",
-    "Research"
+    "Research",
+    "Solid State"
   ],
   "links": [],
   "visual": "paper",
   "capabilityScores": [
-    0,
-    50,
+    5,
+    60,
     100,
-    10,
+    20,
     0
   ],
   "knowledge": {
     "ko": {
       "aliases": [
         "Graphene Dirac Cone Analysis",
-        "그래핀 디락 콘",
+        "A Study on the Nearly-Free-Electron Model",
         "nearly free electron",
-        "결정 격자 전자",
-        "양자역학 프로젝트"
+        "Bloch's theorem",
+        "Dirac cone",
+        "tight-binding model"
       ],
-      "oneLiner": "결정 격자에서 전자의 에너지 준위와 Graphene Dirac cone을 해석한 이론 물리 프로젝트입니다.",
-      "problem": "그래핀의 전도성과 Dirac cone 구조를 이해하려면 결정 격자 안에서 전자 거동과 에너지 관계를 이론적으로 추적해야 합니다.",
-      "approach": "nearly-free electron 관점에서 결정 격자 내 전자 에너지 준위를 유도하고, 그래핀 전도 특성을 해석했습니다.",
-      "technicalCore": "crystal lattice, energy band derivation, Graphene conductivity, Dirac cone analysis가 핵심입니다.",
-      "evidence": "2023년 physics/quantum mechanics 연구 프로젝트로 등록되어 있습니다.",
-      "impact": "반도체/나노소자 연구로 이어지는 물리적 기초 이해를 정리한 프로젝트입니다.",
-      "statusNote": "학부 물리 이론 연구 성격의 프로젝트입니다.",
+      "oneLiner": "결정 격자 속 전자 거동과 Graphene Dirac Cone을 이론적으로 분석한 고체물리 프로젝트입니다.",
+      "problem": "Graphene의 전도성과 band structure를 이해하려면 자유전자 모델과 nearly-free-electron model의 차이, band gap 형성 메커니즘을 구분해야 합니다.",
+      "approach": "Schrodinger equation, Bloch's theorem, Brillouin zone 개념을 바탕으로 주기 퍼텐셜 아래 에너지 준위를 유도하고 tight-binding model로 graphene 특성을 해석했습니다.",
+      "technicalCore": "crystal lattice theory, periodic potential, energy band derivation, Brillouin zone, tight-binding model, Dirac cone analysis가 핵심입니다.",
+      "evidence": "19-page technical report로 이론 유도와 graphene conductivity 분석을 정리했고 solid-state physics 이해도로 A+를 받았습니다.",
+      "impact": "반도체와 나노소자 연구로 이어지는 양자역학/고체물리 기반을 정교하게 정리한 프로젝트입니다.",
+      "statusNote": "2023년 physics capstone 성격의 theoretical research 프로젝트입니다.",
       "keywords": [
         "graphene",
         "Dirac cone",
         "quantum mechanics",
-        "crystal lattice",
-        "electron",
+        "Bloch theorem",
+        "Brillouin zone",
+        "tight-binding",
+        "nearly-free-electron",
+        "solid-state physics",
         "그래핀",
-        "디락 콘",
-        "양자역학"
+        "디랙 콘"
       ]
     }
   }

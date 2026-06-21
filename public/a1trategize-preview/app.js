@@ -1,85 +1,5 @@
 "use strict";
 
-const IS_STATIC_A1_PREVIEW = window.location.pathname.includes("/a1trategize-preview/");
-
-const localStorage = (() => {
-  try {
-    const storage = window.localStorage;
-    const key = "__a1_preview_storage_probe__";
-    storage.setItem(key, "1");
-    storage.removeItem(key);
-    return storage;
-  } catch {
-    const memory = new Map();
-    return {
-      getItem(key) {
-        return memory.has(key) ? memory.get(key) : null;
-      },
-      setItem(key, value) {
-        memory.set(key, String(value));
-      },
-      removeItem(key) {
-        memory.delete(key);
-      }
-    };
-  }
-})();
-
-const STATIC_DOMAIN_REGISTRY = [
-  { key: "business", label: "Business Strategy", icon_id: "mode-business", description: "Market analysis, growth strategy, and executive brief generation." },
-  { key: "career", label: "Career & Interview", icon_id: "mode-career", description: "Resume review, interview preparation, and career positioning." },
-  { key: "ip", label: "IP & Patent", icon_id: "mode-ip", description: "Prior-art review, patent drafting, and IP strategy." },
-  { key: "nnfc", label: "NNFC Recipe", icon_id: "mode-nnfc", description: "Semiconductor process validation against an equipment catalog." }
-];
-
-const STATIC_MODEL_CATALOG = {
-  "solar-pro3": { display_name: "Solar Pro 3", provider: "upstage", supports_search: false },
-  "sonar-pro": { display_name: "Sonar Pro", provider: "perplexity", supports_search: true },
-  "gemini-2.5-pro": { display_name: "Gemini 2.5 Pro", provider: "google", supports_search: false },
-  "deepseek-v4-pro": { display_name: "DeepSeek V4 Pro", provider: "alibaba", supports_search: false },
-  "ax4-consult": { display_name: "A.X Consult", provider: "skt", supports_search: false }
-};
-
-const STATIC_MODEL_ASSIGNMENTS = {
-  classification: "solar-pro3",
-  query_expansion: "solar-pro3",
-  research: "sonar-pro",
-  supplementary_research: "sonar-pro",
-  review: "deepseek-v4-pro",
-  qa: "deepseek-v4-pro",
-  draft: "gemini-2.5-pro",
-  revision: "gemini-2.5-pro",
-  critic: "deepseek-v4-pro",
-  presentation: "ax4-consult"
-};
-
-const STATIC_EQUIPMENT = [
-  {
-    eqpmnt_id: 101,
-    equipment_name: "PECVD Oxide Demo Tool",
-    basic_info: {},
-    structured_specs: {
-      equipment_category: "Deposition",
-      supported_wafer_size: ["4 inch", "6 inch"],
-      target_materials: ["SiO2", "SiN"],
-      max_temperature_celsius: 400,
-      critical_constraints: "Static portfolio preview data."
-    }
-  },
-  {
-    eqpmnt_id: 202,
-    equipment_name: "Mask Aligner Demo Tool",
-    basic_info: {},
-    structured_specs: {
-      equipment_category: "Lithography",
-      supported_wafer_size: ["4 inch"],
-      target_materials: ["Photoresist"],
-      max_temperature_celsius: 120,
-      critical_constraints: "Static portfolio preview data."
-    }
-  }
-];
-
 const BASE_STEPS = [
   { key: "mode_selected", label: "Team Setup", num: 1 },
   { key: "query_expanded", label: "Prompt", num: 2 },
@@ -266,6 +186,146 @@ let equipVisibleCount = EQUIPMENT_PAGE_SIZE;
 let activePromptSuggestions = [];
 let modalReturnFocusEl = null;
 
+function getApiToken() {
+  return (localStorage.getItem("a1_api_token") || "").trim();
+}
+
+function syncApiTokenCookie() {
+  const token = getApiToken();
+  if (!token) {
+    document.cookie = "a1_api_token=; Path=/; Max-Age=0; SameSite=Strict";
+    return;
+  }
+  document.cookie = `a1_api_token=${encodeURIComponent(token)}; Path=/; SameSite=Strict`;
+}
+
+
+const STATIC_PREVIEW_DOMAINS = [
+  { key: "business", label: "Business Strategy", icon_id: "mode-business", description: "Strategic planning, market analysis, and growth strategies." },
+  { key: "career", label: "Career & Interview", icon_id: "mode-career", description: "Resume review, career path coaching, and interview prep." },
+  { key: "ip", label: "IP & Patent", icon_id: "mode-ip", description: "Patent drafting, prior art search, and IP strategy." },
+  { key: "nnfc", label: "NNFC Recipe", icon_id: "mode-nnfc", description: "NNFC semiconductor process recipe validation against 183 tools." }
+];
+
+const STATIC_PREVIEW_EQUIPMENT = [
+  {
+    eqpmnt_id: 101,
+    equipment_name: "SORONA Multi-Target Sputter",
+    basic_info: { "제작사": "SORONA", "모델명": "Multi-Target Sputter", "장비아이디": "PREVIEW-101", "담당자": "Preview", "연락처": "Static data" },
+    structured_specs: {
+      equipment_category: "Deposition",
+      supported_wafer_size: ["4 inch", "6 inch"],
+      target_materials: ["Si", "V2O5", "NCM811", "Pt/Ti"],
+      available_gases: ["Ar", "O2"],
+      max_temperature_celsius: 300,
+      critical_constraints: "Static preview fixture. Engineer confirmation required for production recipes."
+    }
+  },
+  {
+    eqpmnt_id: 102,
+    equipment_name: "Photolithography Track",
+    basic_info: { "제작사": "NNFC", "모델명": "Yellow Room Process", "장비아이디": "PREVIEW-102", "담당자": "Preview", "연락처": "Static data" },
+    structured_specs: {
+      equipment_category: "Lithography",
+      supported_wafer_size: ["4 inch"],
+      target_materials: ["AZ5214-E PR"],
+      available_gases: ["O2"],
+      max_temperature_celsius: 120,
+      critical_constraints: "Exposure dose, bake condition, and descum recipe must be checked by an engineer."
+    }
+  }
+];
+
+const STATIC_PREVIEW_MODELS = {
+  catalog: {
+    "preview-research": { label: "Preview Research Model", provider: "static", supports_search: true },
+    "preview-review": { label: "Preview Review Model", provider: "static", supports_search: false }
+  },
+  assignments: {
+    research: "preview-research",
+    supplementary_research: "preview-research",
+    review: "preview-review",
+    qa: "preview-review",
+    draft: "preview-review",
+    revision: "preview-review",
+    critic: "preview-review",
+    classification: "preview-review",
+    query_expansion: "preview-review",
+    presentation: "preview-review"
+  }
+};
+
+function isStaticPreviewApiResource(resource) {
+  return typeof window !== "undefined" &&
+    window.location.pathname.startsWith("/a1trategize-preview/") &&
+    String(resource || "").startsWith("/api/");
+}
+
+function staticPreviewJson(data, status = 200) {
+  return Promise.resolve(new Response(JSON.stringify(data), {
+    status,
+    headers: { "Content-Type": "application/json; charset=utf-8" }
+  }));
+}
+
+function staticPreviewApiFetch(resource) {
+  const url = new URL(String(resource), window.location.origin);
+  const path = url.pathname;
+
+  if (path === "/api/domains") return staticPreviewJson({ domains: STATIC_PREVIEW_DOMAINS });
+  if (path === "/api/models") return staticPreviewJson(STATIC_PREVIEW_MODELS);
+  if (path === "/api/models/assign") return staticPreviewJson({ ok: true });
+  if (path === "/api/sessions") return staticPreviewJson({ sessions: [] });
+
+  if (path === "/api/equipment") {
+    const category = url.searchParams.get("category");
+    const q = (url.searchParams.get("q") || "").toLowerCase();
+    const equipment = STATIC_PREVIEW_EQUIPMENT.filter((item) => {
+      const itemCategory = item.structured_specs?.equipment_category || "";
+      const categoryMatches = !category || category === "All" || itemCategory === category;
+      const queryMatches = !q || JSON.stringify(item).toLowerCase().includes(q);
+      return categoryMatches && queryMatches;
+    });
+    const categories = Array.from(new Set(STATIC_PREVIEW_EQUIPMENT.map((item) => item.structured_specs?.equipment_category).filter(Boolean)));
+    return staticPreviewJson({ equipment, categories });
+  }
+
+  const equipmentDetail = path.match(/^\/api\/equipment\/(\d+)$/);
+  if (equipmentDetail) {
+    const equipment = STATIC_PREVIEW_EQUIPMENT.find((item) => String(item.eqpmnt_id) === equipmentDetail[1]) || STATIC_PREVIEW_EQUIPMENT[0];
+    return staticPreviewJson({
+      equipment,
+      raw_specs: {
+        Preview: "Static portfolio preview fixture. Live equipment DB is available only inside the A1trategize app."
+      }
+    });
+  }
+
+  if (/^\/api\/equipment\/\d+\/ai-guide$/.test(path)) {
+    return staticPreviewJson({
+      guide: "Static preview guide: verify target material, wafer size, gas availability, and process limits with the responsible engineer before running the recipe."
+    });
+  }
+
+  return staticPreviewJson({ error: "Static embedded preview endpoint." }, 404);
+}
+
+function apiFetch(resource, options = {}) {
+  if (isStaticPreviewApiResource(resource)) return staticPreviewApiFetch(resource, options);
+  syncApiTokenCookie();
+  const headers = new Headers(options.headers || {});
+  const token = getApiToken();
+  if (token && !headers.has("Authorization")) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+  return fetch(resource, { ...options, headers });
+}
+
+function authEventSource(resource) {
+  syncApiTokenCookie();
+  return new EventSource(resource);
+}
+
 function setVisible(el, visible) {
   if (!el) return;
   if (visible) {
@@ -395,14 +455,8 @@ window.toggleLivePanel = function(id) {
 };
 
 async function loadDomains() {
-  if (IS_STATIC_A1_PREVIEW) {
-    domainRegistry = STATIC_DOMAIN_REGISTRY;
-    renderDomainControls(domainRegistry);
-    return;
-  }
-
   try {
-    const res = await fetch("/api/domains");
+    const res = await apiFetch("/api/domains");
     const data = await res.json();
     domainRegistry = data.domains || [];
     renderDomainControls(domainRegistry);
@@ -651,17 +705,12 @@ function isNearPageBottom() {
 }
 
 async function loadModels() {
-  if (IS_STATIC_A1_PREVIEW) {
-    renderModelConfig(STATIC_MODEL_CATALOG, STATIC_MODEL_ASSIGNMENTS);
-    return;
-  }
-
   const container = document.getElementById("model-config");
   if (container) {
     container.innerHTML = `<div class="sidebar-note">모델 목록을 불러오는 중입니다.</div>`;
   }
   try {
-    const res = await fetch("/api/models");
+    const res = await apiFetch("/api/models");
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     renderModelConfig(data.catalog, data.assignments);
@@ -697,7 +746,7 @@ function renderModelConfig(catalog, assignments) {
     }
   }
 }
-async function assignModel(role, modelKey) { if (IS_STATIC_A1_PREVIEW) return; try { await fetch("/api/models/assign", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ role, model_key: modelKey }) }); } catch (e) { console.error("Failed to assign model:", e); } }
+async function assignModel(role, modelKey) { try { await apiFetch("/api/models/assign", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ role, model_key: modelKey }) }); } catch (e) { console.error("Failed to assign model:", e); } }
 
 function providerBadge(provider) {
   const iconName = PROVIDER_ICON_MAP[provider] || "auxiliary";
@@ -761,14 +810,8 @@ function setPipelineUiActive(active) {
 }
 
 async function loadSessions() {
-  if (IS_STATIC_A1_PREVIEW) {
-    savedSessions = [];
-    renderSessionHistory(savedSessions);
-    return;
-  }
-
   try {
-    const res = await fetch("/api/sessions");
+    const res = await apiFetch("/api/sessions");
     const data = await res.json();
     savedSessions = data.sessions || [];
     renderSessionHistory(savedSessions);
@@ -806,7 +849,7 @@ function formatSessionTime(value) {
 
 async function loadSavedSession(sessionId) {
   try {
-    const res = await fetch(`/api/sessions/${encodeURIComponent(sessionId)}`);
+    const res = await apiFetch(`/api/sessions/${encodeURIComponent(sessionId)}`);
     const data = await res.json();
     const session = data.session;
     if (!session) return;
@@ -901,7 +944,7 @@ async function startPipeline() {
   setVisible(document.getElementById("tracker-container"), true);
 
   try {
-    const res = await fetch("/api/run", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ topic, domain: selectedDomain }) });
+    const res = await apiFetch("/api/run", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ topic, domain: selectedDomain }) });
     const data = await res.json();
     currentJobId = data.session_id || data.job_id;
     loadSessions();
@@ -910,7 +953,7 @@ async function startPipeline() {
 }
 
 function listenToEvents(jobId) {
-  const evtSource = new EventSource(`/api/stream/${jobId}`);
+  const evtSource = authEventSource(`/api/stream/${jobId}`);
   activeEventSource = evtSource;
   let stepIndex = -1;
   const getDomainConfig = () => {
@@ -940,7 +983,7 @@ function listenToEvents(jobId) {
 
 async function fetchResults(jobId) {
   try {
-    const res = await fetch(`/api/result/${jobId}`);
+    const res = await apiFetch(`/api/result/${jobId}`);
     const data = await res.json();
     if (data.status === "complete" && data.result) {
       currentJobId = data.result.session_id || jobId;
@@ -967,7 +1010,7 @@ async function renderHarnessTrace(jobId, result = {}) {
   try {
     let trace = result?._harness_metadata || {};
     if (!trace.node_history || !trace.node_history.length) {
-      const res = await fetch(`/api/harness/last-trace/${jobId}`);
+      const res = await apiFetch(`/api/harness/last-trace/${jobId}`);
       trace = await res.json();
     }
     const rows = trace.node_history || [];
@@ -1461,10 +1504,20 @@ window.downloadRunSheetCSV = function() {
 };
 
 function csvEscape(value) {
-  const str = String(value ?? "");
+  const str = spreadsheetSafeValue(value);
   if (/[",\r\n]/.test(str)) return '"' + str.replace(/"/g, '""') + '"';
   return str;
 }
+
+function spreadsheetSafeValue(value) {
+  const str = String(value ?? "");
+  const trimmed = str.trimStart();
+  if (trimmed && /^[=+\-@]/.test(trimmed)) {
+    return `${str.slice(0, str.length - trimmed.length)}'${trimmed}`;
+  }
+  return str;
+}
+
 function stripHtml(str) {
   const tmp = document.createElement("div");
   tmp.innerHTML = String(str ?? "");
@@ -1692,7 +1745,7 @@ window.exportReportFile = async function(format) {
     btn.textContent = "Generating...";
   }
   try {
-    const res = await fetch(`/api/export/${encodeURIComponent(sessionId)}/${encodeURIComponent(fmt)}`, {
+    const res = await apiFetch(`/api/export/${encodeURIComponent(sessionId)}/${encodeURIComponent(fmt)}`, {
       method: "POST",
     });
     if (!res.ok) {
@@ -1833,29 +1886,13 @@ function toggleEquipBrowser() {
 }
 
 async function loadEquipment(category, q) {
-  if (IS_STATIC_A1_PREVIEW) {
-    const normalizedQuery = String(q || "").toLowerCase();
-    const selectedCategory = category || equipActiveCat;
-
-    equipmentData = STATIC_EQUIPMENT.filter((item) => {
-      const itemCategory = item.structured_specs?.equipment_category || "";
-      const inCategory = !selectedCategory || selectedCategory === "All" || itemCategory === selectedCategory;
-      const inQuery = !normalizedQuery || item.equipment_name.toLowerCase().includes(normalizedQuery);
-      return inCategory && inQuery;
-    });
-    equipmentCategories = [...new Set(STATIC_EQUIPMENT.map((item) => item.structured_specs?.equipment_category).filter(Boolean))];
-    equipVisibleCount = EQUIPMENT_PAGE_SIZE;
-    renderEquipment();
-    return;
-  }
-
   try {
     let url = "/api/equipment"; const params = [];
     if (category && category !== "All") params.push(`category=${encodeURIComponent(category)}`);
     if (q) params.push(`q=${encodeURIComponent(q)}`);
     if (params.length) url += "?" + params.join("&");
     renderEquipmentLoading();
-    const res = await fetch(url); const data = await res.json();
+    const res = await apiFetch(url); const data = await res.json();
     equipmentData = data.equipment || [];
     equipmentCategories = data.categories || [];
     equipVisibleCount = EQUIPMENT_PAGE_SIZE;
@@ -1936,7 +1973,7 @@ async function openEquipModal(eqId) {
   currentModalEquipId = eqId;
   try {
     modalReturnFocusEl = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const res = await fetch(`/api/equipment/${eqId}`); const data = await res.json();
+    const res = await apiFetch(`/api/equipment/${eqId}`); const data = await res.json();
     const eq = data.equipment; const info = eq.basic_info || {}; const specs = eq.structured_specs || {}; const rawSpecs = data.raw_specs || {};
     document.getElementById("modal-category").textContent = specs.equipment_category || "";
     document.getElementById("modal-equip-name").textContent = eq.equipment_name || "";
@@ -1987,9 +2024,8 @@ async function requestAIGuide() {
   const btn = document.getElementById("ai-guide-btn"); const resultDiv = document.getElementById("ai-guide-result");
   btn.disabled = true; resultDiv.innerHTML = '<div class="equip-ai-loading"><div class="spinner"></div>장비 데이터를 분석하여 AI 가이드를 생성 중입니다...</div>';
   try {
-    const res = await fetch(`/api/equipment/${currentModalEquipId}/ai-guide`, { method: "POST" }); const data = await res.json();
+    const res = await apiFetch(`/api/equipment/${currentModalEquipId}/ai-guide`, { method: "POST" }); const data = await res.json();
     if (data.guide) { resultDiv.innerHTML = `<div class="equip-ai-result">${simpleMarkdownToHtml(data.guide)}</div>`; } else { resultDiv.innerHTML = `<div class="equip-ai-result" style="color:var(--error);">AI 가이드 생성에 실패했습니다: ${escapeHtml(data.error || 'Unknown error')}</div>`; }
   } catch (e) { resultDiv.innerHTML = `<div class="equip-ai-result" style="color:var(--error);">네트워크 오류가 발생했습니다.</div>`; }
   btn.disabled = false;
 }
-

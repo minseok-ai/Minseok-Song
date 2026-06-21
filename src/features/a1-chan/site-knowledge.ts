@@ -63,6 +63,14 @@ export const routePathById = (routes: NavigatorRoute[], id: string) =>
 const pageRouteIdByPath = (routes: NavigatorRoute[], path: string) =>
   routes.find((route) => route.path === path)?.id ?? "home";
 
+const pendingLockedProjectIds = new Set(["interdigitated-devices"]);
+
+const pendingLockedProjectFacts = [
+  "Planar Micro-Battery Architecture는 현재 Pending 잠금 상태로 공개되어 있습니다.",
+  "세부 공정, 장비 조건, 측정 정보는 공개 카드와 A1 Chan 답변에서 의도적으로 모자이크 처리됩니다.",
+  "Projects 화면에서는 자물쇠형 Pending 카드로만 노출됩니다."
+];
+
 function blockText(block: BlockLike) {
   if (block.hidden) return "";
 
@@ -174,36 +182,45 @@ export function createA1ChanKnowledge({ routes, pages, projects, writings, conta
 
   for (const entry of publishedProjects) {
     const knowledge = entry.data.knowledge?.ko;
-    const facts = unique([
-      knowledge?.oneLiner || entry.data.summary,
-      knowledge?.problem,
-      knowledge?.approach,
-      knowledge?.technicalCore,
-      knowledge?.evidence,
-      knowledge?.impact,
-      knowledge?.statusNote
-    ]);
+    const isPendingLockedProject = pendingLockedProjectIds.has(entry.id);
+    const facts = isPendingLockedProject
+      ? pendingLockedProjectFacts
+      : unique([
+          knowledge?.oneLiner || entry.data.summary,
+          knowledge?.problem,
+          knowledge?.approach,
+          knowledge?.technicalCore,
+          knowledge?.evidence,
+          knowledge?.impact,
+          knowledge?.statusNote
+        ]);
     const projectCardBase = {
       id: `project-${entry.id}`,
       kind: "project" as const,
       locale: "ko" as const,
       title: entry.data.title,
       aliases: unique([entry.id, entry.data.title, ...(knowledge?.aliases ?? [])]),
-      summary: knowledge?.oneLiner || entry.data.summary,
+      summary: isPendingLockedProject ? pendingLockedProjectFacts[0] : knowledge?.oneLiner || entry.data.summary,
       facts,
-      shortAnswer: knowledge?.oneLiner || entry.data.summary,
-      detailAnswer: compactText([
-        knowledge?.oneLiner || entry.data.summary,
-        knowledge?.problem ? `문제의식: ${knowledge.problem}` : undefined,
-        knowledge?.approach ? `접근: ${knowledge.approach}` : undefined,
-        knowledge?.technicalCore ? `기술 핵심: ${knowledge.technicalCore}` : undefined
-      ]),
-      proofPoints: unique([knowledge?.evidence, knowledge?.impact, knowledge?.statusNote]).slice(0, 4),
-      nextQuestions: ["문제의식은?", "기술 핵심은?", "근거와 상태는?"],
-      keywords: unique([...(knowledge?.keywords ?? []), ...entry.data.tags, entry.data.year, "project", "프로젝트"]),
+      shortAnswer: isPendingLockedProject ? pendingLockedProjectFacts[0] : knowledge?.oneLiner || entry.data.summary,
+      detailAnswer: isPendingLockedProject
+        ? pendingLockedProjectFacts.join(" ")
+        : compactText([
+            knowledge?.oneLiner || entry.data.summary,
+            knowledge?.problem ? `문제의식: ${knowledge.problem}` : undefined,
+            knowledge?.approach ? `접근: ${knowledge.approach}` : undefined,
+            knowledge?.technicalCore ? `기술 핵심: ${knowledge.technicalCore}` : undefined
+          ]),
+      proofPoints: isPendingLockedProject
+        ? pendingLockedProjectFacts.slice(1)
+        : unique([knowledge?.evidence, knowledge?.impact, knowledge?.statusNote]).slice(0, 4),
+      nextQuestions: isPendingLockedProject
+        ? ["왜 Pending이야?", "공개 가능한 범위는?", "다른 연구 프로젝트는?"]
+        : ["문제의식은?", "기술 핵심은?", "근거와 상태는?"],
+      keywords: unique([...(knowledge?.keywords ?? []), ...entry.data.tags, entry.data.year, "project", "프로젝트", ...(isPendingLockedProject ? ["pending", "locked", "잠금", "모자이크"] : [])]),
       href: `${routePathById(routes, "projects")}#project-${entry.id}`,
       routeId: "projects",
-      tags: unique([...entry.data.tags, entry.data.year]),
+      tags: unique([...entry.data.tags, entry.data.year, ...(isPendingLockedProject ? ["Pending", "Locked"] : [])]),
       priority: Math.max(entry.data.tags.includes("A1 Firms") ? 82 : 68, 96 - entry.data.order),
       source: `content/projects/${entry.id}.json`
     };

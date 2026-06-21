@@ -1,0 +1,52 @@
+{
+  "title": "3D Dodgeball Game Development for Community Interaction",
+  "summary": "Built and distributed a Unity/C# 3D dodgeball APK that turned a university club lunch bet into a playful shared scoring ritual.",
+  "order": 15,
+  "status": "published",
+  "hidden": false,
+  "year": "2023",
+  "tags": [
+    "Game",
+    "Unity",
+    "C#",
+    "Community"
+  ],
+  "links": [],
+  "visual": "console",
+  "capabilityScores": [
+    75,
+    25,
+    25,
+    75,
+    55
+  ],
+  "knowledge": {
+    "ko": {
+      "aliases": [
+        "3D Dodgeball Game Development for Community Interaction",
+        "3D Dodgeball",
+        "Unity dodgeball",
+        "C# game",
+        "APK"
+      ],
+      "oneLiner": "Unity와 C#으로 3D 피구 게임을 만들어 동아리의 점심 내기 문화를 플레이 가능한 도구로 바꾼 프로젝트입니다.",
+      "problem": "비게이머도 바로 참여할 수 있고, 실제 커뮤니티 안에서 반복 사용될 만큼 단순한 게임 규칙과 배포 방식이 필요했습니다.",
+      "approach": "throwing과 dodging 중심의 간단한 3D mechanics를 구현하고 APK를 직접 배포해 동아리 구성원이 점수 경쟁에 활용하도록 했습니다.",
+      "technicalCore": "Unity scene composition, C# gameplay scripting, simple physics interaction, Android APK distribution, high-score sharing loop가 핵심입니다.",
+      "evidence": "대학 Hip-Hop Club 구성원들이 직접 플레이하고 결과 스크린샷을 공유하면서 수업 프로젝트가 실제 커뮤니티 상호작용 도구로 쓰였습니다.",
+      "impact": "기술이 거창한 문제만이 아니라 일상 커뮤니티의 재미와 참여를 만드는 작은 제품이 될 수 있음을 보여준 game project입니다.",
+      "statusNote": "2023년 Unity program 기반 community game 프로젝트입니다.",
+      "keywords": [
+        "Unity",
+        "C#",
+        "3D game",
+        "dodgeball",
+        "APK",
+        "community",
+        "gameplay",
+        "피구",
+        "게임"
+      ]
+    }
+  }
+}

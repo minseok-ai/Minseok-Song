@@ -1,0 +1,54 @@
+{
+  "title": "Autonomous Marine Tourism Submarine using NVIDIA JetBot",
+  "summary": "Built NVIDIA Jetson Nano robot control logic with asynchronous camera tracking, transfer learning path following, and collision avoidance for an underwater-tourism concept.",
+  "order": 14,
+  "status": "published",
+  "hidden": false,
+  "year": "2024",
+  "tags": [
+    "Robotics",
+    "AI",
+    "Embedded",
+    "Product Concept"
+  ],
+  "links": [],
+  "visual": "console",
+  "capabilityScores": [
+    90,
+    85,
+    60,
+    75,
+    70
+  ],
+  "knowledge": {
+    "ko": {
+      "aliases": [
+        "Autonomous Marine Tourism Submarine using NVIDIA JetBot",
+        "NVIDIA JetBot",
+        "Jetson Nano",
+        "Marine Tourism Capsule",
+        "ResNet-18",
+        "AlexNet"
+      ],
+      "oneLiner": "NVIDIA Jetson Nano 기반 로봇 제어와 딥러닝 주행 모델을 수중 관광 캡슐 사업 아이디어로 확장한 프로젝트입니다.",
+      "problem": "자율주행 로봇은 카메라 추적, 주행 모터, 충돌 회피 모델이 실시간으로 안정적으로 동기화되어야 하며, 기술 데모를 제품 콘셉트로 연결해야 합니다.",
+      "approach": "traitlets로 camera input과 motor output을 묶고 Python threading으로 pan/tilt servo control을 driving loop와 분리했습니다.",
+      "technicalCore": "Jetson Nano, traitlets binding, threaded asynchronous control, custom dataset augmentation, ResNet-18 path following, AlexNet collision avoidance가 핵심입니다.",
+      "evidence": "직접 구축한 데이터셋에 flipping/rotation augmentation을 적용하고 transfer learning 모델을 통합해 test track 자율주행을 구현했습니다.",
+      "impact": "embedded AI, robotics control, computer vision model integration을 실제 주행 데모와 해양 관광 capsule 사업 모델로 연결했습니다.",
+      "statusNote": "2024년 intensive AI camp 기반 robotics/product concept 프로젝트입니다.",
+      "keywords": [
+        "JetBot",
+        "Jetson Nano",
+        "robotics",
+        "threading",
+        "traitlets",
+        "ResNet-18",
+        "AlexNet",
+        "transfer learning",
+        "autonomous navigation",
+        "로보틱스"
+      ]
+    }
+  }
+}

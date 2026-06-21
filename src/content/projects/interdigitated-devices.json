@@ -1,50 +1,57 @@
 {
   "title": "Planar Micro-Battery Architecture",
-  "summary": "Developing next-generation micro-batteries via planar interdigitated cell architecture to mitigate electrolyte degradation.",
-  "order": 5,
+  "summary": "Assisted a 13-step in-plane IDE micro-battery fabrication flow at KAIST NNFC, directly executing photolithography and SORONA sputter depositions.",
+  "order": 4,
   "status": "published",
   "hidden": false,
   "year": "2026",
   "tags": [
     "Research",
     "Semiconductor",
-    "KAIST NNFC"
+    "KAIST NNFC",
+    "Micro-Battery"
   ],
   "links": [],
   "visual": "paper",
   "capabilityScores": [
-    0,
+    20,
     100,
-    80,
-    40,
-    0
+    95,
+    70,
+    25
   ],
   "knowledge": {
     "ko": {
       "aliases": [
         "Planar Micro-Battery Architecture",
-        "평면형 마이크로 배터리",
-        "interdigitated cell",
+        "Development of Durable Interdigitated Electrochemical Devices",
         "interdigitated devices",
+        "IDE micro-battery",
+        "마이크로 배터리",
+        "평면 마이크로 배터리",
+        "인터디지테이티드 전극",
+        "IDE 배터리",
         "KAIST NNFC",
-        "미세전지"
+        "National Nanofab Center"
       ],
-      "oneLiner": "KAIST NNFC에서 평면 interdigitated cell 구조를 통해 차세대 마이크로 배터리를 개발하는 연구 프로젝트입니다.",
-      "problem": "마이크로 배터리는 소형화와 성능 안정성을 동시에 만족해야 하며, 전해질 열화와 구조적 한계를 줄이는 설계가 중요합니다.",
-      "approach": "평면형 interdigitated 전극 구조를 활용해 미세 전지의 구조와 열화 문제를 연구하는 방향으로 접근합니다.",
-      "technicalCore": "planar interdigitated cell architecture, micro-battery fabrication, electrolyte degradation mitigation이 핵심입니다.",
-      "evidence": "About 페이지의 KAIST NNFC R&D Intern 경험과 연결되는 2026년 연구 프로젝트입니다.",
-      "impact": "반도체/에너지 융합 소자의 소형 전원 구조를 개선하는 연구 기반이 됩니다.",
-      "statusNote": "KAIST NNFC와 연결된 진행 중 research 프로젝트입니다.",
+      "oneLiner": "KAIST NNFC 연구 인턴십에서 평면 interdigitated electrode 구조의 마이크로 배터리 제작 공정에 참여한 프로젝트입니다.",
+      "problem": "초소형 전기화학 소자는 제한된 면적 안에서 전극, 전해질, 집전체를 안정적으로 패터닝해야 하며, 공정 순서와 lift-off 품질이 소자 내구성에 직접 영향을 줍니다.",
+      "approach": "current collector, cathode, anode, electrolyte/encapsulation을 나누는 13단계 제작 시퀀스를 따라 포토리소그래피, sputter deposition, lift-off, glove box 보관, 측정 셋업 준비를 수행했습니다.",
+      "technicalCore": "AZ5214-E PR 패터닝, hard contact exposure, O2 descum, Pt/Ti 및 Si/V2O5/NCM811 SORONA multi-target sputter deposition, half-dicing 이후 lift-off 공정, 3-terminal probe station 측정 구상이 핵심입니다.",
+      "evidence": "Yellow Room에서 포토리소그래피를 익힌 뒤 인턴용 공정 매뉴얼을 작성했고, Si 50nm, V2O5 200nm, NCM811 100nm active layer deposition을 직접 수행했습니다.",
+      "impact": "반도체 공정 장비 운용, 미세 패턴 형성, 에너지 저장 소자 제작, 실험 매뉴얼화 역량이 동시에 드러나는 연구 경험입니다.",
+      "statusNote": "2026년 4월부터 진행 중인 KAIST NNFC 연계 R&D internship 프로젝트입니다.",
       "keywords": [
         "micro-battery",
-        "interdigitated",
-        "KAIST NNFC",
-        "semiconductor",
-        "electrolyte",
+        "interdigitated electrode",
+        "photolithography",
+        "sputter deposition",
+        "AZ5214-E",
+        "SORONA",
+        "glove box",
+        "probe station",
         "마이크로 배터리",
-        "전해질",
-        "미세전지"
+        "포토리소그래피"
       ]
     }
   }

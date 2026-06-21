@@ -159,28 +159,32 @@ function answerPartsForProject(card: A1ChanKnowledgeCard, detail = false): A1Cha
   const approach = card.facts[2];
   const core = card.facts[3];
   const evidence = card.facts[4];
-  const impact = card.facts[5] || card.facts[6];
+  const impact = card.facts[5];
+  const status = card.facts[6];
+  const headline = compact(oneLiner.includes(card.title) ? oneLiner : `${card.title}: ${oneLiner}`, 300);
 
   if (!detail) {
     return [
-      {
-        text: compact(oneLiner.includes(card.title) ? oneLiner : `${card.title}: ${oneLiner}`, 280)
-      },
-      ...(core
-        ? [{ label: "기술 핵심", text: `기술적으로는 ${stripFinalPeriod(compact(core, 150))}.` }]
+      { text: headline },
+      ...(problem || approach
+        ? [{ label: "문제/접근", text: compact([problem, approach].filter(Boolean).join(" "), 260) }]
         : []),
-      {
-        label: "다음 질문",
-        text: "더 파고들면 문제의식, 접근 방식, 근거와 상태까지 이어서 설명할 수 있어요."
-      }
+      ...(core
+        ? [{ label: "기술 핵심", text: `기술적으로는 ${stripFinalPeriod(compact(core, 190))}.` }]
+        : []),
+      ...(evidence || impact
+        ? [{ label: "근거/의미", text: compact([evidence, impact].filter(Boolean).join(" "), 250) }]
+        : []),
+      ...(status ? [{ label: "상태", text: compact(status, 160) }] : [])
     ];
   }
 
   return [
-    { text: compact(oneLiner.includes(card.title) ? oneLiner : `${card.title}: ${oneLiner}`, 280) },
-    ...(problem || approach ? [{ label: "문제/접근", text: compact([problem, approach].filter(Boolean).join(" "), 280) }] : []),
-    ...(core || evidence ? [{ label: "핵심/근거", text: compact([core, evidence].filter(Boolean).join(" "), 260) }] : []),
-    ...(impact ? [{ label: "의미", text: compact(impact, 220) }] : [])
+    { text: headline },
+    ...(problem ? [{ label: "문제의식", text: compact(problem, 240) }] : []),
+    ...(approach ? [{ label: "접근", text: compact(approach, 260) }] : []),
+    ...(core || evidence ? [{ label: "핵심/근거", text: compact([core, evidence].filter(Boolean).join(" "), 300) }] : []),
+    ...(impact || status ? [{ label: "의미/상태", text: compact([impact, status].filter(Boolean).join(" "), 240) }] : [])
   ];
 }
 
@@ -190,14 +194,14 @@ function answerPartsForProjectsCollection(cards: A1ChanKnowledgeCard[]): A1ChanA
     .sort((a, b) => b.priority - a.priority || a.title.localeCompare(b.title));
   const a1 = projectCards.filter((card) => card.tags.includes("A1 Firms")).map((card) => card.title);
   const research = projectCards
-    .filter((card) => !card.tags.includes("A1 Firms") && card.tags.some((tag) => /Research|Semiconductor|Physics|Machine Learning|KRISS|Medical|Materials/i.test(tag)))
+    .filter((card) => !card.tags.includes("A1 Firms") && card.tags.some((tag) => /Research|Semiconductor|Physics|Machine Learning|KRISS|Medical|Materials|Energy|Fabrication|Big Data|Agriculture/i.test(tag)))
     .map((card) => card.title);
   const business = projectCards
     .filter((card) => !a1.includes(card.title) && !research.includes(card.title))
     .map((card) => card.title);
 
   return [
-    { text: `Projects에는 현재 ${projectCards.length}개 공개 프로젝트가 있습니다.` },
+    { text: `Projects에는 현재 ${projectCards.length}개 공개 프로젝트가 있으며, 화면 순서대로 A1 제품군 이후 최신 연구/특허/사업화 프로젝트가 이어집니다.` },
     { label: "A1 Firms", text: a1.join(", ") || "A1trategize, A1ntuitize, RA1 계열 프로젝트를 확인할 수 있습니다." },
     { label: "연구/공학", text: research.join(", ") || "반도체, 에너지, 초음파, 센서, 데이터 분석 프로젝트를 확인할 수 있습니다." },
     { label: "사업화/제품", text: `${business.join(", ")} 등이 있습니다. 특정 프로젝트 이름을 물어보면 문제의식, 접근, 기술 핵심, 성과를 따로 설명할 수 있습니다.` }

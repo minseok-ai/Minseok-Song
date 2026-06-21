@@ -1,6 +1,6 @@
 {
   "title": "Predictive Reservoir Intelligence",
-  "summary": "Constructed a robust data pipeline and evaluated ML models to forecast reservoir water levels. Won Best Paper Award at AAiCON 2024.",
+  "summary": "Built a reservoir water-level prediction pipeline from public datasets, optimized Random Forest after multi-model evaluation, and won AAiCON 2024 Best Paper.",
   "order": 11,
   "status": "published",
   "hidden": false,
@@ -8,42 +8,46 @@
   "tags": [
     "Big Data",
     "Machine Learning",
-    "Agriculture"
+    "Agriculture",
+    "Award"
   ],
   "links": [],
   "visual": "graph",
   "capabilityScores": [
-    100,
-    20,
+    95,
+    15,
+    85,
     80,
-    60,
-    40
+    65
   ],
   "knowledge": {
     "ko": {
       "aliases": [
         "Predictive Reservoir Intelligence",
-        "저수지 수위 예측",
-        "농업용수 예측",
+        "Integrated Agricultural Water Management System Using Big Data",
         "reservoir water level",
-        "AAiCON 2024"
+        "AAiCON 2024",
+        "Random Forest",
+        "NPK monitoring"
       ],
-      "oneLiner": "농업용 저수지 수위를 예측하기 위해 데이터 파이프라인과 머신러닝 모델을 구축한 프로젝트입니다.",
-      "problem": "저수지 수위는 농업 운영과 물 관리에 중요하지만, 환경 데이터가 복합적이라 단순 추세만으로 안정적으로 예측하기 어렵습니다.",
-      "approach": "저수지 관련 데이터를 정리하는 파이프라인을 만들고, 여러 머신러닝 모델을 비교해 예측 성능을 검토했습니다.",
-      "technicalCore": "데이터 전처리, 시계열/표형 데이터 기반 예측, 모델 성능 비교, 수위 예측 파이프라인이 핵심입니다.",
-      "evidence": "AAiCON 2024에서 Best Paper Award를 수상한 프로젝트로 등록되어 있습니다.",
-      "impact": "농업용수 관리 의사결정에 필요한 예측 기반 운영 가능성을 검토했습니다.",
-      "statusNote": "2024년 발표 및 수상 이력이 있는 연구/데이터 프로젝트입니다.",
+      "oneLiner": "기상·수위 공공 데이터를 기반으로 저수지 수위를 예측하고 농업용수 관리 시스템으로 확장한 프로젝트입니다.",
+      "problem": "농업용 저수지 수위는 기상, 계절, 강우, 태양고도 등 변수가 복합적이라 안정적인 예측 파이프라인과 오염 관리 확장이 필요합니다.",
+      "approach": "다변량 CSV 데이터를 수집·전처리하고 scatter plot matrix와 heatmap으로 상관을 검토한 뒤, LSTM, Extra Trees, Random Forest 등을 비교했습니다.",
+      "technicalCore": "missing value/outlier handling, meteorological feature engineering, R-squared/MAE/MSE evaluation, Random Forest optimization, NPK monitoring architecture가 핵심입니다.",
+      "evidence": "CNU Excellence Award를 받은 baseline을 AAiCON용으로 고도화했고, 최종적으로 AAiCON 2024 Best Paper Award를 수상했습니다.",
+      "impact": "예측 모델을 단순 수위 forecast에서 실시간 농업용수 오염 지표 관리 시스템으로 확장한 데이터 기반 의사결정 프로젝트입니다.",
+      "statusNote": "2024년 CNU 및 AAiCON 수상 이력이 있는 agricultural big-data 프로젝트입니다.",
       "keywords": [
         "reservoir",
         "water level",
         "agriculture",
         "machine learning",
+        "Random Forest",
+        "LSTM",
+        "Extra Trees",
+        "NPK",
         "AAiCON",
-        "저수지",
-        "농업용수",
-        "예측"
+        "농업용수"
       ]
     }
   }

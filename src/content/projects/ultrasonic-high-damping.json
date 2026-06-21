@@ -1,6 +1,6 @@
 {
   "title": "Cross-Axis Ultrasonic Identification",
-  "summary": "Overcame signal attenuation via Cross-Axis Measurement to precisely identify polymer materials in a blind test.",
+  "summary": "Solved a KRISS blind-test material identification task by bypassing Z-axis attenuation with cross-axis ultrasonic velocity measurement.",
   "order": 9,
   "status": "published",
   "hidden": false,
@@ -8,39 +8,43 @@
   "tags": [
     "Research",
     "Materials",
-    "KRISS"
+    "KRISS",
+    "Ultrasonics"
   ],
   "links": [],
   "visual": "paper",
   "capabilityScores": [
-    10,
-    80,
+    35,
+    75,
     100,
-    20,
-    0
+    45,
+    15
   ],
   "knowledge": {
     "ko": {
       "aliases": [
         "Cross-Axis Ultrasonic Identification",
-        "초음파 고감쇠 재료 식별",
+        "Ultrasonic Velocity Measurement & Identification of High-Damping Specimen",
         "cross-axis measurement",
         "polymer blind test",
-        "KRISS ultrasonic"
+        "LeCroy HDO4034A",
+        "Olympus 5072PR"
       ],
-      "oneLiner": "고감쇠 재료에서 초음파 신호가 약해지는 문제를 cross-axis measurement로 극복해 고분자 재료를 식별한 프로젝트입니다.",
-      "problem": "고감쇠 재료는 초음파 신호가 빠르게 약해져 일반적인 측정 방향만으로는 재료 식별 정확도가 떨어질 수 있습니다.",
-      "approach": "측정 축을 바꾸는 cross-axis measurement를 적용해 신호 감쇠 문제를 줄이고 blind test에서 고분자 재료를 구분했습니다.",
-      "technicalCore": "ultrasonic measurement, signal attenuation handling, cross-axis setup, polymer material identification이 핵심입니다.",
-      "evidence": "KRISS 관련 2024년 research/materials 프로젝트로 등록되어 있습니다.",
-      "impact": "초음파 계측에서 신호가 약한 재료를 다루는 실험 설계와 해석 역량을 보여줍니다.",
-      "statusNote": "재료 식별과 계측 실험 중심의 연구 프로젝트입니다.",
+      "oneLiner": "KRISS 인턴십에서 고감쇠 시편의 초음파 신호 손실을 cross-axis measurement로 우회해 재료를 식별한 프로젝트입니다.",
+      "problem": "Z-axis 10.06mm 경로에서는 고감쇠로 인해 echo signal이 충분히 확보되지 않아 표준 측정 방식만으로는 blind test 식별이 어려웠습니다.",
+      "approach": "X-axis 69.93mm와 Y-axis 20.03mm의 더 긴 신호 경로를 활용해 clear echo signal을 확보하고 time-of-flight 기반 평균 속도를 계산했습니다.",
+      "technicalCore": "Pulse-Echo acquisition, LeCroy HDO4034A oscilloscope, Olympus 5072PR pulser/receiver, cross-axis path selection, ultrasonic velocity calculation이 핵심입니다.",
+      "evidence": "평균 초음파 속도 2264.19m/s를 산출하고 문헌값과 비교해 미지 시편을 PLA/ABS 계열 polymer로 식별했습니다.",
+      "impact": "실험 조건이 불리할 때 측정 축과 물리 경로를 재설계해 데이터 품질을 확보하는 계측 문제 해결력을 보여줍니다.",
+      "statusNote": "2024년 KRISS materials/ultrasonics blind-test 프로젝트입니다.",
       "keywords": [
         "ultrasonic",
         "cross-axis",
         "attenuation",
         "polymer",
-        "materials",
+        "PLA",
+        "ABS",
+        "Pulse-Echo",
         "KRISS",
         "초음파",
         "고감쇠"

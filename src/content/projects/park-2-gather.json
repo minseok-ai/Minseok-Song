@@ -1,50 +1,53 @@
 {
   "title": "Predictive Parking Exit System",
-  "summary": "Commercialized a dormant patent into a BLE Beacon-based architecture resolving double-parking conflicts. Won CNU Grand Prize.",
-  "order": 15,
+  "summary": "Commercialized a dormant BLE Beacon patent into a double-parking exit-time notification service, winning the CNU President's Grand Prize.",
+  "order": 17,
   "status": "published",
   "hidden": false,
   "year": "2023",
   "tags": [
     "IoT",
     "Business Strategy",
-    "Patent Commercialization"
+    "Patent Commercialization",
+    "Award"
   ],
   "links": [],
   "visual": "console",
   "capabilityScores": [
-    50,
+    55,
     70,
-    40,
+    50,
     100,
-    90
+    95
   ],
   "knowledge": {
     "ko": {
       "aliases": [
         "Predictive Parking Exit System",
-        "Park 2 Gather",
+        "PARK 2 GATHER",
         "Park-2-Gather",
-        "이중주차",
+        "Parking Exit Time Notification Service",
         "BLE Beacon",
-        "특허 사업화"
+        "double parking"
       ],
-      "oneLiner": "휴면 특허를 BLE Beacon 기반 이중주차 해결 구조로 재해석해 사업화한 프로젝트입니다.",
-      "problem": "이중주차는 출차 예측과 운전자 연결이 늦어질 때 갈등이 커지고, 기존 특허가 실제 서비스 구조로 이어지지 못하는 경우가 많습니다.",
-      "approach": "BLE Beacon 기반 아키텍처로 차량/위치 신호를 연결하고, 휴면 특허를 실제 출차 갈등 해결 서비스 구조로 전환했습니다.",
-      "technicalCore": "BLE beacon architecture, parking exit prediction, dormant patent commercialization, service design이 핵심입니다.",
-      "evidence": "CNU Grand Prize를 수상한 2023년 프로젝트로 등록되어 있습니다.",
-      "impact": "기술 아이디어를 사용자의 생활 문제와 사업화 구조로 연결한 사례입니다.",
-      "statusNote": "IoT와 business strategy가 결합된 patent commercialization 프로젝트입니다.",
+      "oneLiner": "휴면 특허를 BLE Beacon 기반 이중주차 출차 시간 공유 서비스로 사업화한 프로젝트입니다.",
+      "problem": "아파트 이중주차 갈등은 출차 시간 정보 비대칭에서 발생하며, 기존 특허가 실제 사용자 서비스로 전환되지 못한 상태였습니다.",
+      "approach": "Beacon Adapter & Data Exchange System 특허(KR101720167B1)를 기반으로 차량 입출차 log와 예상 출차 시간을 incoming driver에게 공유하는 구조를 설계했습니다.",
+      "technicalCore": "BLE beacon RSSI-based verification, vehicle entry/exit logs, departure-time sharing, dormant patent commercialization, CAC reduction strategy가 핵심입니다.",
+      "evidence": "Zigbang 같은 부동산 앱과의 제휴 전략까지 포함한 IP commercialization 모델로 CNU President's Award Grand Prize를 수상했습니다.",
+      "impact": "휴면 IP를 생활 문제 해결형 서비스 구조로 전환하고, 기술 타당성과 시장 진입 전략을 함께 제시했습니다.",
+      "statusNote": "2023년 IoT, patent commercialization, business strategy가 결합된 수상 프로젝트입니다.",
       "keywords": [
         "parking",
         "BLE",
         "beacon",
         "patent",
         "commercialization",
+        "RSSI",
+        "Zigbang",
+        "double parking",
         "이중주차",
-        "출차",
-        "특허"
+        "출차"
       ]
     }
   }

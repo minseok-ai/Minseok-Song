@@ -1,6 +1,6 @@
 {
   "title": "Reusable Tableware MICE Platform",
-  "summary": "Pivoted business model for a Mobile Reusable Tableware Service targeting the MICE industry. Secured ~4M KRW mock crowdfunding.",
+  "summary": "Led a 24-hour crisis pivot from an unsustainable transport idea to a MICE reusable-tableware B2B rental model, securing ~4M KRW mock crowdfunding.",
   "order": 13,
   "status": "published",
   "hidden": false,
@@ -8,43 +8,46 @@
   "tags": [
     "Business",
     "Startup",
-    "B2B"
+    "B2B",
+    "Pivot"
   ],
   "links": [],
   "visual": "deck",
   "capabilityScores": [
+    10,
     0,
-    0,
-    30,
-    80,
+    45,
+    95,
     100
   ],
   "knowledge": {
     "ko": {
       "aliases": [
         "Reusable Tableware MICE Platform",
-        "Reborn Reusable",
-        "다회용기",
+        "RE:BORN",
+        "Reusable Gorge",
         "MICE",
         "mock crowdfunding",
-        "리본"
+        "ESG Startup Idea Funding School"
       ],
-      "oneLiner": "MICE 산업을 대상으로 모바일 다회용기 서비스의 사업 모델을 피벗하고 모의 크라우드펀딩을 확보한 B2B 프로젝트입니다.",
-      "problem": "다회용기 서비스는 환경적 가치는 있지만, 실제 고객군과 운영 현장이 명확하지 않으면 반복 사용과 회수 구조를 만들기 어렵습니다.",
-      "approach": "일반 소비자 대상이 아니라 행사·전시·컨벤션 등 MICE 산업을 목표 고객으로 재정의하고 사업 모델을 조정했습니다.",
-      "technicalCore": "B2B service positioning, MICE industry targeting, reuse logistics concept, startup validation이 핵심입니다.",
-      "evidence": "약 4M KRW 규모의 mock crowdfunding을 확보한 프로젝트로 등록되어 있습니다.",
-      "impact": "환경 서비스 아이디어를 특정 산업 고객과 수익 구조에 맞게 재설계한 사례입니다.",
-      "statusNote": "2024년 business/startup/B2B 프로젝트입니다.",
+      "oneLiner": "최종 발표 24시간 전 사업 모델을 전면 pivot해 MICE 산업용 모바일 다회용기 서비스를 설계한 프로젝트입니다.",
+      "problem": "초기 대중교통 앱 아이디어는 인프라 교체 비용 때문에 지속 가능한 사업 구조가 아니었고, 제한 시간 안에 수익성과 실행 가능성을 재설계해야 했습니다.",
+      "approach": "제주 관광 인프라와 MICE 행사를 목표 시장으로 잡고 TAM/SAM/SOM을 빠르게 재계산해 B2B rental model로 전환했습니다.",
+      "technicalCore": "crisis pivot, market sizing, B2B service design, reusable logistics concept, crowdfunding pitch execution이 핵심입니다.",
+      "evidence": "Jeju Utop Ubless Hotel에서 열린 ESG Startup Idea Funding School에서 약 4M KRW mock crowdfunding을 확보하고 8개 팀 중 3위 Excellence Award를 받았습니다.",
+      "impact": "위기 상황에서 팀을 설득하고 고객군, 시장 규모, 수익 모델을 재정의한 창업 실행 경험입니다.",
+      "statusNote": "2024년 B2B/startup/pivot 프로젝트입니다.",
       "keywords": [
         "reusable tableware",
         "MICE",
         "B2B",
         "startup",
         "crowdfunding",
-        "다회용기",
-        "행사",
-        "사업모델"
+        "pivot",
+        "TAM",
+        "SAM",
+        "SOM",
+        "다회용기"
       ]
     }
   }

@@ -38,6 +38,7 @@ const a1PreviewHref = configuredA1PreviewHref || "/a1trategize-preview/index.htm
 const projectCode = (order) => `PX-${String(order ?? 0).padStart(2, "0")}`;
 const isA1trategizeProject = (entry) =>
   entry.id === "a1trategize" || entry.data.title.toLowerCase().includes("a1trategize");
+const isPendingLockedProject = (entry) => entry.id === "interdigitated-devices";
 
 const degToRad = (deg) => (deg * Math.PI) / 180;
 const createCapabilityRadarChart = (scores) => {
@@ -188,42 +189,89 @@ const createCapabilityRadarChart = (scores) => {
         const visual = visualMeta[project.data.visual] ?? visualMeta.blank;
         const primaryLink = project.data.links[0];
         const capabilityChart = createCapabilityRadarChart(project.data.capabilityScores);
+        const isPendingLocked = isPendingLockedProject(project);
 
         return (
-          <article id={`project-${project.id}`} class="project-card reveal-up" data-tone={visual.tone} data-project-id={project.id}>
+          <article
+            id={`project-${project.id}`}
+            class={`project-card reveal-up ${isPendingLocked ? 'is-locked-project' : ''}`}
+            data-tone={visual.tone}
+            data-project-id={project.id}
+            data-lock-state={isPendingLocked ? "pending" : undefined}
+            aria-label={isPendingLocked ? `${project.data.title} pending locked project` : undefined}
+          >
             <div class="card-visual" aria-hidden="true">
-              <svg class="radar-chart" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
-                <circle cx="50" cy="54" r="32" class="radar-grid-circle" />
-                <circle cx="50" cy="54" r="16" class="radar-grid-circle" />
-                
-                <g class="radar-rotating-group">
-                  <line x1="50" y1="54" x2="50" y2="22" class="radar-axis-line" />
-                  <line x1="50" y1="54" x2="80.43" y2="44.11" class="radar-axis-line" />
-                  <line x1="50" y1="54" x2="68.81" y2="79.89" class="radar-axis-line" />
-                  <line x1="50" y1="54" x2="31.19" y2="79.89" class="radar-axis-line" />
-                  <line x1="50" y1="54" x2="19.57" y2="44.11" class="radar-axis-line" />
+              {!isPendingLocked && (
+                <svg class="radar-chart" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+                  <circle cx="50" cy="54" r="32" class="radar-grid-circle" />
+                  <circle cx="50" cy="54" r="16" class="radar-grid-circle" />
                   
-                  <polygon points={capabilityChart.polygon} class="radar-polygon-core" />
-                  {capabilityChart.points.map((point) => <circle cx={point.x} cy={point.y} r="1.5" class="radar-vertex" />)}
-                  
-                  <text x="50" y="14" class="radar-label" text-anchor="middle">AI/SW {capabilityChart.scores[0]}</text>
-                  <text x="88" y="42" class="radar-label" text-anchor="middle">NANO/HW {capabilityChart.scores[1]}</text>
-                  <text x="74" y="88" class="radar-label" text-anchor="middle">R&D {capabilityChart.scores[2]}</text>
-                  <text x="26" y="88" class="radar-label" text-anchor="middle">PM {capabilityChart.scores[3]}</text>
-                  <text x="12" y="42" class="radar-label" text-anchor="middle">GTM {capabilityChart.scores[4]}</text>
-                </g>
-              </svg>
+                  <g class="radar-rotating-group">
+                    <line x1="50" y1="54" x2="50" y2="22" class="radar-axis-line" />
+                    <line x1="50" y1="54" x2="80.43" y2="44.11" class="radar-axis-line" />
+                    <line x1="50" y1="54" x2="68.81" y2="79.89" class="radar-axis-line" />
+                    <line x1="50" y1="54" x2="31.19" y2="79.89" class="radar-axis-line" />
+                    <line x1="50" y1="54" x2="19.57" y2="44.11" class="radar-axis-line" />
+                    
+                    <polygon points={capabilityChart.polygon} class="radar-polygon-core" />
+                    {capabilityChart.points.map((point) => <circle cx={point.x} cy={point.y} r="1.5" class="radar-vertex" />)}
+                    
+                    <text x="50" y="14" class="radar-label" text-anchor="middle">AI/SW {capabilityChart.scores[0]}</text>
+                    <text x="88" y="42" class="radar-label" text-anchor="middle">NANO/HW {capabilityChart.scores[1]}</text>
+                    <text x="74" y="88" class="radar-label" text-anchor="middle">R&D {capabilityChart.scores[2]}</text>
+                    <text x="26" y="88" class="radar-label" text-anchor="middle">PM {capabilityChart.scores[3]}</text>
+                    <text x="12" y="42" class="radar-label" text-anchor="middle">GTM {capabilityChart.scores[4]}</text>
+                  </g>
+                </svg>
+              )}
+              {isPendingLocked && (
+                <div class="pending-lock-visual">
+                  <svg class="pending-lock-icon" viewBox="0 0 48 48" aria-hidden="true">
+                    <path d="M15 21v-5.5C15 10.3 18.9 6 24 6s9 4.3 9 9.5V21" />
+                    <rect x="10" y="20" width="28" height="21" rx="5" />
+                    <path d="M24 28v6" />
+                  </svg>
+                  <span>Pending</span>
+                </div>
+              )}
             </div>
             <div class="card-meta">
               <span>{projectCode(project.data.order)}</span>
-              <span>{project.data.year ?? "Now"} / {visual.label}</span>
+              <span class={isPendingLocked ? "pending-meta-badge" : undefined}>
+                {project.data.year ?? "Now"} / {isPendingLocked ? "Pending" : visual.label}
+              </span>
             </div>
             <h3><span>{project.data.title}</span></h3>
-            <p>{project.data.summary}</p>
-            <div class="tag-row compact">
-              {project.data.tags.map((tag) => <span>{tag}</span>)}
+            {isPendingLocked ? (
+              <div class="pending-mosaic-copy" aria-label="Project details are pending and locked">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            ) : (
+              <p>{project.data.summary}</p>
+            )}
+            <div class={`tag-row compact ${isPendingLocked ? 'pending-tag-row' : ''}`}>
+              {isPendingLocked ? (
+                <>
+                  <span>Pending</span>
+                  <span>Locked</span>
+                  <span>Advisor Review</span>
+                </>
+              ) : (
+                project.data.tags.map((tag) => <span>{tag}</span>)
+              )}
             </div>
-            {primaryLink && (
+            {isPendingLocked && (
+              <span class="card-link is-pending pending-lock-link">
+                <svg class="pending-lock-mini" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                  <rect x="6" y="10" width="12" height="10" rx="2" />
+                </svg>
+                Pending
+              </span>
+            )}
+            {!isPendingLocked && primaryLink && (
               primaryLink.href === "#" ? (
                 <span class="card-link is-pending">{primaryLink.label}</span>
               ) : (
@@ -612,6 +660,128 @@ const createCapabilityRadarChart = (scores) => {
 
   .project-card:hover::before {
     opacity: 1;
+  }
+
+  .project-card.is-locked-project {
+    border-color: color-mix(in srgb, var(--color-accent) 38%, var(--color-line));
+    border-style: dashed;
+    background:
+      linear-gradient(145deg, color-mix(in srgb, var(--color-panel-solid) 76%, transparent), transparent 120%),
+      repeating-conic-gradient(
+        from 45deg,
+        color-mix(in srgb, var(--color-ink) 7%, transparent) 0 25%,
+        transparent 0 50%
+      ) 0 0 / 16px 16px,
+      var(--glass-bg);
+  }
+
+  .project-card.is-locked-project:hover {
+    transform: translateY(-2px);
+  }
+
+  .project-card.is-locked-project .card-visual {
+    background:
+      repeating-conic-gradient(
+        from 45deg,
+        color-mix(in srgb, var(--color-ink) 14%, transparent) 0 25%,
+        color-mix(in srgb, var(--color-accent) 18%, transparent) 0 50%
+      ) 0 0 / 18px 18px,
+      linear-gradient(135deg, var(--color-field), color-mix(in srgb, var(--color-panel-solid) 72%, transparent));
+  }
+
+  .project-card.is-locked-project .radar-chart {
+    filter: blur(6px);
+    opacity: 0.28;
+    transform: scale(1.06);
+  }
+
+  .pending-lock-visual {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    gap: 10px;
+    align-content: center;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--color-panel-solid) 22%, transparent), color-mix(in srgb, var(--color-field) 72%, transparent)),
+      repeating-linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--color-ink) 10%, transparent) 0 8px,
+        transparent 8px 16px
+      );
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .pending-lock-icon {
+    width: 58px;
+    height: 58px;
+    fill: color-mix(in srgb, var(--color-panel-solid) 72%, transparent);
+    stroke: var(--color-ink);
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 12px 24px var(--glass-shadow));
+  }
+
+  .pending-meta-badge {
+    border-color: color-mix(in srgb, var(--color-accent) 56%, var(--color-line)) !important;
+    color: var(--color-accent-ink) !important;
+    background: var(--color-accent-soft) !important;
+  }
+
+  .pending-mosaic-copy {
+    display: grid;
+    gap: 9px;
+    padding: 3px 0;
+  }
+
+  .pending-mosaic-copy span {
+    display: block;
+    height: 14px;
+    border: 1px solid var(--color-line);
+    border-radius: 3px;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--color-ink-soft) 34%, transparent) 0 10px,
+        color-mix(in srgb, var(--color-accent) 18%, transparent) 10px 20px,
+        transparent 20px 30px
+      );
+    opacity: 0.62;
+  }
+
+  .pending-mosaic-copy span:nth-child(2) {
+    width: 86%;
+  }
+
+  .pending-mosaic-copy span:nth-child(3) {
+    width: 62%;
+  }
+
+  .pending-tag-row span {
+    border-color: color-mix(in srgb, var(--color-accent) 36%, var(--color-line)) !important;
+    color: var(--color-accent-ink) !important;
+    background: color-mix(in srgb, var(--color-accent-soft) 70%, transparent) !important;
+  }
+
+  .pending-lock-link {
+    gap: 8px;
+  }
+
+  .pending-lock-mini {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   @keyframes meshFlow {

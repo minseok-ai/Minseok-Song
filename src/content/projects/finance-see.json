@@ -1,0 +1,53 @@
+{
+  "title": "FINAN SEE",
+  "summary": "Proposed a verified financial-product review platform using contract-based MyData logic to reduce information asymmetry and mis-selling risk.",
+  "order": 18,
+  "status": "published",
+  "hidden": false,
+  "year": "2023",
+  "tags": [
+    "Finance",
+    "Consumer Protection",
+    "Platform Strategy",
+    "MyData"
+  ],
+  "links": [],
+  "visual": "deck",
+  "capabilityScores": [
+    35,
+    0,
+    45,
+    75,
+    85
+  ],
+  "knowledge": {
+    "ko": {
+      "aliases": [
+        "FINAN SEE",
+        "Finance + SEE",
+        "Financial Product Review Platform",
+        "MyData",
+        "imperfect selling",
+        "financial reviews"
+      ],
+      "oneLiner": "금융상품 불완전판매와 정보 비대칭을 해결하기 위해 검증된 투자자만 리뷰를 남기는 금융상품 리뷰 플랫폼을 제안한 프로젝트입니다.",
+      "problem": "금융상품은 규제와 레몬마켓 문제 때문에 일반 커머스처럼 투명한 사용자 리뷰가 작동하기 어렵고, 소비자는 판매자 중심 정보에 의존하기 쉽습니다.",
+      "approach": "배달앱식 별점 리뷰 구조를 금융상품에 맞게 재해석하고, MyData 기반 계약 검증을 통해 실제 가입자만 리뷰를 작성하도록 설계했습니다.",
+      "technicalCore": "contract-based verification, MyData integration concept, financial consumer protection logic, review authenticity control, platform trust design이 핵심입니다.",
+      "evidence": "금융 규제와 소비자 보호 관점에서 fake testimonial을 제거하는 검증 로직을 설계하고, 금융상품 선택의 투명성 개선 방향을 제안했습니다.",
+      "impact": "금융 도메인에서 정보 비대칭, 규제, 플랫폼 신뢰 설계를 함께 다룬 early strategy project입니다.",
+      "statusNote": "2023년 finance/platform strategy 프로젝트입니다.",
+      "keywords": [
+        "finance",
+        "review platform",
+        "MyData",
+        "mis-selling",
+        "consumer protection",
+        "contract verification",
+        "platform strategy",
+        "금융",
+        "불완전판매"
+      ]
+    }
+  }
+}

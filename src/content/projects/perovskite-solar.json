@@ -1,6 +1,6 @@
 {
   "title": "Nano-Scale Perovskite Fabrication",
-  "summary": "Fabricated Perovskite Solar Cells and conducted root-cause failure analysis emphasizing precision in nano-scale semiconductor fabrication.",
+  "summary": "Fabricated perovskite solar cells through layer-by-layer thin-film processing, then analyzed J-V failures across 16 cells to isolate yield-loss causes.",
   "order": 10,
   "status": "published",
   "hidden": false,
@@ -8,42 +8,45 @@
   "tags": [
     "Semiconductor",
     "Energy",
-    "Fabrication"
+    "Fabrication",
+    "Failure Analysis"
   ],
   "links": [],
   "visual": "blank",
   "capabilityScores": [
-    0,
+    10,
     100,
     90,
-    20,
-    0
+    55,
+    15
   ],
   "knowledge": {
     "ko": {
       "aliases": [
         "Nano-Scale Perovskite Fabrication",
-        "페로브스카이트 태양전지",
+        "Fabrication and Efficiency Analysis of Perovskite Solar Cells",
         "perovskite solar cell",
-        "나노 공정",
-        "반도체 제작"
+        "J-V curve",
+        "thin-film fabrication"
       ],
-      "oneLiner": "페로브스카이트 태양전지를 제작하고 실패 원인을 분석하며 나노 스케일 공정 정밀도를 학습한 프로젝트입니다.",
-      "problem": "페로브스카이트 태양전지는 공정 조건과 미세 결함에 민감해, 제작 실패 원인을 구조적으로 추적하는 능력이 중요합니다.",
-      "approach": "태양전지 제작 과정을 수행하고, 결과가 기대와 다를 때 root-cause failure analysis 관점으로 원인을 정리했습니다.",
-      "technicalCore": "perovskite fabrication, nano-scale semiconductor process, failure analysis, energy device handling이 핵심입니다.",
-      "evidence": "2024년 semiconductor/energy/fabrication 프로젝트로 등록되어 있습니다.",
-      "impact": "반도체·에너지 소자 제작에서 공정 정밀도와 실패 분석의 중요성을 체득한 사례입니다.",
-      "statusNote": "나노 스케일 제작과 분석 중심의 연구 프로젝트입니다.",
+      "oneLiner": "페로브스카이트 태양전지를 직접 제작하고 16개 cell의 J-V 특성을 통해 공정 실패 원인을 분석한 프로젝트입니다.",
+      "problem": "박막 태양전지는 오염, 코팅 균일성, edge cleaning 손상처럼 작은 공정 편차가 수율과 효율을 크게 떨어뜨립니다.",
+      "approach": "TCO substrate 위에 SnO2 ETL, perovskite absorber, Spiro-OMeTAD HTL을 순차 증착하고 Ag electrode metallization 이후 J-V curve를 평가했습니다.",
+      "technicalCore": "spin coating, thermal annealing, plasma-ozone treatment, layer-by-layer thin-film deposition, Ag electrode metallization, J-V failure analysis가 핵심입니다.",
+      "evidence": "2개 소자 16개 cell 중 의미 있는 photovoltaic performance를 보인 pixel을 분리하고, contamination, dispersion failure, active-area damage를 root cause로 정리했습니다.",
+      "impact": "나노 스케일 반도체/에너지 소자 제작에서 정밀 공정 관리와 오염 통제가 얼마나 중요한지 체득한 fabrication 프로젝트입니다.",
+      "statusNote": "2024년 Semiconductor and Energy Inorganic Materials Chemistry course 기반 fabrication 프로젝트입니다.",
       "keywords": [
         "perovskite",
         "solar cell",
-        "fabrication",
-        "semiconductor",
+        "TCO",
+        "SnO2",
+        "Spiro-OMeTAD",
+        "J-V curve",
         "failure analysis",
+        "spin coating",
         "페로브스카이트",
-        "태양전지",
-        "나노공정"
+        "태양전지"
       ]
     }
   }

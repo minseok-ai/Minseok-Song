@@ -223,9 +223,15 @@ export function createStaticA1ChanResponse(
   retrieved = preferStrongEntityMatches(trimmed, retrieved);
 
   if (intent === "projectCollection") {
-    const collection = knowledgeCards.find((card) => card.id === "projects-collection");
-    const projects = knowledgeCards.filter((card) => card.kind === "project");
-    retrieved = collection ? [collection, ...projects] : projects;
+    const specificProject = retrieved.find((card) => card.kind === "project" && entityMatchScore(trimmed, card) >= 500);
+
+    if (specificProject) {
+      retrieved = [specificProject, ...retrieved.filter((card) => card.id !== specificProject.id)];
+    } else {
+      const collection = knowledgeCards.find((card) => card.id === "projects-collection");
+      const projects = knowledgeCards.filter((card) => card.kind === "project");
+      retrieved = collection ? [collection, ...projects] : projects;
+    }
   }
 
   if (intent === "writing" && !retrieved.some((card) => card.routeId === "writings")) {

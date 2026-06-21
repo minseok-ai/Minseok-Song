@@ -1,6 +1,6 @@
 {
   "title": "Deep-Learning Noise Enforcement",
-  "summary": "Fused imaging sensors with deep learning sound localization to identify noise-violating vehicles. Won KOSAF Special Award.",
+  "summary": "Designed a B2G smart noise enforcement sign by fusing ETRI imaging sensors with KRISS/POSTECH sound-localization AI. Won KOSAF Special Award.",
   "order": 12,
   "status": "published",
   "hidden": false,
@@ -8,41 +8,45 @@
   "tags": [
     "Deep Learning",
     "B2G",
-    "Open Innovation"
+    "Open Innovation",
+    "Award"
   ],
   "links": [],
   "visual": "deck",
   "capabilityScores": [
+    75,
+    65,
     60,
-    60,
-    30,
-    90,
+    95,
     100
   ],
   "knowledge": {
     "ko": {
       "aliases": [
         "Deep-Learning Noise Enforcement",
-        "딥러닝 소음 단속",
-        "소음 차량 식별",
+        "Smart Noise Enforcement Sign",
+        "Grennlight",
         "Greenlight Noise",
+        "sound localization",
         "KOSAF"
       ],
-      "oneLiner": "영상 센서와 딥러닝 기반 음원 위치 추정을 결합해 소음 위반 차량을 식별하려는 B2G형 프로젝트입니다.",
-      "problem": "도로 소음 단속은 소리의 발생 위치와 실제 차량을 연결해야 해서, 단일 센서만으로는 책임 차량을 특정하기 어렵습니다.",
-      "approach": "이미징 센서와 딥러닝 sound localization을 결합해 소음 발생 방향과 차량 후보를 연결하는 구조로 접근했습니다.",
-      "technicalCore": "imaging sensor fusion, sound localization, deep learning inference, noise enforcement workflow가 핵심입니다.",
-      "evidence": "KOSAF Special Award 수상 이력이 있는 open innovation 프로젝트입니다.",
-      "impact": "교통 소음 민원과 단속 행정에서 책임 차량 식별의 실효성을 높이는 방향을 제안했습니다.",
-      "statusNote": "2024년 B2G/open innovation 성격의 수상 프로젝트입니다.",
+      "oneLiner": "영상 센서와 딥러닝 기반 sound localization을 융합해 불법 배기소음 차량을 식별하는 B2G 프로젝트입니다.",
+      "problem": "일반 영상 센서만으로는 차량 소음의 실제 발생원을 특정하기 어렵고, 행정 과태료 처리까지 자동화하려면 차량-소음 매칭 로직이 필요합니다.",
+      "approach": "ETRI imaging sensor 특허와 KRISS/POSTECH 딥러닝 sound localization 기술을 open innovation 방식으로 결합했습니다.",
+      "technicalCore": "imaging sensor fusion, deep-learning sound localization, sound-wave visualization map, vehicle tracking, B2G fine-processing workflow가 핵심입니다.",
+      "evidence": "효과적인 public technology fusion과 B2G 모델로 Korea Student Aid Foundation Special Award 2nd Place를 수상했습니다.",
+      "impact": "공공기술을 조합해 민원 해결, 단속 자동화, 행정 비용 절감까지 이어지는 사업화 구조를 제안했습니다.",
+      "statusNote": "2024년 Open Innovation 및 B2G 사업화 성격의 수상 프로젝트입니다.",
       "keywords": [
         "noise",
         "sound localization",
         "deep learning",
         "B2G",
+        "ETRI",
+        "KRISS",
+        "POSTECH",
         "KOSAF",
         "소음",
-        "차량",
         "단속"
       ]
     }
