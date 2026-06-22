@@ -52,8 +52,14 @@ const routeJson = JSON.stringify(routes);
     </header>
 
     <div class="a1-navigator__context" aria-label="Assistant state">
-      <span data-a1-current-route>Current page</span>
-      <span data-a1-ai-status data-status="unsupported">Standard site mode</span>
+      <span class="a1-navigator__context-group">
+        <span class="a1-navigator__context-label">Viewing</span>
+        <strong data-a1-current-route>Home</strong>
+      </span>
+      <span class="a1-navigator__context-group is-ai">
+        <span class="a1-navigator__state-dot" aria-hidden="true"></span>
+        <strong data-a1-ai-status data-status="unsupported">Site mode</strong>
+      </span>
     </div>
 
     <div class="a1-navigator__body">
@@ -162,12 +168,12 @@ const routeJson = JSON.stringify(routes);
   const MAX_HISTORY = 10;
   const intentRouteIds = ["a1-firms", "about", "projects", "writings", "contacts"];
   const statusCopy: Record<BrowserAiStatus, string> = {
-    unsupported: "Standard site mode",
-    unavailable: "Standard site mode",
-    downloadable: "Smart local ready",
-    downloading: "Preparing local AI",
-    available: "Smart local",
-    error: "Standard site mode"
+    unsupported: "Site mode",
+    unavailable: "Site mode",
+    downloadable: "Local AI ready",
+    downloading: "Local AI preparing",
+    available: "Local AI",
+    error: "Site mode"
   };
 
   const emptyCapabilities: ChromeAiCapabilities = {
@@ -207,12 +213,18 @@ const routeJson = JSON.stringify(routes);
     ].filter(Boolean);
 
     const suffix =
-      status === "downloading" && typeof progress === "number"
+      status === "downloading" && typeof progress === "number" && progress > 0.05
         ? ` ${Math.round(progress * 100)}%`
         : "";
 
-    const toolSuffix = availableTools.length ? ` · ${availableTools.length} tools` : "";
-    return `${statusCopy[status]}${toolSuffix}${suffix}`;
+    if (aiStatusState) {
+      aiStatusState.title = availableTools.length
+        ? `${availableTools.length} local AI capabilities are available.`
+        : statusCopy[status];
+      aiStatusState.setAttribute("aria-label", aiStatusState.title);
+    }
+
+    return `${statusCopy[status]}${suffix}`;
   };
 
   const setAiCapabilities = (capabilities: ChromeAiCapabilities) => {
@@ -387,7 +399,7 @@ const routeJson = JSON.stringify(routes);
 
   const updateContext = () => {
     if (currentRouteState) {
-      currentRouteState.textContent = `Now: ${currentRoute.label}`;
+      currentRouteState.textContent = currentRoute.label;
     }
   };
 
