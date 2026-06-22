@@ -11,7 +11,7 @@ const cases = [
     name: "capability",
     query: "A1 Chan은 뭐 할 수 있어?",
     context: { currentRouteId: "home", lastRouteId: "home", userHistory: [] },
-    expect: { mode: "answer", intent: "capability", primaryId: "site-overview" }
+    expect: { mode: "answer", intent: "capability", primaryId: "assistant-a1-chan" }
   },
   {
     name: "semantic hint capability routing",
@@ -24,7 +24,20 @@ const cases = [
       confidence: "high"
     },
     context: { currentRouteId: "home", lastRouteId: "home", userHistory: [] },
-    expect: { mode: "answer", intent: "capability", primaryId: "site-overview", includes: "A1 Chan" }
+    expect: { mode: "answer", intent: "capability", primaryId: "assistant-a1-chan", includes: "A1 Chan" }
+  },
+  {
+    name: "english self identity semantic hint",
+    query: "Who are you?",
+    semanticHint: {
+      intent: "capability",
+      language: "en",
+      entities: ["A1 Chan", "site assistant"],
+      answerMode: "direct",
+      confidence: "high"
+    },
+    context: { currentRouteId: "home", lastRouteId: "home", userHistory: [] },
+    expect: { mode: "answer", intent: "capability", primaryId: "assistant-a1-chan", includes: "A1 Chan" }
   },
   {
     name: "home current page",

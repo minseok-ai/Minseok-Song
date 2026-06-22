@@ -166,7 +166,8 @@ function actionsForRoute(routes: NavigatorRoute[], routeId: string, label?: stri
 
 function createCapabilityResult(query: string, routes: NavigatorRoute[], cards: A1ChanKnowledgeCard[], context: A1ChanContext): A1ChanResult {
   const detectedLanguage = detectLanguage(query);
-  const siteCard = cards.find((card) => card.id === "site-overview");
+  const assistantCard = cards.find((card) => card.id === "assistant-a1-chan");
+  const siteCard = assistantCard ?? cards.find((card) => card.id === "site-overview");
   return manualResult({
     query,
     intent: "capability",
@@ -188,7 +189,7 @@ function createCapabilityResult(query: string, routes: NavigatorRoute[], cards: 
 
 function createSmalltalkResult(query: string, routes: NavigatorRoute[], cards: A1ChanKnowledgeCard[], context: A1ChanContext): A1ChanResult {
   const detectedLanguage = detectLanguage(query);
-  const siteCard = cards.find((card) => card.id === "site-overview");
+  const siteCard = cards.find((card) => card.id === "assistant-a1-chan") ?? cards.find((card) => card.id === "site-overview");
   return manualResult({
     query,
     intent: "smalltalk",
