@@ -11,6 +11,39 @@ const operatingLoop = [
   ["03", "Adaptive Gate", "Checks data adequacy to conditionally bypass unnecessary research stages."],
   ["04", "Adversarial QA", "Runs multi-agent critique and safety checks before final file compilation."]
 ];
+
+const modelStack = [
+  {
+    provider: "Upstage",
+    product: "Solar",
+    logo: "/brand-logos/upstage-symbol-black.png",
+    description: "A Korean frontier model endpoint built into the stack for structured Korean and technical strategy work."
+  },
+  {
+    provider: "Perplexity",
+    product: "Sonar",
+    logo: "/brand-logos/perplexity.svg",
+    description: "A web-aware model layer used when current citations and external reference context are needed."
+  },
+  {
+    provider: "Google Gemini",
+    product: "Gemini",
+    logo: "/brand-logos/google-gemini.svg",
+    description: "A long-context reasoning model used for dense brief synthesis, planning, and structured report drafting."
+  },
+  {
+    provider: "DeepSeek",
+    product: "DeepSeek",
+    logo: "/brand-logos/deepseek.svg",
+    description: "A critique-oriented model endpoint used to challenge draft logic and expose weak assumptions."
+  },
+  {
+    provider: "Qwen",
+    product: "Qwen",
+    logo: "/brand-logos/qwen.svg",
+    description: "An Alibaba Cloud model family layer built into the current stack for multilingual reasoning and structured strategy output."
+  }
+];
 ---
 
 <Layout
@@ -50,72 +83,31 @@ const operatingLoop = [
 
     <ProductWorkbench operatingLoop={operatingLoop} appUrl={appUrl} />
 
-    <section id="llm-router" class="llm-router-board" aria-label="A1trategize Multi-LLM Role Router">
+    <section id="llm-router" class="llm-router-board" aria-label="A1trategize built multi-model stack">
       <div class="router-header">
-        <span class="micro-label">Cognitive division of labor</span>
-        <h2>Role-Based Multi-LLM Routing</h2>
-        <p>A1trategize delegates tasks to specialized models, optimizing for reasoning depth, real-time citation scraping, and cost-efficient self-critique.</p>
+        <span class="micro-label">Built model stack</span>
+        <h2>Operational Multi-LLM Stack</h2>
+        <p>A1trategize is built around a live model stack rather than fixed role assignments. Each provider is wired as a capability layer for reasoning, citation context, drafting, critique, or multilingual strategy work.</p>
       </div>
       <div class="router-grid">
-        <div class="router-card reveal-up stagger-1">
-          <div class="card-brand">
-            <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17 1.4h5v1.2l-1 1v1.2l-1 1v1.2l-1 1v1.2l-1 1v1.2l-1 1v1.2l1 1v1.2l1 1v1.2l-9 1v1.2l-1 1v1.2h-8v-1.2l1-1v-1.2l1-1v-1.2l1-1v-1.2l1-1v-1.2l-1-1v-1.2l-1-1v-1.2l10-1v-1.2l2-1v-1.2l2-1z"></path>
-            </svg>
-            <span>Upstage</span>
+        {modelStack.map((item, index) => (
+          <div class={`router-card reveal-up stagger-${index + 1}`}>
+            <div class="card-brand">
+              <span class="brand-logo-frame" aria-hidden="true">
+                <img
+                  class="brand-logo"
+                  src={item.logo}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
+              </span>
+              <span>{item.provider}</span>
+            </div>
+            <h3>{item.product}</h3>
+            <small>{item.description}</small>
           </div>
-          <h3>Classification</h3>
-          <p>solar-pro3</p>
-          <small>Classifies input domain, expanding query parameters and detecting user intent.</small>
-        </div>
-
-        <div class="router-card reveal-up stagger-2">
-          <div class="card-brand">
-            <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square">
-              <path d="M12 2v20M12 12 5 6.5v11zM12 12l7-5.5v11zM5 9.5V4h4.5M19 9.5V4h-4.5M5 14.5V20h4.5M19 14.5V20h-4.5"></path>
-            </svg>
-            <span>Perplexity</span>
-          </div>
-          <h3>Live Research</h3>
-          <p>sonar-pro</p>
-          <small>Scrapes global web indexes in real-time, sourcing citation-backed text context.</small>
-        </div>
-
-        <div class="router-card reveal-up stagger-3">
-          <div class="card-brand">
-            <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2C12 7.5 7.5 12 2 12C7.5 12 12 16.5 12 22C12 16.5 16.5 12 22 12C16.5 12 12 7.5 12 2Z"></path>
-            </svg>
-            <span>Google Gemini</span>
-          </div>
-          <h3>Drafting</h3>
-          <p>gemini-2.5-pro</p>
-          <small>Injects deep context windows to draft comprehensive, highly structured briefings.</small>
-        </div>
-
-        <div class="router-card reveal-up stagger-4">
-          <div class="card-brand">
-            <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 12a8 8 0 018-8v8H4zM12 4a8 8 0 018 8h-8V4zM20 12a8 8 0 01-8 8v-8h8z"></path>
-            </svg>
-            <span>Alibaba</span>
-          </div>
-          <h3>Self-Critique</h3>
-          <p>deepseek-v4-pro</p>
-          <small>Reviews drafts as an adversarial agent, spotting logical gaps or minor errors.</small>
-        </div>
-
-        <div class="router-card reveal-up stagger-5">
-          <div class="card-brand">
-            <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2L2 22h20L12 2zM12 6l7 12H5L12 6z"></path>
-            </svg>
-            <span>SKT A.X</span>
-          </div>
-          <h3>Localization</h3>
-          <p>ax4-consult</p>
-          <small>Refines output styling for specific Korean business culture guidelines.</small>
-        </div>
+        ))}
       </div>
     </section>
 
@@ -123,7 +115,7 @@ const operatingLoop = [
       <div class="domains-header">
         <span class="micro-label">Application Verticals</span>
         <h2>Modular Domain Adaptations</h2>
-        <p>A1trategize loads specialized prompt bases and rules depending on the domain. NNFC semiconductor validation is just one application of this core engine.</p>
+        <p>A1trategize loads specialized prompt bases and rules depending on the domain. Semiconductor equipment workflows are one application of this core engine.</p>
       </div>
       <div class="domains-grid">
         <article class="domain-card reveal-up stagger-1">
@@ -143,16 +135,16 @@ const operatingLoop = [
         <article class="domain-card reveal-up stagger-2">
           <span class="micro-label">Domain 02</span>
           <h3 class="domain-title">
-            <span class="domain-glyph" title="NNFC Semiconductor">
+            <span class="domain-glyph" title="Semiconductor">
               <svg class="dg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <rect x="4" y="4" width="16" height="16" rx="2"></rect>
                 <rect x="9" y="9" width="6" height="6"></rect>
                 <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"></path>
               </svg>
             </span>
-            NNFC Semiconductor
+            Semiconductor
           </h3>
-          <p>Recipe parameter mapping. Cross-checks wafer sizes, temperatures, and gases against 183 fabrication tools.</p>
+          <p>Recipe parameter mapping built around semiconductor equipment data, cross-checking wafer sizes, temperatures, gases, and process constraints.</p>
         </article>
 
         <article class="domain-card reveal-up stagger-3">
@@ -424,7 +416,7 @@ const operatingLoop = [
     font-family: var(--font-serif);
     font-size: clamp(2rem, 3.5vw, 2.6rem);
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
   }
 
   .router-header p {
@@ -445,8 +437,8 @@ const operatingLoop = [
 
   .router-card {
     display: grid;
-    grid-template-rows: auto auto auto 1fr;
-    gap: 10px;
+    grid-template-rows: auto auto 1fr;
+    gap: 12px;
     padding: 24px 20px;
     border: 1px solid var(--color-line);
     border-radius: 16px;
@@ -492,14 +484,60 @@ const operatingLoop = [
     color: var(--color-ink);
   }
 
-  .brand-icon {
-    width: 16px;
-    height: 16px;
-    opacity: 0.6;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+  .brand-logo-frame {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent);
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--color-ink) 7%, transparent);
+    overflow: hidden;
+    transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
   }
 
-  .router-card:hover .brand-icon {
+  .brand-logo {
+    display: block;
+    width: 13px;
+    height: 13px;
+    object-fit: contain;
+    opacity: 0.9;
+    filter: invert(1) brightness(1.75) contrast(1.12);
+    transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+  }
+
+  html[data-theme="light"] .brand-logo,
+  html[data-resolved-theme="light"] .brand-logo {
+    filter: none;
+    opacity: 0.76;
+  }
+
+  html[data-theme="dark"] .brand-logo,
+  html[data-resolved-theme="dark"] .brand-logo {
+    filter: invert(1) brightness(1.75) contrast(1.12);
+    opacity: 0.92;
+  }
+
+  @media (prefers-color-scheme: light) {
+    html:not([data-theme]) .brand-logo {
+      filter: none;
+      opacity: 0.76;
+    }
+
+    html:not([data-theme]) .brand-logo-frame {
+      border-color: color-mix(in srgb, var(--color-ink) 12%, transparent);
+      background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+    }
+  }
+
+  .router-card:hover .brand-logo-frame {
+    border-color: color-mix(in srgb, var(--color-ink) 28%, transparent);
+    background: color-mix(in srgb, var(--color-ink) 11%, transparent);
+    transform: scale(1.08);
+  }
+
+  .router-card:hover .brand-logo {
     opacity: 1;
     transform: scale(1.1);
   }
@@ -509,19 +547,11 @@ const operatingLoop = [
     font-size: 16px;
     font-weight: 700;
     color: var(--color-ink);
-    letter-spacing: -0.01em;
-  }
-
-  .router-card p {
-    margin: 0;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--color-accent-ink);
-    opacity: 0.9;
+    letter-spacing: 0;
   }
 
   .router-card small {
-    margin-top: 10px;
+    margin-top: 6px;
     color: var(--color-ink-soft);
     font-size: 13px;
     line-height: 1.5;

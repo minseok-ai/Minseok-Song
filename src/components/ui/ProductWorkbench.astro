@@ -5,14 +5,14 @@ const pipelinePhases = [
   {
     num: "01",
     title: "Input Detection",
-    model: "Solar-pro3",
+    model: "Solar",
     role: "Intent Classifier",
     desc: "Upstage Solar classifies the user query into Business, Career, IP, or semiconductor domains and expands prompt keywords."
   },
   {
     num: "02",
     title: "Research Scrutiny",
-    model: "Sonar-pro",
+    model: "Sonar",
     role: "Context Harvester",
     desc: "Perplexity Sonar performs live web searches, scraping high-signal citations and localizing raw reference data."
   },
@@ -26,16 +26,16 @@ const pipelinePhases = [
   {
     num: "04",
     title: "Adversarial Critique",
-    model: "DeepSeek V4 & Gemini Pro",
+    model: "DeepSeek & Gemini",
     role: "Creative & Critic Loop",
     desc: "Gemini drafts the report. DeepSeek critiques it as an adversarial agent to correct hallucinations and refine conclusions."
   },
   {
     num: "05",
     title: "QA & Verification",
-    model: "Gemini Flash & Rules",
+    model: "Rules & Verification",
     role: "Compliance Inspector",
-    desc: "Performs strict database spec matches (e.g. NNFC machine logs) and generates formatted Word, PowerPoint, PDF, or Excel sheets."
+    desc: "Performs strict semiconductor equipment spec checks and generates formatted Word, PowerPoint, PDF, or Excel sheets."
   }
 ];
 ---
@@ -95,7 +95,7 @@ const pipelinePhases = [
     <!-- Repositioned Dedicated Telemetry Status Bar -->
     <div class="telemetry-info-bar" id="telemetry-bar">
       <div class="bar-left">
-        <span class="bar-kicker" id="card-model">Solar-pro3</span>
+        <span class="bar-kicker" id="card-model">Solar</span>
         <h3 id="card-title">Input Detection</h3>
       </div>
       <div class="bar-center">
@@ -104,7 +104,7 @@ const pipelinePhases = [
       <div class="bar-right">
         <div>
           <span>Engine</span>
-          <strong id="card-engine">Solar-pro</strong>
+          <strong id="card-engine">Solar</strong>
         </div>
         <div>
           <span>Target</span>
