@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" data-design="nnfc">
+<html lang="ko" data-design="a1-light">
 
 <head>
   <meta charset="UTF-8">
@@ -19,7 +19,7 @@
         <div class="sidebar-rail">
           <div class="brand-lockup" id="brand-lockup" role="button" tabindex="0" aria-label="사이드바 펼치기" title="사이드바 펼치기">
             <span class="brand-logo-mark" id="brand-logo-mark" aria-hidden="true">
-              <img id="brand-logo-img" src="/a1trategize-preview/NNFC.png" alt="" />
+              <img id="brand-logo-img" src="/a1trategize-preview/A1Firm-logo-light.png" alt="" />
             </span>
           </div>
           <button class="sidebar-toggle" id="sidebar-toggle" type="button" onclick="toggleSidebar()" aria-label="사이드바 접기" aria-expanded="true" title="사이드바 접기">
@@ -44,13 +44,13 @@
           <div class="sidebar-panel">
       <div class="sidebar-section theme-section">
         <div class="theme-switch-wrapper" role="group" aria-label="워크스페이스">
-          <button class="theme-btn active" data-theme="nnfc" type="button" onclick="switchThemeUI('nnfc')">
-            <span class="theme-icon" data-icon="mode-nnfc"></span>
-            <span>NNFC</span>
+          <button class="theme-btn active" data-theme="a1-light" type="button" onclick="switchThemeUI('a1-light')">
+            <span class="theme-icon" data-icon="theme-light"></span>
+            <span>Light</span>
           </button>
-          <button class="theme-btn" data-theme="mckinsey" type="button" onclick="switchThemeUI('mckinsey')">
-            <span class="theme-icon" data-icon="theme-a1"></span>
-            <span>A1 Firm</span>
+          <button class="theme-btn" data-theme="a1-dark" type="button" onclick="switchThemeUI('a1-dark')">
+            <span class="theme-icon" data-icon="theme-dark"></span>
+            <span>Dark</span>
           </button>
         </div>
       </div>
@@ -79,16 +79,15 @@
     </aside>
 
     <main class="main-content" id="main-content">
-      <img src="/a1trategize-preview/NNFC.png" alt="National Nanofab Center" class="partner-logo" id="nnfc-logo" width="180" height="40" />
-      <img src="/a1trategize-preview/A1Firm.png" alt="A1trategize" class="partner-logo" id="A1Firm-logo" width="180" height="40" />
+      <img src="/a1trategize-preview/A1Firm-logo-light.png" alt="A1 Firms" class="partner-logo" id="A1Firm-logo" width="180" height="40" />
 
       <div class="mvp-badge">MVP Testing</div>
 
       <div id="mobile-pipeline-tracker" class="mobile-pipeline-tracker" hidden aria-label="파이프라인 진행"></div>
 
       <section class="hero" id="hero-section">
-        <h1 id="hero-title">A1trategize at NNFC</h1>
-        <p class="subtitle" id="hero-subtitle">Strategic Intelligence, Delivered by AI</p>
+        <h1 id="hero-title">A1 Firms: A1trategize</h1>
+        <p class="subtitle is-hidden" id="hero-subtitle"></p>
       </section>
 
       <section class="input-section" id="input-section">
@@ -103,7 +102,7 @@
           <textarea id="topic-input" rows="6" aria-describedby="mode-context-desc"></textarea>
           <div class="prompt-mode-dock" id="prompt-mode-dock" aria-label="컨설팅 모드 선택"></div>
           <div class="input-actions">
-            <button class="toggle-icon-btn is-hidden" id="equip-toggle-btn" type="button" onclick="toggleEquipBrowser()" title="NNFC 장비 카탈로그 열기">
+            <button class="toggle-icon-btn is-hidden" id="equip-toggle-btn" type="button" onclick="toggleEquipBrowser()" title="Nano 장비 카탈로그 열기">
               <span class="ui-icon" data-icon="database"></span>
             </button>
             <button class="submit-icon-btn" id="submit-btn" type="button" onclick="startPipeline()" title="상담 요청">

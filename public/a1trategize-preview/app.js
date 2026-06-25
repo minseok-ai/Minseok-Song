@@ -1,16 +1,11 @@
 "use strict";
 
 const BASE_STEPS = [
-  { key: "mode_selected", label: "Team Setup", num: 1 },
-  { key: "query_expanded", label: "Prompt", num: 2 },
-  { key: "initial_research_complete", label: "Research", num: 3 },
-  { key: "review_complete", label: "Review", num: 4 },
-  { key: "adequacy_scored", label: "Adaptive", num: 5 },
-  { key: "draft_complete", label: "Draft", num: 6 },
-  { key: "self_critique_complete", label: "Critic", num: 7 },
-  { key: "qa_complete", label: "QA Review", num: 8 },
-  { key: "final_validation_complete", label: "Validation", num: 9 },
-  { key: "pipeline_complete", label: "Complete", num: 10 },
+  { key: "intake", label: "요청 이해", num: 1 },
+  { key: "evidence", label: "근거 수집", num: 2 },
+  { key: "draft", label: "초안 작성", num: 3 },
+  { key: "verification", label: "검증·수정", num: 4 },
+  { key: "complete", label: "최종 산출", num: 5 },
 ];
 
 const SOFT_BREAK_TOKEN = "\uE000BR\uE000";
@@ -23,11 +18,30 @@ const ROLE_GROUPS = {
   "Research": { icon: "research", roles: ["research", "supplementary_research"] },
   "Review": { icon: "review", roles: ["review", "qa"] },
   "Drafting": { icon: "draft", roles: ["draft", "revision", "critic"] },
-  "Auxiliary": { icon: "auxiliary", roles: ["classification", "query_expansion", "presentation"] },
+  "Routing & Output": { icon: "auxiliary", roles: ["classification", "query_expansion", "presentation"] },
+};
+
+const ROLE_LABELS = {
+  research: "Research",
+  supplementary_research: "Supplementary Research",
+  review: "Review",
+  qa: "QA Gate",
+  draft: "Draft",
+  revision: "Revision",
+  critic: "Self Review",
+  classification: "Mode Routing",
+  query_expansion: "Query Expansion",
+  presentation: "Presentation",
+};
+
+const ROLE_DESCRIPTIONS = {
+  classification: "요청을 Nano, Biz, Career, Patent 중 어느 모드로 보낼지 고릅니다.",
+  query_expansion: "입력 요청을 리서치와 초안 작성에 필요한 작업 지시로 정리합니다.",
+  presentation: "최종 보고서를 슬라이드 구성 데이터로 바꿉니다.",
 };
 
 const ICONS = {
-  "mode-nnfc": `
+  "mode-nano": `
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M10 4h4"></path><path d="M12 4v6"></path>
       <path d="M9.5 10 6.5 19h11l-3-9"></path>
@@ -55,7 +69,15 @@ const ICONS = {
       <path d="M9 18h6"></path><path d="M10 21h4"></path>
       <path d="M8.5 13.6a5.5 5.5 0 1 1 7 0c-.8.6-1.1 1.4-1.1 2.4H9.6c0-1-.3-1.8-1.1-2.4z"></path>
     </svg>`,
-  "theme-a1": `
+  "theme-light": `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 3v2"></path><path d="M12 19v2"></path>
+      <path d="M4.2 4.2l1.4 1.4"></path><path d="M18.4 18.4l1.4 1.4"></path>
+      <path d="M3 12h2"></path><path d="M19 12h2"></path>
+      <path d="M4.2 19.8l1.4-1.4"></path><path d="M18.4 5.6l1.4-1.4"></path>
+    </svg>`,
+  "theme-dark": `
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M18.2 15.8A7.6 7.6 0 0 1 8.2 5.8 7.7 7.7 0 1 0 18.2 15.8z"></path>
     </svg>`,
@@ -131,10 +153,6 @@ const ICONS = {
     <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M17 1.4h5v1.2l-1 1v1.2l-1 1v1.2l-1 1v1.2l-1 1v1.2l-1 1v1.2l1 1v1.2l1 1v1.2l-9 1v1.2l-1 1v1.2h-8v-1.2l1-1v-1.2l1-1v-1.2l1-1v-1.2l1-1v-1.2l-1-1v-1.2l-1-1v-1.2l10-1v-1.2l2-1v-1.2l2-1z"></path>
     </svg>`,
-  "provider-skt": `
-    <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
-      <path d="M 3 5.5 h 18 v 4.5 h -6.5 v 10 h -5 v -10 h -6.5 z"></path>
-    </svg>`,
   "provider-alibaba": `
     <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M4 12a8 8 0 018-8v8H4z"></path>
@@ -144,7 +162,7 @@ const ICONS = {
 };
 
 const DOMAIN_ICON_MAP = {
-  nnfc: "mode-nnfc",
+  nnfc: "mode-nano",
   business: "mode-business",
   career: "mode-career",
   ip: "mode-ip",
@@ -154,7 +172,6 @@ const PROVIDER_ICON_MAP = {
   perplexity: "provider-perplexity",
   google: "provider-google",
   upstage: "provider-upstage",
-  skt: "provider-skt",
   alibaba: "provider-alibaba",
 };
 
@@ -337,21 +354,23 @@ function setVisible(el, visible) {
   }
 }
 
-const DOMAIN_THEME_MAP = { business: "mckinsey", career: "mckinsey", ip: "mckinsey", nnfc: "nnfc" };
+const DESIGN_LIGHT = "a1-light";
+const DESIGN_DARK = "a1-dark";
+const LEGACY_DESIGN_MAP = { nnfc: DESIGN_LIGHT, mckinsey: DESIGN_DARK };
 const MODE_SHORT_LABELS = {
   business: "Biz",
   career: "Career",
   ip: "Patent",
-  nnfc: "NNFC",
+  nnfc: "Nano",
 };
 const SUBMIT_ICON_SVG = iconSvg("send", "submit-svg");
 
 function domainLogoSrc(key) {
-  return key === "nnfc" ? "/a1trategize-preview/NNFC.png" : "/a1trategize-preview/A1Firm.png";
+  return a1LogoSrc();
 }
 
 function domainLogoAlt(key) {
-  return key === "nnfc" ? "NNFC" : "A1 Firm";
+  return "A1 Firms";
 }
 
 function domainLogoHtml(key, className = "mode-logo-img") {
@@ -361,7 +380,7 @@ function domainLogoHtml(key, className = "mode-logo-img") {
 const DOMAIN_PROMPTS = {
   nnfc: `만들고 싶은 소자·박막·공정을 편하게 적어 주세요. 논문·수치가 없으면 없는 값은 확인 필요로 표시됩니다.
 
-e.g., '실리콘 웨이퍼 위에 약 200nm SiO2 캡을 씌우고 싶습니다. NNFC 장비 DB 기준으로 가능한 공정 흐름, 후보 장비, 엔지니어 확인 항목을 검토용 초안으로 정리해주세요.'`,
+e.g., '실리콘 웨이퍼 위에 약 200nm SiO2 캡을 씌우고 싶습니다. Nano 장비 DB 기준으로 가능한 공정 흐름, 후보 장비, 엔지니어 확인 항목을 검토용 초안으로 정리해주세요.'`,
   business: `비즈니스 전략을 분석하려는 주제나 질문을 입력해주세요.\n\ne.g., '최근 AI 챗봇 시장의 성장 추세와 주요 경쟁사(ChatGPT, Gemini, Claude)의 전략을 분석해주세요. 한국 시장 진출 시의 기회와 위협 요소, 그리고 성공 전략을 MBB 레벨의 관점에서 제시해주세요. TAM, 경쟁사 포지셔닝, 수익화 전략까지 포함해서요.'`,
   ip: `특허 명세서를 작성하려는 발명을 설명해주세요.\n\ne.g., '스마트폰 배터리 온도 관리 시스템: 배터리 온도를 실시간으로 모니터링하고 과열 시 자동으로 충전 속도를 조절하는 IoT 기반 시스템입니다. 센서 데이터 수집, 클라우드 분석, 앱 제어까지 포함됩니다. KIPO 표준의 완벽한 특허 명세서(발명의 명칭, 청구항, 상세 설명), 선행기술 조사, 침해 분석을 제공해주세요.'`,
   career: `커리어 컨설팅을 받으려는 직무나 경력을 설명해주세요.\n\ne.g., '5년 경력의 데이터 엔지니어입니다. Python, Spark, Kafka를 다루고 스타트업에서 근무 중입니다. Google 또는 아마존 시니어 엔지니어로 이직하려면 어떤 전략을 세워야 할까요? 기술 스택 강화, 포트폴리오 구성, 면접 준비, 연봉 협상 전략까지 글로벌 기준의 실행 로드맵을 제시해주세요.'`
@@ -371,15 +390,15 @@ const DOMAIN_SUGGESTIONS = {
   nnfc: [
     {
       label: "200nm SiO2 절연막",
-      prompt: "실리콘 웨이퍼 위에 약 200nm SiO2 절연막을 형성하려고 합니다. NNFC 보유 장비 기준으로 가능한 공정 순서, 후보 장비, DB 근거, 엔지니어 확인이 필요한 hold point를 검토용 초안으로 정리해주세요."
+      prompt: "실리콘 웨이퍼 위에 약 200nm SiO2 절연막을 형성하려고 합니다. Nano 장비 DB 기준으로 가능한 공정 순서, 후보 장비, DB 근거, 엔지니어 확인이 필요한 hold point를 검토용 초안으로 정리해주세요."
     },
     {
       label: "Al 전극 패터닝",
-      prompt: "Al 전극을 증착하고 패터닝해야 합니다. NNFC 장비 DB를 기준으로 증착, 리소그래피, 식각 또는 lift-off 중 적합한 플로우를 비교하고 추천 장비와 주의사항을 정리해주세요."
+      prompt: "Al 전극을 증착하고 패터닝해야 합니다. Nano 장비 DB를 기준으로 증착, 리소그래피, 식각 또는 lift-off 중 적합한 플로우를 비교하고 추천 장비와 주의사항을 정리해주세요."
     },
     {
       label: "샘플 조건 기반 검토",
-      prompt: "샘플 기판, 목표 박막 두께, 열 예산, 사용 가능 가스 조건을 입력하면 NNFC 장비 매칭, 공정 리스크, 엔지니어 확인 항목을 함께 검토하는 초안을 만들어주세요."
+      prompt: "샘플 기판, 목표 박막 두께, 열 예산, 사용 가능 가스 조건을 입력하면 Nano 장비 매칭, 공정 리스크, 엔지니어 확인 항목을 함께 검토하는 초안을 만들어주세요."
     }
   ],
   business: [
@@ -399,9 +418,31 @@ const DOMAIN_SUGGESTIONS = {
   ]
 };
 
+function normalizeDesign(theme) {
+  return LEGACY_DESIGN_MAP[theme] || (theme === DESIGN_DARK ? DESIGN_DARK : DESIGN_LIGHT);
+}
+
+function a1LogoSrc() {
+  return normalizeDesign(document.documentElement.getAttribute("data-design")) === DESIGN_DARK
+    ? "/a1trategize-preview/A1Firm-logo-dark.png"
+    : "/a1trategize-preview/A1Firm-logo-light.png";
+}
+
+function syncThemeLogoAssets() {
+  const src = a1LogoSrc();
+  document.querySelectorAll("#brand-logo-img, #A1Firm-logo").forEach(img => {
+    img.setAttribute("src", src);
+    img.setAttribute("alt", "A1 Firms");
+  });
+}
+
+function normalizeDomainKey(key) {
+  return key === "nano" ? "nnfc" : (key || "business");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  const saved = localStorage.getItem("a1_design") || "nnfc";
-  selectedDomain = saved === "nnfc" ? "nnfc" : (localStorage.getItem("a1_domain") || "business");
+  const saved = normalizeDesign(localStorage.getItem("a1_design"));
+  selectedDomain = normalizeDomainKey(localStorage.getItem("a1_domain") || "nnfc");
   hydrateStaticIcons();
   
   document.querySelectorAll('.theme-btn').forEach(btn => {
@@ -474,7 +515,7 @@ async function loadDomains() {
 function renderDomainControls(domains) {
   renderModeDock(domains);
   syncModePresentation(domains.find(d => d.key === selectedDomain));
-  switchDesign(document.documentElement.getAttribute("data-design") || "nnfc");
+  switchDesign(document.documentElement.getAttribute("data-design") || DESIGN_LIGHT);
 }
 
 function renderModeDock(domains) {
@@ -492,14 +533,13 @@ function renderModeDock(domains) {
 }
 
 function selectDomain(key) {
+  key = normalizeDomainKey(key);
   if (key !== "nnfc") closeEquipmentBrowser();
   selectedDomain = key;
   localStorage.setItem("a1_domain", key);
   if (key !== "nnfc") localStorage.setItem("a1_last_firm_domain", key);
   updateModeSelectionUI();
 
-  const theme = DOMAIN_THEME_MAP[key] || "mckinsey";
-  switchDesign(theme);
   const triggerBtn = document.getElementById("equip-toggle-btn");
   const equipSection = document.getElementById("equip-browser-section");
   if (triggerBtn) triggerBtn.classList.toggle("is-hidden", key !== "nnfc");
@@ -543,6 +583,7 @@ function syncModePresentation(domain) {
     window.setTimeout(() => ctx.classList.remove("is-switching"), 420);
   }
   document.documentElement.dataset.domain = resolved.key;
+  syncThemeLogoAssets();
 }
 
 function updateHeroCopy() {
@@ -550,21 +591,16 @@ function updateHeroCopy() {
   const subtitle = document.getElementById("hero-subtitle");
   if (!title || !subtitle) return;
 
-  if (selectedDomain === "nnfc") {
-    title.textContent = "A1trategize at NNFC";
-    subtitle.textContent = "Service requester baseline recipe draft — final confirmation by NNFC engineers";
-  } else {
-    title.textContent = "A1trategize: A1 Firm";
-    subtitle.textContent = "Business, career, and patent strategy delivered by AI";
-  }
+  title.textContent = "A1 Firms: A1trategize";
+  subtitle.textContent = "";
+  subtitle.classList.add("is-hidden");
 }
 
 function updatePromptPlaceholder() {
   const textarea = document.getElementById("topic-input");
   if (!textarea) return;
 
-  const currentDesign = document.documentElement.getAttribute("data-design") || "nnfc";
-  let domainKey = currentDesign === "nnfc" ? "nnfc" : selectedDomain;
+  const domainKey = selectedDomain;
 
   if (DOMAIN_PROMPTS[domainKey]) {
     textarea.placeholder = DOMAIN_PROMPTS[domainKey];
@@ -599,6 +635,7 @@ function switchThemeUI(theme) {
 }
 
 function switchDesign(theme) {
+  theme = normalizeDesign(theme);
   document.documentElement.setAttribute("data-design", theme);
   localStorage.setItem("a1_design", theme);
 
@@ -606,28 +643,17 @@ function switchDesign(theme) {
     btn.classList.toggle('active', btn.dataset.theme === theme);
   });
 
-  if (theme === "nnfc") { 
-    selectedDomain = "nnfc"; 
-    localStorage.setItem("a1_domain", "nnfc"); 
-  } else {
-    closeEquipmentBrowser();
-    if (selectedDomain === "nnfc") {
-      selectedDomain = localStorage.getItem("a1_last_firm_domain") || "business";
-    }
-    localStorage.setItem("a1_domain", selectedDomain);
-    localStorage.setItem("a1_last_firm_domain", selectedDomain);
-  }
-
   const triggerBtn = document.getElementById("equip-toggle-btn");
   const equipSection = document.getElementById("equip-browser-section");
-  if (triggerBtn) triggerBtn.classList.toggle("is-hidden", theme !== "nnfc");
-  if (equipSection) setVisible(equipSection, theme === "nnfc" && equipBrowserOpen);
-  if (theme === "nnfc" && equipmentData.length === 0) loadEquipment();
+  if (triggerBtn) triggerBtn.classList.toggle("is-hidden", selectedDomain !== "nnfc");
+  if (equipSection) setVisible(equipSection, selectedDomain === "nnfc" && equipBrowserOpen);
+  if (selectedDomain === "nnfc" && equipmentData.length === 0) loadEquipment();
 
   updateModeSelectionUI();
   if (domainRegistry.length) {
     syncModePresentation(domainRegistry.find(d => d.key === selectedDomain));
   }
+  syncThemeLogoAssets();
 
   updateHeroCopy();
   updatePromptPlaceholder();
@@ -739,9 +765,10 @@ function renderModelConfig(catalog, assignments) {
       const current = assignments[role] || "";
       const candidates = Object.keys(catalog).filter(key => { if (new Set(["research", "supplementary_research"]).has(role) && !catalog[key].supports_search) return false; return true; });
       const row = document.createElement("div"); row.className = "model-role-row";
-      const roleLabel = role.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const roleLabel = ROLE_LABELS[role] || role.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
       const currentProvider = catalog[current]?.provider || catalog[candidates[0]]?.provider || "";
-      row.innerHTML = `<label>${escapeHtml(roleLabel)}</label><div class="model-select-row"><span class="provider-badge" data-provider="${escapeHtml(currentProvider)}">${providerBadge(currentProvider)}</span><select onchange="assignModel('${role}', this.value); updateModelProviderBadge(this)">${candidates.map(k => `<option value="${escapeHtml(k)}" data-provider="${escapeHtml(catalog[k].provider)}" ${k === current ? "selected" : ""}>${escapeHtml(catalog[k].display_name)}</option>`).join("")}</select></div>`;
+      const help = ROLE_DESCRIPTIONS[role] ? `<small class="model-role-help">${escapeHtml(ROLE_DESCRIPTIONS[role])}</small>` : "";
+      row.innerHTML = `<label>${escapeHtml(roleLabel)}</label>${help}<div class="model-select-row"><span class="provider-badge" data-provider="${escapeHtml(currentProvider)}">${providerBadge(currentProvider)}</span><select onchange="assignModel('${role}', this.value); updateModelProviderBadge(this)">${candidates.map(k => `<option value="${escapeHtml(k)}" data-provider="${escapeHtml(catalog[k].provider)}" ${k === current ? "selected" : ""}>${escapeHtml(catalog[k].display_name)}</option>`).join("")}</select></div>`;
       body.appendChild(row);
     }
   }
@@ -798,7 +825,7 @@ function closeEquipmentBrowser() {
   if (mainContent) mainContent.classList.remove("catalog-active");
   if (toggleBtn) {
     toggleBtn.classList.remove("active");
-    toggleBtn.title = "NNFC 장비 카탈로그 열기";
+    toggleBtn.title = "Nano 장비 카탈로그 열기";
   }
 }
 
@@ -855,9 +882,10 @@ async function loadSavedSession(sessionId) {
     if (!session) return;
     currentJobId = session.id;
     if (session.domain) {
-      selectedDomain = session.domain;
+      selectedDomain = normalizeDomainKey(session.domain);
       localStorage.setItem("a1_domain", selectedDomain);
-      switchDesign(DOMAIN_THEME_MAP[selectedDomain] || "mckinsey");
+      updateModeSelectionUI();
+      syncModePresentation(domainRegistry.find(item => item.key === selectedDomain));
     }
     const topicInput = document.getElementById("topic-input");
     if (topicInput) topicInput.value = session.topic || "";
@@ -959,24 +987,30 @@ function listenToEvents(jobId) {
   const getDomainConfig = () => {
     const isNNFC = selectedDomain === "nnfc";
     return {
-      isNNFC, initialTitle: isNNFC ? "NNFC DB 매칭 분석" : "Initial Research", initialAgent: isNNFC ? "DB ANALYTICS AGENT" : "RESEARCH AGENT", initialMsg: isNNFC ? "DB 분석 완료" : "Initial Research Complete",
-      suppTitle: isNNFC ? "심층 DB 매칭 리포트" : "Supplementary Research", suppAgent: isNNFC ? "DB ANALYTICS AGENT" : "RESEARCH AGENT", suppMsg: isNNFC ? "심층 분석 완료" : "Supplementary Research Complete", finalTitle: isNNFC ? "Final Report After Equipment Reference Validation" : "Final Report After Link Validation"
+      isNNFC,
+      initialTitle: isNNFC ? "Nano DB 매칭 분석" : "근거 수집",
+      initialAgent: isNNFC ? "NANO DB AGENT" : "RESEARCH AGENT",
+      initialMsg: isNNFC ? "Nano DB 분석 완료" : "근거 수집 완료",
+      suppTitle: isNNFC ? "Nano DB 보강 분석" : "보조 근거 수집",
+      suppAgent: isNNFC ? "NANO DB AGENT" : "RESEARCH AGENT",
+      suppMsg: isNNFC ? "Nano DB 보강 완료" : "보조 근거 수집 완료",
+      finalTitle: isNNFC ? "장비 근거 검증 후 최종 보고서" : "출처 검증 후 최종 보고서"
     };
   };
 
-  evtSource.addEventListener("mode_selected", (e) => { stepIndex = 0; pipelineStatusOverride = null; const d = JSON.parse(e.data); if (d.mode_key) { selectedDomain = d.mode_key; updateModeSelectionUI(); syncModePresentation(domainRegistry.find(item => item.key === selectedDomain)); } renderTracker(stepIndex); addEventCard("info", "팀 구성 완료", `모드: <strong>${escapeHtml(d.mode_name || selectedDomain)}</strong>`, "team"); });
-  evtSource.addEventListener("query_expanded", (e) => { stepIndex = 1; renderTracker(stepIndex); const d = JSON.parse(e.data); addEventCard("info", "Prompt Expanded", d.changed ? "The request was expanded into a research brief." : "The original request was used as-is.", "expand"); addLivePanel({ id: "query-expanded", title: "Expanded Research Brief", agent: "PROMPT CONTROL", type: "info", content: d.content || `### Expanded Research Guidance\n${d.expanded_topic || ""}` }); });
-  evtSource.addEventListener("initial_research_complete", (e) => { stepIndex = 2; renderTracker(stepIndex); const d = JSON.parse(e.data); const config = getDomainConfig(); addEventCard("success", config.initialMsg, `Collected ${d.length} characters of research data.`, "research"); addLivePanel({ id: "initial-research", title: config.initialTitle, agent: config.initialAgent, type: "success", content: d.content || "" }); });
-  evtSource.addEventListener("review_complete", (e) => { stepIndex = 3; renderTracker(stepIndex); const d = JSON.parse(e.data); addEventCard("success", "Data Review Complete", "Research data verified and supplementary questions generated.", "review"); addLivePanel({ id: "data-review", title: "Data Review", agent: "REVIEW AGENT", type: "success", content: d.content || d.raw_review || "" }); });
-  evtSource.addEventListener("adequacy_scored", (e) => { stepIndex = 4; pipelineStatusOverride = null; renderTracker(stepIndex); const d = JSON.parse(e.data); const adequate = d.is_adequate; if (!adequate) pipelineStatusOverride = { title: "보조 리서치 준비", detail: "데이터 보완을 위해 추가 조사를 시작합니다." }; addEventCard(adequate ? "success" : "warning", "데이터 적정성 평가", `점수 <strong>${d.score || 0}/100</strong> — ${adequate ? "충분한 데이터, 보조 리서치를 건너뜁니다." : "데이터 부족, 보조 리서치를 진행합니다."}`, "chart"); });
-  evtSource.addEventListener("supplementary_research_complete", (e) => { stepIndex = 4; const d = JSON.parse(e.data); const config = getDomainConfig(); pipelineStatusOverride = { title: "보조 리서치 완료", detail: `${d.length || 0}자 추가 수집 · 초안 단계로 이동합니다.` }; renderTracker(stepIndex); addEventCard("success", config.suppMsg, `추가 ${d.length}자 수집.`, "research"); addLivePanel({ id: "supplementary-research", title: config.suppTitle, agent: config.suppAgent, type: "success", content: d.content || "", meta: d.research_brief ? `Research brief: ${d.research_brief}` : "" }); });
-  evtSource.addEventListener("draft_complete", (e) => { stepIndex = 5; pipelineStatusOverride = null; renderTracker(stepIndex); const d = JSON.parse(e.data); const validationLog = combineValidationLogs(d.link_log, d.equipment_reference_log); const config = getDomainConfig(); addEventCard("success", "Draft Report Generated", config.isNNFC ? `Draft: ${d.draft_length} chars, ${validationLog.length} equipment references normalized.` : `Draft: ${d.draft_length} chars, ${d.link_checks} links verified.`, "draft"); addLivePanel({ id: "draft-report", title: "Draft Report", agent: "DRAFTING AGENT", type: "success", content: d.content || "", linkLog: validationLog }); });
-  evtSource.addEventListener("self_critique_complete", (e) => { stepIndex = 6; renderTracker(stepIndex); const d = JSON.parse(e.data); addEventCard("success", "Self-Correction Complete", "Critic persona reviewed and refined the draft.", "quality"); if (d.critique) addLivePanel({ id: "self-critique", title: "Self-Critique", agent: "CRITIQUE PERSONA", type: "success", content: d.critique }); addLivePanel({ id: "self-corrected-draft", title: "Revised Draft After Self-Correction", agent: "DRAFTING AGENT", type: "success", content: d.content || "", linkLog: d.equipment_reference_log || [] }); });
-  evtSource.addEventListener("qa_complete", (e) => { stepIndex = 7; renderTracker(stepIndex); const d = JSON.parse(e.data); const qaLabel = d.qa_passed === false ? "Checklist: needs review" : "Checklist: passed"; addEventCard("success", "QA Review Complete", `Reference score <strong>${d.final_score}/100</strong> · ${qaLabel} · ${d.iterations} iteration(s).`, "review"); addLivePanel({ id: "qa-adjusted-report", title: "QA-Adjusted Report", agent: "QA REVIEW AGENT", type: "success", content: d.content || "", meta: `Reference score ${d.final_score}/100 · ${qaLabel} · ${d.qa_blocking_count || 0} CRITICAL item(s).`, linkLog: d.equipment_reference_log || [] }); });
-  evtSource.addEventListener("final_validation_complete", (e) => { stepIndex = 8; renderTracker(stepIndex); const d = JSON.parse(e.data); const validationLog = combineValidationLogs(d.link_log, d.equipment_reference_log); const config = getDomainConfig(); addEventCard("success", "Final Validation", config.isNNFC ? `${validationLog.length} NNFC equipment references checked.` : `${d.link_checks} links validated. Financial disclaimers: ${d.financial_disclaimer_ok ? "OK" : "Missing"}.`, "link"); addLivePanel({ id: "validated-final-report", title: config.finalTitle, agent: "VALIDATION MODULE", type: "success", content: d.content || "", linkLog: validationLog, meta: config.isNNFC ? "NNFC equipment references and QA constraints were checked against the local equipment DB." : `Financial disclaimers: ${d.financial_disclaimer_ok ? "OK" : "Missing"}.` }); });
-  evtSource.addEventListener("presentation_data_generated", (e) => { addEventCard("info", "Presentation Data", "Presentation slide layout generated.", "chart"); });
-  evtSource.addEventListener("documents_saved", (e) => { const d = JSON.parse(e.data); addEventCard("success", "Documents Saved", `DOCX: ${d.docx || "—"}<br>PDF: ${d.pdf || "—"}<br>PPTX: ${d.pptx || "—"}`, "save"); });
-  evtSource.addEventListener("pipeline_complete", (e) => { stepIndex = 9; pipelineStatusOverride = null; renderTracker(stepIndex); evtSource.close(); activeEventSource = null; const d = JSON.parse(e.data || "{}"); if (d.session_id) currentJobId = d.session_id; fetchResults(jobId); });
+  evtSource.addEventListener("mode_selected", (e) => { stepIndex = 0; pipelineStatusOverride = null; const d = JSON.parse(e.data); if (d.mode_key) { selectedDomain = normalizeDomainKey(d.mode_key); updateModeSelectionUI(); syncModePresentation(domainRegistry.find(item => item.key === selectedDomain)); } renderTracker(stepIndex); addEventCard("info", "요청 이해 완료", `선택 모드: <strong>${escapeHtml(d.mode_name || selectedDomain)}</strong>`, "team"); });
+  evtSource.addEventListener("query_expanded", (e) => { stepIndex = 0; renderTracker(stepIndex); const d = JSON.parse(e.data); addEventCard("info", "요청 정리 완료", d.changed ? "입력 요청을 실행 가능한 작업 지시로 정리했습니다." : "입력 요청을 그대로 작업 지시로 사용합니다.", "expand"); addLivePanel({ id: "query-expanded", title: "정리된 작업 지시", agent: "PROMPT CONTROL", type: "info", content: d.content || `### Expanded Research Guidance\n${d.expanded_topic || ""}` }); });
+  evtSource.addEventListener("initial_research_complete", (e) => { stepIndex = 1; renderTracker(stepIndex); const d = JSON.parse(e.data); const config = getDomainConfig(); addEventCard("success", config.initialMsg, `${d.length || 0}자 분량의 근거를 수집했습니다.`, "research"); addLivePanel({ id: "initial-research", title: config.initialTitle, agent: config.initialAgent, type: "success", content: d.content || "" }); });
+  evtSource.addEventListener("review_complete", (e) => { stepIndex = 1; renderTracker(stepIndex); const d = JSON.parse(e.data); addEventCard("success", "근거 검토 완료", "수집 근거를 검토하고 보강 질문을 정리했습니다.", "review"); addLivePanel({ id: "data-review", title: "근거 검토", agent: "REVIEW AGENT", type: "success", content: d.content || d.raw_review || "" }); });
+  evtSource.addEventListener("adequacy_scored", (e) => { stepIndex = 1; pipelineStatusOverride = null; renderTracker(stepIndex); const d = JSON.parse(e.data); const adequate = d.is_adequate; if (!adequate) pipelineStatusOverride = { title: "근거 보강 준비", detail: "부족한 근거를 보완하기 위해 추가 조사를 시작합니다." }; addEventCard(adequate ? "success" : "warning", "근거 충분성 판정", `참고 점수 <strong>${d.score || 0}/100</strong> · ${adequate ? "보강 없이 초안으로 이동합니다." : "보강 조사를 진행합니다."}`, "chart"); });
+  evtSource.addEventListener("supplementary_research_complete", (e) => { stepIndex = 1; const d = JSON.parse(e.data); const config = getDomainConfig(); pipelineStatusOverride = { title: "근거 보강 완료", detail: `${d.length || 0}자 추가 수집 · 초안 작성으로 이동합니다.` }; renderTracker(stepIndex); addEventCard("success", config.suppMsg, `${d.length || 0}자 분량의 추가 근거를 수집했습니다.`, "research"); addLivePanel({ id: "supplementary-research", title: config.suppTitle, agent: config.suppAgent, type: "success", content: d.content || "", meta: d.research_brief ? `Research brief: ${d.research_brief}` : "" }); });
+  evtSource.addEventListener("draft_complete", (e) => { stepIndex = 2; pipelineStatusOverride = null; renderTracker(stepIndex); const d = JSON.parse(e.data); const validationLog = combineValidationLogs(d.link_log, d.equipment_reference_log); const config = getDomainConfig(); addEventCard("success", "초안 작성 완료", config.isNNFC ? `${d.draft_length || 0}자 초안 · ${validationLog.length}개 장비 근거 정규화` : `${d.draft_length || 0}자 초안 · ${d.link_checks || 0}개 링크 확인`, "draft"); addLivePanel({ id: "draft-report", title: "초안", agent: "DRAFTING AGENT", type: "success", content: d.content || "", linkLog: validationLog }); });
+  evtSource.addEventListener("self_critique_complete", (e) => { stepIndex = 3; renderTracker(stepIndex); const d = JSON.parse(e.data); addEventCard("success", "자체 수정 완료", "초안을 검토하고 수정했습니다.", "quality"); if (d.critique) addLivePanel({ id: "self-critique", title: "자체 검토", agent: "CRITIQUE PERSONA", type: "success", content: d.critique }); addLivePanel({ id: "self-corrected-draft", title: "수정된 초안", agent: "DRAFTING AGENT", type: "success", content: d.content || "", linkLog: d.equipment_reference_log || [] }); });
+  evtSource.addEventListener("qa_complete", (e) => { stepIndex = 3; renderTracker(stepIndex); const d = JSON.parse(e.data); const qaLabel = d.qa_passed === false ? "체크리스트 재검토 필요" : "체크리스트 통과"; addEventCard("success", "QA 검토 완료", `참고 점수 <strong>${d.final_score}/100</strong> · ${qaLabel} · ${d.iterations}회 수정`, "review"); addLivePanel({ id: "qa-adjusted-report", title: "QA 반영본", agent: "QA REVIEW AGENT", type: "success", content: d.content || "", meta: `참고 점수 ${d.final_score}/100 · ${qaLabel} · CRITICAL ${d.qa_blocking_count || 0}건`, linkLog: d.equipment_reference_log || [] }); });
+  evtSource.addEventListener("final_validation_complete", (e) => { stepIndex = 3; renderTracker(stepIndex); const d = JSON.parse(e.data); const validationLog = combineValidationLogs(d.link_log, d.equipment_reference_log); const config = getDomainConfig(); addEventCard("success", "최종 검증 완료", config.isNNFC ? `${validationLog.length}개 Nano 장비 근거를 확인했습니다.` : `${d.link_checks || 0}개 출처를 확인했습니다. 면책 문구: ${d.financial_disclaimer_ok ? "확인" : "확인 필요"}`, "link"); addLivePanel({ id: "validated-final-report", title: config.finalTitle, agent: "VALIDATION MODULE", type: "success", content: d.content || "", linkLog: validationLog, meta: config.isNNFC ? "Nano 장비 근거와 QA 제약 조건을 로컬 장비 DB 기준으로 확인했습니다." : `면책 문구: ${d.financial_disclaimer_ok ? "확인" : "확인 필요"}` }); });
+  evtSource.addEventListener("presentation_data_generated", (e) => { addEventCard("info", "발표 자료 구성", "슬라이드 구성을 생성했습니다.", "chart"); });
+  evtSource.addEventListener("documents_saved", (e) => { const d = JSON.parse(e.data); addEventCard("success", "파일 저장 완료", `DOCX: ${d.docx || "—"}<br>PDF: ${d.pdf || "—"}<br>PPTX: ${d.pptx || "—"}`, "save"); });
+  evtSource.addEventListener("pipeline_complete", (e) => { stepIndex = 4; pipelineStatusOverride = null; renderTracker(stepIndex); evtSource.close(); activeEventSource = null; const d = JSON.parse(e.data || "{}"); if (d.session_id) currentJobId = d.session_id; fetchResults(jobId); });
   evtSource.addEventListener("pipeline_error", (e) => { const d = JSON.parse(e.data); addEventCard("error", "Pipeline Error", d.error); evtSource.close(); activeEventSource = null; loadSessions(); resetButton(); });
   evtSource.onerror = () => { evtSource.close(); activeEventSource = null; setTimeout(() => fetchResults(jobId), 1000); };
 }
@@ -1115,11 +1149,11 @@ function renderPipelineStatus(activeIndex) {
   const steps = getTrackerSteps();
   const safeIndex = Math.max(-1, Math.min(activeIndex, steps.length - 1));
   const current = safeIndex >= 0 ? steps[safeIndex] : null;
-  const complete = current?.key === "pipeline_complete";
+  const complete = current?.key === "complete";
   const progress = safeIndex < 0 ? 4 : Math.round(((safeIndex + 1) / steps.length) * 100);
   const override = pipelineStatusOverride;
   const title = override?.title
-    || (complete ? "파이프라인 완료" : current ? `${current.label} 진행 중` : "파이프라인 준비 중");
+    || (complete ? "최종 산출 완료" : current ? `${current.label} 진행 중` : "파이프라인 준비 중");
   const detail = override?.detail
     || (complete
       ? "최종 산출물이 준비되었습니다."
@@ -1263,7 +1297,7 @@ window.setViewMode = function(mode) {
 };
 
 const NNFC_DEFAULT_DISCLAIMER =
-  "본 문서는 AI가 제안하는 공정 레시피 초안으로, 나노종합기술원(NNFC)의 실제 장비 상태 및 제약 조건을 완벽히 반영하지 않을 수 있습니다. 실제 공정 진행 전, 반드시 담당 장비 엔지니어의 최종 검토 및 승인을 거치시기 바랍니다.";
+  "본 문서는 AI가 제안하는 Nano 공정 레시피 검토 초안입니다. 실제 장비 상태, 예약 가능 여부, 인터락, 가스 라인, 공정 조건은 완전히 반영되지 않을 수 있습니다. 실제 공정 진행 전 반드시 담당 장비 엔지니어의 최종 검토 및 승인을 거치시기 바랍니다.";
 
 function renderNnfcDisclaimerBanner(text) {
   const msg = normalizeMarkdownInput(text || NNFC_DEFAULT_DISCLAIMER);
@@ -1324,7 +1358,7 @@ function renderProcessStepCards(cards) {
 
 function extractEquipmentIdsFromText(value) {
   const ids = new Set();
-  String(value || "").replace(/\bID[:\s]*(\d+(?:\s*\/\s*\d+)*)\b|\[NNFC\s+DB:\s*(\d+(?:\s*,\s*\d+)*)\]|\(ID[:\s]*(\d+(?:\s*\/\s*\d+)*)\)/gi, (_, a, b, c) => {
+  String(value || "").replace(/\bID[:\s]*(\d+(?:\s*\/\s*\d+)*)\b|\[(?:Nano|NNFC)\s+DB:\s*(\d+(?:\s*,\s*\d+)*)\]|\(ID[:\s]*(\d+(?:\s*\/\s*\d+)*)\)/gi, (_, a, b, c) => {
     String(a || b || c || "").split(/[\/,]/).forEach(part => ids.add(Number(part.trim())));
     return "";
   });
@@ -1382,7 +1416,7 @@ function formatRunSheetOwner(matches) {
     if (!match) return "";
     return [match.owner_name, match.owner_phone ? `(${match.owner_phone})` : ""].filter(Boolean).join(" ");
   }));
-  if (!owners.length) return "NNFC engineer confirmation";
+  if (!owners.length) return "담당 엔지니어 확인";
   if (owners.length <= 2) return owners.join(" / ");
   return `${owners.slice(0, 2).join(" / ")} +${owners.length - 2}`;
 }
@@ -1426,10 +1460,10 @@ function buildNnfcRunSheetRows(processCards, reportText, equipLog, dbMatches = [
       rows.push({
         no: index + 1,
         step: item.category || item.status || `Check ${index + 1}`,
-        equipment: item.observed_name || item.expected_name || item.equipment_id || "NNFC DB item",
+        equipment: item.observed_name || item.expected_name || item.equipment_id || "Nano DB item",
         recipe: item.reason || item.message || item.action || "Review equipment constraint.",
         hold: inferRunSheetHoldPoint(item, [], item.reason || item.message || item.action),
-        owner: "NNFC engineer confirmation",
+        owner: "담당 엔지니어 확인",
       });
     });
   }
@@ -1446,7 +1480,7 @@ function renderNnfcRunSheet(processCards, reportText, equipLog, dbMatches = []) 
     <div class="runsheet-panel">
       <div class="runsheet-header">
         <div>
-          <div class="results-kicker">NNFC operations review draft</div>
+          <div class="results-kicker">Nano 운영 검토 초안</div>
           <h3>Run Sheet Review Draft</h3>
         </div>
         <div class="runsheet-actions">
@@ -1500,7 +1534,7 @@ window.downloadRunSheetCSV = function() {
   });
   const BOM = "\uFEFF";
   const blob = new Blob([BOM + csvRows.join("\r\n")], { type: "text/csv;charset=utf-8;" });
-  triggerDownload(blob, `NNFC_RunSheet_${dateStamp()}.csv`);
+  triggerDownload(blob, `Nano_RunSheet_${dateStamp()}.csv`);
 };
 
 function csvEscape(value) {
@@ -1542,7 +1576,7 @@ function triggerDownload(blob, filename) {
 
 function isNnfcResult(result) {
   return result.mode_key === "nnfc" || selectedDomain === "nnfc" ||
-    (result.mode_name && String(result.mode_name).includes("NNFC"));
+    (result.mode_name && /NNFC|Nano/i.test(String(result.mode_name)));
 }
 
 function qaStatusChip(result) {
@@ -1638,7 +1672,7 @@ function renderResults(result) {
           ${disclaimerHtml}
           <div class="results-header">
             <div>
-              <div class="results-kicker">${escapeHtml(result.mode_name || "NNFC")}</div>
+              <div class="results-kicker">${escapeHtml(result.mode_name || "Nano")}</div>
               <h2>Baseline Review Draft</h2>
               <p class="results-subtitle">고객용 검토용 요약 · 엔지니어 상세는 별도 탭에서 확인</p>
             </div>
@@ -1874,7 +1908,7 @@ function toggleEquipBrowser() {
   setVisible(equipSection, true);
   if (toggleBtn) {
     toggleBtn.classList.add("active");
-    toggleBtn.title = "NNFC 장비 카탈로그 닫기";
+    toggleBtn.title = "Nano 장비 카탈로그 닫기";
   }
   
   if (equipBrowserOpen) {
