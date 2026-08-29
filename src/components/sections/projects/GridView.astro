@@ -5,8 +5,8 @@ const visibleProjects = projects
   .filter((entry) => !entry.data.hidden && entry.data.status === "published")
   .sort((a, b) => a.data.order - b.data.order);
 
-const a1FirmsProjects = visibleProjects.filter((p) => p.data.tags.includes("A1 Firms"));
-const otherProjects = visibleProjects.filter((p) => !p.data.tags.includes("A1 Firms"));
+const productProjects = visibleProjects.filter((p) => p.data.order <= 9);
+const researchProjects = visibleProjects.filter((p) => p.data.order >= 10);
 
 
 const visualMeta = {
@@ -38,7 +38,7 @@ const a1PreviewHref = configuredA1PreviewHref || "/a1trategize-preview/index.htm
 const projectCode = (order) => `PX-${String(order ?? 0).padStart(2, "0")}`;
 const isA1trategizeProject = (entry) =>
   entry.id === "a1trategize" || entry.data.title.toLowerCase().includes("a1trategize");
-const isPendingLockedProject = (entry) => entry.id === "interdigitated-devices";
+const isPendingLockedProject = (entry) => false;
 
 const degToRad = (deg) => (deg * Math.PI) / 180;
 const createCapabilityRadarChart = (scores) => {
@@ -78,8 +78,8 @@ const createCapabilityRadarChart = (scores) => {
       <strong>{String(visibleProjects.length).padStart(2, "0")}</strong>
     </div>
     <div>
-      <span>Primary mode</span>
-      <strong>Build log</strong>
+      <span>Operating track</span>
+      <strong>Dual Focus</strong>
     </div>
     <div>
       <span>Archive state</span>
@@ -96,23 +96,76 @@ const createCapabilityRadarChart = (scores) => {
   </section>
 )}
 
-{a1FirmsProjects.length > 0 && (
-  <section id="a1-projects" class="project-grid-section" aria-label="A1 Firms Ecosystem">
+{productProjects.length > 0 && (
+  <section id="product-projects" class="project-grid-section" aria-label="Product & Venture Projects">
     <div class="project-grid-head">
-      <p class="micro-label">A1 Firms</p>
-      <h2>Enterprise Strategy & Robotics Ecosystem.</h2>
+      <p class="micro-label">Product, Venture & Systems</p>
+      <h2>Patented Systems, Interactive Software, and Venture Innovations.</h2>
     </div>
 
     <div class="project-grid">
-      {a1FirmsProjects.map((project, index) => {
+      {productProjects.map((project, index) => {
         const visual = visualMeta[project.data.visual] ?? visualMeta.blank;
         const primaryLink = project.data.links[0];
         const capabilityChart = createCapabilityRadarChart(project.data.capabilityScores);
         const showAppPreview = isA1trategizeProject(project) && Boolean(a1PreviewHref);
+        const isHero = index === 0;
+        const hasDoc = Boolean(project.data.pdf?.src);
+        const docSrc = project.data.pdf?.src;
+        const docTitle = project.data.title;
+        const docLabel = project.data.pdf?.label || (docSrc?.endsWith('.mp4') ? "시연 영상 열람" : docSrc?.endsWith('index.html') ? "3D 게임 플레이" : "문서 열람");
+
+        const hasPoster = Boolean(project.data.poster?.src);
+        const posterSrc = project.data.poster?.src;
+        const posterTitle = project.data.poster?.title || `${project.data.title} (Poster)`;
+
+        const hasAward = Boolean(project.data.award?.src);
+        const awardSrc = project.data.award?.src;
+        const awardTitle = project.data.award?.title || `${project.data.title} (Award)`;
+
+        const hasCert = Boolean(project.data.certificate?.src);
+        const certSrc = project.data.certificate?.src;
+        const certTitle = project.data.certificate?.title || `${project.data.title} (Certificate)`;
+        const isPatent = certSrc?.includes('patent');
+        const isAbstract = certSrc?.includes('abstract');
+        const isPortfolio = certSrc?.includes('portfolio') || certSrc?.includes('deck') || certSrc?.includes('dossier');
+        const certBtnText = isPatent ? "PATENT" : isAbstract ? "ABSTRACT" : isPortfolio ? "PORTFOLIO" : "CERTIFICATE";
+        const certBtnClass = isPatent ? "is-patent" : isAbstract ? "is-abstract" : isPortfolio ? "is-portfolio" : "is-cert";
+
+        const primaryVisualSrc = docSrc || posterSrc || awardSrc || certSrc;
+        const primaryVisualTitle = project.data.title;
+        const hasVisualLink = Boolean(primaryVisualSrc) && !isHero;
+
+        const validPrimaryLink = primaryLink && primaryLink.href && primaryLink.href !== "#" ? primaryLink : null;
+        const docKind = project.data.pdf?.kind;
+        const docBtnText = docSrc?.endsWith('.mp4')
+          ? "VIDEO DEMO"
+          : docSrc?.endsWith('index.html')
+            ? "PLAY GAME"
+            : docKind === 'report' || project.id === 'nearly-free-electron'
+              ? "REPORT"
+              : "PRESENTATION";
+        const docBtnClass = docSrc?.endsWith('.mp4')
+          ? "is-video"
+          : docSrc?.endsWith('index.html')
+            ? "is-game"
+            : docKind === 'report' || project.id === 'nearly-free-electron'
+              ? "is-report"
+              : "is-presentation";
+
+        const hasAnyArtifact = hasDoc || hasPoster || hasAward || hasCert || Boolean(validPrimaryLink);
 
         return (
-          <article id={`project-${project.id}`} class={`project-card reveal-up ${index === 0 ? 'bento-hero' : ''} ${showAppPreview ? 'has-app-preview' : ''}`} data-tone={visual.tone} data-project-id={project.id}>
-            <div class="card-visual" aria-hidden="true">
+          <article id={`project-${project.id}`} class={`project-card reveal-up ${isHero ? 'bento-hero' : ''} ${showAppPreview ? 'has-app-preview' : ''}`} data-tone={visual.tone} data-project-id={project.id}>
+            <div
+              class={`card-visual ${hasVisualLink ? 'card-visual-interactive card-pdf-link' : ''}`}
+              data-pdf-src={hasVisualLink ? primaryVisualSrc : undefined}
+              data-pdf-title={hasVisualLink ? primaryVisualTitle : undefined}
+              role={hasVisualLink ? "button" : undefined}
+              tabindex={hasVisualLink ? "0" : undefined}
+              title={hasVisualLink ? `${project.data.title} (Click to view)` : undefined}
+              aria-label={hasVisualLink ? `View ${project.data.title}` : undefined}
+            >
               <svg class="radar-chart" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
                 <circle cx="50" cy="54" r="32" class="radar-grid-circle" />
                 <circle cx="50" cy="54" r="16" class="radar-grid-circle" />
@@ -135,15 +188,71 @@ const createCapabilityRadarChart = (scores) => {
                 </g>
               </svg>
             </div>
-            <div class="card-meta">
-              <span>{projectCode(project.data.order)}</span>
-              <span>{project.data.year ?? "Now"} / {visual.label}</span>
-            </div>
-            <h3><span>{project.data.title}</span></h3>
-            <p>{project.data.summary}</p>
-            <div class="tag-row compact">
-              {project.data.tags.map((tag) => <span>{tag}</span>)}
-            </div>
+
+            {isHero ? (
+              <div class="hero-top-grid">
+                <div class="hero-text-content">
+                  <div class="card-meta">
+                    <span>{projectCode(project.data.order)}</span>
+                    <span>{project.data.year ?? "Now"} / {visual.label}</span>
+                  </div>
+                  <h3><span>{project.data.title}</span></h3>
+                  <p>{project.data.summary}</p>
+                  <div class="tag-row compact">
+                    {project.data.tags.map((tag) => <span>{tag}</span>)}
+                  </div>
+                </div>
+                {project.data.pdf?.src && (project.data.pdf.src.endsWith('.mp4') || project.data.pdf.src.endsWith('.webm')) && (
+                  <div
+                    class="card-mini-video-preview card-pdf-link"
+                    data-pdf-src={project.data.pdf.src}
+                    data-pdf-title={project.data.pdf.title || project.data.title}
+                    title="Click to view Demo Video"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <video
+                      src={project.data.pdf.src}
+                      autoplay
+                      muted
+                      loop
+                      playsinline
+                      preload="auto"
+                      class="mini-preview-video"
+                    ></video>
+                    <div class="mini-video-overlay">
+                      <span class="mini-video-badge">
+                        <svg class="mini-play-icon" viewBox="0 0 24 24" fill="currentColor">
+                          <polygon points="6 4 20 12 6 20 6 4"></polygon>
+                        </svg>
+                        <span>DEMO VIDEO</span>
+                      </span>
+                      <span class="mini-expand-badge" title="Click to view Demo Video">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="15 3 21 3 21 9"/>
+                          <polyline points="9 21 3 21 3 15"/>
+                          <line x1="21" y1="3" x2="14" y2="10"/>
+                          <line x1="3" y1="21" x2="10" y2="14"/>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <div class="card-meta">
+                  <span>{projectCode(project.data.order)}</span>
+                  <span>{project.data.year ?? "Now"} / {visual.label}</span>
+                </div>
+                <h3><span>{project.data.title}</span></h3>
+                <p>{project.data.summary}</p>
+                <div class="tag-row compact">
+                  {project.data.tags.map((tag) => <span>{tag}</span>)}
+                </div>
+              </>
+            )}
+
             {showAppPreview && (
               <div class="app-preview-panel" aria-label="A1trategize interactive frontend preview">
                 <div class="app-preview-shell" data-source-width="1440">
@@ -156,19 +265,127 @@ const createCapabilityRadarChart = (scores) => {
                 </div>
               </div>
             )}
-            {primaryLink && (
-              primaryLink.href === "#" ? (
-                <span class="card-link is-pending">{primaryLink.label}</span>
-              ) : (
-                <a
-                  class="card-link"
-                  href={primaryLink.href}
-                  target={externalHref(primaryLink.href) ? "_blank" : undefined}
-                  rel={externalHref(primaryLink.href) ? "noopener noreferrer" : undefined}
-                >
-                  {primaryLink.label}
-                </a>
-              )
+
+            {hasAnyArtifact && (
+              <div class="card-artifacts-row">
+                {hasDoc && (
+                  <button
+                    type="button"
+                    class={`artifact-minimal-btn ${docBtnClass} card-pdf-link`}
+                    data-pdf-src={docSrc}
+                    data-pdf-title={docTitle}
+                    title={docSrc?.endsWith('.mp4') ? "시연 영상 열람" : docSrc?.endsWith('index.html') ? "3D 게임 플레이" : docSrc?.includes('presentation') ? "구두발표 슬라이드 열람" : "프로젝트 문서 열람"}
+                    aria-label={`View Project Artifact for ${project.data.title}`}
+                  >
+                    <svg class="art-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      {docSrc?.endsWith('.mp4') ? (
+                        <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
+                      ) : docSrc?.endsWith('index.html') ? (
+                        <polygon points="6 3 20 12 6 21 6 3" fill="currentColor"></polygon>
+                      ) : (
+                        <>
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                        </>
+                      )}
+                    </svg>
+                    <span>{docBtnText}</span>
+                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                    </svg>
+                  </button>
+                )}
+                {hasPoster && (
+                  <button
+                    type="button"
+                    class="artifact-minimal-btn is-poster card-pdf-link"
+                    data-pdf-src={posterSrc}
+                    data-pdf-title={posterTitle}
+                    title="학회 포스터 발표 자료 열람"
+                    aria-label={`View Poster for ${project.data.title}`}
+                  >
+                    <svg class="art-icon poster-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <path d="m21 15-5-5L5 21"/>
+                    </svg>
+                    <span>POSTER</span>
+                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                    </svg>
+                  </button>
+                )}
+                {hasAward && (
+                  <button
+                    type="button"
+                    class="artifact-minimal-btn is-award card-pdf-link"
+                    data-pdf-src={awardSrc}
+                    data-pdf-title={awardTitle}
+                    title="공식 수상 상장/표창장 열람"
+                    aria-label={`View Award for ${project.data.title}`}
+                  >
+                    <svg class="art-icon award-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"/>
+                      <path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/>
+                      <path d="M4 22h16"/>
+                      <path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"/>
+                      <path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/>
+                    </svg>
+                    <span>AWARD</span>
+                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                    </svg>
+                  </button>
+                )}
+                {hasCert && (
+                  <button
+                    type="button"
+                    class={`artifact-minimal-btn ${certBtnClass} card-pdf-link`}
+                    data-pdf-src={certSrc}
+                    data-pdf-title={certTitle}
+                    title="공식 인증서/증명원 열람"
+                    aria-label={`View ${certBtnText} for ${project.data.title}`}
+                  >
+                    <svg class="art-icon cert-seal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      {isPatent ? (
+                        <>
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                          <path d="m9 12 2 2 4-4"/>
+                        </>
+                      ) : isAbstract ? (
+                        <>
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                          <line x1="16" y1="13" x2="8" y2="13"/>
+                          <line x1="16" y1="17" x2="8" y2="17"/>
+                        </>
+                      ) : (
+                        <>
+                          <circle cx="12" cy="8" r="6"/>
+                          <path d="M8.21 13.89L7 22l5-3 5 3-1.21-8.11"/>
+                        </>
+                      )}
+                    </svg>
+                    <span>{certBtnText}</span>
+                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                    </svg>
+                  </button>
+                )}
+                {validPrimaryLink && (
+                  <a
+                    class="artifact-minimal-btn is-link"
+                    href={validPrimaryLink.href}
+                    target={externalHref(validPrimaryLink.href) ? "_blank" : undefined}
+                    rel={externalHref(validPrimaryLink.href) ? "noopener noreferrer" : undefined}
+                  >
+                    <span>{validPrimaryLink.label}</span>
+                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                    </svg>
+                  </a>
+                )}
+              </div>
             )}
           </article>
         );
@@ -177,19 +394,63 @@ const createCapabilityRadarChart = (scores) => {
   </section>
 )}
 
-{otherProjects.length > 0 && (
-  <section id="research-projects" class="project-grid-section research-grid-section" aria-label="Academic & Research Projects">
+{researchProjects.length > 0 && (
+  <section id="research-projects" class="project-grid-section research-grid-section" aria-label="Deep Tech & Scientific R&D">
     <div class="project-grid-head">
-      <p class="micro-label">Research & Academia</p>
-      <h2>Engineering, AI Models, and Scientific Validation.</h2>
+      <p class="micro-label">Deep Tech & Scientific R&D</p>
+      <h2>NNFC Nanofabrication, KRISS Metrology, and Applied AI Models.</h2>
     </div>
 
     <div class="project-grid">
-      {otherProjects.map((project, index) => {
+      {researchProjects.map((project, index) => {
         const visual = visualMeta[project.data.visual] ?? visualMeta.blank;
         const primaryLink = project.data.links[0];
         const capabilityChart = createCapabilityRadarChart(project.data.capabilityScores);
         const isPendingLocked = isPendingLockedProject(project);
+        const hasDoc = Boolean(project.data.pdf?.src);
+        const docSrc = project.data.pdf?.src;
+        const docTitle = project.data.title;
+        const docLabel = project.data.pdf?.label || (docSrc?.endsWith('.mp4') ? "시연 영상 열람" : docSrc?.endsWith('index.html') ? "3D 게임 플레이" : "문서 열람");
+
+        const hasPoster = Boolean(project.data.poster?.src);
+        const posterSrc = project.data.poster?.src;
+        const posterTitle = project.data.poster?.title || `${project.data.title} (Poster)`;
+
+        const hasAward = Boolean(project.data.award?.src);
+        const awardSrc = project.data.award?.src;
+        const awardTitle = project.data.award?.title || `${project.data.title} (Award)`;
+
+        const hasCert = Boolean(project.data.certificate?.src);
+        const certSrc = project.data.certificate?.src;
+        const certTitle = project.data.certificate?.title || `${project.data.title} (Certificate)`;
+        const isPatent = certSrc?.includes('patent');
+        const isAbstract = certSrc?.includes('abstract');
+        const isPortfolio = certSrc?.includes('portfolio') || certSrc?.includes('deck') || certSrc?.includes('dossier');
+        const certBtnText = isPatent ? "PATENT" : isAbstract ? "ABSTRACT" : isPortfolio ? "PORTFOLIO" : "CERTIFICATE";
+        const certBtnClass = isPatent ? "is-patent" : isAbstract ? "is-abstract" : isPortfolio ? "is-portfolio" : "is-cert";
+
+        const primaryVisualSrc = docSrc || posterSrc || awardSrc || certSrc;
+        const primaryVisualTitle = project.data.title;
+        const hasVisualLink = Boolean(primaryVisualSrc) && !isPendingLocked;
+
+        const validPrimaryLink = primaryLink && primaryLink.href && primaryLink.href !== "#" ? primaryLink : null;
+        const docKind = project.data.pdf?.kind;
+        const docBtnText = docSrc?.endsWith('.mp4')
+          ? "VIDEO DEMO"
+          : docSrc?.endsWith('index.html')
+            ? "PLAY GAME"
+            : docKind === 'report' || project.id === 'nearly-free-electron'
+              ? "REPORT"
+              : "PRESENTATION";
+        const docBtnClass = docSrc?.endsWith('.mp4')
+          ? "is-video"
+          : docSrc?.endsWith('index.html')
+            ? "is-game"
+            : docKind === 'report' || project.id === 'nearly-free-electron'
+              ? "is-report"
+              : "is-presentation";
+
+        const hasAnyArtifact = !isPendingLocked && (hasDoc || hasPoster || hasAward || hasCert || Boolean(validPrimaryLink));
 
         return (
           <article
@@ -200,7 +461,15 @@ const createCapabilityRadarChart = (scores) => {
             data-lock-state={isPendingLocked ? "pending" : undefined}
             aria-label={isPendingLocked ? `${project.data.title} pending locked project` : undefined}
           >
-            <div class="card-visual" aria-hidden="true">
+            <div
+              class={`card-visual ${hasVisualLink ? 'card-visual-interactive card-pdf-link' : ''}`}
+              data-pdf-src={hasVisualLink ? primaryVisualSrc : undefined}
+              data-pdf-title={hasVisualLink ? primaryVisualTitle : undefined}
+              role={hasVisualLink ? "button" : undefined}
+              tabindex={hasVisualLink ? "0" : undefined}
+              title={hasVisualLink ? `${project.data.title} (Click to view)` : undefined}
+              aria-label={hasVisualLink ? `View ${project.data.title}` : undefined}
+            >
               {!isPendingLocked && (
                 <svg class="radar-chart" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
                   <circle cx="50" cy="54" r="32" class="radar-grid-circle" />
@@ -228,8 +497,9 @@ const createCapabilityRadarChart = (scores) => {
                 <div class="pending-lock-visual">
                   <svg class="pending-lock-icon" viewBox="0 0 48 48" aria-hidden="true">
                     <path d="M15 21v-5.5C15 10.3 18.9 6 24 6s9 4.3 9 9.5V21" />
-                    <rect x="10" y="20" width="28" height="21" rx="5" />
-                    <path d="M24 28v6" />
+                    <rect x="9" y="21" width="30" height="21" rx="4" />
+                    <circle cx="24" cy="31.5" r="2.5" />
+                    <path d="M24 34v4" />
                   </svg>
                   <span>Pending</span>
                 </div>
@@ -262,28 +532,127 @@ const createCapabilityRadarChart = (scores) => {
                 project.data.tags.map((tag) => <span>{tag}</span>)
               )}
             </div>
-            {isPendingLocked && (
-              <span class="card-link is-pending pending-lock-link">
-                <svg class="pending-lock-mini" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-                  <rect x="6" y="10" width="12" height="10" rx="2" />
-                </svg>
-                Pending
-              </span>
-            )}
-            {!isPendingLocked && primaryLink && (
-              primaryLink.href === "#" ? (
-                <span class="card-link is-pending">{primaryLink.label}</span>
-              ) : (
-                <a
-                  class="card-link"
-                  href={primaryLink.href}
-                  target={externalHref(primaryLink.href) ? "_blank" : undefined}
-                  rel={externalHref(primaryLink.href) ? "noopener noreferrer" : undefined}
-                >
-                  {primaryLink.label}
-                </a>
-              )
+
+            {hasAnyArtifact && (
+              <div class="card-artifacts-row">
+                {hasDoc && (
+                  <button
+                    type="button"
+                    class={`artifact-minimal-btn ${docBtnClass} card-pdf-link`}
+                    data-pdf-src={docSrc}
+                    data-pdf-title={docTitle}
+                    title={docSrc?.endsWith('.mp4') ? "시연 영상 열람" : docSrc?.endsWith('index.html') ? "3D 게임 플레이" : docSrc?.includes('presentation') ? "구두발표 슬라이드 열람" : "프로젝트 문서 열람"}
+                    aria-label={`View Project Artifact for ${project.data.title}`}
+                  >
+                    <svg class="art-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      {docSrc?.endsWith('.mp4') ? (
+                        <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
+                      ) : docSrc?.endsWith('index.html') ? (
+                        <polygon points="6 3 20 12 6 21 6 3" fill="currentColor"></polygon>
+                      ) : (
+                        <>
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                        </>
+                      )}
+                    </svg>
+                    <span>{docBtnText}</span>
+                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                    </svg>
+                  </button>
+                )}
+                {hasPoster && (
+                  <button
+                    type="button"
+                    class="artifact-minimal-btn is-poster card-pdf-link"
+                    data-pdf-src={posterSrc}
+                    data-pdf-title={posterTitle}
+                    title="학회 포스터 발표 자료 열람"
+                    aria-label={`View Poster for ${project.data.title}`}
+                  >
+                    <svg class="art-icon poster-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <path d="m21 15-5-5L5 21"/>
+                    </svg>
+                    <span>POSTER</span>
+                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                    </svg>
+                  </button>
+                )}
+                {hasAward && (
+                  <button
+                    type="button"
+                    class="artifact-minimal-btn is-award card-pdf-link"
+                    data-pdf-src={awardSrc}
+                    data-pdf-title={awardTitle}
+                    title="공식 수상 상장/표창장 열람"
+                    aria-label={`View Award for ${project.data.title}`}
+                  >
+                    <svg class="art-icon award-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"/>
+                      <path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/>
+                      <path d="M4 22h16"/>
+                      <path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"/>
+                      <path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/>
+                    </svg>
+                    <span>AWARD</span>
+                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                    </svg>
+                  </button>
+                )}
+                {hasCert && (
+                  <button
+                    type="button"
+                    class={`artifact-minimal-btn ${certBtnClass} card-pdf-link`}
+                    data-pdf-src={certSrc}
+                    data-pdf-title={certTitle}
+                    title="공식 인증서/증명원 열람"
+                    aria-label={`View ${certBtnText} for ${project.data.title}`}
+                  >
+                    <svg class="art-icon cert-seal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      {isPatent ? (
+                        <>
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                          <path d="m9 12 2 2 4-4"/>
+                        </>
+                      ) : isAbstract || isPortfolio ? (
+                        <>
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                          <line x1="16" y1="13" x2="8" y2="13"/>
+                          <line x1="16" y1="17" x2="8" y2="17"/>
+                        </>
+                      ) : (
+                        <>
+                          <circle cx="12" cy="8" r="6"/>
+                          <path d="M8.21 13.89L7 22l5-3 5 3-1.21-8.11"/>
+                        </>
+                      )}
+                    </svg>
+                    <span>{certBtnText}</span>
+                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                    </svg>
+                  </button>
+                )}
+                {validPrimaryLink && (
+                  <a
+                    class="artifact-minimal-btn is-link"
+                    href={validPrimaryLink.href}
+                    target={externalHref(validPrimaryLink.href) ? "_blank" : undefined}
+                    rel={externalHref(validPrimaryLink.href) ? "noopener noreferrer" : undefined}
+                  >
+                    <span>{validPrimaryLink.label}</span>
+                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                    </svg>
+                  </a>
+                )}
+              </div>
             )}
           </article>
         );
@@ -291,6 +660,37 @@ const createCapabilityRadarChart = (scores) => {
     </div>
   </section>
 )}
+
+<!-- Dedicated PDF Document Modal Viewer -->
+<div id="pdf-modal" class="pdf-modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="pdf-modal-backdrop" id="pdf-modal-backdrop"></div>
+  <div class="pdf-modal-container">
+    <header class="pdf-modal-header">
+      <div class="pdf-modal-title-wrap">
+        <svg class="pdf-modal-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" fill="none" stroke="currentColor" stroke-width="2"/>
+          <polyline points="14 2 14 8 20 8" fill="none" stroke="currentColor" stroke-width="2"/>
+          <line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2"/>
+          <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <h3 id="pdf-modal-title">Document Viewer</h3>
+      </div>
+      <div class="pdf-modal-actions">
+        <a id="pdf-modal-download" class="pdf-modal-action-btn" href="#" target="_blank" rel="noopener noreferrer" title="Open in new tab / Download">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m4-3h6v6m-11 5L21 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Open in New Tab</span>
+        </a>
+        <button id="pdf-modal-close" class="pdf-modal-action-btn pdf-close-btn" type="button" aria-label="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </header>
+    <div class="pdf-modal-body">
+      <iframe id="pdf-modal-iframe" src="" title="PDF Document Viewer" loading="lazy"></iframe>
+      <video id="pdf-modal-video" src="" controls playsinline preload="metadata" style="display: none; width: 100%; height: 100%; object-fit: contain; background: #000;"></video>
+    </div>
+  </div>
+</div>
 
 <script is:inline>
   function fitAppPreviewFrames() {
@@ -346,6 +746,80 @@ const createCapabilityRadarChart = (scores) => {
 
     fitAppPreviewFrames();
     initIframeThemeSync();
+    initPdfModal();
+  }
+
+  function initPdfModal() {
+    const modal = document.getElementById('pdf-modal');
+    const backdrop = document.getElementById('pdf-modal-backdrop');
+    const closeBtn = document.getElementById('pdf-modal-close');
+    const iframe = document.getElementById('pdf-modal-iframe');
+    const video = document.getElementById('pdf-modal-video');
+    const titleEl = document.getElementById('pdf-modal-title');
+    const downloadLink = document.getElementById('pdf-modal-download');
+    
+    if (!modal) return;
+
+    function openPdf(src, title) {
+      const isVideo = src.toLowerCase().endsWith('.mp4') || src.toLowerCase().endsWith('.webm');
+      if (titleEl) titleEl.textContent = title || (isVideo ? "Video Demonstration" : "Document Viewer");
+      if (downloadLink) {
+        downloadLink.href = src;
+        const linkSpan = downloadLink.querySelector('span');
+        if (linkSpan) linkSpan.textContent = isVideo ? "Watch Original" : "Open in New Tab";
+      }
+
+      if (isVideo && video) {
+        if (iframe) { iframe.style.display = 'none'; iframe.src = ''; }
+        video.style.display = 'block';
+        video.src = src;
+        video.load();
+        video.currentTime = 0;
+        video.play().catch((err) => {
+          console.warn("Video playback:", err);
+        });
+      } else if (iframe) {
+        if (video) { video.pause(); video.style.display = 'none'; video.src = ''; }
+        iframe.style.display = 'block';
+        iframe.src = src;
+      }
+
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePdf() {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      if (video) {
+        video.pause();
+        video.src = '';
+      }
+      if (iframe) {
+        iframe.src = '';
+      }
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.card-pdf-link').forEach(btn => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const src = btn.dataset.pdfSrc;
+        const title = btn.dataset.pdfTitle;
+        if (src) openPdf(src, title);
+      };
+    });
+
+    if (backdrop) backdrop.onclick = closePdf;
+    if (closeBtn) closeBtn.onclick = closePdf;
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+        closePdf();
+      }
+    });
   }
 
   let syncRetries = 0;
@@ -411,6 +885,182 @@ const createCapabilityRadarChart = (scores) => {
 </script>
 
 <style>
+  .card-actions-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: auto;
+  }
+
+  .card-pdf-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    background: color-mix(in srgb, var(--color-accent) 14%, var(--color-field));
+    border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-line));
+    color: var(--color-accent-ink);
+  }
+
+  .card-pdf-link:hover {
+    background: var(--color-accent);
+    color: var(--color-paper-deep);
+    border-color: var(--color-accent);
+  }
+
+  .pdf-btn-icon {
+    width: 15px;
+    height: 15px;
+  }
+
+  /* PDF Modal Styling */
+  .pdf-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(12px, 2.5vh, 24px) clamp(12px, 2.5vw, 24px);
+    box-sizing: border-box;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .pdf-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .pdf-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(3, 4, 7, 0.78);
+    backdrop-filter: blur(12px);
+  }
+
+  .pdf-modal-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    width: min(1200px, 96vw);
+    height: min(84vh, calc(96vw * 9 / 16 + 54px));
+    max-height: calc(100dvh - 36px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-card);
+    background: var(--color-field);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.48), 0 0 0 1px var(--glass-border);
+    overflow: hidden;
+    transform: scale(0.96) translateY(8px);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pdf-modal.is-open .pdf-modal-container {
+    transform: scale(1) translateY(0);
+  }
+
+  .pdf-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    height: 50px;
+    min-height: 50px;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-panel-solid);
+    flex-shrink: 0;
+  }
+
+  .pdf-modal-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .pdf-modal-icon {
+    width: 18px;
+    height: 18px;
+    stroke: var(--color-accent-ink);
+    flex-shrink: 0;
+  }
+
+  .pdf-modal-header h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pdf-modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .pdf-modal-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid var(--color-line);
+    border-radius: 6px;
+    background: var(--color-field);
+    color: var(--color-ink-soft);
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .pdf-modal-action-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .pdf-modal-action-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-ink);
+    background: var(--color-panel);
+  }
+
+  .pdf-close-btn {
+    padding: 0 8px;
+  }
+
+  .pdf-modal-body {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    height: calc(100% - 50px);
+    background: #525659;
+    overflow: hidden;
+  }
+
+  .pdf-modal-body iframe,
+  .pdf-modal-body video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #525659;
+  }
+
   .project-hero {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(280px, 0.38fr);
@@ -589,6 +1239,119 @@ const createCapabilityRadarChart = (scores) => {
   .bento-hero h3 {
     font-size: 3.05rem;
     max-width: 760px;
+  }
+
+  .hero-top-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: center;
+  }
+
+  @media (max-width: 960px) {
+    .hero-top-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+
+  .hero-text-content {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  .card-mini-video-preview {
+    position: relative;
+    width: clamp(280px, 28vw, 420px);
+    aspect-ratio: 16 / 9;
+    border-radius: calc(var(--radius-card) - 2px);
+    border: 1px solid var(--glass-border);
+    background: #030407;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.35s ease;
+    flex-shrink: 0;
+  }
+
+  .card-mini-video-preview:hover {
+    transform: translateY(-3px) scale(1.02);
+    border-color: var(--color-accent);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6), 0 0 24px var(--color-accent-glow);
+  }
+
+  .mini-preview-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+    background: #000;
+  }
+
+  .mini-video-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 10px 14px;
+    background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.8) 100%);
+    pointer-events: none;
+    transition: background 0.3s ease;
+  }
+
+  .card-mini-video-preview:hover .mini-video-overlay {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.88) 100%);
+  }
+
+  .mini-video-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    background: rgba(10, 14, 23, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    color: var(--color-ink);
+    font-size: 11px;
+    font-weight: 750;
+    font-family: var(--font-mono);
+  }
+
+  .mini-play-icon {
+    width: 10px;
+    height: 10px;
+    fill: var(--color-accent);
+  }
+
+  .mini-expand-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    background: rgba(10, 14, 23, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    color: var(--color-ink);
+    transition: all 0.2s ease;
+  }
+
+  .mini-expand-badge svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .card-mini-video-preview:hover .mini-expand-badge {
+    background: var(--color-accent);
+    color: var(--color-paper-deep);
+    border-color: var(--color-accent);
+    transform: scale(1.12);
   }
 
   .project-card {
@@ -796,15 +1559,416 @@ const createCapabilityRadarChart = (scores) => {
     height: 160px;
     margin: -8px -8px 8px;
     padding: 0;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--color-line);
     border-radius: calc(var(--radius-card) - 2px);
     overflow: hidden;
-    background: radial-gradient(circle at top left, rgba(107, 156, 242, 0.18), transparent 70%),
-                radial-gradient(circle at bottom right, rgba(var(--rgb-warm), 0.12), transparent 70%),
+    background: radial-gradient(circle at top left, rgba(var(--rgb-warm), 0.14), transparent 70%),
+                radial-gradient(circle at bottom right, rgba(var(--rgb-warm), 0.06), transparent 70%),
                 var(--color-field);
     background-size: 200% 200%;
     animation: meshFlow 15s ease-in-out infinite;
-    box-shadow: inset 0 0 30px rgba(0,0,0,0.25);
+    box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.03);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.35s ease;
+  }
+
+  [data-theme="dark"] .card-visual {
+    border-color: rgba(255, 255, 255, 0.06);
+    background: radial-gradient(circle at top left, rgba(107, 156, 242, 0.16), transparent 70%),
+                radial-gradient(circle at bottom right, rgba(179, 154, 251, 0.08), transparent 70%),
+                var(--color-field);
+    box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.35);
+  }
+
+  .card-visual-interactive {
+    cursor: pointer;
+  }
+
+  .card-visual-interactive:hover {
+    transform: translateY(-2px) scale(1.015);
+    border-color: var(--color-accent);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05), 0 10px 24px rgba(0, 0, 0, 0.08), 0 0 16px var(--color-accent-glow);
+  }
+
+  [data-theme="dark"] .card-visual-interactive:hover {
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.15), 0 12px 28px rgba(0, 0, 0, 0.35), 0 0 20px var(--color-accent-glow);
+  }
+
+  .card-artifacts-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .artifact-minimal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 25px;
+    padding: 0 8px;
+    border-radius: 5px;
+    border: 1px solid var(--color-line);
+    background: transparent;
+    color: var(--color-ink-muted);
+    font-size: 10px;
+    font-weight: 750;
+    font-family: var(--font-mono);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    line-height: 1;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .artifact-minimal-btn:hover {
+    border-color: var(--color-ink);
+    background: var(--color-ink);
+    color: var(--color-paper-deep);
+    transform: translateY(-1px);
+  }
+
+  .artifact-minimal-btn .art-icon {
+    width: 10px;
+    height: 10px;
+    stroke: currentColor;
+    flex-shrink: 0;
+    opacity: 0.8;
+  }
+
+  .artifact-minimal-btn .art-arrow {
+    width: 8px;
+    height: 8px;
+    stroke: currentColor;
+    flex-shrink: 0;
+    opacity: 0.55;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .artifact-minimal-btn:hover .art-arrow {
+    opacity: 1;
+    transform: translate(1px, -1px);
+  }
+
+  /* 1. AWARD Minimal Styling (Warm Gold / Trophy Highlight) */
+  .artifact-minimal-btn.is-award {
+    border-color: color-mix(in srgb, #f59e0b 55%, var(--color-line));
+    color: #d97706;
+  }
+  .artifact-minimal-btn.is-award .award-trophy {
+    stroke: #f59e0b;
+  }
+  .artifact-minimal-btn.is-award:hover {
+    border-color: #f59e0b;
+    background: #f59e0b;
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.35);
+  }
+  .artifact-minimal-btn.is-award:hover .award-trophy {
+    stroke: #ffffff;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-award {
+    border-color: rgba(251, 191, 36, 0.4);
+    color: #fbbf24;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-award .award-trophy {
+    stroke: #fbbf24;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-award:hover {
+    border-color: #fbbf24;
+    background: #fbbf24;
+    color: #0b0f17;
+    box-shadow: 0 2px 12px rgba(251, 191, 36, 0.4);
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-award:hover .award-trophy {
+    stroke: #0b0f17;
+  }
+
+  /* 2. CERTIFICATE Minimal Styling (Crisp Emerald / Completion Seal) */
+  .artifact-minimal-btn.is-cert {
+    border-color: color-mix(in srgb, #10b981 45%, var(--color-line));
+    color: #059669;
+  }
+  .artifact-minimal-btn.is-cert .cert-seal {
+    stroke: #10b981;
+  }
+  .artifact-minimal-btn.is-cert:hover {
+    border-color: #10b981;
+    background: #10b981;
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
+  }
+  .artifact-minimal-btn.is-cert:hover .cert-seal {
+    stroke: #ffffff;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-cert {
+    border-color: rgba(52, 211, 153, 0.35);
+    color: #34d399;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-cert .cert-seal {
+    stroke: #34d399;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-cert:hover {
+    border-color: #10b981;
+    background: #10b981;
+    color: #0b0f17;
+    box-shadow: 0 2px 12px rgba(16, 185, 129, 0.4);
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-cert:hover .cert-seal {
+    stroke: #0b0f17;
+  }
+
+  /* 3. PATENT Minimal Styling (Royal Violet / Shield Highlight) */
+  .artifact-minimal-btn.is-patent {
+    border-color: color-mix(in srgb, #8b5cf6 45%, var(--color-line));
+    color: #7c3aed;
+  }
+  .artifact-minimal-btn.is-patent .cert-seal {
+    stroke: #8b5cf6;
+  }
+  .artifact-minimal-btn.is-patent:hover {
+    border-color: #8b5cf6;
+    background: #8b5cf6;
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(139, 92, 246, 0.35);
+  }
+  .artifact-minimal-btn.is-patent:hover .cert-seal {
+    stroke: #ffffff;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-patent {
+    border-color: rgba(167, 139, 250, 0.35);
+    color: #c084fc;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-patent .cert-seal {
+    stroke: #c084fc;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-patent:hover {
+    border-color: #a78bfa;
+    background: #a78bfa;
+    color: #0b0f17;
+    box-shadow: 0 2px 12px rgba(167, 139, 250, 0.4);
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-patent:hover .cert-seal {
+    stroke: #0b0f17;
+  }
+
+  /* 4. ABSTRACT Minimal Styling (Azure Blue / Quill Highlight) */
+  .artifact-minimal-btn.is-abstract {
+    border-color: color-mix(in srgb, #3b82f6 45%, var(--color-line));
+    color: #2563eb;
+  }
+  .artifact-minimal-btn.is-abstract .cert-seal {
+    stroke: #3b82f6;
+  }
+  .artifact-minimal-btn.is-abstract:hover {
+    border-color: #3b82f6;
+    background: #3b82f6;
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(59, 130, 246, 0.35);
+  }
+  .artifact-minimal-btn.is-abstract:hover .cert-seal {
+    stroke: #ffffff;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-abstract {
+    border-color: rgba(96, 165, 250, 0.35);
+    color: #60a5fa;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-abstract .cert-seal {
+    stroke: #60a5fa;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-abstract:hover {
+    border-color: #60a5fa;
+    background: #60a5fa;
+    color: #0b0f17;
+    box-shadow: 0 2px 12px rgba(96, 165, 250, 0.4);
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-abstract:hover .cert-seal {
+    stroke: #0b0f17;
+  }
+
+  /* 5. PORTFOLIO Minimal Styling (Indigo / Dossier Highlight) */
+  .artifact-minimal-btn.is-portfolio {
+    border-color: color-mix(in srgb, #6366f1 45%, var(--color-line));
+    color: #4f46e5;
+  }
+  .artifact-minimal-btn.is-portfolio .cert-seal {
+    stroke: #6366f1;
+  }
+  .artifact-minimal-btn.is-portfolio:hover {
+    border-color: #6366f1;
+    background: #6366f1;
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(99, 102, 241, 0.35);
+  }
+  .artifact-minimal-btn.is-portfolio:hover .cert-seal {
+    stroke: #ffffff;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-portfolio {
+    border-color: rgba(129, 140, 248, 0.35);
+    color: #a5b4fc;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-portfolio .cert-seal {
+    stroke: #a5b4fc;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-portfolio:hover {
+    border-color: #818cf8;
+    background: #818cf8;
+    color: #0b0f17;
+    box-shadow: 0 2px 12px rgba(129, 140, 248, 0.4);
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-portfolio:hover .cert-seal {
+    stroke: #0b0f17;
+  }
+
+  /* 6. POSTER Minimal Styling (Teal / Conference Poster Highlight) */
+  .artifact-minimal-btn.is-poster {
+    border-color: color-mix(in srgb, #0d9488 45%, var(--color-line));
+    color: #0f766e;
+  }
+  .artifact-minimal-btn.is-poster .poster-icon {
+    stroke: #0d9488;
+  }
+  .artifact-minimal-btn.is-poster:hover {
+    border-color: #0d9488;
+    background: #0d9488;
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(13, 148, 136, 0.35);
+  }
+  .artifact-minimal-btn.is-poster:hover .poster-icon {
+    stroke: #ffffff;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-poster {
+    border-color: rgba(45, 212, 191, 0.35);
+    color: #2dd4bf;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-poster .poster-icon {
+    stroke: #2dd4bf;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-poster:hover {
+    border-color: #14b8a6;
+    background: #14b8a6;
+    color: #0b0f17;
+    box-shadow: 0 2px 12px rgba(45, 212, 191, 0.4);
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-poster:hover .poster-icon {
+    stroke: #0b0f17;
+  }
+
+  /* 7. PRESENTATION & REPORT Minimal Styling (Steel Azure / Sky Cyan Highlight) */
+  .artifact-minimal-btn.is-presentation,
+  .artifact-minimal-btn.is-report {
+    border-color: color-mix(in srgb, #0284c7 45%, var(--color-line));
+    color: #0369a1;
+  }
+  .artifact-minimal-btn.is-presentation .art-icon,
+  .artifact-minimal-btn.is-report .art-icon {
+    stroke: #0284c7;
+  }
+  .artifact-minimal-btn.is-presentation:hover,
+  .artifact-minimal-btn.is-report:hover {
+    border-color: #0284c7;
+    background: #0284c7;
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(2, 132, 199, 0.35);
+  }
+  .artifact-minimal-btn.is-presentation:hover .art-icon,
+  .artifact-minimal-btn.is-report:hover .art-icon {
+    stroke: #ffffff;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-presentation,
+  [data-theme="dark"] .artifact-minimal-btn.is-report {
+    border-color: rgba(56, 189, 248, 0.35);
+    color: #38bdf8;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-presentation .art-icon,
+  [data-theme="dark"] .artifact-minimal-btn.is-report .art-icon {
+    stroke: #38bdf8;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-presentation:hover,
+  [data-theme="dark"] .artifact-minimal-btn.is-report:hover {
+    border-color: #38bdf8;
+    background: #38bdf8;
+    color: #0b0f17;
+    box-shadow: 0 2px 12px rgba(56, 189, 248, 0.4);
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-presentation:hover .art-icon,
+  [data-theme="dark"] .artifact-minimal-btn.is-report:hover .art-icon {
+    stroke: #0b0f17;
+  }
+
+  /* 8. VIDEO DEMO Minimal Styling (Vibrant Rose / Crimson Highlight) */
+  .artifact-minimal-btn.is-video {
+    border-color: color-mix(in srgb, #e11d48 45%, var(--color-line));
+    color: #be123c;
+  }
+  .artifact-minimal-btn.is-video .art-icon {
+    fill: #e11d48;
+    stroke: none;
+  }
+  .artifact-minimal-btn.is-video:hover {
+    border-color: #e11d48;
+    background: #e11d48;
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(225, 29, 72, 0.35);
+  }
+  .artifact-minimal-btn.is-video:hover .art-icon {
+    fill: #ffffff;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-video {
+    border-color: rgba(251, 113, 133, 0.35);
+    color: #fb7185;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-video .art-icon {
+    fill: #fb7185;
+    stroke: none;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-video:hover {
+    border-color: #fb7185;
+    background: #fb7185;
+    color: #0b0f17;
+    box-shadow: 0 2px 12px rgba(251, 113, 133, 0.4);
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-video:hover .art-icon {
+    fill: #0b0f17;
+  }
+
+  /* 9. PLAY GAME Minimal Styling (Arcade Fuchsia Highlight) */
+  .artifact-minimal-btn.is-game {
+    border-color: color-mix(in srgb, #c026d3 45%, var(--color-line));
+    color: #a21caf;
+  }
+  .artifact-minimal-btn.is-game .art-icon {
+    fill: #c026d3;
+    stroke: none;
+  }
+  .artifact-minimal-btn.is-game:hover {
+    border-color: #c026d3;
+    background: #c026d3;
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(192, 38, 211, 0.35);
+  }
+  .artifact-minimal-btn.is-game:hover .art-icon {
+    fill: #ffffff;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-game {
+    border-color: rgba(232, 121, 249, 0.35);
+    color: #e879f9;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-game .art-icon {
+    fill: #e879f9;
+    stroke: none;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-game:hover {
+    border-color: #e879f9;
+    background: #e879f9;
+    color: #0b0f17;
+    box-shadow: 0 2px 12px rgba(232, 121, 249, 0.4);
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-game:hover .art-icon {
+    fill: #0b0f17;
   }
 
   .app-preview-panel {
@@ -856,24 +2020,56 @@ const createCapabilityRadarChart = (scores) => {
     transform-origin: 0 0;
   }
 
+  .app-video-shell {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #030407;
+    border-radius: inherit;
+    overflow: hidden;
+  }
+
+  .embedded-card-video {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    background: #030407;
+    border-radius: inherit;
+    display: block;
+  }
+
+  .project-video-mockup-panel {
+    min-height: clamp(380px, 32vw, 560px);
+  }
+
   .project-card[data-tone="green"] .card-visual {
-    background: radial-gradient(circle at top right, rgba(108, 163, 125, 0.22), transparent 70%),
-                radial-gradient(circle at bottom left, rgba(108, 163, 125, 0.08), transparent 70%),
+    background: radial-gradient(circle at top right, rgba(108, 163, 125, 0.16), transparent 70%),
+                radial-gradient(circle at bottom left, rgba(108, 163, 125, 0.06), transparent 70%),
+                var(--color-field);
+    background-size: 200% 200%;
+  }
+
+  .project-card[data-tone="blue"] .card-visual {
+    background: radial-gradient(circle at top right, rgba(107, 156, 242, 0.16), transparent 70%),
+                radial-gradient(circle at bottom left, rgba(107, 156, 242, 0.06), transparent 70%),
                 var(--color-field);
     background-size: 200% 200%;
   }
 
   .project-card[data-tone="warm"] .card-visual,
   .project-card[data-tone="paper"] .card-visual {
-    background: radial-gradient(circle at top right, rgba(var(--rgb-warm), 0.2), transparent 70%),
-                radial-gradient(circle at bottom left, rgba(var(--rgb-warm), 0.08), transparent 70%),
+    background: radial-gradient(circle at top right, rgba(var(--rgb-warm), 0.16), transparent 70%),
+                radial-gradient(circle at bottom left, rgba(var(--rgb-warm), 0.06), transparent 70%),
                 var(--color-field);
     background-size: 200% 200%;
   }
 
   .radar-chart {
-    position: absolute;
-    inset: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
@@ -911,10 +2107,10 @@ const createCapabilityRadarChart = (scores) => {
   }
 
   .radar-polygon-core {
-    fill: rgba(107, 156, 242, 0.25);
-    stroke: rgba(107, 156, 242, 0.8);
+    fill: rgba(var(--rgb-warm), 0.22);
+    stroke: rgba(var(--rgb-warm), 0.85);
     stroke-width: 1;
-    filter: drop-shadow(0 0 4px rgba(107, 156, 242, 0.5));
+    filter: drop-shadow(0 0 4px rgba(var(--rgb-warm), 0.45));
     transition: fill 0.3s ease, stroke 0.3s ease;
   }
 
@@ -923,10 +2119,16 @@ const createCapabilityRadarChart = (scores) => {
     filter: drop-shadow(0 0 2px var(--color-accent-glow)) !important;
   }
 
+  .project-card[data-tone="blue"] .radar-polygon-core {
+    fill: rgba(107, 156, 242, 0.22);
+    stroke: rgba(107, 156, 242, 0.85);
+    filter: drop-shadow(0 0 4px rgba(107, 156, 242, 0.45));
+  }
+
   .project-card[data-tone="green"] .radar-polygon-core {
-    fill: rgba(108, 163, 125, 0.25);
-    stroke: rgba(108, 163, 125, 0.8);
-    filter: drop-shadow(0 0 4px rgba(108, 163, 125, 0.5));
+    fill: rgba(108, 163, 125, 0.22);
+    stroke: rgba(108, 163, 125, 0.85);
+    filter: drop-shadow(0 0 4px rgba(108, 163, 125, 0.45));
   }
   
   .project-card[data-tone="warm"] .radar-polygon-core,

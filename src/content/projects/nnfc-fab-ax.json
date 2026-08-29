@@ -1,0 +1,86 @@
+{
+  "title": "NNFC Semiconductor Fab AX Transformation",
+  "summary": "Architected a multi-LLM DAG harness and 183-tool spec database at KAIST NNFC to automate manual recipe formulation into verified engineer run-sheets.",
+  "order": 4,
+  "status": "published",
+  "hidden": false,
+  "year": "2026",
+  "tags": [
+    "NNFC",
+    "AX Transformation",
+    "Semiconductor Fab",
+    "Multi-LLM Harness",
+    "Portfolio Deck"
+  ],
+  "links": [],
+  "visual": "console",
+  "capabilityScores": [
+    95,
+    100,
+    85,
+    90,
+    80
+  ],
+  "pdf": {
+    "src": "/documents/projects/01-nnfc-recipe-system.mp4",
+    "label": "팹 AX 시연영상 (MP4)",
+    "title": "NNFC Semiconductor Fab AX Transformation"
+  },
+  "certificate": {
+    "src": "/documents/projects/04-nnfc-fab-ax-portfolio.pdf",
+    "label": "경력기술서 및 포트폴리오 (PDF)",
+    "title": "NNFC Fab AX Portfolio & Experience Deck"
+  },
+  "ko": {
+    "title": "나노종합기술원 반도체 제조 부문 레시피 제조 컨설팅 시스템 (AX 전환)",
+    "summary": "나노종합기술원(NNFC) 클린룸 183대 반도체·배터리 공정 장비 제원 DB와 Multi-LLM Harness DAG 검증 파이프라인을 구축하여, 수동 레시피 작성을 즉시 활용 가능한 런시트(Run-sheet)로 자동화하고 기관 기술로드맵 회의 도입 안건으로 제출했습니다.",
+    "tags": [
+      "나노종합기술원",
+      "AX 전환",
+      "반도체 팹 레시피",
+      "Multi-LLM DAG",
+      "경력기술서"
+    ],
+    "pdf": {
+      "src": "/documents/projects/01-nnfc-recipe-system.mp4",
+      "label": "팹 AX 시스템 시연영상 열람",
+      "title": "NNFC Semiconductor Fab AX Transformation"
+    },
+    "certificate": {
+      "src": "/documents/projects/04-nnfc-fab-ax-portfolio.pdf",
+      "label": "경력기술서 및 포트폴리오 (PDF) 열람",
+      "title": "NNFC Fab AX Portfolio & Experience Deck"
+    }
+  },
+  "knowledge": {
+    "ko": {
+      "aliases": [
+        "NNFC Semiconductor Fab AX Transformation",
+        "나노종합기술원 반도체 제조 부문 레시피 제조 컨설팅 시스템",
+        "NNFC AX 전환",
+        "반도체 레시피 자동화",
+        "Multi-LLM Harness",
+        "183대 장비 DB",
+        "Run-sheet 자동 생성"
+      ],
+      "oneLiner": "나노종합기술원 183대 반도체 공정 장비 한계치 DB와 AI Harness DAG를 연동해 런시트 작성을 자동화한 반도체 팹 AX 전환 시스템입니다.",
+      "problem": "팹(Fab) 현장에서 고객 의뢰서에 맞게 183대 장비 스펙을 수동 대조하여 레시피를 작성하는 과정의 병목과 AI 환각에 따른 위험성을 해결해야 했습니다.",
+      "approach": "Harness 기반 Multi-LLM 상호 검증 DAG 구조를 적용하고, 183대 장비 스펙/한계치 DB를 연동해 물리적 허용 범위 내에서만 레시피가 생성되도록 가드레일을 구축했습니다.",
+      "technicalCore": "Multi-LLM Orchestration, DAG Harness 검증, 183대 공정장비 스펙 DB 연동, 파라미터 자동 보정, Run-sheet 자동 생성 파이프라인, 특허 10-2026-0009508 기반 기술입니다.",
+      "evidence": "실제 엔지니어가 즉시 투입 가능한 런시트 초안 출력 기능을 완성하여 나노종합기술원 기술로드맵 회의의 정식 도입 검토 안건으로 제출되었습니다.",
+      "impact": "반도체 공정 도메인 지식과 생성형 AI 가드레일 엔지니어링을 결합해 실질적인 산업현장 AX(AI Transformation) 가치를 입증했습니다.",
+      "statusNote": "2026년 KAIST 부설 나노종합기술원 인턴십 및 특허 출원 기반 AX 프로젝트입니다.",
+      "keywords": [
+        "NNFC",
+        "반도체",
+        "AX 전환",
+        "레시피",
+        "런시트",
+        "Harness",
+        "DAG",
+        "183대 장비",
+        "특허"
+      ]
+    }
+  }
+}

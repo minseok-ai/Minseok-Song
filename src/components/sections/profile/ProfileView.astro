@@ -10,17 +10,107 @@ const leadBlock = visibleBlocks.find(
 );
 const calloutBlock = visibleBlocks.find((block) => block.type === "callout");
 const statBlock = visibleBlocks.find((block) => block.type === "stats");
+const educationBlock = visibleBlocks.find((block) => block.type === "education" || block.id === "education-block") ?? {
+  school: "Chungnam National University",
+  degree: "B.S. in Physics",
+  major: "Semiconductor-Energy Convergence Science",
+  period: "Mar 2017 - Feb 2026",
+  status: "Graduated"
+};
 const timelineEvents = experienceTimelineBlock
   ? experienceTimelineBlock.events
-  : [
-      {
-        date: "Now",
-        title: "A1 Firms foundation",
-        body: "Design, product, and operating systems are being composed into one public surface."
-      }
-    ];
+  : [];
 const isCompanyFounderEvent = (event) =>
   event.title.includes("A1trategize") || event.title.includes("Minseok Song & Company");
+
+const credentials = [
+  {
+    category: "AI & Generative Intelligence",
+    issuer: "Google",
+    icon: "google",
+    badgeColor: "google",
+    title: "Google AI Professional Certifications",
+    grade: "Official Credential",
+    description: "Verified foundational & enterprise generative AI mastery, prompt engineering architecture, and Gemini workflow orchestration.",
+    items: [
+      {
+        name: "Google AI Essentials",
+        label: "AI Foundation & Prompt Engineering",
+        date: "2025.11",
+        src: "/documents/credentials/google-ai-essentials.pdf",
+        tag: "CERTIFIED"
+      },
+      {
+        name: "Google Gemini Academy",
+        label: "Enterprise GenAI Architecture",
+        date: "2025.11",
+        src: "/documents/credentials/google-gemini-academy.pdf",
+        tag: "COMPLETED"
+      }
+    ]
+  },
+  {
+    category: "Deep Learning & Neural Architectures",
+    issuer: "NVIDIA DLI",
+    icon: "nvidia",
+    badgeColor: "nvidia",
+    title: "NVIDIA Deep Learning Institute (DLI)",
+    grade: "DLI Certified",
+    description: "Hands-on GPU-accelerated neural network architecture training, CNN/RNN optimization, and transformer-based NLP engineering.",
+    items: [
+      {
+        name: "Fundamentals of Deep Learning",
+        label: "Neural Networks & Computer Vision",
+        date: "2024.07",
+        src: "/documents/credentials/nvidia-dli-fundamentals.pdf",
+        tag: "DLI CERTIFIED"
+      },
+      {
+        name: "Building Transformer-Based NLP Applications",
+        label: "Transformer Models & Attention",
+        date: "2024.07",
+        src: "/documents/credentials/nvidia-dli-transformers-nlp.pdf",
+        tag: "DLI CERTIFIED"
+      }
+    ]
+  },
+  {
+    category: "Global Technical English",
+    issuer: "ACTFL OPIc",
+    icon: "lang-en",
+    badgeColor: "opic",
+    title: "OPIc English Competency",
+    grade: "IH (Intermediate High)",
+    description: "Demonstrated advanced fluency in technical discussions, cross-functional engineering debates, and structured presentation delivery.",
+    items: [
+      {
+        name: "OPIc English Official Score Report",
+        label: "Professional Engineering Communication",
+        date: "2025.10",
+        src: "/documents/credentials/opic-english.pdf",
+        tag: "GRADE: IH"
+      }
+    ]
+  },
+  {
+    category: "Global Japanese Communication",
+    issuer: "ACTFL OPIc",
+    icon: "lang-ja",
+    badgeColor: "opic-ja",
+    title: "OPIc Japanese Competency",
+    grade: "IM2 (Intermediate Mid 2)",
+    description: "Demonstrated conversational proficiency in Japanese and professional cross-border engineering collaboration.",
+    items: [
+      {
+        name: "OPIc Japanese Official Score Report",
+        label: "Cross-Border Technical Dialogue",
+        date: "2026.04",
+        src: "/documents/credentials/opic-japanese.pdf",
+        tag: "GRADE: IM2"
+      }
+    ]
+  }
+];
 ---
 
 <div class="page-kicker">
@@ -31,19 +121,35 @@ const isCompanyFounderEvent = (event) =>
 
 <section id="profile-overview" class="about-hero">
   <figure class="identity-figure" aria-label="Minseok Song identity diagram">
-    <div class="identity-orbit">
-      <div class="profile-center">
-        <div class="profile-bg"></div>
-        <div class="profile-scanner-line"></div>
-        <div class="profile-grid-layer"></div>
-        <div class="profile-vignette"></div>
+    <div class="identity-orbit-wrap">
+      <div class="identity-orbit">
+        <div class="profile-center">
+          <div class="profile-bg"></div>
+          <div class="profile-scanner-line"></div>
+          <div class="profile-grid-layer"></div>
+          <div class="profile-vignette"></div>
+        </div>
+
+        <div class="orbit-ring">
+          <span class="orbit-node node-a"></span>
+          <span class="orbit-node node-b"></span>
+          <span class="orbit-node node-c"></span>
+        </div>
       </div>
-      <div class="orbit-ring">
-        <span class="orbit-node node-a"></span>
-        <span class="orbit-node node-b"></span>
-        <span class="orbit-node node-c"></span>
+
+      <!-- Sub-Badge ID Photo (Executive Rounded Rectangle ID Badge) -->
+      <div class="profile-sub-badge" title="Minseok Song (송민석) · Deep Tech Strategist">
+        <div class="badge-inner-frame">
+          <img src="/송민석_증명사진.jpg" alt="Minseok Song" class="sub-badge-img" />
+          <div class="badge-sheen"></div>
+        </div>
+        <div class="badge-bottom-bar">
+          <span class="badge-status-dot"></span>
+          <span class="badge-id-text">MINSEOK SONG</span>
+        </div>
       </div>
     </div>
+
     <figcaption>
       <span>Fig. 00 / Self</span>
       <span>Strategy / AI / Operating Systems</span>
@@ -53,10 +159,13 @@ const isCompanyFounderEvent = (event) =>
   <div class="about-statement card-view">
     <div class="statement-header">
       <p class="micro-label">Core Philosophy</p>
-      <div class="ra1-thm-chip">
+      <a href="/projects#project-ra1" class="ra1-thm-chip" title="View RA1 Theorem Project" aria-label="View Project RA1">
         <span class="chip-dot"></span>
         <span>RA1 <span class="chip-muted">THM</span></span>
-      </div>
+        <svg class="chip-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M7 17L17 7M17 7H9M17 7V15"/>
+        </svg>
+      </a>
     </div>
     <div class="lattice-interaction-area">
       <svg viewBox="0 0 800 440" aria-hidden="true" class="true-3d-lattice" style="overflow: visible; margin-top: 10px;">
@@ -80,9 +189,9 @@ const isCompanyFounderEvent = (event) =>
   </div>
 </section>
 
-<!-- Independent Intro Card directly below the hero section -->
-<section class="about-intro-section">
+<section class="about-intro-section reveal-up stagger-1">
   <div class="intro-card card-view">
+    <span class="intro-tag">EXECUTION FIRST</span>
     <p class="intro-text">
       {calloutBlock?.body ??
         "My strength is Proactive Execution—transforming complex technical challenges into valuable Deep Tech strategies. I want to be someone who values hands-on experience over just words."}
@@ -92,23 +201,40 @@ const isCompanyFounderEvent = (event) =>
 
 <section id="profile-thesis" class="about-thesis">
   <aside class="sticky-timeline">
-    <span class="micro-label">Timeline / Sticky</span>
-    <ol>
-      {timelineEvents.map((event, index) => (
-        <li class={`reveal-in stagger-${(index % 5) + 1} ${index === 0 ? "is-current" : ""}`}>
-          {isCompanyFounderEvent(event) && <><img src="/A1Firm-logo.webp" alt="Minseok Song & Company" class="timeline-logo logo-dark" /><img src="/A1Firm-logo_light.webp" alt="Minseok Song & Company" class="timeline-logo logo-light" /></>}
-          {event.title.includes('NNFC') && <img src="/NNFC-logo.webp" alt="KAIST NNFC" class="timeline-logo" />}
-          {event.title.includes('KRISS') && <img src="/KRISS-logo.webp" alt="KRISS" class="timeline-logo" />}
-          {(event.title.includes('Chungnam National University') || event.title.includes('Semiconductor Sensor Lab')) && <img src="/CNU-logo.webp" alt="CNU" class="timeline-logo" />}
-          
+    <div class="timeline-group">
+      <span class="micro-label">Research Experience</span>
+      <ol class="timeline-list">
+        {timelineEvents.map((event, index) => (
+          <li class={`reveal-in stagger-${(index % 5) + 1} ${index === 0 ? "is-current" : ""}`}>
+            {(event.title.includes('NNFC') || event.title.includes('R&D') || event.body.includes('NNFC') || event.body.includes('Nanomaterials')) && <img src="/NNFC-logo.webp" alt="KAIST NNFC" class="timeline-logo" />}
+            {(event.title.includes('KRISS') || event.body.includes('KRISS') || event.body.includes('Non-Destructive')) && <img src="/KRISS-logo.webp" alt="KRISS" class="timeline-logo" />}
+            {(event.title.includes('CNU') || event.title.includes('Chungnam') || event.body.includes('IQS') || event.body.includes('Quantum') || event.body.includes('CNU')) && <img src="/CNU-logo.webp" alt="CNU" class="timeline-logo" />}
+            
+            <div class="timeline-content">
+              <span>{event.date}</span>
+              <strong>{event.title}</strong>
+              {event.body && <small>{event.body}</small>}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    <div class="timeline-divider"></div>
+
+    <div class="timeline-group">
+      <span class="micro-label">Education</span>
+      <ol class="timeline-list">
+        <li class="reveal-in stagger-4">
+          <img src="/CNU-logo.webp" alt="Chungnam National University" class="timeline-logo" />
           <div class="timeline-content">
-            <span>{event.date}</span>
-            <strong>{event.title}</strong>
-            {event.body && <small>{event.body}</small>}
+            <span>Mar 2017 - Feb 2026</span>
+            <strong>Chungnam National University</strong>
+            <small>B.S. in Physics (Semiconductor-Energy Convergence Science)</small>
           </div>
         </li>
-      ))}
-    </ol>
+      </ol>
+    </div>
   </aside>
 
   <article class="thesis-copy">
@@ -139,7 +265,206 @@ const isCompanyFounderEvent = (event) =>
   </article>
 </section>
 
+<!-- 4. Verified Credentials & Global Competencies Section -->
+<section id="profile-credentials" class="credentials-section">
+  <div class="credentials-head reveal-up">
+    <div class="credentials-head-main">
+      <div class="credentials-kicker">
+        <span class="micro-label">02 / Verified Credentials & Global Competencies</span>
+      </div>
+      <h2>Industry Certifications & Global Language Mastery</h2>
+    </div>
+    <div class="credentials-head-side">
+      <p class="credentials-lead">
+        Officially verified technical credentials in Artificial Intelligence, Deep Learning, and Multilingual Engineering Communication from Google, NVIDIA, and ACTFL OPIc.
+      </p>
+      <div class="credentials-meta-strip">
+        <span class="cred-meta-badge">
+          <svg class="cred-meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+          Direct PDF Verification
+        </span>
+        <span class="cred-meta-count">6 Official Documents · 100% Authenticated</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="credentials-grid">
+    {credentials.map((cred, idx) => (
+      <article class={`credential-card card-view reveal-up stagger-${(idx % 4) + 1}`} data-brand={cred.badgeColor}>
+        <div class="credential-card-top">
+          <div class="credential-issuer-badge">
+            {cred.icon === 'google' && (
+              <svg class="cred-brand-icon" viewBox="0 0 24 24" fill="none">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+              </svg>
+            )}
+            {cred.icon === 'nvidia' && (
+              <svg class="cred-brand-icon nvidia-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.001 3.84c-4.498 0-8.15 3.65-8.15 8.16 0 4.5 3.652 8.16 8.15 8.16 4.502 0 8.16-3.66 8.16-8.16 0-4.51-3.658-8.16-8.16-8.16zm-1.892 12.184c-2.316-.276-4.14-2.247-4.14-4.664 0-2.584 2.1-4.685 4.685-4.685 1.678 0 3.13.886 3.95 2.217-.677.29-1.258.74-1.704 1.298-.445-.69-.993-1.048-1.854-1.048-1.43 0-2.593 1.163-2.593 2.593 0 1.43 1.163 2.593 2.593 2.593.754 0 1.408-.328 1.865-.858.423.518.966.938 1.603 1.206-.91 1.026-2.24 1.648-3.405 1.748z"/>
+              </svg>
+            )}
+            {cred.icon.startsWith('lang') && (
+              <svg class="cred-brand-icon opic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            )}
+            <span class="issuer-name">{cred.issuer}</span>
+            <span class="issuer-category-tag">{cred.category}</span>
+          </div>
+          {cred.grade && <span class="grade-badge">{cred.grade}</span>}
+        </div>
+
+        <h3>{cred.title}</h3>
+        <p class="credential-desc">{cred.description}</p>
+
+        <div class="credential-items-stack">
+          {cred.items.map((item) => (
+            <div class="credential-item-row">
+              <div class="cred-item-info">
+                <div class="cred-item-title-row">
+                  <span class="cred-doc-indicator"></span>
+                  <span class="cred-item-name">{item.name}</span>
+                </div>
+                <span class="cred-item-subtitle">{item.label} · {item.date}</span>
+              </div>
+              <button
+                type="button"
+                class="artifact-minimal-btn is-cert card-pdf-link"
+                data-pdf-src={item.src}
+                data-pdf-title={`${item.name} (Official Verification)`}
+                title="View Official Certificate"
+                aria-label={`View Certificate for ${item.name}`}
+              >
+                <svg class="art-icon cert-seal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="8" r="6"/>
+                  <path d="M8.21 13.89L7 22l5-3 5 3-1.21-8.11"/>
+                </svg>
+                <span>{item.tag.includes('GRADE') ? 'SCORE REPORT' : 'CERTIFICATE'}</span>
+                <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                </svg>
+              </button>
+            </div>
+          ))}
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<!-- Dedicated PDF Document Modal Viewer for Profile Page -->
+<div id="pdf-modal" class="pdf-modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="pdf-modal-backdrop" id="pdf-modal-backdrop"></div>
+  <div class="pdf-modal-container">
+    <header class="pdf-modal-header">
+      <div class="pdf-modal-title-wrap">
+        <svg class="pdf-modal-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M8.21 13.89L7 22l5-3 5 3-1.21-8.11" fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <h3 id="pdf-modal-title">Verified Credential Viewer</h3>
+      </div>
+      <div class="pdf-modal-actions">
+        <a id="pdf-modal-download" class="pdf-modal-action-btn" href="#" target="_blank" rel="noopener noreferrer" title="Open in new tab / Download">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m4-3h6v6m-11 5L21 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Open in New Tab</span>
+        </a>
+        <button id="pdf-modal-close" class="pdf-modal-action-btn pdf-close-btn" type="button" aria-label="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </header>
+    <div class="pdf-modal-body">
+      <iframe id="pdf-modal-iframe" src="" title="PDF Document Viewer" loading="lazy"></iframe>
+      <video id="pdf-modal-video" src="" controls playsinline preload="metadata" style="display: none; width: 100%; height: 100%; object-fit: contain; background: #000;"></video>
+    </div>
+  </div>
+</div>
+
 <script is:inline>
+  function initPdfModal() {
+    const modal = document.getElementById('pdf-modal');
+    const backdrop = document.getElementById('pdf-modal-backdrop');
+    const closeBtn = document.getElementById('pdf-modal-close');
+    const iframe = document.getElementById('pdf-modal-iframe');
+    const video = document.getElementById('pdf-modal-video');
+    const titleEl = document.getElementById('pdf-modal-title');
+    const downloadLink = document.getElementById('pdf-modal-download');
+    
+    if (!modal) return;
+
+    function openPdf(src, title) {
+      const isVideo = src.toLowerCase().endsWith('.mp4') || src.toLowerCase().endsWith('.webm');
+      if (titleEl) titleEl.textContent = title || (isVideo ? "Video Demonstration" : "Verified Credential Viewer");
+      if (downloadLink) {
+        downloadLink.href = src;
+        const linkSpan = downloadLink.querySelector('span');
+        if (linkSpan) linkSpan.textContent = isVideo ? "Watch Original" : "Open in New Tab";
+      }
+
+      if (isVideo && video) {
+        if (iframe) { iframe.style.display = 'none'; iframe.src = ''; }
+        video.style.display = 'block';
+        video.src = src;
+        video.load();
+        video.currentTime = 0;
+        video.play().catch((err) => {
+          console.warn("Video playback:", err);
+        });
+      } else if (iframe) {
+        if (video) { video.pause(); video.style.display = 'none'; video.src = ''; }
+        iframe.style.display = 'block';
+        iframe.src = src;
+      }
+
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePdf() {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      if (video) {
+        video.pause();
+        video.src = '';
+      }
+      if (iframe) {
+        iframe.src = '';
+      }
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.card-pdf-link').forEach(btn => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const src = btn.dataset.pdfSrc;
+        const title = btn.dataset.pdfTitle;
+        if (src) openPdf(src, title);
+      };
+    });
+
+    if (backdrop) backdrop.onclick = closePdf;
+    if (closeBtn) closeBtn.onclick = closePdf;
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+        closePdf();
+      }
+    });
+  }
+
+  initPdfModal();
+
   const identityFigure = document.querySelector('.identity-figure');
   if (identityFigure) {
     identityFigure.addEventListener('mousemove', (e) => {
@@ -489,12 +814,19 @@ const isCompanyFounderEvent = (event) =>
     transition: transform var(--motion-slow) ease;
   }
 
+  .identity-orbit-wrap {
+    position: relative;
+    width: min(520px, 100%);
+    aspect-ratio: 1;
+    margin: 0 auto;
+  }
+
   .identity-orbit {
     position: relative;
     display: grid;
     place-items: center;
-    width: min(520px, 100%);
-    aspect-ratio: 1;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     border: 1px solid rgba(var(--rgb-warm), 0.2);
     border-radius: 50%;
@@ -567,6 +899,103 @@ const isCompanyFounderEvent = (event) =>
     pointer-events: none;
   }
 
+  /* Executive Rounded Rectangle (Squircle) ID Badge */
+  .profile-sub-badge {
+    position: absolute;
+    top: 2.5%;
+    left: 2.5%;
+    width: clamp(114px, 28%, 146px);
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    border-radius: 18px;
+    background: rgba(14, 14, 18, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(var(--rgb-warm), 0.45);
+    box-shadow: 
+      0 16px 40px rgba(0, 0, 0, 0.85),
+      0 0 24px rgba(var(--rgb-warm), 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    z-index: 25;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.3s ease;
+  }
+
+  [data-theme="light"] .profile-sub-badge {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(var(--rgb-warm), 0.55);
+    box-shadow: 
+      0 16px 40px rgba(0, 0, 0, 0.18),
+      0 0 24px rgba(var(--rgb-warm), 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
+  .profile-sub-badge:hover {
+    transform: translateY(-4px) scale(1.03);
+    border-color: rgba(var(--rgb-warm), 0.85);
+    box-shadow: 
+      0 22px 48px rgba(0, 0, 0, 0.9),
+      0 0 32px rgba(var(--rgb-warm), 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+
+  .badge-inner-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1.18;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+  }
+
+  .sub-badge-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 15%;
+    display: block;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .profile-sub-badge:hover .sub-badge-img {
+    transform: scale(1.05);
+  }
+
+  .badge-sheen {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .badge-bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding-top: 6px;
+    padding-bottom: 2px;
+  }
+
+  .badge-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 6px #10b981;
+    flex-shrink: 0;
+  }
+
+  .badge-id-text {
+    font-family: var(--font-mono, monospace);
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--color-ink);
+    text-transform: uppercase;
+  }
+
   .orbit-ring {
     position: absolute;
     inset: 0;
@@ -612,9 +1041,14 @@ const isCompanyFounderEvent = (event) =>
     display: grid;
     gap: 8px;
     color: var(--color-ink-muted);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
+  }
+
+  .identity-figure figcaption span:first-child {
+    color: var(--color-ink);
   }
 
   .about-statement.card-view {
@@ -653,7 +1087,7 @@ const isCompanyFounderEvent = (event) =>
   }
 
   .ra1-thm-chip {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
     padding: 4px 12px;
@@ -663,11 +1097,19 @@ const isCompanyFounderEvent = (event) =>
     font-family: var(--font-mono, monospace);
     font-size: 10px;
     font-weight: 700;
-    color: var(--color-ink); /* Theme-aware text color */
+    color: var(--color-ink);
     letter-spacing: 0.05em;
+    text-decoration: none;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-    --ra1-color: #8b5cf6; /* RA1 Purple */
+    --ra1-color: #8b5cf6;
+  }
+
+  .ra1-thm-chip .chip-arrow {
+    width: 10px;
+    height: 10px;
+    color: var(--color-ink-muted);
+    transition: transform 0.2s ease, color 0.2s ease;
   }
 
   .ra1-thm-chip:hover {
@@ -675,6 +1117,11 @@ const isCompanyFounderEvent = (event) =>
     border-color: rgba(138, 180, 248, 0.3);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(138, 180, 248, 0.15);
+  }
+
+  .ra1-thm-chip:hover .chip-arrow {
+    transform: translate(1px, -1px);
+    color: var(--color-ink);
   }
 
   html[data-theme="light"] .ra1-thm-chip {
@@ -832,11 +1279,14 @@ const isCompanyFounderEvent = (event) =>
     align-items: start;
   }
 
+  /* Sticky Timeline with Restored Floating Logos - Vertically Centered on Scroll */
   .sticky-timeline {
     position: sticky;
-    top: calc(var(--header-height) + 54px);
+    top: max(100px, calc(50vh - 210px));
+    align-self: flex-start;
     padding-top: 4px;
     padding-left: 40px;
+    transition: top 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   @media (max-width: 1180px) {
@@ -847,6 +1297,7 @@ const isCompanyFounderEvent = (event) =>
   }
 
   .sticky-timeline ol {
+    position: relative;
     display: grid;
     gap: 0;
     margin: 24px 0 0;
@@ -861,9 +1312,13 @@ const isCompanyFounderEvent = (event) =>
     transition: color var(--motion-fast) ease;
   }
 
+  .sticky-timeline li:last-child {
+    padding-bottom: 0;
+  }
+
   .timeline-content {
     display: grid;
-    gap: 5px;
+    gap: 4px;
     transition: transform var(--motion-fast) var(--easing-spring);
   }
 
@@ -872,7 +1327,7 @@ const isCompanyFounderEvent = (event) =>
   }
 
   .sticky-timeline li:hover .timeline-content {
-    transform: translateX(8px);
+    transform: translateX(6px);
   }
 
   .sticky-timeline li::before {
@@ -882,16 +1337,23 @@ const isCompanyFounderEvent = (event) =>
     left: 0;
     width: 10px;
     height: 10px;
-    border: 1px solid rgba(var(--rgb-warm), 0.3);
+    border: 1px solid rgba(var(--rgb-warm), 0.35);
     border-radius: 0;
     transform: rotate(45deg);
-    background: var(--color-paper);
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    background: var(--color-field);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 2;
+  }
+
+  .sticky-timeline li.is-current::before {
+    background: rgba(var(--rgb-warm), 0.95);
+    border-color: rgba(var(--rgb-warm), 1);
+    box-shadow: 0 0 10px rgba(var(--rgb-warm), 0.4);
   }
 
   .sticky-timeline li:hover::before {
-    border-color: rgba(var(--rgb-warm), 0.8);
-    background: rgba(var(--rgb-warm), 0.15);
+    border-color: rgba(var(--rgb-warm), 0.85);
+    background: rgba(var(--rgb-warm), 0.2);
     box-shadow: 0 0 12px rgba(var(--rgb-warm), 0.4);
     transform: rotate(135deg) scale(1.2);
   }
@@ -899,38 +1361,40 @@ const isCompanyFounderEvent = (event) =>
   .sticky-timeline li::after {
     content: "";
     position: absolute;
-    top: 22px;
+    top: 20px;
     bottom: 2px;
-    left: 5px;
+    left: 4.5px;
     width: 2px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.02));
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.03));
+  }
+
+  [data-theme="light"] .sticky-timeline li::after {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.03));
   }
 
   .sticky-timeline li:last-child::after {
     display: none;
   }
 
-  .sticky-timeline li.is-current {
-    color: var(--color-ink);
-  }
-
   .timeline-logo {
     position: absolute;
-    left: -44px;
-    top: 6px;
-    width: 32px;
-    height: 32px;
+    left: -42px;
+    top: 3px;
+    width: 28px;
+    height: 28px;
     object-fit: contain;
-    opacity: 0.35;
+    opacity: 0.45;
     filter: grayscale(0.8) contrast(0.85);
-    transform: translateX(-8px);
+    transform: translateX(-6px);
     transition: opacity 0.4s ease, transform 0.4s var(--easing-spring), filter 0.4s ease;
     pointer-events: none;
     z-index: 10;
   }
 
   .sticky-timeline li.is-current .timeline-logo {
-    opacity: 0.85;
+    opacity: 0.9;
+    filter: grayscale(0.2) contrast(1);
+    transform: translateX(0);
   }
 
   .sticky-timeline li:hover .timeline-logo {
@@ -956,26 +1420,41 @@ const isCompanyFounderEvent = (event) =>
     }
   }
 
-  .sticky-timeline li.is-current::before {
-    background: rgba(var(--rgb-warm), 0.8);
-    border-color: rgba(var(--rgb-warm), 1);
-    box-shadow: 0 0 10px rgba(var(--rgb-warm), 0.3);
-  }
-
-  .sticky-timeline span,
-  .sticky-timeline strong,
-  .sticky-timeline small {
-    display: block;
-  }
-
   .sticky-timeline span {
     font-size: 12px;
     font-weight: 800;
+    color: var(--color-accent-ink);
+  }
+
+  .sticky-timeline strong {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--color-ink);
+    line-height: 1.35;
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
   .sticky-timeline small {
-    font-size: 12px;
-    line-height: 1.45;
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: var(--color-ink-muted);
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  .timeline-group {
+    position: relative;
+  }
+
+  .timeline-divider {
+    height: 1px;
+    margin: 28px 0 24px;
+    background: linear-gradient(90deg, rgba(var(--rgb-warm), 0.3) 0%, rgba(255, 255, 255, 0.08) 50%, transparent 100%);
+  }
+
+  [data-theme="light"] .timeline-divider {
+    background: linear-gradient(90deg, rgba(var(--rgb-warm), 0.4) 0%, rgba(0, 0, 0, 0.08) 50%, transparent 100%);
   }
 
   .thesis-copy {
@@ -999,20 +1478,20 @@ const isCompanyFounderEvent = (event) =>
     margin: 0;
     max-width: 960px;
     font-family: var(--font-serif);
-    font-size: clamp(2.6rem, 3.8vw, 3.8rem);
+    font-size: clamp(2.4rem, 3.5vw, 3.4rem);
     font-weight: 500;
     line-height: 1.15;
     letter-spacing: -0.01em;
   }
 
   .lead-copy {
-    margin: 36px 0 0;
-    max-width: 820px;
+    margin: 28px 0 0;
+    max-width: 860px;
     font-family: var(--font-serif);
-    font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+    font-size: clamp(1.25rem, 1.7vw, 1.55rem);
     font-style: italic;
     font-weight: 400;
-    line-height: 1.45;
+    line-height: 1.55;
     color: var(--color-ink-soft);
   }
 
@@ -1117,6 +1596,535 @@ const isCompanyFounderEvent = (event) =>
     line-height: 1.5;
   }
 
+  /* ==========================================================================
+     02. Verified Credentials & Global Competencies Section
+     ========================================================================== */
+  .credentials-section {
+    margin-top: clamp(80px, 10vw, 130px);
+    padding-top: clamp(48px, 6vw, 80px);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .credentials-head {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 56px;
+    align-items: flex-end;
+    margin-bottom: clamp(36px, 5vw, 56px);
+  }
+
+  @media (max-width: 980px) {
+    .credentials-head {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+
+  .credentials-kicker {
+    margin-bottom: 12px;
+  }
+
+  .credentials-head-main h2 {
+    margin: 0;
+    font-size: clamp(2rem, 3.2vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.18;
+    color: var(--color-ink);
+    letter-spacing: -0.02em;
+  }
+
+  .credentials-head-side {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .credentials-lead {
+    margin: 0;
+    font-size: clamp(1.02rem, 1.2vw, 1.15rem);
+    line-height: 1.65;
+    color: var(--color-ink-muted);
+  }
+
+  .credentials-meta-strip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .cred-meta-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #34d399;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .cred-meta-icon {
+    width: 13px;
+    height: 13px;
+  }
+
+  .cred-meta-count {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+  }
+
+  .credentials-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .credential-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(24px, 3vw, 32px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-card);
+    background: var(--color-field);
+    box-shadow: 
+      0 10px 32px var(--glass-shadow), 
+      inset 0 1px 0 var(--color-line-strong);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.4s ease;
+    overflow: hidden;
+  }
+
+  .credential-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--brand-accent, var(--color-accent)), transparent 85%);
+    opacity: 0.9;
+  }
+
+  .credential-card[data-brand="google"] {
+    --brand-accent: #4285f4;
+  }
+  .credential-card[data-brand="nvidia"] {
+    --brand-accent: #76b900;
+  }
+  .credential-card[data-brand="opic"] {
+    --brand-accent: #f59e0b;
+  }
+  .credential-card[data-brand="opic-ja"] {
+    --brand-accent: #10b981;
+  }
+
+  .credential-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(var(--rgb-warm), 0.35);
+    box-shadow: 
+      0 20px 48px rgba(0, 0, 0, 0.32), 
+      0 0 24px rgba(var(--rgb-warm), 0.08),
+      inset 0 1px 0 var(--color-line-strong);
+  }
+
+  .credential-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .credential-issuer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--color-line);
+  }
+
+  [data-theme="light"] .credential-issuer-badge {
+    background: rgba(0, 0, 0, 0.03);
+  }
+
+  .cred-brand-icon {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+  }
+
+  .cred-brand-icon.nvidia-icon {
+    color: #76b900;
+  }
+
+  .cred-brand-icon.opic-icon {
+    color: #f59e0b;
+  }
+
+  .issuer-name {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--color-ink);
+    text-transform: uppercase;
+  }
+
+  .issuer-category-tag {
+    font-size: 11px;
+    color: var(--color-ink-muted);
+    padding-left: 6px;
+    border-left: 1px solid var(--color-line);
+  }
+
+  .grade-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  .credential-card[data-brand="google"] .grade-badge {
+    background: rgba(66, 133, 244, 0.12);
+    border: 1px solid rgba(66, 133, 244, 0.35);
+    color: #60a5fa;
+  }
+
+  .credential-card[data-brand="nvidia"] .grade-badge {
+    background: rgba(118, 185, 0, 0.12);
+    border: 1px solid rgba(118, 185, 0, 0.35);
+    color: #a3e635;
+  }
+
+  .credential-card[data-brand="opic"] .grade-badge {
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    color: #fbbf24;
+  }
+
+  .credential-card[data-brand="opic-ja"] .grade-badge {
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: #34d399;
+  }
+
+  .credential-card h3 {
+    margin: 0 0 8px;
+    font-size: 1.28rem;
+    font-weight: 700;
+    color: var(--color-ink);
+    line-height: 1.3;
+  }
+
+  .credential-desc {
+    margin: 0 0 20px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+    flex-grow: 1;
+  }
+
+  .credential-items-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .credential-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-theme="light"] .credential-item-row {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .credential-item-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(var(--rgb-warm), 0.3);
+    transform: translateX(3px);
+  }
+
+  [data-theme="light"] .credential-item-row:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .cred-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .cred-item-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cred-doc-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--brand-accent, var(--color-warm));
+    box-shadow: 0 0 8px var(--brand-accent, var(--color-warm));
+    flex-shrink: 0;
+  }
+
+  .cred-item-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cred-item-subtitle {
+    font-size: 11px;
+    color: var(--color-ink-muted);
+    padding-left: 14px;
+  }
+
+  .artifact-minimal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .artifact-minimal-btn.is-cert {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--color-ink);
+    border: 1px solid var(--color-line-strong);
+  }
+
+  .credential-card[data-brand="google"] .artifact-minimal-btn.is-cert:hover {
+    background: rgba(66, 133, 244, 0.16);
+    border-color: #4285f4;
+    color: #93c5fd;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(66, 133, 244, 0.25);
+  }
+
+  .credential-card[data-brand="nvidia"] .artifact-minimal-btn.is-cert:hover {
+    background: rgba(118, 185, 0, 0.16);
+    border-color: #76b900;
+    color: #bef264;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(118, 185, 0, 0.25);
+  }
+
+  .credential-card[data-brand="opic"] .artifact-minimal-btn.is-cert:hover {
+    background: rgba(245, 158, 11, 0.16);
+    border-color: #f59e0b;
+    color: #fcd34d;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+  }
+
+  .credential-card[data-brand="opic-ja"] .artifact-minimal-btn.is-cert:hover {
+    background: rgba(16, 185, 129, 0.16);
+    border-color: #10b981;
+    color: #6ee7b7;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.25);
+  }
+
+  .art-icon {
+    width: 13px;
+    height: 13px;
+  }
+
+  .art-arrow {
+    width: 11px;
+    height: 11px;
+    transition: transform 0.2s ease;
+  }
+
+  .artifact-minimal-btn:hover .art-arrow {
+    transform: translate(2px, -2px);
+  }
+
+  /* PDF Modal Styling for Profile Page */
+  .pdf-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(12px, 2.5vh, 24px) clamp(12px, 2.5vw, 24px);
+    box-sizing: border-box;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .pdf-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .pdf-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(3, 4, 7, 0.78);
+    backdrop-filter: blur(12px);
+  }
+
+  .pdf-modal-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    width: min(1200px, 96vw);
+    height: min(84vh, calc(96vw * 9 / 16 + 54px));
+    max-height: calc(100dvh - 36px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-card);
+    background: var(--color-field);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.48), 0 0 0 1px var(--glass-border);
+    overflow: hidden;
+    transform: scale(0.96) translateY(8px);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pdf-modal.is-open .pdf-modal-container {
+    transform: scale(1) translateY(0);
+  }
+
+  .pdf-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    height: 50px;
+    min-height: 50px;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--color-line);
+    background: var(--color-panel-solid);
+    flex-shrink: 0;
+  }
+
+  .pdf-modal-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .pdf-modal-icon {
+    width: 18px;
+    height: 18px;
+    stroke: var(--color-accent-ink);
+    flex-shrink: 0;
+  }
+
+  .pdf-modal-header h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pdf-modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .pdf-modal-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid var(--color-line);
+    border-radius: 6px;
+    background: var(--color-field);
+    color: var(--color-ink-soft);
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .pdf-modal-action-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .pdf-modal-action-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-ink);
+    background: var(--color-panel);
+  }
+
+  .pdf-close-btn {
+    padding: 0 8px;
+  }
+
+  .pdf-modal-body {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    height: calc(100% - 50px);
+    background: #525659;
+    overflow: hidden;
+  }
+
+  .pdf-modal-body iframe,
+  .pdf-modal-body video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #525659;
+  }
+
   @media (max-width: 1180px) {
     .about-hero,
     .about-thesis {
@@ -1129,6 +2137,10 @@ const isCompanyFounderEvent = (event) =>
 
     .sticky-timeline {
       position: static;
+    }
+
+    .credentials-grid {
+      grid-template-columns: 1fr;
     }
   }
 
@@ -1171,6 +2183,11 @@ const isCompanyFounderEvent = (event) =>
     .essay-columns,
     .signal-strip {
       grid-template-columns: 1fr;
+    }
+
+    .credentials-card-top {
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 </style>

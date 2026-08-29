@@ -1,7 +1,7 @@
 {
   "title": "Predictive Parking Exit System",
   "summary": "Commercialized a dormant BLE Beacon patent into a double-parking exit-time notification service, winning the CNU President's Grand Prize.",
-  "order": 17,
+  "order": 6,
   "status": "published",
   "hidden": false,
   "year": "2023",
@@ -50,5 +50,36 @@
         "출차"
       ]
     }
+  },
+  "pdf": {
+    "src": "/documents/projects/14-park2gather-grand-prize.pdf",
+    "label": "사업화 기획서 (PDF)",
+    "title": "Predictive Parking Exit System"
+  },
+  "ko": {
+    "title": "비콘 특허 기반 이중주차 알림 서비스 PARK 2 GATHER",
+    "summary": "출차 예정 시간 기반의 비콘 특허를 이중주차 알림 서비스로 사업화 모델링하여 충남대학교 지식재산 창업해커톤에서 대상(총장상)을 수상했습니다.",
+    "tags": [
+      "특허 사업화",
+      "비콘 기술",
+      "이중주차 알림",
+      "지식재산 해커톤",
+      "총장상 대상"
+    ],
+    "pdf": {
+      "src": "/documents/projects/14-park2gather-grand-prize.pdf",
+      "label": "사업화 기획서 (PDF) 열람",
+      "title": "Predictive Parking Exit System"
+    },
+    "award": {
+      "src": "/documents/projects/14-park2gather-cnu-grand-prize.pdf",
+      "label": "충남대학교 총장상 대상 (PDF)",
+      "title": "Predictive Parking Exit System (Grand Prize)"
+    }
+  },
+  "award": {
+    "src": "/documents/projects/14-park2gather-cnu-grand-prize.pdf",
+    "label": "충남대학교 총장상 대상 (PDF)",
+    "title": "Predictive Parking Exit System (Grand Prize)"
   }
 }

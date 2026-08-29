@@ -1,15 +1,15 @@
 {
   "title": "Predictive Reservoir Intelligence",
   "summary": "Built a reservoir water-level prediction pipeline from public datasets, optimized Random Forest after multi-model evaluation, and won AAiCON 2024 Best Paper.",
-  "order": 11,
+  "order": 14,
   "status": "published",
   "hidden": false,
   "year": "2024",
   "tags": [
-    "Big Data",
-    "Machine Learning",
-    "Agriculture",
-    "Award"
+    "AAICON",
+    "Deep Learning",
+    "Reservoir Modeling",
+    "Time Series"
   ],
   "links": [],
   "visual": "graph",
@@ -50,5 +50,46 @@
         "농업용수"
       ]
     }
+  },
+  "pdf": {
+    "src": "/documents/projects/07-agricultural-water-paper.pdf",
+    "label": "AAICON 학술 논문 (PDF)",
+    "title": "Predictive Reservoir Intelligence"
+  },
+  "ko": {
+    "title": "농업용 저수지 수위 예측 시스템 연구",
+    "summary": "곡성군 저수지 수위·기온 공공데이터를 머신러닝(Random Forest)으로 학습시켜 농업용수 수요를 예측했으며, AAICON 컨퍼런스에서 제2저자로 우수논문상을 수상했습니다.",
+    "tags": [
+      "공공데이터",
+      "머신러닝",
+      "수위 예측",
+      "AAICON",
+      "우수논문상"
+    ],
+    "pdf": {
+      "src": "/documents/projects/07-agricultural-water-paper.pdf",
+      "label": "AAICON 학술 논문 (PDF) 열람",
+      "title": "Predictive Reservoir Intelligence"
+    },
+    "award": {
+      "src": "/documents/projects/11-agricultural-aifriends-award.pdf",
+      "label": "에이아이프렌즈학회 상장 (PDF)",
+      "title": "Predictive Reservoir Intelligence (Award)"
+    },
+    "certificate": {
+      "src": "/documents/projects/07-agricultural-water-abstract.pdf",
+      "label": "AAiCON 2024 공식 학회 초록집 열람",
+      "title": "Predictive Reservoir Intelligence (Abstract)"
+    }
+  },
+  "award": {
+    "src": "/documents/projects/11-agricultural-aifriends-award.pdf",
+    "label": "에이아이프렌즈학회 상장 (PDF)",
+    "title": "Predictive Reservoir Intelligence (Award)"
+  },
+  "certificate": {
+    "src": "/documents/projects/07-agricultural-water-abstract.pdf",
+    "label": "AAiCON 2024 공식 학회 초록집 (PDF)",
+    "title": "Predictive Reservoir Intelligence (Abstract)"
   }
 }

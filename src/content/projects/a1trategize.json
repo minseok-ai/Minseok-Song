@@ -11,12 +11,7 @@
     "Product",
     "Launched"
   ],
-  "links": [
-    {
-      "label": "Open App",
-      "href": "https://a1trategize.com"
-    }
-  ],
+  "links": [],
   "visual": "deck",
   "capabilityScores": [
     75,
@@ -25,6 +20,32 @@
     85,
     95
   ],
+  "pdf": {
+    "src": "/documents/projects/01-nnfc-recipe-system.mp4",
+    "label": "시연 영상 재생 (MP4)",
+    "title": "A1trategize Strategy Intelligence OS"
+  },
+  "ko": {
+    "title": "A1trategize & 팹 레시피 컨설팅 시스템",
+    "summary": "AI의 환각을 줄이기 위해 이종 LLM 교차 검증(Harness DAG) 웹앱을 개발하고, 나노종합기술원 183대 장비 스펙을 연동하여 실제 팹 실무에 쓰일 수 있는 런시트 자동 생성 시스템을 기획했습니다.",
+    "tags": [
+      "AI 시스템",
+      "Harness DAG",
+      "반도체 팹 레시피",
+      "특허 출원",
+      "KAIST NNFC"
+    ],
+    "pdf": {
+      "src": "/documents/projects/01-nnfc-recipe-system.mp4",
+      "label": "시연 영상 재생 (MP4)",
+      "title": "A1trategize Strategy Intelligence OS"
+    },
+    "certificate": {
+      "src": "/documents/projects/01-a1trategize-patent-certificate.pdf",
+      "label": "특허 출원사실증명원 (PDF)",
+      "title": "A1trategize Strategy Intelligence OS (Patent)"
+    }
+  },
   "knowledge": {
     "ko": {
       "aliases": [
@@ -53,5 +74,10 @@
         "컨설팅"
       ]
     }
+  },
+  "certificate": {
+    "src": "/documents/projects/01-a1trategize-patent-certificate.pdf",
+    "label": "특허 출원사실증명원 (PDF)",
+    "title": "A1trategize Strategy Intelligence OS (Patent)"
   }
 }

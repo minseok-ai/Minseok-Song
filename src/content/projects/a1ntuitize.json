@@ -1,7 +1,7 @@
 {
   "title": "A1ntuitize Vision Memory Engine",
   "summary": "Developing a 3D coordinate memory system that maps real-world visual impressions into emotion-vector particles, then uses attention, repetition, entropy, and Ebbinghaus-style decay to model intuition.",
-  "order": 2,
+  "order": 3,
   "status": "published",
   "hidden": false,
   "year": "2026",

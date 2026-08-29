@@ -1,15 +1,15 @@
 {
   "title": "Graphene Dirac Cone Analysis",
   "summary": "Analyzed electron behavior in crystal lattices using Bloch's theorem, Brillouin zones, tight-binding logic, and the nearly-free-electron model.",
-  "order": 16,
+  "order": 18,
   "status": "published",
   "hidden": false,
   "year": "2023",
   "tags": [
-    "Physics",
-    "Quantum Mechanics",
-    "Research",
-    "Solid State"
+    "Quantum Physics",
+    "Graphene Dirac Cone",
+    "2D Band Simulator",
+    "MATLAB"
   ],
   "links": [],
   "visual": "paper",
@@ -49,6 +49,29 @@
         "그래핀",
         "디랙 콘"
       ]
+    }
+  },
+  "pdf": {
+    "src": "/documents/projects/06-nfe-band-simulator.pdf",
+    "label": "전산물리 보고서 (PDF)",
+    "title": "Graphene Dirac Cone Analysis",
+    "kind": "report"
+  },
+  "ko": {
+    "title": "준자유전자(NFE) 2차원 에너지 밴드 시뮬레이터",
+    "summary": "양자물리 전산실습 과목에서 준자유전자(Nearly Free Electron) 모델을 바탕으로 2차원 에너지 밴드 구조와 브릴루앙 영역 변화를 수치 해석해본 시뮬레이션입니다.",
+    "tags": [
+      "전산물리",
+      "준자유전자",
+      "에너지 밴드",
+      "MATLAB",
+      "양자물리"
+    ],
+    "pdf": {
+      "src": "/documents/projects/06-nfe-band-simulator.pdf",
+      "label": "전산물리 보고서 (PDF) 열람",
+      "title": "Graphene Dirac Cone Analysis",
+      "kind": "report"
     }
   }
 }

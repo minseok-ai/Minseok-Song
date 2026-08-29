@@ -1,15 +1,15 @@
 {
   "title": "Planar Micro-Battery Architecture",
-  "summary": "Assisted a 13-step in-plane IDE micro-battery fabrication flow at KAIST NNFC, directly executing photolithography and SORONA sputter depositions.",
-  "order": 4,
+  "summary": "Executed in-plane IDE micro-battery fabrication at KAIST NNFC, conducting multi-layer photolithography, multi-target sputter deposition, and process documentation.",
+  "order": 10,
   "status": "published",
   "hidden": false,
   "year": "2026",
   "tags": [
-    "Research",
+    "NNFC",
     "Semiconductor",
-    "KAIST NNFC",
-    "Micro-Battery"
+    "Micro-Battery",
+    "Photolithography"
   ],
   "links": [],
   "visual": "paper",
@@ -20,39 +20,66 @@
     70,
     25
   ],
+  "ko": {
+    "title": "차세대 마이크로 배터리 평면형 전극(IDE) 제작",
+    "summary": "나노종합기술원(NNFC) 클린룸에서 포토공정과 Sputter 장비를 다루며 13단계 In-plane IDE 셀 구조를 제작하고, 동료들을 위한 포토리소그래피 행동 가이드를 체계적으로 문서화했습니다.",
+    "tags": [
+      "반도체 공정",
+      "마이크로 배터리",
+      "KAIST NNFC",
+      "포토리소그래피",
+      "스퍼터링"
+    ],
+    "pdf": {
+      "src": "/documents/projects/10-nnfc-photolithography-guide.pdf",
+      "label": "포토리소그래피 가이드 (PDF) 열람",
+      "title": "Planar Micro-Battery Architecture"
+    },
+    "certificate": {
+      "src": "/documents/projects/10-nnfc-internship-certificate.pdf",
+      "label": "나노종합기술원 인턴십 수료증 (PDF) 열람",
+      "title": "Planar Micro-Battery Architecture (Certificate)"
+    }
+  },
   "knowledge": {
     "ko": {
       "aliases": [
         "Planar Micro-Battery Architecture",
-        "Development of Durable Interdigitated Electrochemical Devices",
+        "차세대 마이크로 배터리 평면형 전극(IDE) 제작",
         "interdigitated devices",
         "IDE micro-battery",
         "마이크로 배터리",
         "평면 마이크로 배터리",
         "인터디지테이티드 전극",
-        "IDE 배터리",
-        "KAIST NNFC",
-        "National Nanofab Center"
+        "KAIST NNFC"
       ],
       "oneLiner": "KAIST NNFC 연구 인턴십에서 평면 interdigitated electrode 구조의 마이크로 배터리 제작 공정에 참여한 프로젝트입니다.",
-      "problem": "초소형 전기화학 소자는 제한된 면적 안에서 전극, 전해질, 집전체를 안정적으로 패터닝해야 하며, 공정 순서와 lift-off 품질이 소자 내구성에 직접 영향을 줍니다.",
-      "approach": "current collector, cathode, anode, electrolyte/encapsulation을 나누는 13단계 제작 시퀀스를 따라 포토리소그래피, sputter deposition, lift-off, glove box 보관, 측정 셋업 준비를 수행했습니다.",
-      "technicalCore": "AZ5214-E PR 패터닝, hard contact exposure, O2 descum, Pt/Ti 및 Si/V2O5/NCM811 SORONA multi-target sputter deposition, half-dicing 이후 lift-off 공정, 3-terminal probe station 측정 구상이 핵심입니다.",
-      "evidence": "Yellow Room에서 포토리소그래피를 익힌 뒤 인턴용 공정 매뉴얼을 작성했고, Si 50nm, V2O5 200nm, NCM811 100nm active layer deposition을 직접 수행했습니다.",
-      "impact": "반도체 공정 장비 운용, 미세 패턴 형성, 에너지 저장 소자 제작, 실험 매뉴얼화 역량이 동시에 드러나는 연구 경험입니다.",
-      "statusNote": "2026년 4월부터 진행 중인 KAIST NNFC 연계 R&D internship 프로젝트입니다.",
+      "problem": "초소형 전기화학 소자는 전극과 집전체를 안정적으로 패터닝해야 하며, 리프트오프 및 핸들링 공정 품질이 소자 내구성에 직결됩니다.",
+      "approach": "13단계 In-plane 제작 시퀀스를 따라 포토리소그래피, sputter deposition, lift-off, glove box 보관 및 측정 셋업 준비를 체계적으로 수행했습니다.",
+      "technicalCore": "PR 패터닝, 노광/현상, 다종 타겟 sputter deposition, lift-off 공정, 프로브 스테이션 측정 준비 및 공정 행동 가이드라인 수립이 핵심입니다.",
+      "evidence": "클린룸에서 포토리소그래피와 증착 공정을 익히고 인턴용 공정 행동 가이드를 작성해 동료들과 공유했습니다.",
+      "impact": "반도체 공정 장비 운용, 미세 패턴 형성, 에너지 저장 소자 제작 및 실험 매뉴얼화 역량을 입증한 공정 연구 프로젝트입니다.",
+      "statusNote": "KAIST 부설 나노종합기술원(NNFC) 인턴십 기반 공정 연구 프로젝트입니다.",
       "keywords": [
         "micro-battery",
         "interdigitated electrode",
         "photolithography",
         "sputter deposition",
-        "AZ5214-E",
-        "SORONA",
         "glove box",
         "probe station",
         "마이크로 배터리",
         "포토리소그래피"
       ]
     }
+  },
+  "pdf": {
+    "src": "/documents/projects/10-nnfc-photolithography-guide.pdf",
+    "label": "포토리소그래피 가이드 (PDF)",
+    "title": "Planar Micro-Battery Architecture"
+  },
+  "certificate": {
+    "src": "/documents/projects/10-nnfc-internship-certificate.pdf",
+    "label": "나노종합기술원 인턴십 수료증 (PDF)",
+    "title": "Planar Micro-Battery Architecture (Certificate)"
   }
 }

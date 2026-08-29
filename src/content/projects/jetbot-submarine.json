@@ -1,18 +1,18 @@
 {
   "title": "Autonomous Marine Tourism Submarine using NVIDIA JetBot",
   "summary": "Built NVIDIA Jetson Nano robot control logic with asynchronous camera tracking, transfer learning path following, and collision avoidance for an underwater-tourism concept.",
-  "order": 14,
+  "order": 17,
   "status": "published",
   "hidden": false,
   "year": "2024",
   "tags": [
-    "Robotics",
-    "AI",
-    "Embedded",
-    "Product Concept"
+    "NVIDIA",
+    "Jetson Nano",
+    "Robotics AI",
+    "Autonomous Navigation"
   ],
   "links": [],
-  "visual": "console",
+  "visual": "paper",
   "capabilityScores": [
     90,
     85,
@@ -49,6 +49,37 @@
         "autonomous navigation",
         "로보틱스"
       ]
+    }
+  },
+  "pdf": {
+    "src": "/documents/projects/15-jetbot-submarine.pdf",
+    "label": "프로젝트 보고서 (PDF)",
+    "title": "Autonomous Marine Tourism Submarine using NVIDIA JetBot"
+  },
+  "certificate": {
+    "src": "/documents/projects/15-jetbot-bootcamp-certificate.pdf",
+    "label": "JetBot AI 부트캠프 수료증 (PDF)",
+    "title": "Autonomous Marine Tourism Submarine using NVIDIA JetBot (Certificate)"
+  },
+  "ko": {
+    "title": "NVIDIA Jetson Nano 소형 자율운항 잠수정 제어",
+    "summary": "NVIDIA Jetson Nano와 센서 피드백을 결합하여 수중 환경에서 모터를 제어하고 장애물을 감지하도록 구현해본 소형 자율 잠수정 프로젝트입니다.",
+    "tags": [
+      "임베디드 AI",
+      "Jetson Nano",
+      "자율 잠수정",
+      "센서 제어",
+      "로보틱스"
+    ],
+    "pdf": {
+      "src": "/documents/projects/15-jetbot-submarine.pdf",
+      "label": "프로젝트 보고서 (PDF) 열람",
+      "title": "Autonomous Marine Tourism Submarine using NVIDIA JetBot"
+    },
+    "certificate": {
+      "src": "/documents/projects/15-jetbot-bootcamp-certificate.pdf",
+      "label": "JetBot AI 부트캠프 수료증 (PDF) 열람",
+      "title": "Autonomous Marine Tourism Submarine using NVIDIA JetBot (Certificate)"
     }
   }
 }

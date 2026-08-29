@@ -1,7 +1,7 @@
 {
   "title": "FINAN SEE",
   "summary": "Proposed a verified financial-product review platform using contract-based MyData logic to reduce information asymmetry and mis-selling risk.",
-  "order": 18,
+  "order": 9,
   "status": "published",
   "hidden": false,
   "year": "2023",
@@ -48,6 +48,27 @@
         "금융",
         "불완전판매"
       ]
+    }
+  },
+  "pdf": {
+    "src": "/documents/projects/16-fintech-stock-dashboard.pdf",
+    "label": "개발 결과서 (PDF)",
+    "title": "FINAN SEE"
+  },
+  "ko": {
+    "title": "금융 빅데이터 머신러닝 주가 분석 대시보드",
+    "summary": "기업 재무제표와 주가 데이터를 머신러닝 회귀 모델로 분석하고, 직관적으로 확인할 수 있는 웹 대시보드를 제작해보았습니다.",
+    "tags": [
+      "핀테크",
+      "빅데이터",
+      "머신러닝",
+      "웹 대시보드",
+      "주가 분석"
+    ],
+    "pdf": {
+      "src": "/documents/projects/16-fintech-stock-dashboard.pdf",
+      "label": "개발 결과서 (PDF) 열람",
+      "title": "FINAN SEE"
     }
   }
 }

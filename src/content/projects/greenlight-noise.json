@@ -1,7 +1,7 @@
 {
   "title": "Deep-Learning Noise Enforcement",
   "summary": "Designed a B2G smart noise enforcement sign by fusing ETRI imaging sensors with KRISS/POSTECH sound-localization AI. Won KOSAF Special Award.",
-  "order": 12,
+  "order": 7,
   "status": "published",
   "hidden": false,
   "year": "2024",
@@ -50,5 +50,36 @@
         "단속"
       ]
     }
+  },
+  "pdf": {
+    "src": "/documents/projects/12-smart-decibel-sign.pdf",
+    "label": "창업 제안서 (PDF)",
+    "title": "Deep-Learning Noise Enforcement"
+  },
+  "ko": {
+    "title": "스마트 태양광 소음 단속 표지판 Green Light",
+    "summary": "기존 사운드 미터의 한계를 보완해 주·야간 가변 기준을 적용한 태양광 소음 단속 표지판을 기획하고 부품 원가를 산출하여 대전 대학생 창업대회에서 특별상을 수상했습니다.",
+    "tags": [
+      "스마트 표지판",
+      "소음 단속",
+      "태양광",
+      "창업경진대회",
+      "특별상"
+    ],
+    "pdf": {
+      "src": "/documents/projects/12-smart-decibel-sign.pdf",
+      "label": "창업 제안서 (PDF) 열람",
+      "title": "Deep-Learning Noise Enforcement"
+    },
+    "award": {
+      "src": "/documents/projects/12-greenlight-kosaf-award.pdf",
+      "label": "한국장학재단 이사장상 (PDF)",
+      "title": "Deep-Learning Noise Enforcement (Award)"
+    }
+  },
+  "award": {
+    "src": "/documents/projects/12-greenlight-kosaf-award.pdf",
+    "label": "한국장학재단 이사장상 (PDF)",
+    "title": "Deep-Learning Noise Enforcement (Award)"
   }
 }

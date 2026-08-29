@@ -1,15 +1,15 @@
 {
   "title": "Cross-Axis Ultrasonic Identification",
   "summary": "Solved a KRISS blind-test material identification task by bypassing Z-axis attenuation with cross-axis ultrasonic velocity measurement.",
-  "order": 9,
+  "order": 12,
   "status": "published",
   "hidden": false,
   "year": "2024",
   "tags": [
-    "Research",
-    "Materials",
     "KRISS",
-    "Ultrasonics"
+    "Materials",
+    "Pulse-Echo",
+    "High-Damping Polymer"
   ],
   "links": [],
   "visual": "paper",
@@ -50,5 +50,36 @@
         "고감쇠"
       ]
     }
+  },
+  "pdf": {
+    "src": "/documents/projects/09-kriss-ultrasonic-report.pdf",
+    "label": "KRISS 연구보고서 (PDF)",
+    "title": "Cross-Axis Ultrasonic Identification"
+  },
+  "ko": {
+    "title": "고감쇠 미상 시편 초음파 음속 계측 및 재질 식별",
+    "summary": "표준과학연구원(KRISS) 인턴십 중 Z축 감쇠가 심한 미지의 고분자 시편을 축 교차 측정 방식으로 해결하여 음속을 계산하고 PLA/ABS 재질을 식별해냈습니다.",
+    "tags": [
+      "초음파 비파괴검사",
+      "고감쇠 고분자",
+      "KRISS",
+      "음속 계측",
+      "재질 식별"
+    ],
+    "pdf": {
+      "src": "/documents/projects/09-kriss-ultrasonic-report.pdf",
+      "label": "KRISS 연구보고서 열람",
+      "title": "Cross-Axis Ultrasonic Identification"
+    },
+    "certificate": {
+      "src": "/documents/projects/12-kriss-internship-certificate.pdf",
+      "label": "한국표준과학연구원 인턴십 수료증 열람",
+      "title": "Cross-Axis Ultrasonic Identification (Certificate)"
+    }
+  },
+  "certificate": {
+    "src": "/documents/projects/12-kriss-internship-certificate.pdf",
+    "label": "한국표준과학연구원 인턴십 수료증 (PDF)",
+    "title": "Cross-Axis Ultrasonic Identification (Certificate)"
   }
 }

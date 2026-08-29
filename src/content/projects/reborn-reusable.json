@@ -1,7 +1,7 @@
 {
   "title": "Reusable Tableware MICE Platform",
   "summary": "Led a 24-hour crisis pivot from an unsustainable transport idea to a MICE reusable-tableware B2B rental model, securing ~4M KRW mock crowdfunding.",
-  "order": 13,
+  "order": 8,
   "status": "published",
   "hidden": false,
   "year": "2024",
@@ -50,5 +50,36 @@
         "다회용기"
       ]
     }
+  },
+  "pdf": {
+    "src": "/documents/projects/17-reborn-reusable-esg.pdf",
+    "label": "ESG 기획서 (PDF)",
+    "title": "Reusable Tableware MICE Platform"
+  },
+  "ko": {
+    "title": "MICE 행사용 다회용기 대여·세척 플랫폼 Re:born",
+    "summary": "ESG 창업대회 중 제작 단가가 높은 기존 아이템의 한계를 진단하고, 행사용 다회용기 대여·세척 서비스로 24시간 만에 피봇하여 모의 펀딩 400만 원을 유치하고 우수상을 수상했습니다.",
+    "tags": [
+      "ESG 창업",
+      "친환경 다회용기",
+      "MICE 렌탈",
+      "24시간 피봇",
+      "모의펀딩 우수상"
+    ],
+    "pdf": {
+      "src": "/documents/projects/17-reborn-reusable-esg.pdf",
+      "label": "ESG 기획서 (PDF) 열람",
+      "title": "Reusable Tableware MICE Platform"
+    },
+    "award": {
+      "src": "/documents/projects/13-reborn-kaia-certificate.pdf",
+      "label": "한국산업지능화협회 표창장 (PDF)",
+      "title": "Reusable Tableware MICE Platform (Award)"
+    }
+  },
+  "award": {
+    "src": "/documents/projects/13-reborn-kaia-certificate.pdf",
+    "label": "한국산업지능화협회 표창장 (PDF)",
+    "title": "Reusable Tableware MICE Platform (Award)"
   }
 }

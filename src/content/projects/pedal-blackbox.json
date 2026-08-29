@@ -1,7 +1,7 @@
 {
   "title": "OBD-II Pedal Evidence Blackbox",
   "summary": "Designed a low-cost legal-tech evidence system projecting real-time OBD-II RPM and pedal-position data onto a HUD for dashcam-synced SUA dispute records.",
-  "order": 7,
+  "order": 5,
   "status": "published",
   "hidden": false,
   "year": "2024",
@@ -50,5 +50,36 @@
         "증거"
       ]
     }
+  },
+  "pdf": {
+    "src": "/documents/projects/13-pedal-blackbox-siw.pdf",
+    "label": "SIW 기획서 (PDF)",
+    "title": "OBD-II Pedal Evidence Blackbox"
+  },
+  "ko": {
+    "title": "급발진 의심사고 대비 페달 블랙박스",
+    "summary": "OBD-II RPM 신호와 페달 영상을 동기화 녹화하는 블랙박스를 기획하여 스타트업 투자 위크(SIW) 모의 IR에서 특별상을 수상했습니다.",
+    "tags": [
+      "차량 안전",
+      "OBD-II",
+      "페달 블랙박스",
+      "스타트업 투자위크",
+      "특별상"
+    ],
+    "pdf": {
+      "src": "/documents/projects/13-pedal-blackbox-siw.pdf",
+      "label": "SIW 기획서 (PDF) 열람",
+      "title": "OBD-II Pedal Evidence Blackbox"
+    },
+    "award": {
+      "src": "/documents/projects/07-pedal-blackbox-diva-award.pdf",
+      "label": "대덕이노폴리스벤처협회장상 (PDF)",
+      "title": "OBD-II Pedal Evidence Blackbox (Award)"
+    }
+  },
+  "award": {
+    "src": "/documents/projects/07-pedal-blackbox-diva-award.pdf",
+    "label": "대덕이노폴리스벤처협회장상 (PDF)",
+    "title": "OBD-II Pedal Evidence Blackbox (Award)"
   }
 }

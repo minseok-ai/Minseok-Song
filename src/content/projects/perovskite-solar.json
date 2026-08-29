@@ -1,18 +1,18 @@
 {
   "title": "Nano-Scale Perovskite Fabrication",
   "summary": "Fabricated perovskite solar cells through layer-by-layer thin-film processing, then analyzed J-V failures across 16 cells to isolate yield-loss causes.",
-  "order": 10,
+  "order": 16,
   "status": "published",
   "hidden": false,
   "year": "2024",
   "tags": [
     "Semiconductor",
     "Energy",
-    "Fabrication",
+    "Perovskite Solar",
     "Failure Analysis"
   ],
   "links": [],
-  "visual": "blank",
+  "visual": "paper",
   "capabilityScores": [
     10,
     100,
@@ -49,5 +49,10 @@
         "태양전지"
       ]
     }
+  },
+  "pdf": {
+    "src": "/documents/projects/10-perovskite-solar-report.pdf",
+    "label": "실험 결과 보고서 (PDF)",
+    "title": "Nano-Scale Perovskite Fabrication"
   }
 }

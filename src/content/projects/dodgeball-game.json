@@ -1,18 +1,18 @@
 {
   "title": "3D Dodgeball Game Development for Community Interaction",
   "summary": "Built and distributed a Unity/C# 3D dodgeball APK that turned a university club lunch bet into a playful shared scoring ritual.",
-  "order": 15,
+  "order": 19,
   "status": "published",
   "hidden": false,
   "year": "2023",
   "tags": [
-    "Game",
-    "Unity",
-    "C#",
-    "Community"
+    "Interactive 3D",
+    "Physics Engine",
+    "Unity WebGL",
+    "Simulation"
   ],
   "links": [],
-  "visual": "console",
+  "visual": "paper",
   "capabilityScores": [
     75,
     25,
@@ -47,6 +47,36 @@
         "피구",
         "게임"
       ]
+    }
+  },
+  "pdf": {
+    "src": "/apps/3d-dodge/index.html",
+    "label": "3D 게임 플레이",
+    "title": "3D Dodgeball Game Simulation"
+  },
+  "certificate": {
+    "src": "/documents/projects/18-dodgeball-audio-game.pdf",
+    "label": "게임 개발 결과서 (PDF)",
+    "title": "3D Dodgeball Game Development for Community Interaction"
+  },
+  "ko": {
+    "title": "Unity 3D 물리 피구 게임 (3D Dodge)",
+    "summary": "Unity/C# 물리 충돌 엔진과 4축 포탑 회전 알고리즘을 구현하여 실시간 탄막을 회피하는 3D 물리 아케이드 게임을 제작하고 웹에서 즉시 플레이할 수 있도록 WebGL로 추출했습니다.",
+    "tags": [
+      "3D 물리 엔진",
+      "인터랙티브 시뮬레이션",
+      "Unity WebGL",
+      "C# 알고리즘"
+    ],
+    "pdf": {
+      "src": "/apps/3d-dodge/index.html",
+      "label": "3D 게임 플레이",
+      "title": "3D Dodgeball Game Simulation"
+    },
+    "certificate": {
+      "src": "/documents/projects/18-dodgeball-audio-game.pdf",
+      "label": "게임 개발 결과서 (PDF) 열람",
+      "title": "3D Dodgeball Game Development for Community Interaction"
     }
   }
 }

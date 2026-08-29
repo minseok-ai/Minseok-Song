@@ -1,14 +1,14 @@
 {
   "title": "Ultrasonic Glucose Monitoring",
   "summary": "Led KRISS independent research on non-invasive glucose monitoring, using MATLAB peak detection and robust regression to validate ultrasonic velocity correlation.",
-  "order": 6,
+  "order": 11,
   "status": "published",
   "hidden": false,
   "year": "2024",
   "tags": [
-    "Research",
-    "Medical Tech",
     "KRISS",
+    "Medical Tech",
+    "Ultrasonic Velocity",
     "Signal Processing"
   ],
   "links": [],
@@ -51,5 +51,46 @@
         "초음파"
       ]
     }
+  },
+  "pdf": {
+    "src": "/documents/projects/04-glucose-ultrasound-presentation.pdf",
+    "label": "KSNT 2024 구두발표 슬라이드 (PDF)",
+    "title": "Non-invasive Evaluation of Glucose Concentration by Measuring Ultrasound Velocity (Presentation)"
+  },
+  "certificate": {
+    "src": "/documents/projects/04-glucose-ultrasound-abstract.pdf",
+    "label": "KSNT 2024 공식 학회 초록집 (PDF)",
+    "title": "Non-invasive Evaluation of Glucose Concentration by Measuring Ultrasound Velocity (Abstract)"
+  },
+  "ko": {
+    "title": "초음파 음속 기반 비침습 혈당 계측 연구",
+    "summary": "표준과학연구원(KRISS)에서 용매 소분량 오차를 개선하고 MATLAB 강건 회귀를 적용해 혈당 농도 변화를 계측했으며, 한국비파괴검사학회(KSNT)에서 제1저자로 발표했습니다.",
+    "tags": [
+      "초음파 계측",
+      "비침습 혈당",
+      "KRISS",
+      "KSNT 학회",
+      "제1저자"
+    ],
+    "pdf": {
+      "src": "/documents/projects/04-glucose-ultrasound-presentation.pdf",
+      "label": "KSNT 2024 구두발표 슬라이드 열람",
+      "title": "초음파 음속 측정을 통한 비침습적 혈당 농도 평가 (구두발표)"
+    },
+    "certificate": {
+      "src": "/documents/projects/04-glucose-ultrasound-abstract.pdf",
+      "label": "KSNT 2024 공식 학회 초록집 열람",
+      "title": "Non-invasive Evaluation of Glucose Concentration by Measuring Ultrasound Velocity (Abstract)"
+    },
+    "poster": {
+      "src": "/documents/projects/04-glucose-ultrasound-paper.pdf",
+      "label": "KSNT 2024 학회 포스터 열람",
+      "title": "초음파 음속 측정을 통한 비침습적 혈당 농도 평가 (포스터)"
+    }
+  },
+  "poster": {
+    "src": "/documents/projects/04-glucose-ultrasound-paper.pdf",
+    "label": "KSNT 2024 학회 포스터 (PDF)",
+    "title": "Non-invasive Evaluation of Glucose Concentration by Measuring Ultrasound Velocity (Poster)"
   }
 }

@@ -1,7 +1,7 @@
 {
   "title": "RA1 Edge Robotics Control System",
   "summary": "Conceptualized a physics-inspired edge robotics architecture that treats model activation as vector resonance, gates NPU power accordingly, and counters physical hallucination through 3D volume-based multi-layer verification.",
-  "order": 3,
+  "order": 2,
   "status": "published",
   "hidden": false,
   "year": "2026",
@@ -9,7 +9,7 @@
     "A1 Firms",
     "Robotics",
     "Hardware AI",
-    "Pending"
+    "Patent Filed"
   ],
   "links": [
     {
@@ -53,5 +53,10 @@
         "엣지"
       ]
     }
+  },
+  "certificate": {
+    "src": "/documents/projects/03-ra1-patent-certificate.pdf",
+    "label": "특허 출원사실증명원 (PDF)",
+    "title": "RA1 Edge Robotics Control System (Patent)"
   }
 }

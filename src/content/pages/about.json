@@ -1,13 +1,13 @@
 {
   "title": "About",
   "navLabel": "About",
-  "description": "Founder @ Minseok Song & Company | Research Intern @ KAIST NNFC",
+  "description": "Semiconductor & AI Engineer | Ex-Research Intern @ KAIST NNFC & KRISS | Open to Opportunities",
   "assistant": {
     "summary": "Minseok Song의 현재 역할, 연구 경험, 창업/제품 맥락을 정리한 프로필 화면입니다.",
-    "shortAnswer": "About 화면은 Minseok Song의 현재 역할, 연구 경험, 학문적 기반, Minseok Song & Company 창업 맥락을 빠르게 파악하는 곳입니다.",
-    "detailAnswer": "KAIST NNFC Research Intern, Minseok Song & Company Founder, KRISS Collaborator/Research Intern, CNU 연구 경험, 특허와 발표 이력을 한 흐름으로 묶어 보여줍니다.",
-    "proofPoints": ["현재 역할", "연구 경험", "창업/제품 맥락", "주요 milestones"],
-    "nextQuestions": ["민석은 누구야?", "연구 프로젝트를 보여줘", "Minseok Song & Company와 어떤 관련이 있어?"]
+    "shortAnswer": "About 화면은 Minseok Song의 전문 분야, KAIST NNFC 및 KRISS 연구 인턴십 이력, 공인 AI/어학 자격, 포트폴리오를 빠르게 파악하는 곳입니다.",
+    "detailAnswer": "KAIST NNFC 및 KRISS 연구 인턴십, 특허 출원, 학회 발표, 공인 AI 자격(Google/NVIDIA) 및 어학(OPIc IH/IM2) 이력을 한 흐름으로 묶어 보여줍니다.",
+    "proofPoints": ["전문 역량", "연구 경험", "공인 자격 및 어학", "주요 milestones"],
+    "nextQuestions": ["민석은 누구야?", "연구 프로젝트를 보여줘", "공인 자격증과 어학 성적을 보여줘"]
   },
   "order": 1,
   "path": "/about",
@@ -17,73 +17,68 @@
   "hero": {
     "eyebrow": "01 / Profile",
     "title": "Minseok Song",
-    "subtitle": "Founder @ Minseok Song & Company | Research Intern @ KAIST NNFC"
+    "subtitle": "Deep Tech & Semiconductor Technology Strategist | Ex-Research Appointments @ KAIST NNFC & KRISS"
   },
   "blocks": [
     {
       "id": "about-intent",
       "type": "callout",
       "title": "Operating Thesis",
-      "body": "My strength is Proactive Execution—transforming complex technical challenges into valuable Deep Tech strategies. I want to be someone who values hands-on experience over just words.",
+      "body": "My goal is to be a Deep Tech & Semiconductor Technology Strategist—bridging cleanroom fabrication realities, AI architectures, and commercial feasibility into actionable product roadmaps.",
       "tone": "important"
     },
     {
       "id": "about-lead",
       "type": "text",
       "title": "Lead",
-      "body": "I am currently a Research Intern at KAIST NNFC and Founder of Minseok Song & Company, with a strong foundation in Physics and Semiconductor-Energy Convergence Science from Chungnam National University.",
+      "body": "I am a Deep Tech & Semiconductor Technology Strategist with hands-on cleanroom fabrication and AI research experience at KAIST NNFC and KRISS. I specialize in turning complex physics constraints and emerging AI systems into commercially deployable product roadmaps.",
       "variant": "lead"
     },
     {
       "id": "about-body-1",
       "type": "text",
       "title": "Body 1",
-      "body": "My recent work involves designing interdigitated electrochemical devices and developing autonomous robot control systems. I've also successfully self-filed two patents combining deep tech engineering with legal strategy.",
+      "body": "My strategy combines technical depth with market feasibility. From self-filing multi-agent AI patents (10-2026-0009508) to architecting recipe automation modules tailored to 183 cleanroom tool specifications at KAIST NNFC, I focus on bridging internal fab realities with scalable product value.",
       "variant": "body"
     },
     {
       "id": "about-body-2",
       "type": "text",
       "title": "Body 2",
-      "body": "From utilizing ultrasound velocity for non-invasive glucose monitoring to engineering smart noise enforcement signs using open innovation, I continuously aim to resolve critical technical gaps through structured data and applied logic.",
+      "body": "At KRISS, I spearheaded high-accuracy ultrasonic velocity metrology for non-invasive sensing as 1st author. Across national competitions, I led unit-cost modeling, public patent commercialization, and market-entry roadmaps—winning Grand Prize (CNU) and 5 Special Awards for strategic execution.",
       "variant": "body"
     },
     {
       "id": "experience-timeline",
       "type": "timeline",
-      "title": "Timeline",
+      "title": "Research Experience",
       "events": [
         {
-          "date": "Apr 2026 - Present",
-          "title": "Research Intern @ KAIST NNFC",
-          "body": "Assisting next-generation micro-battery fabrication through planar interdigitated cell architecture and thin-film process execution."
+          "date": "Apr 2026 - Jun 2026",
+          "title": "R&D Intern",
+          "body": "KAIST NNFC (Center for Nanomaterials Development) · Micro-battery fab & AI recipe orchestration (Patent 10-2026-0009508)"
         },
         {
-          "date": "Jan 2026 - Present",
-          "title": "Founder @ Minseok Song & Company",
-          "body": "Building AI strategy systems and deep-tech business assets while self-filing two independent patents."
-        },
-        {
-          "date": "Sep 2024 - Nov 2024",
-          "title": "Collaborator @ KRISS",
-          "body": "Worked as an independent student researcher and first author on ultrasonic glucose research after classes during the semester, with the supervising PhD researcher's verbal approval."
-        },
-        {
-          "date": "Jul 2024 - Aug 2024",
-          "title": "Research Intern @ KRISS",
-          "body": "Completed ultrasonic velocity measurement and high-damping specimen identification work during a KRISS research internship."
+          "date": "Jul 2024 - Nov 2024",
+          "title": "Research Assistant",
+          "body": "KRISS (Non-Destructive Metrology Group) · Ultrasonic velocity metrology & non-invasive sensing (1st Author KSNT)"
         },
         {
           "date": "Mar 2024 - Aug 2024",
-          "title": "URA @ Semiconductor Sensor Lab",
-          "body": "Optical Analysis Research on Air-Suction High-Sensitivity Nitro Group Sensor."
-        },
-        {
-          "date": "Mar 2017 - Feb 2026",
-          "title": "Chungnam National University",
-          "body": "BS, Physics (Semiconductor-Energy Convergence Science)"
+          "title": "Undergraduate Research Assistant",
+          "body": "CNU IQS (Institute of Quantum Systems) · Semiconductor Sensor Lab & deep learning error correction"
         }
       ]
+    },
+    {
+      "id": "education-block",
+      "type": "education",
+      "title": "Education",
+      "school": "Chungnam National University",
+      "degree": "B.S. in Physics",
+      "major": "Semiconductor-Energy Convergence Science",
+      "period": "Mar 2017 - Feb 2026",
+      "status": "Graduated"
     },
     {
       "id": "key-stats",

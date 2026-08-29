@@ -64,8 +64,7 @@ export const galleryBlockSchema = blockBaseSchema.extend({
   items: z.array(
     z.object({
       src: z.string().min(1),
-      alt: z.string().default(""),
-      caption: z.string().optional()
+      alt: z.string().default("")
     })
   ).default([])
 });
@@ -161,6 +160,47 @@ export const writingBlockSchema = z.discriminatedUnion("type", [
   dividerWritingBlockSchema
 ]);
 
+export const pdfDocSchema = z.object({
+  src: z.string().min(1),
+  label: z.string().optional(),
+  title: z.string().optional(),
+  pageCount: z.number().int().positive().optional(),
+  kind: z.enum(["award", "certificate", "patent", "abstract", "paper", "video", "report"]).optional()
+});
+
+export const projectLocalizedSchema = z.object({
+  title: z.string().optional(),
+  summary: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  links: z.array(
+    z.object({
+      label: z.string().min(1),
+      href: z.string().min(1)
+    })
+  ).optional(),
+  video: z.string().optional(),
+  pdf: pdfDocSchema.optional(),
+  poster: pdfDocSchema.optional(),
+  certificate: pdfDocSchema.optional(),
+  award: pdfDocSchema.optional()
+});
+
+export const pageLocalizedSchema = z.object({
+  title: z.string().optional(),
+  navLabel: z.string().optional(),
+  description: z.string().optional(),
+  hero: z.object({
+    eyebrow: z.string().optional(),
+    title: z.string().optional(),
+    subtitle: z.string().optional()
+  }).optional(),
+  blocks: z.array(aboutBlockSchema).optional(),
+  cta: z.object({
+    label: z.string().optional(),
+    href: z.string().optional()
+  }).optional()
+});
+
 export const pageSchema = z.object({
   title: z.string().min(1),
   navLabel: z.string().min(1),
@@ -186,7 +226,8 @@ export const pageSchema = z.object({
   cta: z.object({
     label: z.string().min(1),
     href: z.string().min(1)
-  }).optional()
+  }).optional(),
+  ko: pageLocalizedSchema.optional()
 });
 
 export const projectSchema = z.object({
@@ -203,6 +244,11 @@ export const projectSchema = z.object({
       href: z.string().min(1)
     })
   ).default([]),
+  video: z.string().optional(),
+  pdf: pdfDocSchema.optional(),
+  poster: pdfDocSchema.optional(),
+  certificate: pdfDocSchema.optional(),
+  award: pdfDocSchema.optional(),
   cover: z.object({
     src: z.string().min(1),
     alt: z.string().default("")
@@ -215,6 +261,7 @@ export const projectSchema = z.object({
     z.number().min(0).max(100),
     z.number().min(0).max(100)
   ]).default([20, 20, 20, 20, 20]),
+  ko: projectLocalizedSchema.optional(),
   knowledge: z.object({
     ko: z.object({
       aliases: z.array(z.string()).default([]),

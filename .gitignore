@@ -26,10 +26,12 @@ visual-checks/
 # Local environment and untracked extensions
 local/
 public/*-extension/
+public/3D Dodge/
 
 # Package manager caches
 .npm/
 .pnpm-store/
+.venv/
 .yarn/*
 !.yarn/releases/
 !.yarn/plugins/
@@ -53,6 +55,7 @@ Desktop.ini
 !.vscode/settings.json
 
 # Temporary files
+scratch/
 tmp/
 temp/
 *.tmp

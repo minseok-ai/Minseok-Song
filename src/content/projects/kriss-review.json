@@ -1,0 +1,82 @@
+{
+  "title": "Review of Thickness Measurement Techniques",
+  "summary": "Conducted a comprehensive literature and technical review at KRISS on non-destructive thickness measurement methods, ultrasonic pulse-echo propagation, and precision metrology principles.",
+  "order": 13,
+  "status": "published",
+  "hidden": false,
+  "year": "2024",
+  "tags": [
+    "KRISS",
+    "Ultrasonics",
+    "Literature Review",
+    "Thickness Metrology",
+    "NDT"
+  ],
+  "links": [],
+  "visual": "paper",
+  "capabilityScores": [
+    40,
+    70,
+    100,
+    60,
+    25
+  ],
+  "pdf": {
+    "src": "/documents/projects/08-kriss-thickness-review.pdf",
+    "label": "두께 측정 기술 리뷰 보고서 (PDF)",
+    "title": "Review of Thickness Measurement Techniques"
+  },
+  "ko": {
+    "title": "두께 측정 기술 및 초음파 비파괴 계측 문헌 리뷰",
+    "summary": "한국표준과학연구원(KRISS) 연구 인턴십에서 초음파 펄스-에코, 공진 및 와전류 기반 비파괴 두께 측정 기술의 원리와 계측 표준을 체계적으로 분석한 심층 리뷰 보고서입니다.",
+    "tags": [
+      "KRISS",
+      "두께 측정 기술",
+      "초음파 비파괴검사",
+      "정밀 계측",
+      "문헌 리뷰"
+    ],
+    "pdf": {
+      "src": "/documents/projects/08-kriss-thickness-review.pdf",
+      "label": "두께 측정 기술 리뷰 보고서 (PDF) 열람",
+      "title": "Review of Thickness Measurement Techniques"
+    },
+    "certificate": {
+      "src": "/documents/projects/12-kriss-internship-certificate.pdf",
+      "label": "한국표준과학연구원 인턴십 수료증 (PDF) 열람",
+      "title": "Review of Thickness Measurement Techniques (Certificate)"
+    }
+  },
+  "knowledge": {
+    "ko": {
+      "aliases": [
+        "KRISS Ultrasonic Testing & Precision Metrology Review",
+        "KRISS Review",
+        "초음파 문헌 리뷰",
+        "KRISS 계측 리뷰",
+        "비파괴 평가 표준"
+      ],
+      "oneLiner": "한국표준과학연구원(KRISS)에서 초음파 비파괴 계측 표준과 고감쇠 재료의 파동 전달 이론을 종합적으로 분석한 연구 리뷰입니다.",
+      "problem": "고감쇠 소재의 초음파 신호 손실과 계측 불확도를 극복하기 위해 기존 문헌의 이론적 모델과 실험 기법에 대한 심층적 정리가 필요했습니다.",
+      "approach": "해외 표준 규격과 선행 연구 논문들을 비교 검토하고, Pulse-Echo 감쇠 보정 및 신호 대 잡음비 개선 메커니즘을 체계화했습니다.",
+      "technicalCore": "Ultrasonic attenuation modeling, Pulse-Echo methodology, signal processing, precision metrology standards, literature synthesis가 핵심입니다.",
+      "evidence": "KRISS 인턴십 과정에서 선행 문헌을 조사해 실험 가이드라인과 보고서로 완성했습니다.",
+      "impact": "이론적 배경 조사와 실험 검증을 연결하는 탄탄한 리서치 역량을 보여주는 프로젝트입니다.",
+      "statusNote": "2024년 KRISS 연구 리뷰 프로젝트입니다.",
+      "keywords": [
+        "KRISS",
+        "Ultrasonics",
+        "Metrology",
+        "Literature Review",
+        "Non-Destructive Testing",
+        "초음파",
+        "문헌리뷰"
+      ]
+    }
+  },
+  "certificate": {
+    "src": "/documents/projects/12-kriss-internship-certificate.pdf",
+    "label": "한국표준과학연구원 인턴십 수료증 (PDF)",
+    "title": "Review of Thickness Measurement Techniques (Certificate)"
+  }
+}

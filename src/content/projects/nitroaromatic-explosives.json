@@ -1,15 +1,15 @@
 {
   "title": "Fluorescence Explosives Detection AI",
   "summary": "Built and evaluated five 1D-CNN/LSTM architectures for nitroaromatic explosives sensing, reducing MSE by 51.4% through skip connections.",
-  "order": 8,
+  "order": 15,
   "status": "published",
   "hidden": false,
   "year": "2024",
   "tags": [
-    "Machine Learning",
-    "Data Analysis",
-    "Deep Learning",
-    "National R&D"
+    "National R&D",
+    "Sensor AI",
+    "1D-CNN LSTM",
+    "Ablation Study"
   ],
   "links": [],
   "visual": "graph",
@@ -50,5 +50,36 @@
         "폭발물 탐지"
       ]
     }
+  },
+  "certificate": {
+    "src": "/documents/projects/05-nitro-sensor-certificate.pdf",
+    "label": "연구과제 참여확인서 (PDF)",
+    "title": "Fluorescence Explosives Detection AI (Certificate)"
+  },
+  "ko": {
+    "title": "흡입식 니트로계 폭발물 광학 센서 예측 모델 평가",
+    "summary": "충남대 양자제어물성연구소 산학과제에서 형광 광학 센서의 오차를 보정할 때, 복잡한 딥러닝 기법보다 불필요한 연산을 배제한 모델이 더 우수함을 실험으로 확인했습니다.",
+    "tags": [
+      "센서 데이터 평가",
+      "광학 센서",
+      "머신러닝",
+      "충남대 IQS",
+      "산학과제"
+    ],
+    "certificate": {
+      "src": "/documents/projects/05-nitro-sensor-certificate.pdf",
+      "label": "연구과제 참여확인서 (PDF) 열람",
+      "title": "Fluorescence Explosives Detection AI (Certificate)"
+    },
+    "poster": {
+      "src": "/documents/projects/05-nitro-sensor-evaluation.pdf",
+      "label": "연구 포스터 (PDF) 열람",
+      "title": "Fluorescence Explosives Detection AI (Poster)"
+    }
+  },
+  "poster": {
+    "src": "/documents/projects/05-nitro-sensor-evaluation.pdf",
+    "label": "연구 포스터 (PDF)",
+    "title": "Fluorescence Explosives Detection AI (Poster)"
   }
 }
