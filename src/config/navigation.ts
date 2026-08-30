@@ -53,21 +53,11 @@ export const navigationItems = [
     contentEntry: "projects"
   },
   {
-    id: "writings",
-    num: "04",
-    label: "Writings",
-    path: "/writings",
-    order: 4,
-    layoutType: "writingIndex",
-    hidden: false,
-    contentEntry: "writings"
-  },
-  {
     id: "contacts",
-    num: "05",
+    num: "04",
     label: "Contacts",
     path: "/contacts",
-    order: 5,
+    order: 4,
     layoutType: "contact",
     hidden: false,
     contentEntry: "contacts"

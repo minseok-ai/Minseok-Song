@@ -268,53 +268,6 @@ const createCapabilityRadarChart = (scores) => {
 
             {hasAnyArtifact && (
               <div class="card-artifacts-row">
-                {hasDoc && (
-                  <button
-                    type="button"
-                    class={`artifact-minimal-btn ${docBtnClass} card-pdf-link`}
-                    data-pdf-src={docSrc}
-                    data-pdf-title={docTitle}
-                    title={docSrc?.endsWith('.mp4') ? "시연 영상 열람" : docSrc?.endsWith('index.html') ? "3D 게임 플레이" : docSrc?.includes('presentation') ? "구두발표 슬라이드 열람" : "프로젝트 문서 열람"}
-                    aria-label={`View Project Artifact for ${project.data.title}`}
-                  >
-                    <svg class="art-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      {docSrc?.endsWith('.mp4') ? (
-                        <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
-                      ) : docSrc?.endsWith('index.html') ? (
-                        <polygon points="6 3 20 12 6 21 6 3" fill="currentColor"></polygon>
-                      ) : (
-                        <>
-                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                          <polyline points="14 2 14 8 20 8"/>
-                        </>
-                      )}
-                    </svg>
-                    <span>{docBtnText}</span>
-                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
-                    </svg>
-                  </button>
-                )}
-                {hasPoster && (
-                  <button
-                    type="button"
-                    class="artifact-minimal-btn is-poster card-pdf-link"
-                    data-pdf-src={posterSrc}
-                    data-pdf-title={posterTitle}
-                    title="학회 포스터 발표 자료 열람"
-                    aria-label={`View Poster for ${project.data.title}`}
-                  >
-                    <svg class="art-icon poster-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="3" y="3" width="18" height="18" rx="2"/>
-                      <circle cx="8.5" cy="8.5" r="1.5"/>
-                      <path d="m21 15-5-5L5 21"/>
-                    </svg>
-                    <span>POSTER</span>
-                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
-                    </svg>
-                  </button>
-                )}
                 {hasAward && (
                   <button
                     type="button"
@@ -367,6 +320,53 @@ const createCapabilityRadarChart = (scores) => {
                       )}
                     </svg>
                     <span>{certBtnText}</span>
+                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                    </svg>
+                  </button>
+                )}
+                {hasDoc && (
+                  <button
+                    type="button"
+                    class={`artifact-minimal-btn ${docBtnClass} card-pdf-link`}
+                    data-pdf-src={docSrc}
+                    data-pdf-title={docTitle}
+                    title={docSrc?.endsWith('.mp4') ? "시연 영상 열람" : docSrc?.endsWith('index.html') ? "3D 게임 플레이" : docSrc?.includes('presentation') ? "구두발표 슬라이드 열람" : "프로젝트 문서 열람"}
+                    aria-label={`View Project Artifact for ${project.data.title}`}
+                  >
+                    <svg class="art-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      {docSrc?.endsWith('.mp4') ? (
+                        <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
+                      ) : docSrc?.endsWith('index.html') ? (
+                        <polygon points="6 3 20 12 6 21 6 3" fill="currentColor"></polygon>
+                      ) : (
+                        <>
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                        </>
+                      )}
+                    </svg>
+                    <span>{docBtnText}</span>
+                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                    </svg>
+                  </button>
+                )}
+                {hasPoster && (
+                  <button
+                    type="button"
+                    class="artifact-minimal-btn is-poster card-pdf-link"
+                    data-pdf-src={posterSrc}
+                    data-pdf-title={posterTitle}
+                    title="학회 포스터 발표 자료 열람"
+                    aria-label={`View Poster for ${project.data.title}`}
+                  >
+                    <svg class="art-icon poster-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <path d="m21 15-5-5L5 21"/>
+                    </svg>
+                    <span>POSTER</span>
                     <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M7 17L17 7M17 7H9M17 7V15"/>
                     </svg>
@@ -535,53 +535,6 @@ const createCapabilityRadarChart = (scores) => {
 
             {hasAnyArtifact && (
               <div class="card-artifacts-row">
-                {hasDoc && (
-                  <button
-                    type="button"
-                    class={`artifact-minimal-btn ${docBtnClass} card-pdf-link`}
-                    data-pdf-src={docSrc}
-                    data-pdf-title={docTitle}
-                    title={docSrc?.endsWith('.mp4') ? "시연 영상 열람" : docSrc?.endsWith('index.html') ? "3D 게임 플레이" : docSrc?.includes('presentation') ? "구두발표 슬라이드 열람" : "프로젝트 문서 열람"}
-                    aria-label={`View Project Artifact for ${project.data.title}`}
-                  >
-                    <svg class="art-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      {docSrc?.endsWith('.mp4') ? (
-                        <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
-                      ) : docSrc?.endsWith('index.html') ? (
-                        <polygon points="6 3 20 12 6 21 6 3" fill="currentColor"></polygon>
-                      ) : (
-                        <>
-                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                          <polyline points="14 2 14 8 20 8"/>
-                        </>
-                      )}
-                    </svg>
-                    <span>{docBtnText}</span>
-                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
-                    </svg>
-                  </button>
-                )}
-                {hasPoster && (
-                  <button
-                    type="button"
-                    class="artifact-minimal-btn is-poster card-pdf-link"
-                    data-pdf-src={posterSrc}
-                    data-pdf-title={posterTitle}
-                    title="학회 포스터 발표 자료 열람"
-                    aria-label={`View Poster for ${project.data.title}`}
-                  >
-                    <svg class="art-icon poster-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="3" y="3" width="18" height="18" rx="2"/>
-                      <circle cx="8.5" cy="8.5" r="1.5"/>
-                      <path d="m21 15-5-5L5 21"/>
-                    </svg>
-                    <span>POSTER</span>
-                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
-                    </svg>
-                  </button>
-                )}
                 {hasAward && (
                   <button
                     type="button"
@@ -639,6 +592,53 @@ const createCapabilityRadarChart = (scores) => {
                     </svg>
                   </button>
                 )}
+                {hasDoc && (
+                  <button
+                    type="button"
+                    class={`artifact-minimal-btn ${docBtnClass} card-pdf-link`}
+                    data-pdf-src={docSrc}
+                    data-pdf-title={docTitle}
+                    title={docSrc?.endsWith('.mp4') ? "시연 영상 열람" : docSrc?.endsWith('index.html') ? "3D 게임 플레이" : docSrc?.includes('presentation') ? "구두발표 슬라이드 열람" : "프로젝트 문서 열람"}
+                    aria-label={`View Project Artifact for ${project.data.title}`}
+                  >
+                    <svg class="art-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      {docSrc?.endsWith('.mp4') ? (
+                        <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
+                      ) : docSrc?.endsWith('index.html') ? (
+                        <polygon points="6 3 20 12 6 21 6 3" fill="currentColor"></polygon>
+                      ) : (
+                        <>
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                        </>
+                      )}
+                    </svg>
+                    <span>{docBtnText}</span>
+                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                    </svg>
+                  </button>
+                )}
+                {hasPoster && (
+                  <button
+                    type="button"
+                    class="artifact-minimal-btn is-poster card-pdf-link"
+                    data-pdf-src={posterSrc}
+                    data-pdf-title={posterTitle}
+                    title="학회 포스터 발표 자료 열람"
+                    aria-label={`View Poster for ${project.data.title}`}
+                  >
+                    <svg class="art-icon poster-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <path d="m21 15-5-5L5 21"/>
+                    </svg>
+                    <span>POSTER</span>
+                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                    </svg>
+                  </button>
+                )}
                 {validPrimaryLink && (
                   <a
                     class="artifact-minimal-btn is-link"
@@ -686,6 +686,7 @@ const createCapabilityRadarChart = (scores) => {
       </div>
     </header>
     <div class="pdf-modal-body">
+      <div id="pdf-modal-canvas-viewer" class="pdf-canvas-viewer" style="display: none;"></div>
       <iframe id="pdf-modal-iframe" src="" title="PDF Document Viewer" loading="lazy"></iframe>
       <video id="pdf-modal-video" src="" controls playsinline preload="metadata" style="display: none; width: 100%; height: 100%; object-fit: contain; background: #000;"></video>
     </div>
@@ -693,6 +694,82 @@ const createCapabilityRadarChart = (scores) => {
 </div>
 
 <script is:inline>
+  let pdfjsPromise = null;
+  function loadPdfJs() {
+    if (window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
+    if (pdfjsPromise) return pdfjsPromise;
+    pdfjsPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      script.onload = () => {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        resolve(window.pdfjsLib);
+      };
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+    return pdfjsPromise;
+  }
+
+  let currentPdfRenderToken = 0;
+  async function renderPdfOnCanvas(src, container) {
+    const renderToken = ++currentPdfRenderToken;
+    container.innerHTML = '<div class="pdf-loading-spinner"><div class="spinner"></div><span>문서 렌더링 중...</span></div>';
+    
+    try {
+      const pdfjs = await loadPdfJs();
+      if (renderToken !== currentPdfRenderToken) return;
+      const loadingTask = pdfjs.getDocument(src);
+      const pdf = await loadingTask.promise;
+      if (renderToken !== currentPdfRenderToken) return;
+      
+      container.innerHTML = '';
+      for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        if (renderToken !== currentPdfRenderToken) return;
+        const page = await pdf.getPage(pageNum);
+        const unscaledViewport = page.getViewport({ scale: 1.0 });
+        
+        const containerWidth = Math.min(window.innerWidth - 32, 860);
+        const scale = Math.max(1.1, Math.min(2.2, (containerWidth / unscaledViewport.width) * (window.devicePixelRatio || 1.3)));
+        const viewport = page.getViewport({ scale });
+        
+        const pageWrap = document.createElement('div');
+        pageWrap.className = 'pdf-page-canvas-wrap';
+        
+        const canvas = document.createElement('canvas');
+        canvas.className = 'pdf-page-canvas';
+        const ctx = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        canvas.style.width = '100%';
+        canvas.style.height = 'auto';
+        
+        const pageBadge = document.createElement('span');
+        pageBadge.className = 'pdf-page-number-badge';
+        pageBadge.textContent = `${pageNum} / ${pdf.numPages}`;
+        
+        pageWrap.appendChild(canvas);
+        pageWrap.appendChild(pageBadge);
+        container.appendChild(pageWrap);
+        
+        await page.render({
+          canvasContext: ctx,
+          viewport: viewport
+        }).promise;
+      }
+    } catch (err) {
+      console.warn('PDF.js mobile render error:', err);
+      if (renderToken === currentPdfRenderToken) {
+        container.innerHTML = `
+          <div class="pdf-render-fallback">
+            <p>모바일 인라인 뷰어를 로드하는 중 오류가 발생했습니다.</p>
+            <a href="${src}" target="_blank" rel="noopener noreferrer" class="pdf-fallback-btn">새 탭에서 열기</a>
+          </div>
+        `;
+      }
+    }
+  }
+
   function fitAppPreviewFrames() {
     document.querySelectorAll('.app-preview-shell').forEach(shell => {
       const sourceWidth = Number(shell.dataset.sourceWidth || 1440);
@@ -754,6 +831,7 @@ const createCapabilityRadarChart = (scores) => {
     const backdrop = document.getElementById('pdf-modal-backdrop');
     const closeBtn = document.getElementById('pdf-modal-close');
     const iframe = document.getElementById('pdf-modal-iframe');
+    const canvasViewer = document.getElementById('pdf-modal-canvas-viewer');
     const video = document.getElementById('pdf-modal-video');
     const titleEl = document.getElementById('pdf-modal-title');
     const downloadLink = document.getElementById('pdf-modal-download');
@@ -762,6 +840,8 @@ const createCapabilityRadarChart = (scores) => {
 
     function openPdf(src, title) {
       const isVideo = src.toLowerCase().endsWith('.mp4') || src.toLowerCase().endsWith('.webm');
+      const isMobile = window.innerWidth <= 768 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
       if (titleEl) titleEl.textContent = title || (isVideo ? "Video Demonstration" : "Document Viewer");
       if (downloadLink) {
         downloadLink.href = src;
@@ -770,6 +850,7 @@ const createCapabilityRadarChart = (scores) => {
       }
 
       if (isVideo && video) {
+        if (canvasViewer) { canvasViewer.style.display = 'none'; canvasViewer.innerHTML = ''; }
         if (iframe) { iframe.style.display = 'none'; iframe.src = ''; }
         video.style.display = 'block';
         video.src = src;
@@ -778,8 +859,14 @@ const createCapabilityRadarChart = (scores) => {
         video.play().catch((err) => {
           console.warn("Video playback:", err);
         });
+      } else if (isMobile && canvasViewer) {
+        if (video) { video.pause(); video.style.display = 'none'; video.src = ''; }
+        if (iframe) { iframe.style.display = 'none'; iframe.src = ''; }
+        canvasViewer.style.display = 'flex';
+        renderPdfOnCanvas(src, canvasViewer);
       } else if (iframe) {
         if (video) { video.pause(); video.style.display = 'none'; video.src = ''; }
+        if (canvasViewer) { canvasViewer.style.display = 'none'; canvasViewer.innerHTML = ''; }
         iframe.style.display = 'block';
         iframe.src = src;
       }
@@ -799,6 +886,11 @@ const createCapabilityRadarChart = (scores) => {
       if (iframe) {
         iframe.src = '';
       }
+      if (canvasViewer) {
+        currentPdfRenderToken++;
+        canvasViewer.innerHTML = '';
+        canvasViewer.style.display = 'none';
+      }
       document.body.style.overflow = '';
     }
 
@@ -813,6 +905,11 @@ const createCapabilityRadarChart = (scores) => {
     });
 
     if (backdrop) backdrop.onclick = closePdf;
+    if (closeBtn) closeBtn.onclick = closePdf;
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('is-open')) closePdf();
+    });
+  }
     if (closeBtn) closeBtn.onclick = closePdf;
 
     window.addEventListener('keydown', (e) => {
@@ -1059,6 +1156,101 @@ const createCapabilityRadarChart = (scores) => {
     height: 100%;
     border: 0;
     background: #525659;
+  }
+
+  .pdf-canvas-viewer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px 10px 40px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    background: #1e2024;
+  }
+
+  .pdf-page-canvas-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 860px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+    border-radius: 6px;
+    overflow: hidden;
+    background: #ffffff;
+  }
+
+  .pdf-page-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .pdf-page-number-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #ffffff;
+    font-size: 10px;
+    font-family: var(--font-mono, monospace);
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+  }
+
+  .pdf-loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    height: 280px;
+    color: var(--color-ink-muted, #9aa0a6);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .pdf-loading-spinner .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(255, 255, 255, 0.15);
+    border-top-color: var(--color-accent, #3b82f6);
+    border-radius: 50%;
+    animation: pdfSpin 0.8s linear infinite;
+  }
+
+  @keyframes pdfSpin {
+    to { transform: rotate(360deg); }
+  }
+
+  .pdf-render-fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 60px 20px;
+    color: #d1d5db;
+    text-align: center;
+  }
+
+  .pdf-fallback-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 20px;
+    background: var(--color-accent, #3b82f6);
+    color: #ffffff;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
   }
 
   .project-hero {
@@ -1594,49 +1786,60 @@ const createCapabilityRadarChart = (scores) => {
   }
 
   .card-artifacts-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 6px;
     margin-top: auto;
-    padding-top: 10px;
+    padding-top: 12px;
     border-top: 1px solid var(--color-line);
+    width: 100%;
+  }
+
+  .card-artifacts-row > .artifact-minimal-btn:only-child {
+    grid-column: span 2;
+  }
+
+  .card-artifacts-row > .artifact-minimal-btn:nth-child(3):last-child {
+    grid-column: span 2;
   }
 
   .artifact-minimal-btn {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    min-height: 25px;
+    justify-content: center;
+    gap: 6px;
+    min-height: 28px;
+    width: 100%;
     padding: 0 8px;
-    border-radius: 5px;
+    border-radius: 6px;
     border: 1px solid var(--color-line);
-    background: transparent;
+    background: rgba(255, 255, 255, 0.02);
     color: var(--color-ink-muted);
     font-size: 10px;
-    font-weight: 750;
-    font-family: var(--font-mono);
-    letter-spacing: 0.05em;
+    font-weight: 800;
+    font-family: var(--font-mono, monospace);
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
     line-height: 1;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .artifact-minimal-btn:hover {
-    border-color: var(--color-ink);
-    background: var(--color-ink);
-    color: var(--color-paper-deep);
-    transform: translateY(-1px);
+    transform: translateY(-1.5px);
   }
 
   .artifact-minimal-btn .art-icon {
-    width: 10px;
-    height: 10px;
+    width: 11px;
+    height: 11px;
     stroke: currentColor;
     flex-shrink: 0;
-    opacity: 0.8;
+    opacity: 0.9;
   }
 
   .artifact-minimal-btn .art-arrow {
@@ -1644,7 +1847,7 @@ const createCapabilityRadarChart = (scores) => {
     height: 8px;
     stroke: currentColor;
     flex-shrink: 0;
-    opacity: 0.55;
+    opacity: 0.6;
     transition: transform 0.2s ease, opacity 0.2s ease;
   }
 
@@ -1653,58 +1856,62 @@ const createCapabilityRadarChart = (scores) => {
     transform: translate(1px, -1px);
   }
 
-  /* 1. AWARD Minimal Styling (Warm Gold / Trophy Highlight) */
+  /* 1. AWARD Minimal Styling (Warm Amber / Gold) */
   .artifact-minimal-btn.is-award {
-    border-color: color-mix(in srgb, #f59e0b 55%, var(--color-line));
+    background: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.3);
     color: #d97706;
   }
   .artifact-minimal-btn.is-award .award-trophy {
     stroke: #f59e0b;
   }
   .artifact-minimal-btn.is-award:hover {
-    border-color: #f59e0b;
     background: #f59e0b;
+    border-color: #f59e0b;
     color: #ffffff;
-    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.35);
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
   }
   .artifact-minimal-btn.is-award:hover .award-trophy {
     stroke: #ffffff;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-award {
-    border-color: rgba(251, 191, 36, 0.4);
+    background: rgba(251, 191, 36, 0.08);
+    border-color: rgba(251, 191, 36, 0.35);
     color: #fbbf24;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-award .award-trophy {
     stroke: #fbbf24;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-award:hover {
-    border-color: #fbbf24;
     background: #fbbf24;
+    border-color: #fbbf24;
     color: #0b0f17;
-    box-shadow: 0 2px 12px rgba(251, 191, 36, 0.4);
+    box-shadow: 0 4px 14px rgba(251, 191, 36, 0.4);
   }
   [data-theme="dark"] .artifact-minimal-btn.is-award:hover .award-trophy {
     stroke: #0b0f17;
   }
 
-  /* 2. CERTIFICATE Minimal Styling (Crisp Emerald / Completion Seal) */
+  /* 2. CERTIFICATE Minimal Styling (Mint / Emerald) */
   .artifact-minimal-btn.is-cert {
-    border-color: color-mix(in srgb, #10b981 45%, var(--color-line));
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.3);
     color: #059669;
   }
   .artifact-minimal-btn.is-cert .cert-seal {
     stroke: #10b981;
   }
   .artifact-minimal-btn.is-cert:hover {
-    border-color: #10b981;
     background: #10b981;
+    border-color: #10b981;
     color: #ffffff;
-    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
   }
   .artifact-minimal-btn.is-cert:hover .cert-seal {
     stroke: #ffffff;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-cert {
+    background: rgba(52, 211, 153, 0.08);
     border-color: rgba(52, 211, 153, 0.35);
     color: #34d399;
   }
@@ -1712,33 +1919,35 @@ const createCapabilityRadarChart = (scores) => {
     stroke: #34d399;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-cert:hover {
-    border-color: #10b981;
     background: #10b981;
+    border-color: #10b981;
     color: #0b0f17;
-    box-shadow: 0 2px 12px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
   }
   [data-theme="dark"] .artifact-minimal-btn.is-cert:hover .cert-seal {
     stroke: #0b0f17;
   }
 
-  /* 3. PATENT Minimal Styling (Royal Violet / Shield Highlight) */
+  /* 3. PATENT Minimal Styling (Royal Violet / Shield) */
   .artifact-minimal-btn.is-patent {
-    border-color: color-mix(in srgb, #8b5cf6 45%, var(--color-line));
+    background: rgba(139, 92, 246, 0.08);
+    border-color: rgba(139, 92, 246, 0.3);
     color: #7c3aed;
   }
   .artifact-minimal-btn.is-patent .cert-seal {
     stroke: #8b5cf6;
   }
   .artifact-minimal-btn.is-patent:hover {
-    border-color: #8b5cf6;
     background: #8b5cf6;
+    border-color: #8b5cf6;
     color: #ffffff;
-    box-shadow: 0 2px 10px rgba(139, 92, 246, 0.35);
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
   }
   .artifact-minimal-btn.is-patent:hover .cert-seal {
     stroke: #ffffff;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-patent {
+    background: rgba(167, 139, 250, 0.08);
     border-color: rgba(167, 139, 250, 0.35);
     color: #c084fc;
   }
@@ -1746,33 +1955,35 @@ const createCapabilityRadarChart = (scores) => {
     stroke: #c084fc;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-patent:hover {
-    border-color: #a78bfa;
     background: #a78bfa;
+    border-color: #a78bfa;
     color: #0b0f17;
-    box-shadow: 0 2px 12px rgba(167, 139, 250, 0.4);
+    box-shadow: 0 4px 14px rgba(167, 139, 250, 0.4);
   }
   [data-theme="dark"] .artifact-minimal-btn.is-patent:hover .cert-seal {
     stroke: #0b0f17;
   }
 
-  /* 4. ABSTRACT Minimal Styling (Azure Blue / Quill Highlight) */
+  /* 4. ABSTRACT Minimal Styling (Cobalt Blue) */
   .artifact-minimal-btn.is-abstract {
-    border-color: color-mix(in srgb, #3b82f6 45%, var(--color-line));
+    background: rgba(59, 130, 246, 0.08);
+    border-color: rgba(59, 130, 246, 0.3);
     color: #2563eb;
   }
   .artifact-minimal-btn.is-abstract .cert-seal {
     stroke: #3b82f6;
   }
   .artifact-minimal-btn.is-abstract:hover {
-    border-color: #3b82f6;
     background: #3b82f6;
+    border-color: #3b82f6;
     color: #ffffff;
-    box-shadow: 0 2px 10px rgba(59, 130, 246, 0.35);
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
   }
   .artifact-minimal-btn.is-abstract:hover .cert-seal {
     stroke: #ffffff;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-abstract {
+    background: rgba(96, 165, 250, 0.08);
     border-color: rgba(96, 165, 250, 0.35);
     color: #60a5fa;
   }
@@ -1780,33 +1991,35 @@ const createCapabilityRadarChart = (scores) => {
     stroke: #60a5fa;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-abstract:hover {
-    border-color: #60a5fa;
     background: #60a5fa;
+    border-color: #60a5fa;
     color: #0b0f17;
-    box-shadow: 0 2px 12px rgba(96, 165, 250, 0.4);
+    box-shadow: 0 4px 14px rgba(96, 165, 250, 0.4);
   }
   [data-theme="dark"] .artifact-minimal-btn.is-abstract:hover .cert-seal {
     stroke: #0b0f17;
   }
 
-  /* 5. PORTFOLIO Minimal Styling (Indigo / Dossier Highlight) */
+  /* 5. PORTFOLIO Minimal Styling (Indigo / Dossier) */
   .artifact-minimal-btn.is-portfolio {
-    border-color: color-mix(in srgb, #6366f1 45%, var(--color-line));
+    background: rgba(99, 102, 241, 0.08);
+    border-color: rgba(99, 102, 241, 0.3);
     color: #4f46e5;
   }
   .artifact-minimal-btn.is-portfolio .cert-seal {
     stroke: #6366f1;
   }
   .artifact-minimal-btn.is-portfolio:hover {
-    border-color: #6366f1;
     background: #6366f1;
+    border-color: #6366f1;
     color: #ffffff;
-    box-shadow: 0 2px 10px rgba(99, 102, 241, 0.35);
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
   }
   .artifact-minimal-btn.is-portfolio:hover .cert-seal {
     stroke: #ffffff;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-portfolio {
+    background: rgba(129, 140, 248, 0.08);
     border-color: rgba(129, 140, 248, 0.35);
     color: #a5b4fc;
   }
@@ -1814,33 +2027,35 @@ const createCapabilityRadarChart = (scores) => {
     stroke: #a5b4fc;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-portfolio:hover {
-    border-color: #818cf8;
     background: #818cf8;
+    border-color: #818cf8;
     color: #0b0f17;
-    box-shadow: 0 2px 12px rgba(129, 140, 248, 0.4);
+    box-shadow: 0 4px 14px rgba(129, 140, 248, 0.4);
   }
   [data-theme="dark"] .artifact-minimal-btn.is-portfolio:hover .cert-seal {
     stroke: #0b0f17;
   }
 
-  /* 6. POSTER Minimal Styling (Teal / Conference Poster Highlight) */
+  /* 6. POSTER Minimal Styling (Teal / Cyan) */
   .artifact-minimal-btn.is-poster {
-    border-color: color-mix(in srgb, #0d9488 45%, var(--color-line));
+    background: rgba(13, 148, 136, 0.08);
+    border-color: rgba(13, 148, 136, 0.3);
     color: #0f766e;
   }
   .artifact-minimal-btn.is-poster .poster-icon {
     stroke: #0d9488;
   }
   .artifact-minimal-btn.is-poster:hover {
-    border-color: #0d9488;
     background: #0d9488;
+    border-color: #0d9488;
     color: #ffffff;
-    box-shadow: 0 2px 10px rgba(13, 148, 136, 0.35);
+    box-shadow: 0 4px 14px rgba(13, 148, 136, 0.35);
   }
   .artifact-minimal-btn.is-poster:hover .poster-icon {
     stroke: #ffffff;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-poster {
+    background: rgba(45, 212, 191, 0.08);
     border-color: rgba(45, 212, 191, 0.35);
     color: #2dd4bf;
   }
@@ -1848,19 +2063,20 @@ const createCapabilityRadarChart = (scores) => {
     stroke: #2dd4bf;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-poster:hover {
-    border-color: #14b8a6;
     background: #14b8a6;
+    border-color: #14b8a6;
     color: #0b0f17;
-    box-shadow: 0 2px 12px rgba(45, 212, 191, 0.4);
+    box-shadow: 0 4px 14px rgba(45, 212, 191, 0.4);
   }
   [data-theme="dark"] .artifact-minimal-btn.is-poster:hover .poster-icon {
     stroke: #0b0f17;
   }
 
-  /* 7. PRESENTATION & REPORT Minimal Styling (Steel Azure / Sky Cyan Highlight) */
+  /* 7. PRESENTATION & REPORT Minimal Styling (Sky Azure) */
   .artifact-minimal-btn.is-presentation,
   .artifact-minimal-btn.is-report {
-    border-color: color-mix(in srgb, #0284c7 45%, var(--color-line));
+    background: rgba(2, 132, 199, 0.08);
+    border-color: rgba(2, 132, 199, 0.3);
     color: #0369a1;
   }
   .artifact-minimal-btn.is-presentation .art-icon,
@@ -1869,10 +2085,10 @@ const createCapabilityRadarChart = (scores) => {
   }
   .artifact-minimal-btn.is-presentation:hover,
   .artifact-minimal-btn.is-report:hover {
-    border-color: #0284c7;
     background: #0284c7;
+    border-color: #0284c7;
     color: #ffffff;
-    box-shadow: 0 2px 10px rgba(2, 132, 199, 0.35);
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
   }
   .artifact-minimal-btn.is-presentation:hover .art-icon,
   .artifact-minimal-btn.is-report:hover .art-icon {
@@ -1880,6 +2096,7 @@ const createCapabilityRadarChart = (scores) => {
   }
   [data-theme="dark"] .artifact-minimal-btn.is-presentation,
   [data-theme="dark"] .artifact-minimal-btn.is-report {
+    background: rgba(56, 189, 248, 0.08);
     border-color: rgba(56, 189, 248, 0.35);
     color: #38bdf8;
   }
@@ -1889,19 +2106,20 @@ const createCapabilityRadarChart = (scores) => {
   }
   [data-theme="dark"] .artifact-minimal-btn.is-presentation:hover,
   [data-theme="dark"] .artifact-minimal-btn.is-report:hover {
-    border-color: #38bdf8;
     background: #38bdf8;
+    border-color: #38bdf8;
     color: #0b0f17;
-    box-shadow: 0 2px 12px rgba(56, 189, 248, 0.4);
+    box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
   }
   [data-theme="dark"] .artifact-minimal-btn.is-presentation:hover .art-icon,
   [data-theme="dark"] .artifact-minimal-btn.is-report:hover .art-icon {
     stroke: #0b0f17;
   }
 
-  /* 8. VIDEO DEMO Minimal Styling (Vibrant Rose / Crimson Highlight) */
+  /* 8. VIDEO DEMO Minimal Styling (Rose Crimson) */
   .artifact-minimal-btn.is-video {
-    border-color: color-mix(in srgb, #e11d48 45%, var(--color-line));
+    background: rgba(225, 29, 72, 0.08);
+    border-color: rgba(225, 29, 72, 0.3);
     color: #be123c;
   }
   .artifact-minimal-btn.is-video .art-icon {
@@ -1909,15 +2127,16 @@ const createCapabilityRadarChart = (scores) => {
     stroke: none;
   }
   .artifact-minimal-btn.is-video:hover {
-    border-color: #e11d48;
     background: #e11d48;
+    border-color: #e11d48;
     color: #ffffff;
-    box-shadow: 0 2px 10px rgba(225, 29, 72, 0.35);
+    box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
   }
   .artifact-minimal-btn.is-video:hover .art-icon {
     fill: #ffffff;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-video {
+    background: rgba(251, 113, 133, 0.08);
     border-color: rgba(251, 113, 133, 0.35);
     color: #fb7185;
   }
@@ -1926,18 +2145,19 @@ const createCapabilityRadarChart = (scores) => {
     stroke: none;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-video:hover {
-    border-color: #fb7185;
     background: #fb7185;
+    border-color: #fb7185;
     color: #0b0f17;
-    box-shadow: 0 2px 12px rgba(251, 113, 133, 0.4);
+    box-shadow: 0 4px 14px rgba(251, 113, 133, 0.4);
   }
   [data-theme="dark"] .artifact-minimal-btn.is-video:hover .art-icon {
     fill: #0b0f17;
   }
 
-  /* 9. PLAY GAME Minimal Styling (Arcade Fuchsia Highlight) */
+  /* 9. PLAY GAME Minimal Styling (Arcade Fuchsia) */
   .artifact-minimal-btn.is-game {
-    border-color: color-mix(in srgb, #c026d3 45%, var(--color-line));
+    background: rgba(192, 38, 211, 0.08);
+    border-color: rgba(192, 38, 211, 0.3);
     color: #a21caf;
   }
   .artifact-minimal-btn.is-game .art-icon {
@@ -1945,15 +2165,16 @@ const createCapabilityRadarChart = (scores) => {
     stroke: none;
   }
   .artifact-minimal-btn.is-game:hover {
-    border-color: #c026d3;
     background: #c026d3;
+    border-color: #c026d3;
     color: #ffffff;
-    box-shadow: 0 2px 10px rgba(192, 38, 211, 0.35);
+    box-shadow: 0 4px 14px rgba(192, 38, 211, 0.35);
   }
   .artifact-minimal-btn.is-game:hover .art-icon {
     fill: #ffffff;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-game {
+    background: rgba(232, 121, 249, 0.08);
     border-color: rgba(232, 121, 249, 0.35);
     color: #e879f9;
   }
@@ -1962,13 +2183,36 @@ const createCapabilityRadarChart = (scores) => {
     stroke: none;
   }
   [data-theme="dark"] .artifact-minimal-btn.is-game:hover {
-    border-color: #e879f9;
     background: #e879f9;
+    border-color: #e879f9;
     color: #0b0f17;
-    box-shadow: 0 2px 12px rgba(232, 121, 249, 0.4);
+    box-shadow: 0 4px 14px rgba(232, 121, 249, 0.4);
   }
   [data-theme="dark"] .artifact-minimal-btn.is-game:hover .art-icon {
     fill: #0b0f17;
+  }
+
+  /* 10. PRIMARY LINK Minimal Styling (Neutral Glass) */
+  .artifact-minimal-btn.is-link {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: var(--color-line-strong);
+    color: var(--color-ink);
+  }
+  .artifact-minimal-btn.is-link:hover {
+    background: var(--color-ink);
+    border-color: var(--color-ink);
+    color: var(--color-paper-deep);
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-link {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: var(--color-ink);
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-link:hover {
+    background: var(--color-ink);
+    border-color: var(--color-ink);
+    color: #0b0f17;
+    box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
   }
 
   .app-preview-panel {

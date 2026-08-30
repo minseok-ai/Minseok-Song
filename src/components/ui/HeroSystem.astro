@@ -12,23 +12,29 @@ const telemetryNodes = [
     id: 'a1trategize', 
     label: 'A1trategize', 
     tone: 'tone-blue', 
-    status: a1trategize?.tags?.includes("Launched") ? 'LAUNCHED' : 'PENDING', 
-    desc: 'Automates consulting reports via intent-based LLM routing.'
+    status: a1trategize?.tags?.includes("Launched") ? 'LAUNCHED' : 'ACTIVE', 
+    desc: 'Multi-LLM cognitive strategy & B2B consulting report automation.'
   },
   { 
     id: 'a1ntuitize', 
     label: 'A1ntuitize', 
     tone: 'tone-coral', 
     status: a1ntuitize?.tags?.includes("Pending") ? 'PENDING' : 'ACTIVE', 
-    desc: '3D vision memory engine modeling human intuition.'
+    desc: '3D vision memory system modeling human spatial intuition.'
   },
   { 
     id: 'ra1', 
     label: 'RA1', 
     tone: 'tone-purple', 
     status: ra1?.tags?.includes("Pending") ? 'PENDING' : 'ACTIVE', 
-    desc: 'Physics-inspired edge robotics control system.'
+    desc: 'Physics-inspired proactive edge robotics control framework.'
   }
+];
+
+const ecosystemDimensions = [
+  { label: "Strategic Core", value: "B2B Strategic Intelligence OS" },
+  { label: "Domain Depth", value: "Semiconductor Fab & Metrology" },
+  { label: "Architecture", value: "Multi-LLM Routing & Edge Robotics" }
 ];
 ---
 
@@ -54,7 +60,11 @@ const telemetryNodes = [
   </div>
 
   <div class="hero-copy-panel fade-in-up">
-    <p class="micro-label">Minseok Song / A1 Firms</p>
+    <div class="hero-kicker-row">
+      <span class="hero-kicker-tag">MINSEOK SONG</span>
+      <span class="hero-kicker-sep">/</span>
+      <span class="hero-kicker-label">A1 Firms · Strategy & Tech Core</span>
+    </div>
     <h1 class="hero-title">
       Hello, I bridge<br/>
       <span class="nowrap">cognitive&nbsp;strategy</span>
@@ -62,11 +72,17 @@ const telemetryNodes = [
       <span class="h1-highlight nowrap">proactive&nbsp;execution.</span>
     </h1>
     <p class="hero-desc">
-      The foundational operating layer fusing cognitive strategy with physical edge robotics. I engineer the autonomous core for next-generation enterprises.
+      I absorb deep tech domains and translate engineering feasibility into business strategy, IP roadmaps, and commercial solutions.
     </p>
     <div class="hero-actions" aria-label="Primary actions">
-      <a class="primary-action" href="#surfaces">
-        Discover the system
+      <a class="primary-action" href="/projects">
+        Explore Projects
+        <svg class="arrow-shifted" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+      <a class="secondary-action" href="/about">
+        Self Interview
         <svg class="arrow-shifted" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
@@ -80,7 +96,7 @@ const telemetryNodes = [
       <div class="focus-title-wrap">
         <p class="micro-label">Current focus</p>
         <div class="focus-badges">
-          <!-- Site Assistant Chip (Minimal) -->
+          <!-- Site Assistant Chip (A1 Chan) -->
           <div class="site-assistant-minimal telemetry-node active tone-accent group">
             <span class="telemetry-dot"></span>
             <span class="telemetry-label">A1 Chan <span class="mvp-text">MVP</span></span>
@@ -102,48 +118,46 @@ const telemetryNodes = [
           </span>
         </div>
       </div>
-      <h2>{a1Firms?.hero?.title ?? "A1trategize"}</h2>
+      <h2>A1 Firms</h2>
       <p class="ecosystem-desc">
         A unified intelligence architecture fusing cognitive strategy, spatial intuition, and physical execution into a seamless flow.
       </p>
 
-      <!-- Multi-LLM Routing Telemetry -->
-      <div class="telemetry-bar">
-        <div class="telemetry-pipeline">
-          {telemetryNodes.map((node) => (
-            <div class:list={["telemetry-node active group", node.tone]}>
-              <span class="telemetry-dot"></span>
-              <span class="telemetry-label">{node.label}</span>
-              
-              <div class="telemetry-tooltip">
-                <div class="tooltip-header">
-                  <span class="tooltip-title">{node.label}</span>
-                  <span class:list={["tooltip-badge", `badge-${node.status.toLowerCase()}`]}>{node.status}</span>
-                </div>
-                <p class="tooltip-desc">{node.desc}</p>
+      <!-- 3-Product Telemetry Pipeline -->
+      <div class="telemetry-pipeline">
+        {telemetryNodes.map((node) => (
+          <div class:list={["telemetry-node active group", node.tone]}>
+            <span class="telemetry-dot"></span>
+            <span class="telemetry-label">{node.label}</span>
+            
+            <div class="telemetry-tooltip">
+              <div class="tooltip-header">
+                <span class="tooltip-title">{node.label}</span>
+                <span class:list={["tooltip-badge", `badge-${node.status.toLowerCase()}`]}>{node.status}</span>
               </div>
+              <p class="tooltip-desc">{node.desc}</p>
             </div>
-          ))}
-        </div>
-        <div class="telemetry-status">
-          <span class="telemetry-log">
-            <span class="pulse-dot"></span>
-            A1 FIRMS ECOSYSTEM / ROUTING ENGAGED
-            <span class="pulse-dot"></span>
-          </span>
-          <span class="telemetry-progress-track">
-            <span class="telemetry-progress-bar"></span>
-          </span>
-        </div>
-      </div>
-
-      <div class="focus-stats-clean">
-        {focusStats.map(([label, value]) => (
-          <div class="stat-row-clean">
-            <span class="label-clean">{label}</span>
-            <span class="value-clean">{value}</span>
           </div>
         ))}
+      </div>
+
+      <!-- Executive Strategic Pillars -->
+      <div class="ecosystem-pillars">
+        {ecosystemDimensions.map((item) => (
+          <div class="pillar-row">
+            <span class="pillar-label">{item.label}</span>
+            <span class="pillar-value">{item.value}</span>
+          </div>
+        ))}
+      </div>
+
+      <div class="brief-footer">
+        <a class="brief-footer-action" href="/A1-Firm">
+          <span>Enter A1 Firms Platform</span>
+          <svg class="arrow-shifted" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
       </div>
     </div>
   </aside>
@@ -154,66 +168,69 @@ const telemetryNodes = [
     position: relative;
     display: grid;
     grid-template-columns: minmax(0, 0.95fr) minmax(420px, 0.78fr);
-    align-content: center;
-    gap: 42px 62px;
+    align-items: start;
+    gap: clamp(28px, 4vw, 52px) clamp(36px, 4.5vw, 64px);
     width: min(100%, var(--max-site));
     margin: 0 auto;
     padding-right: var(--space-page);
     padding-left: var(--space-page);
-    min-height: calc(100svh - var(--header-height));
-    padding-top: 64px;
-    padding-bottom: 64px;
+    min-height: auto;
+    padding-top: clamp(34px, 4.2vw, 54px);
+    padding-bottom: clamp(40px, 4.5vw, 60px);
     overflow: hidden;
   }
 
-  .hero-dots-bg {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
+  .hero-kicker-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 16px;
+    transform: translateY(-4px);
+  }
+
+  .hero-kicker-tag {
+    font-family: var(--font-mono, monospace);
+    font-size: 10.5px;
+    font-weight: 800;
+    color: var(--color-ink);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .hero-kicker-sep {
+    color: var(--color-ink-muted);
+    font-size: 11px;
     opacity: 0.6;
   }
 
-  .hero-system::before {
-    content: "";
-    position: absolute;
-    inset: 0 var(--space-page) auto;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(var(--rgb-warm), 0.6), transparent);
-    opacity: 0.6;
-    z-index: 1;
-  }
-
-  .hero-system::after {
-    content: "";
-    position: absolute;
-    right: var(--space-page);
-    bottom: 0;
-    left: var(--space-page);
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(var(--rgb-warm), 0.22), transparent);
-    pointer-events: none;
-    z-index: 1;
+  .hero-kicker-label {
+    font-family: var(--font-mono, monospace);
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--color-ink-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   .hero-copy-panel {
     position: relative;
     z-index: 2;
-    align-self: center;
+    align-self: start;
     min-width: 0;
     width: 100%;
     max-width: 800px;
     grid-column: 1;
     grid-row: 1;
+    padding-top: 2px;
   }
 
   .hero-copy-panel .hero-title {
-    margin: 12px 0 24px;
-    font-size: clamp(1.2rem, 7.5vw, 4.2rem);
+    margin: 10px 0 22px;
+    font-size: clamp(2.4rem, 4.3vw, 3.85rem);
     font-weight: 400;
     font-style: normal;
     letter-spacing: -0.02em;
-    line-height: 1.25;
+    line-height: 1.22;
     font-family: "Noto Serif KR", "Noto Serif", serif;
     color: color-mix(in srgb, var(--color-ink) 70%, transparent);
     word-break: keep-all;
@@ -292,7 +309,7 @@ const telemetryNodes = [
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
-    margin-top: 26px;
+    margin-top: 36px;
   }
 
   .primary-action,
@@ -361,8 +378,9 @@ const telemetryNodes = [
 
   .hero-brief {
     position: relative;
-    align-self: center;
-    padding: 32px;
+    align-self: start;
+    margin-top: -6px;
+    padding: 30px;
     border-radius: var(--radius-lg);
     background: var(--color-panel);
     border: 1px solid var(--glass-border);
@@ -478,50 +496,13 @@ const telemetryNodes = [
     -webkit-text-fill-color: transparent;
   }
   
-  .hero-brief p {
-    color: var(--color-ink-soft);
-    font-size: 15px;
-    line-height: 1.65;
-    margin-bottom: 16px;
-  }
-  
   .hero-brief p.ecosystem-desc {
     font-size: 16px;
     line-height: 1.7;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     letter-spacing: -0.01em;
     color: color-mix(in srgb, var(--color-ink) 85%, transparent);
     text-align: left;
-  }
-  
-  .ecosystem-desc strong {
-    color: var(--color-ink);
-    font-weight: 600;
-  }
-
-  .telemetry-bar {
-    margin-bottom: 16px;
-    padding: 16px 20px;
-    border-radius: 16px;
-    background: color-mix(in srgb, var(--color-ink) 2%, var(--color-panel));
-    backdrop-filter: blur(16px);
-    border: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent);
-    box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 color-mix(in srgb, var(--color-ink) 5%, transparent);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    position: relative;
-  }
-  
-  .telemetry-bar::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    z-index: 1;
-    border-radius: inherit;
   }
 
   .site-assistant-minimal {
@@ -596,109 +577,78 @@ const telemetryNodes = [
   .telemetry-pipeline {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    gap: 10px;
+    margin-bottom: 20px;
   }
 
   .telemetry-pipeline .telemetry-node {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 7px;
     position: relative;
     cursor: default;
-    padding: 10px 12px;
-    border-radius: 12px;
-    background: var(--glass-bg, rgba(255, 255, 255, 0.4));
-    border: 1px solid rgba(var(--rgb-ink), 0.08);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    padding: 10px 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
   }
 
   .telemetry-pipeline .telemetry-node:hover {
-    background: var(--color-panel);
-    border-color: rgba(var(--rgb-ink), 0.15);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--node-color);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3), 0 0 12px color-mix(in srgb, var(--node-color) 20%, transparent);
   }
 
-  .telemetry-node.tone-accent {
-    --node-color: #3b82f6; /* Guide Blue */
-  }
-
-  .telemetry-node.tone-blue {
-    --node-color: #10b981; /* Green */
-  }
-
-  .telemetry-node.tone-coral {
-    --node-color: #f59e0b; /* Amber */
-  }
-
-  .telemetry-node.tone-purple {
-    --node-color: #8b5cf6; /* Purple */
-  }
+  .telemetry-node.tone-accent { --node-color: #38bdf8; }
+  .telemetry-node.tone-blue { --node-color: #10b981; }
+  .telemetry-node.tone-coral { --node-color: #f59e0b; }
+  .telemetry-node.tone-purple { --node-color: #8b5cf6; }
 
   .telemetry-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
     background-color: var(--node-color);
-    box-shadow: 0 0 10px var(--node-color), 0 0 4px rgba(255, 255, 255, 0.5);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-  }
-  
-  .telemetry-node.active .telemetry-dot::after {
-    content: '';
-    position: absolute;
-    inset: -3px;
-    border-radius: 50%;
-    background: var(--node-color);
-    opacity: 0.4;
-    animation: dotPulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    box-shadow: 0 0 8px var(--node-color);
+    flex-shrink: 0;
   }
 
   .telemetry-label {
-    font-size: 10.5px;
+    font-size: 11px;
     color: var(--color-ink);
-    font-family: var(--font-mono);
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    transition: color 0.3s ease;
+    font-family: var(--font-mono, monospace);
+    font-weight: 700;
+    letter-spacing: 0.02em;
   }
-  
+
   .telemetry-tooltip {
     position: absolute;
-    bottom: calc(100% + 12px);
+    bottom: calc(100% + 10px);
     left: 50%;
-    transform: translateX(-50%) translateY(10px);
-    width: 250px;
+    transform: translateX(-50%) translateY(8px);
+    width: 240px;
     background: var(--color-panel);
     background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1));
     backdrop-filter: blur(40px) saturate(200%);
     border: 1px solid var(--glass-border);
     border-radius: 8px;
-    padding: 12px;
+    padding: 11px 13px;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
-    z-index: 10;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+    z-index: 20;
     pointer-events: none;
   }
-  
+
   .telemetry-node:hover .telemetry-tooltip {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
-  }
-  
-  .telemetry-node:hover .telemetry-dot {
-    transform: scale(1.4);
-    box-shadow: 0 0 14px var(--node-color);
-  }
-  
-  .telemetry-node:hover .telemetry-label {
-    color: var(--node-color);
   }
 
   .tooltip-header {
@@ -707,16 +657,16 @@ const telemetryNodes = [
     align-items: center;
     margin-bottom: 6px;
     border-bottom: 1px solid var(--color-line);
-    padding-bottom: 6px;
+    padding-bottom: 5px;
   }
-  
+
   .tooltip-title {
     font-size: 11px;
     font-weight: 800;
     color: var(--color-ink);
-    font-family: var(--font-mono);
+    font-family: var(--font-mono, monospace);
   }
-  
+
   .tooltip-badge {
     font-size: 8px;
     font-weight: 800;
@@ -725,132 +675,114 @@ const telemetryNodes = [
     border-radius: 999px;
     letter-spacing: 0.05em;
   }
-  
+
   .badge-launched {
     background: rgba(16, 185, 129, 0.15);
     color: #10b981;
     border: 1px solid rgba(16, 185, 129, 0.3);
   }
-  
+
   .badge-pending {
     background: rgba(245, 158, 11, 0.15);
     color: #f59e0b;
     border: 1px solid rgba(245, 158, 11, 0.3);
   }
-  
+
   .badge-active {
     background: rgba(59, 130, 246, 0.15);
     color: #3b82f6;
     border: 1px solid rgba(59, 130, 246, 0.3);
   }
-  
+
   .tooltip-desc {
-    font-size: 12.5px;
-    line-height: 1.7;
+    font-size: 12px;
+    line-height: 1.6;
     color: var(--color-ink-soft);
     margin: 0;
-    padding-top: 4px;
     white-space: normal;
-    text-wrap: pretty;
   }
 
-  .telemetry-status {
+  .ecosystem-pillars {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 10px;
     margin-top: 8px;
-    padding-top: 16px;
-    border-top: 1px dashed rgba(var(--rgb-ink), 0.12);
-    position: relative;
+    padding-top: 10px;
+    border-top: 1px solid rgba(var(--rgb-warm), 0.12);
   }
 
-  .telemetry-log {
-    font-size: 8.5px;
-    color: var(--color-ink-muted);
-    font-family: var(--font-mono);
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .pulse-dot {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--color-accent);
-    box-shadow: 0 0 8px var(--color-accent);
-    animation: pulseDot 2s infinite;
-  }
-
-  @keyframes pulseDot {
-    0%, 100% { opacity: 0.3; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.5); }
-  }
-
-  .telemetry-progress-track {
-    width: 100%;
-    height: 2px;
-    background: rgba(var(--rgb-ink), 0.04);
-    border-radius: 2px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .telemetry-progress-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 40%;
-    background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
-    border-radius: 2px;
-    animation: telemetrySweep 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  }
-
-  @keyframes telemetrySweep {
-    0% { transform: translateX(-150%); }
-    100% { transform: translateX(350%); }
-  }
-
-  .focus-stats-clean {
-    display: flex;
-    flex-direction: column;
-    margin-top: 24px;
-    padding-top: 8px;
-    border-top: 1px solid rgba(var(--rgb-warm), 0.15);
-  }
-
-  .stat-row-clean {
+  .pillar-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 8px;
-    border-bottom: 1px solid rgba(var(--rgb-warm), 0.08);
+    padding: 10px 4px;
+    border-bottom: 1px solid rgba(var(--rgb-warm), 0.06);
   }
 
-  .stat-row-clean:last-child {
+  .pillar-row:last-child {
     border-bottom: none;
   }
 
-  .label-clean {
-    font-size: 12px;
+  .pillar-label {
+    font-family: var(--font-mono, monospace);
+    font-size: 10.5px;
     text-transform: uppercase;
     color: var(--color-ink-muted);
     font-weight: 700;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.12em;
     flex-shrink: 0;
   }
 
-  .value-clean {
+  .pillar-value {
     font-family: "Noto Serif KR", "Noto Serif", serif;
-    font-size: 18px;
+    font-size: 14.5px;
     font-weight: 500;
     color: var(--color-ink);
     text-align: right;
+  }
+
+  .brief-footer {
+    padding-top: 14px;
+    margin-top: 6px;
+    border-top: 1px solid rgba(var(--rgb-warm), 0.1);
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .brief-footer-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 750;
+    color: var(--color-ink-soft);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: all 0.2s ease;
+  }
+
+  .brief-footer-action .arrow-shifted {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.2s ease;
+  }
+
+  .brief-footer-action:hover {
+    color: var(--color-ink);
+  }
+
+  .brief-footer-action:hover .arrow-shifted {
+    transform: translateX(4px);
+  }
+
+  html[data-theme="light"] .telemetry-pipeline .telemetry-node {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.07);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  html[data-theme="light"] .telemetry-pipeline .telemetry-node:hover {
+    border-color: var(--node-color);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
   }
 
   .stat-divider {

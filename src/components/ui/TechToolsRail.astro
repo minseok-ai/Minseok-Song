@@ -1,64 +1,55 @@
 ---
 const techGroups = [
   {
-    title: "Build Stack",
-    note: "site runtime",
+    title: "Strategy & Business Consulting",
+    note: "consulting & strategy",
+    index: "01",
+    items: [
+      { label: "Business Consulting", icon: "consulting" },
+      { label: "Case Study Analysis", icon: "casestudy" },
+      { label: "Feasibility & Market Analysis", icon: "deck" },
+      { label: "Patent & IP Strategy", icon: "patent" },
+      { label: "Problem Definition & Solution", icon: "strategy" },
+      { label: "Technology Roadmapping", icon: "product" }
+    ]
+  },
+  {
+    title: "Semiconductor & Metrology",
+    note: "hardware & cleanroom",
+    index: "02",
+    items: [
+      { label: "Dry & Wet Etching", icon: "fabrication" },
+      { label: "Photolithography", icon: "chip" },
+      { label: "Signal & Metrology Processing", icon: "signal" },
+      { label: "Thin-Film Deposition", icon: "materials" },
+      { label: "Ultrasonic Metrology (NDT)", icon: "ndt" }
+    ]
+  },
+  {
+    title: "AI & Scientific Modeling",
+    note: "model & computation",
+    index: "03",
+    items: [
+      { label: "Hyperparameter Tuning", icon: "optimization" },
+      { label: "LabVIEW", icon: "labview" },
+      { label: "LLM & Prompt Architecture", icon: "multi" },
+      { label: "MATLAB", icon: "matlab" },
+      { label: "Python", icon: "python" },
+      { label: "PyTorch", icon: "deep" },
+      { label: "Scikit-learn", icon: "scikit" },
+      { label: "Unity", icon: "unity" }
+    ]
+  },
+  {
+    title: "Software & Systems",
+    note: "software & systems",
+    index: "04",
     items: [
       { label: "Astro", icon: "astro" },
+      { label: "Git / GitHub", icon: "github" },
       { label: "React", icon: "react" },
       { label: "TypeScript", icon: "typescript" },
-      { label: "Figma", icon: "figma" },
-      { label: "Auth.js / OAuth", icon: "auth" },
-      { label: "Site Chatbot", icon: "chatbot" },
-      { label: "Rate Limiting", icon: "rate" },
-      { label: "Origin Guard", icon: "origin" },
-      { label: "Vercel", icon: "vercel" },
-      { label: "Cloudflare DNS", icon: "cloudflare" }
-    ]
-  },
-  {
-    title: "AI & Data",
-    note: "model work",
-    items: [
-      { label: "Python", icon: "python" },
-      { label: "MATLAB", icon: "matlab" },
-      { label: "LabVIEW", icon: "labview" },
-      { label: "Big Data", icon: "bigdata" },
-      { label: "Scikit-learn", icon: "scikit" },
-      { label: "Deep Learning", icon: "deep" },
-      { label: "Unity", icon: "unity" },
-      { label: "LLM", icon: "llm" },
-      { label: "Multi-agent", icon: "multi" },
-      { label: "Curve Fitting", icon: "machine" },
-      { label: "Hyperparameter Optimization", icon: "optimization" }
-    ]
-  },
-  {
-    title: "Deep Tech",
-    note: "research field",
-    items: [
-      { label: "Solid-State Physics", icon: "physics" },
-      { label: "Quantum Mechanics", icon: "quantum" },
-      { label: "Materials", icon: "materials" },
-      { label: "Semiconductor", icon: "chip" },
-      { label: "Micro-battery", icon: "battery" },
-      { label: "Fabrication", icon: "fabrication" },
-      { label: "NDT", icon: "ndt" },
-      { label: "Signal Processing", icon: "signal" }
-    ]
-  },
-  {
-    title: "Business & Strategy",
-    note: "operating layer",
-    items: [
-      { label: "Business Strategy", icon: "strategy" },
-      { label: "Digital Transformation", icon: "digital" },
-      { label: "Consulting", icon: "consulting" },
-      { label: "Patent Strategy", icon: "patent" },
-      { label: "Product Systems", icon: "product" },
-      { label: "Report Automation", icon: "report" },
-      { label: "Case Study", icon: "casestudy" },
-      { label: "Presentation", icon: "deck" }
+      { label: "Vercel", icon: "vercel" }
     ]
   }
 ];
@@ -128,33 +119,39 @@ const iconSvg = {
 ---
 
 <section class="tech-tools" aria-labelledby="tech-tools-title">
-  <div class="tech-tools__intro">
-    <p class="micro-label">Verified stack</p>
-    <h2 id="tech-tools-title">Tech & Tools</h2>
-    <p>
-      A compact map of the production stack, research software, and strategy work behind the public surface.
-    </p>
-  </div>
+  <div class="tech-tools__container">
+    <div class="tech-tools__intro">
+      <p class="micro-label">Verified stack</p>
+      <h2 id="tech-tools-title">Tech & Tools</h2>
+      <p>
+        A compact map of the production stack, research software, and strategy work behind the public surface.
+      </p>
+    </div>
 
-  <div class="tech-tools__groups">
-    {techGroups.map((group) => (
-      <section class="tech-group" aria-label={group.title}>
-        <div class="tech-group__meta">
-          <strong>{group.title}</strong>
-          <span>{group.note}</span>
-        </div>
-        <ul class="tech-list">
-          {group.items.map((item) => (
-            <li>
-              <span class="tech-chip">
-                <span class="tech-icon" aria-hidden="true" set:html={iconSvg[item.icon]}></span>
-                <span>{item.label}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
-    ))}
+    <div class="tech-tools__groups">
+      {techGroups.map((group) => (
+        <section class="tech-group" aria-label={group.title}>
+          <div class="tech-group__meta">
+            <div class="meta-tag-row">
+              <span class="group-index-badge">{group.index}</span>
+              <span class="group-dot"></span>
+              <span class="group-note">{group.note}</span>
+            </div>
+            <strong>{group.title}</strong>
+          </div>
+          <ul class="tech-list">
+            {group.items.map((item) => (
+              <li>
+                <span class="tech-chip">
+                  <span class="tech-icon" aria-hidden="true" set:html={iconSvg[item.icon]}></span>
+                  <span>{item.label}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
   </div>
 
   <div class="tech-tools__powered">
@@ -194,10 +191,8 @@ const iconSvg = {
 
 <style>
   .tech-tools {
-    display: grid;
-    grid-template-columns: minmax(260px, 0.42fr) minmax(0, 1fr);
-    gap: clamp(28px, 5vw, 76px);
-    align-items: start;
+    display: flex;
+    flex-direction: column;
     width: min(100%, var(--max-site));
     margin: 0 auto;
     padding: 54px var(--space-page) 58px;
@@ -205,12 +200,21 @@ const iconSvg = {
     border-bottom: 1px solid var(--color-line);
   }
 
+  .tech-tools__container {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.4fr) minmax(0, 1fr);
+    gap: clamp(28px, 5vw, 64px);
+    align-items: start;
+    width: 100%;
+  }
+
   .tech-tools__intro {
     position: sticky;
-    top: calc(var(--header-height) + 48px);
+    top: max(calc(var(--header-height) + 54px), calc(50vh - 100px));
     display: grid;
     gap: 14px;
     max-width: 430px;
+    align-self: start;
   }
 
   .tech-tools__intro .micro-label {
@@ -239,23 +243,23 @@ const iconSvg = {
 
   .tech-tools__groups {
     display: grid;
-    gap: 18px;
+    gap: 12px;
   }
 
   .tech-group {
     display: grid;
-    grid-template-columns: 150px minmax(0, 1fr);
-    gap: 24px;
+    grid-template-columns: 210px minmax(0, 1fr);
+    gap: 28px;
     align-items: start;
     min-width: 0;
-    padding: 18px 0;
+    padding: 22px 0;
     border-top: 1px solid var(--color-line);
   }
 
-  .tech-group:nth-child(1) { --group-accent: #3b82f6; } /* Build Stack: Blue */
-  .tech-group:nth-child(2) { --group-accent: #8b5cf6; } /* AI & Data: Purple */
-  .tech-group:nth-child(3) { --group-accent: #10b981; } /* Deep Tech: Green */
-  .tech-group:nth-child(4) { --group-accent: #f59e0b; } /* Business: Orange */
+  .tech-group:nth-child(1) { --group-accent: #f59e0b; } /* Technology Strategy & IP: Amber/Gold */
+  .tech-group:nth-child(2) { --group-accent: #10b981; } /* Semiconductor & Fab Process: Emerald */
+  .tech-group:nth-child(3) { --group-accent: #8b5cf6; } /* AI & Scientific Modeling: Purple */
+  .tech-group:nth-child(4) { --group-accent: #3b82f6; } /* Systems & Tools: Blue */
 
   .tech-group:first-child {
     padding-top: 0;
@@ -264,32 +268,59 @@ const iconSvg = {
 
   .tech-group__meta {
     display: grid;
-    gap: 5px;
+    gap: 6px;
     min-width: 0;
+  }
+
+  .meta-tag-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .group-index-badge {
+    font-family: var(--font-mono, monospace);
+    font-size: 9.5px;
+    font-weight: 800;
+    color: var(--group-accent);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid color-mix(in srgb, var(--group-accent) 35%, transparent);
+    padding: 1px 5px;
+    border-radius: 4px;
+    line-height: 1;
+  }
+
+  .group-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--group-accent);
+    box-shadow: 0 0 6px var(--group-accent);
+    flex-shrink: 0;
+  }
+
+  .group-note {
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono, monospace);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    text-transform: uppercase;
   }
 
   .tech-group__meta strong {
     color: var(--color-ink);
-    font-size: 13px;
-    font-weight: 850;
-    letter-spacing: 0;
-    line-height: 1.1;
-  }
-
-  .tech-group__meta span {
-    color: var(--color-ink-muted);
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    line-height: 1.15;
-    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
   }
 
   .tech-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px 8px;
+    gap: 8px 7px;
     min-width: 0;
     margin: 0;
     padding: 0;
@@ -304,19 +335,19 @@ const iconSvg = {
   .tech-chip {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    min-height: 32px;
+    gap: 7px;
+    min-height: 31px;
     max-width: 100%;
-    padding: 0 12px 0 10px;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    border-radius: 999px;
-    color: #0f1219;
-    background: linear-gradient(135deg, #fdfdfd 0%, #edf0f5 100%);
+    padding: 0 11px 0 9px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 7px;
+    color: var(--color-ink);
+    background: rgba(255, 255, 255, 0.035);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.8),
-      0 2px 8px rgba(0, 0, 0, 0.04);
-    font-size: 12px;
-    font-weight: 800;
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 11.5px;
+    font-weight: 650;
     letter-spacing: 0.01em;
     line-height: 1;
     white-space: nowrap;
@@ -325,102 +356,72 @@ const iconSvg = {
     will-change: transform, box-shadow;
     transform: translateZ(0);
     transition:
-      border-color 0.3s ease,
-      color 0.3s ease,
-      transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-      box-shadow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-
-  .tech-chip > * {
-    position: relative;
-    z-index: 1;
-  }
-
-  .tech-chip::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: color-mix(in srgb, #edf0f5 85%, var(--group-accent, var(--color-accent)) 15%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-    z-index: 0;
+      border-color 0.22s ease,
+      background-color 0.22s ease,
+      color 0.22s ease,
+      transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .tech-list li:hover .tech-chip,
   .tech-list li:focus-within .tech-chip {
-    border-color: color-mix(in srgb, var(--group-accent, var(--color-accent)) 40%, transparent);
-    color: #0f1219;
-    transform: translateY(-2px) scale(1.02);
+    border-color: color-mix(in srgb, var(--group-accent) 65%, transparent);
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    transform: translateY(-2px);
     box-shadow: 
-      0 8px 20px color-mix(in srgb, var(--group-accent, #6b9cf2) 16%, transparent),
-      0 2px 6px color-mix(in srgb, var(--group-accent, #6b9cf2) 10%, transparent);
-  }
-
-  .tech-list li:hover .tech-chip::before,
-  .tech-list li:focus-within .tech-chip::before {
-    opacity: 1;
+      0 6px 18px rgba(0, 0, 0, 0.4),
+      0 0 14px color-mix(in srgb, var(--group-accent) 22%, transparent);
   }
 
   .tech-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 16px;
-    height: 16px;
-    flex: 0 0 16px;
-    color: currentColor;
-    opacity: 0.94;
+    width: 14px;
+    height: 14px;
+    flex: 0 0 14px;
+    color: var(--group-accent);
+    opacity: 0.92;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .tech-chip:hover .tech-icon {
+    opacity: 1;
+    transform: scale(1.08);
   }
 
   .tech-icon :global(svg) {
     display: block;
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     overflow: visible;
   }
 
-  html[data-theme="light"] .tech-chip {
-    border-color: rgba(255, 255, 255, 0.06);
-    color: #f8f6ef;
-    background: linear-gradient(135deg, #1a1e24 0%, #0d1117 100%);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.08),
-      0 4px 12px rgba(0, 0, 0, 0.2);
+  html[data-theme="light"] .group-index-badge {
+    background: #ffffff;
+    border-color: color-mix(in srgb, var(--group-accent) 45%, transparent);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
   }
 
-  html[data-theme="light"] .tech-chip::before {
-    background: color-mix(in srgb, #1a1e24 80%, var(--group-accent, var(--color-accent)) 20%);
+  html[data-theme="light"] .tech-chip {
+    border-color: rgba(0, 0, 0, 0.07);
+    color: #1a1e24;
+    background: #ffffff;
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.04),
+      0 2px 8px rgba(0, 0, 0, 0.02);
   }
 
   html[data-theme="light"] .tech-list li:hover .tech-chip,
   html[data-theme="light"] .tech-list li:focus-within .tech-chip {
-    border-color: color-mix(in srgb, var(--group-accent, var(--color-accent)) 58%, rgba(255, 255, 255, 0.18));
-    color: #ffffff;
-    box-shadow: 0 8px 24px color-mix(in srgb, var(--group-accent, #6b9cf2) 15%, transparent), 0 0 0 1px color-mix(in srgb, var(--group-accent, #6b9cf2) 30%, transparent);
-  }
-
-  @media (prefers-color-scheme: light) {
-    html:not([data-theme]) .tech-chip {
-      border-color: rgba(255, 255, 255, 0.06);
-      color: #f8f6ef;
-      background: linear-gradient(135deg, #1a1e24 0%, #0d1117 100%);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-    
-    html:not([data-theme]) .tech-chip::before {
-      background: color-mix(in srgb, #1a1e24 80%, var(--group-accent, var(--color-accent)) 20%);
-    }
-
-    html:not([data-theme]) .tech-list li:hover .tech-chip,
-    html:not([data-theme]) .tech-list li:focus-within .tech-chip {
-      border-color: color-mix(in srgb, var(--group-accent, var(--color-accent)) 58%, rgba(255, 255, 255, 0.18));
-      color: #ffffff;
-      box-shadow: 0 8px 24px color-mix(in srgb, var(--group-accent, #6b9cf2) 15%, transparent), 0 0 0 1px color-mix(in srgb, var(--group-accent, #6b9cf2) 30%, transparent);
-    }
+    border-color: var(--group-accent);
+    background: #ffffff;
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 
+      0 6px 20px rgba(0, 0, 0, 0.08),
+      0 0 12px color-mix(in srgb, var(--group-accent) 25%, transparent);
   }
 
   /* Powered By Row styling */

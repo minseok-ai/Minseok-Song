@@ -1,13 +1,13 @@
 {
   "title": "About",
   "navLabel": "About",
-  "description": "Semiconductor & AI Engineer | Ex-Research Intern @ KAIST NNFC & KRISS | Open to Opportunities",
+  "description": "Technology Strategist & Consultant | Deep Tech Feasibility, IP Roadmaps & Business Architecture",
   "assistant": {
-    "summary": "Minseok Song의 현재 역할, 연구 경험, 창업/제품 맥락을 정리한 프로필 화면입니다.",
-    "shortAnswer": "About 화면은 Minseok Song의 전문 분야, KAIST NNFC 및 KRISS 연구 인턴십 이력, 공인 AI/어학 자격, 포트폴리오를 빠르게 파악하는 곳입니다.",
-    "detailAnswer": "KAIST NNFC 및 KRISS 연구 인턴십, 특허 출원, 학회 발표, 공인 AI 자격(Google/NVIDIA) 및 어학(OPIc IH/IM2) 이력을 한 흐름으로 묶어 보여줍니다.",
-    "proofPoints": ["전문 역량", "연구 경험", "공인 자격 및 어학", "주요 milestones"],
-    "nextQuestions": ["민석은 누구야?", "연구 프로젝트를 보여줘", "공인 자격증과 어학 성적을 보여줘"]
+    "summary": "Minseok Song의 기술 전략 컨설팅 역량, 도메인 기반 사업화 전략, 연구 및 공인 자격을 정리한 프로필 화면입니다.",
+    "shortAnswer": "About 화면은 Minseok Song의 기술 전략 컨설팅 전문성, 딥테크 타당성 분석, 특허 및 비즈니스 대회 수상 이력을 빠르게 파악하는 곳입니다.",
+    "detailAnswer": "도메인 지식을 바탕으로 엔지니어링 타당성을 비즈니스 전략과 특허 로드맵으로 치환하는 역량, KAIST NNFC 및 KRISS 연구 인턴십, 4개 비즈니스 대회 수상 이력을 일목요연하게 보여줍니다.",
+    "proofPoints": ["기술 전략 및 비즈니스 컨설팅", "도메인 기반 타당성 분석", "특허 및 비즈니스 수상", "공인 자격 및 어학"],
+    "nextQuestions": ["민석의 기술 전략 역량은?", "비즈니스 및 특허 프로젝트를 보여줘", "연구 및 공인 자격을 보여줘"]
   },
   "order": 1,
   "path": "/about",
@@ -17,35 +17,35 @@
   "hero": {
     "eyebrow": "01 / Profile",
     "title": "Minseok Song",
-    "subtitle": "Deep Tech & Semiconductor Technology Strategist | Ex-Research Appointments @ KAIST NNFC & KRISS"
+    "subtitle": "Technology Strategy & Business Consulting | Deep Tech Feasibility & IP Architecture"
   },
   "blocks": [
     {
       "id": "about-intent",
       "type": "callout",
       "title": "Operating Thesis",
-      "body": "My goal is to be a Deep Tech & Semiconductor Technology Strategist—bridging cleanroom fabrication realities, AI architectures, and commercial feasibility into actionable product roadmaps.",
+      "body": "My strength is Proactive Execution—transforming complex technical challenges into valuable Deep Tech strategies.",
       "tone": "important"
     },
     {
       "id": "about-lead",
       "type": "text",
       "title": "Lead",
-      "body": "I am a Deep Tech & Semiconductor Technology Strategist with hands-on cleanroom fabrication and AI research experience at KAIST NNFC and KRISS. I specialize in turning complex physics constraints and emerging AI systems into commercially deployable product roadmaps.",
+      "body": "I am a Technology Strategist specializing in business feasibility, IP portfolio structuring, and commercial translation. Grounded in semiconductor fabrication and metrology domain depth, I evaluate technical constraints and convert complex engineering into executable market strategies.",
       "variant": "lead"
     },
     {
       "id": "about-body-1",
       "type": "text",
       "title": "Body 1",
-      "body": "My strategy combines technical depth with market feasibility. From self-filing multi-agent AI patents (10-2026-0009508) to architecting recipe automation modules tailored to 183 cleanroom tool specifications at KAIST NNFC, I focus on bridging internal fab realities with scalable product value.",
+      "body": "My work bridges engineering feasibility with commercial strategy. From self-filing multi-agent AI patents (10-2026-0009508) to architecting recipe automation workflows informed by cleanroom operations, I focus on translating domain depth into high-margin business models and scalable product value.",
       "variant": "body"
     },
     {
       "id": "about-body-2",
       "type": "text",
       "title": "Body 2",
-      "body": "At KRISS, I spearheaded high-accuracy ultrasonic velocity metrology for non-invasive sensing as 1st author. Across national competitions, I led unit-cost modeling, public patent commercialization, and market-entry roadmaps—winning Grand Prize (CNU) and 5 Special Awards for strategic execution.",
+      "body": "Across national business and case competitions, I led unit-cost modeling, public patent commercialization, and market-entry roadmaps—winning Grand Prize (CNU) and 4 business competition awards by identifying unmet industry needs and structuring viable solutions.",
       "variant": "body"
     },
     {
@@ -97,8 +97,8 @@
         },
         {
           "label": "Awards",
-          "value": "6",
-          "description": "Grand Prize (CNU) & 5 Special Awards"
+          "value": "5",
+          "description": "Grand Prize (CNU) & 4 Business Awards"
         }
       ]
     }

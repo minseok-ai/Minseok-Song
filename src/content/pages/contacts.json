@@ -9,13 +9,13 @@
     "proofPoints": ["Email", "LinkedIn", "GitHub", "공개 연락 채널"],
     "nextQuestions": ["연락하고 싶어", "이메일 주소 알려줘", "LinkedIn으로 연결해줘"]
   },
-  "order": 5,
+  "order": 4,
   "path": "/contacts",
   "layoutType": "contact",
   "status": "published",
   "hidden": false,
   "hero": {
-    "eyebrow": "05 / Contacts",
+    "eyebrow": "04 / Contacts",
     "title": "Open Node",
     "subtitle": "A channel graph for specific, serious product conversations."
   },
