@@ -2483,6 +2483,7 @@ const createCapabilityRadarChart = (scores) => {
       grid-template-columns: 1fr;
     }
 
+
     .bento-hero {
       grid-column: auto;
       grid-row: auto;
@@ -2516,19 +2517,29 @@ const createCapabilityRadarChart = (scores) => {
   }
 
   @media (max-width: 760px) {
+    .hero-card-layout {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 20px;
+    }
+
+    .card-mini-video-preview {
+      width: 100%;
+      max-width: 100%;
+      aspect-ratio: 16 / 9;
+    }
+
     .project-card {
       min-height: auto;
-      padding: 24px;
+      padding: 24px 20px;
     }
 
     .app-preview-panel {
-      flex-basis: 320px;
-      min-height: 320px;
-      margin: 2px -6px 2px;
-    }
-
-    .project-signal-panel div {
-      min-height: 58px;
+      flex-basis: 240px;
+      min-height: 240px;
+      height: 240px;
+      margin: 6px 0 0;
+      border-radius: 12px;
     }
 
     .project-hero h1 {
