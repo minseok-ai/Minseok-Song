@@ -910,14 +910,6 @@ const createCapabilityRadarChart = (scores) => {
       if (e.key === 'Escape' && modal.classList.contains('is-open')) closePdf();
     });
   }
-    if (closeBtn) closeBtn.onclick = closePdf;
-
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.classList.contains('is-open')) {
-        closePdf();
-      }
-    });
-  }
 
   let syncRetries = 0;
   function syncIframeTheme() {

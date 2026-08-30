@@ -553,16 +553,6 @@ const credentials = [
     });
   }
 
-    if (backdrop) backdrop.onclick = closePdf;
-    if (closeBtn) closeBtn.onclick = closePdf;
-
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.classList.contains('is-open')) {
-        closePdf();
-      }
-    });
-  }
-
   initPdfModal();
 
   const identityFigure = document.querySelector('.identity-figure');
