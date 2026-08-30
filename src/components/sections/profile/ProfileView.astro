@@ -258,24 +258,16 @@ const credentials = [
 <!-- 4. Verified Credentials & Global Competencies Section -->
 <section id="profile-credentials" class="credentials-section">
   <div class="credentials-head reveal-up">
-    <div class="credentials-head-main">
-      <div class="credentials-kicker">
-        <span class="micro-label">02 / Verified Credentials & Global Competencies</span>
-      </div>
-      <h2>Industry Certifications & Global Language Mastery</h2>
+    <div class="credentials-kicker">
+      <span class="micro-label">02 / Verified Credentials & Global Competencies</span>
+      <span class="cred-shield-badge" title="Official Verified Credentials" aria-label="Official Verified Credentials">
+        <svg class="cred-shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M9 12l2 2 4-4"/>
+        </svg>
+      </span>
     </div>
-    <div class="credentials-head-side">
-      <div class="credentials-meta-strip">
-        <span class="cred-meta-badge">
-          <svg class="cred-meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <path d="M9 12l2 2 4-4"/>
-          </svg>
-          Direct PDF Verification
-        </span>
-        <span class="cred-meta-count">6 Official Documents · 100% Authenticated</span>
-      </div>
-    </div>
+    <h2>Industry Certifications & Language Competencies</h2>
   </div>
 
   <div class="credentials-grid">
@@ -1749,77 +1741,50 @@ const credentials = [
   }
 
   .credentials-head {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 36px;
-    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     margin-bottom: 24px;
   }
 
-  @media (max-width: 980px) {
-    .credentials-head {
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-  }
-
   .credentials-kicker {
-    margin-bottom: 8px;
-  }
-
-  .credentials-head-main h2 {
-    margin: 0;
-    font-size: clamp(1.65rem, 2.3vw, 2.15rem);
-    font-weight: 700;
-    line-height: 1.18;
-    color: var(--color-ink);
-    letter-spacing: -0.02em;
-  }
-
-  .credentials-head-side {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .credentials-lead {
-    margin: 0;
-    font-size: 0.92rem;
-    line-height: 1.55;
-    color: var(--color-ink-muted);
-  }
-
-  .credentials-meta-strip {
     display: flex;
     align-items: center;
     gap: 10px;
-    flex-wrap: wrap;
   }
 
-  .cred-meta-badge {
+  .credentials-head h2 {
+    margin: 0;
+    font-size: clamp(1.7rem, 2.8vw, 2.3rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-ink);
+    letter-spacing: -0.025em;
+  }
+
+  .cred-shield-badge {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 3px 10px;
-    border-radius: 999px;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
     background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.3);
+    border: 1px solid rgba(16, 185, 129, 0.35);
     color: #34d399;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .cred-meta-icon {
+  .cred-shield-badge:hover {
+    transform: scale(1.15);
+    border-color: rgba(16, 185, 129, 0.6);
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
+  }
+
+  .cred-shield-icon {
     width: 12px;
     height: 12px;
-  }
-
-  .cred-meta-count {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--color-ink-soft);
   }
 
   .credentials-grid {
@@ -2385,6 +2350,19 @@ const credentials = [
     .about-hero,
     .about-thesis {
       grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .thesis-copy {
+      border-left: none;
+      padding-left: 0;
+      padding-top: 32px;
+      border-top: 1px solid var(--color-line);
+      width: 100%;
+    }
+
+    .thesis-copy::before {
+      display: none;
     }
 
     .thesis-copy h1 {
@@ -2425,7 +2403,9 @@ const credentials = [
     }
 
     .thesis-copy {
-      padding-left: 20px;
+      padding-left: 0;
+      padding-right: 0;
+      width: 100%;
     }
 
     .thesis-copy h1 {
@@ -2433,12 +2413,24 @@ const credentials = [
     }
 
     .lead-copy {
-      font-size: 1.45rem;
+      font-size: 1.35rem;
     }
 
-    .essay-columns,
+    .essay-columns {
+      grid-template-columns: 1fr;
+    }
+
     .signal-strip {
       grid-template-columns: 1fr;
+      width: 100%;
+      margin: 32px 0 0;
+      gap: 14px;
+    }
+
+    .signal-strip div {
+      padding: 22px 20px;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .credential-card-top {

@@ -182,7 +182,8 @@ export const projectLocalizedSchema = z.object({
   pdf: pdfDocSchema.optional(),
   poster: pdfDocSchema.optional(),
   certificate: pdfDocSchema.optional(),
-  award: pdfDocSchema.optional()
+  award: pdfDocSchema.optional(),
+  award2: pdfDocSchema.optional()
 });
 
 export const pageLocalizedSchema = z.object({
@@ -249,6 +250,7 @@ export const projectSchema = z.object({
   poster: pdfDocSchema.optional(),
   certificate: pdfDocSchema.optional(),
   award: pdfDocSchema.optional(),
+  award2: pdfDocSchema.optional(),
   cover: z.object({
     src: z.string().min(1),
     alt: z.string().default("")

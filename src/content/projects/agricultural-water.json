@@ -72,9 +72,14 @@
       "title": "Predictive Reservoir Intelligence"
     },
     "award": {
-      "src": "/documents/projects/11-agricultural-aifriends-award.pdf",
-      "label": "에이아이프렌즈학회 상장 (PDF)",
-      "title": "Predictive Reservoir Intelligence (Award)"
+      "src": "/documents/projects/11-agricultural-winter-ai-award.pdf",
+      "label": "충남대 동계 AI 경진대회 상장 (PDF)",
+      "title": "Predictive Reservoir Intelligence (Winter AI Award)"
+    },
+    "award2": {
+      "src": "/documents/projects/11-agricultural-aaicon-award.pdf",
+      "label": "AAiCON 2024 우수논문상 상장 (PDF)",
+      "title": "Predictive Reservoir Intelligence (AAiCON Award)"
     },
     "certificate": {
       "src": "/documents/projects/07-agricultural-water-abstract.pdf",
@@ -83,9 +88,14 @@
     }
   },
   "award": {
-    "src": "/documents/projects/11-agricultural-aifriends-award.pdf",
-    "label": "에이아이프렌즈학회 상장 (PDF)",
-    "title": "Predictive Reservoir Intelligence (Award)"
+    "src": "/documents/projects/11-agricultural-winter-ai-award.pdf",
+    "label": "충남대 동계 AI 경진대회 상장 (PDF)",
+    "title": "Predictive Reservoir Intelligence (Winter AI Award)"
+  },
+  "award2": {
+    "src": "/documents/projects/11-agricultural-aaicon-award.pdf",
+    "label": "AAiCON 2024 우수논문상 상장 (PDF)",
+    "title": "Predictive Reservoir Intelligence (AAiCON Award)"
   },
   "certificate": {
     "src": "/documents/projects/07-agricultural-water-abstract.pdf",

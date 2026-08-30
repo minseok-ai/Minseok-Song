@@ -54,8 +54,8 @@
   },
   "pdf": {
     "src": "/documents/projects/04-glucose-ultrasound-presentation.pdf",
-    "label": "KSNT 2024 구두발표 슬라이드 (PDF)",
-    "title": "Non-invasive Evaluation of Glucose Concentration by Measuring Ultrasound Velocity (Presentation)"
+    "label": "KSNT 2024 학술 포스터/발표자료 (PDF)",
+    "title": "Non-invasive Evaluation of Glucose Concentration by Measuring Ultrasound Velocity (Poster & Slides)"
   },
   "certificate": {
     "src": "/documents/projects/04-glucose-ultrasound-abstract.pdf",
@@ -64,18 +64,18 @@
   },
   "ko": {
     "title": "초음파 음속 기반 비침습 혈당 계측 연구",
-    "summary": "표준과학연구원(KRISS)에서 용매 소분량 오차를 개선하고 MATLAB 강건 회귀를 적용해 혈당 농도 변화를 계측했으며, 한국비파괴검사학회(KSNT)에서 제1저자로 발표했습니다.",
+    "summary": "표준과학연구원(KRISS)에서 용매 소분량 오차를 개선하고 MATLAB 강건 회귀를 적용해 혈당 농도 변화를 계측했으며, 한국비파괴검사학회(KSNT 2024)에서 제1저자로 포스터 발표를 진행했습니다.",
     "tags": [
       "초음파 계측",
       "비침습 혈당",
       "KRISS",
       "KSNT 학회",
-      "제1저자"
+      "제1저자 포스터"
     ],
     "pdf": {
       "src": "/documents/projects/04-glucose-ultrasound-presentation.pdf",
-      "label": "KSNT 2024 구두발표 슬라이드 열람",
-      "title": "초음파 음속 측정을 통한 비침습적 혈당 농도 평가 (구두발표)"
+      "label": "KSNT 2024 학회 발표자료 (PDF) 열람",
+      "title": "초음파 음속 측정을 통한 비침습적 혈당 농도 평가 (제1저자 포스터)"
     },
     "certificate": {
       "src": "/documents/projects/04-glucose-ultrasound-abstract.pdf",

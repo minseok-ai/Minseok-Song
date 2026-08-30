@@ -118,10 +118,15 @@ const createCapabilityRadarChart = (scores) => {
         const hasPoster = Boolean(project.data.poster?.src);
         const posterSrc = project.data.poster?.src;
         const posterTitle = project.data.poster?.title || `${project.data.title} (Poster)`;
-
         const hasAward = Boolean(project.data.award?.src);
         const awardSrc = project.data.award?.src;
         const awardTitle = project.data.award?.title || `${project.data.title} (Award)`;
+        const awardBtnText = project.id === 'agricultural-water' ? "AWARD (WINTER AI)" : "AWARD";
+
+        const hasAward2 = Boolean(project.data.award2?.src);
+        const award2Src = project.data.award2?.src;
+        const award2Title = project.data.award2?.title || `${project.data.title} (AAiCON Award)`;
+        const award2BtnText = project.id === 'agricultural-water' ? "AWARD (AAICON)" : "AWARD 2";
 
         const hasCert = Boolean(project.data.certificate?.src);
         const certSrc = project.data.certificate?.src;
@@ -153,7 +158,8 @@ const createCapabilityRadarChart = (scores) => {
               ? "is-report"
               : "is-presentation";
 
-        const hasAnyArtifact = hasDoc || hasPoster || hasAward || hasCert || Boolean(validPrimaryLink);
+        const isPendingLocked = Boolean(project.data.tags?.some((t: string) => t.toLowerCase() === 'pending')) || project.id === 'a1ntuitize';
+        const hasAnyArtifact = hasDoc || hasPoster || hasAward || hasAward2 || hasCert || Boolean(validPrimaryLink) || isPendingLocked;
 
         return (
           <article id={`project-${project.id}`} class={`project-card reveal-up ${isHero ? 'bento-hero' : ''} ${showAppPreview ? 'has-app-preview' : ''}`} data-tone={visual.tone} data-project-id={project.id}>
@@ -284,7 +290,29 @@ const createCapabilityRadarChart = (scores) => {
                       <path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"/>
                       <path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/>
                     </svg>
-                    <span>AWARD</span>
+                    <span>{awardBtnText}</span>
+                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                    </svg>
+                  </button>
+                )}
+                {hasAward2 && (
+                  <button
+                    type="button"
+                    class="artifact-minimal-btn is-award-secondary card-pdf-link"
+                    data-pdf-src={award2Src}
+                    data-pdf-title={award2Title}
+                    title="공식 수상 상장/표창장 열람"
+                    aria-label={`View ${award2BtnText} for ${project.data.title}`}
+                  >
+                    <svg class="art-icon award-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"/>
+                      <path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/>
+                      <path d="M4 22h16"/>
+                      <path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"/>
+                      <path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/>
+                    </svg>
+                    <span>{award2BtnText}</span>
                     <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M7 17L17 7M17 7H9M17 7V15"/>
                     </svg>
@@ -296,7 +324,7 @@ const createCapabilityRadarChart = (scores) => {
                     class={`artifact-minimal-btn ${certBtnClass} card-pdf-link`}
                     data-pdf-src={certSrc}
                     data-pdf-title={certTitle}
-                    title="공식 인증서/증명원 열람"
+                    title={isAbstract ? "공식 학회 초록집 열람" : "공식 인증서/증명원 열람"}
                     aria-label={`View ${certBtnText} for ${project.data.title}`}
                   >
                     <svg class="art-icon cert-seal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -305,7 +333,7 @@ const createCapabilityRadarChart = (scores) => {
                           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                           <path d="m9 12 2 2 4-4"/>
                         </>
-                      ) : isAbstract ? (
+                      ) : isAbstract || isPortfolio ? (
                         <>
                           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                           <polyline points="14 2 14 8 20 8"/>
@@ -385,6 +413,20 @@ const createCapabilityRadarChart = (scores) => {
                     </svg>
                   </a>
                 )}
+                {isPendingLocked && !hasAward && !hasAward2 && !hasCert && !hasDoc && !hasPoster && !validPrimaryLink && (
+                  <div
+                    class="artifact-minimal-btn is-pending-locked"
+                    title="R&D Pending: 3D Vision Memory Engine modeling in progress"
+                    aria-label="Pending Project: In active development"
+                  >
+                    <svg class="art-icon pending-lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                    <span>R&D PENDING</span>
+                    <span class="pending-stripes-pill">IN PROGRESS</span>
+                  </div>
+                )}
               </div>
             )}
           </article>
@@ -415,10 +457,15 @@ const createCapabilityRadarChart = (scores) => {
         const hasPoster = Boolean(project.data.poster?.src);
         const posterSrc = project.data.poster?.src;
         const posterTitle = project.data.poster?.title || `${project.data.title} (Poster)`;
-
         const hasAward = Boolean(project.data.award?.src);
         const awardSrc = project.data.award?.src;
         const awardTitle = project.data.award?.title || `${project.data.title} (Award)`;
+        const awardBtnText = project.id === 'agricultural-water' ? "AWARD (WINTER AI)" : "AWARD";
+
+        const hasAward2 = Boolean(project.data.award2?.src);
+        const award2Src = project.data.award2?.src;
+        const award2Title = project.data.award2?.title || `${project.data.title} (AAiCON Award)`;
+        const award2BtnText = project.id === 'agricultural-water' ? "AWARD (AAICON)" : "AWARD 2";
 
         const hasCert = Boolean(project.data.certificate?.src);
         const certSrc = project.data.certificate?.src;
@@ -551,7 +598,29 @@ const createCapabilityRadarChart = (scores) => {
                       <path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"/>
                       <path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/>
                     </svg>
-                    <span>AWARD</span>
+                    <span>{awardBtnText}</span>
+                    <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M7 17L17 7M17 7H9M17 7V15"/>
+                    </svg>
+                  </button>
+                )}
+                {hasAward2 && (
+                  <button
+                    type="button"
+                    class="artifact-minimal-btn is-award-secondary card-pdf-link"
+                    data-pdf-src={award2Src}
+                    data-pdf-title={award2Title}
+                    title="공식 수상 상장/표창장 열람"
+                    aria-label={`View ${award2BtnText} for ${project.data.title}`}
+                  >
+                    <svg class="art-icon award-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"/>
+                      <path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"/>
+                      <path d="M4 22h16"/>
+                      <path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"/>
+                      <path d="M6 3h12v7a6 6 0 0 1-12 0V3z"/>
+                    </svg>
+                    <span>{award2BtnText}</span>
                     <svg class="art-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M7 17L17 7M17 7H9M17 7V15"/>
                     </svg>
@@ -563,7 +632,7 @@ const createCapabilityRadarChart = (scores) => {
                     class={`artifact-minimal-btn ${certBtnClass} card-pdf-link`}
                     data-pdf-src={certSrc}
                     data-pdf-title={certTitle}
-                    title="공식 인증서/증명원 열람"
+                    title={isAbstract ? "공식 학회 초록집 열람" : "공식 인증서/증명원 열람"}
                     aria-label={`View ${certBtnText} for ${project.data.title}`}
                   >
                     <svg class="art-icon cert-seal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1895,6 +1964,42 @@ const createCapabilityRadarChart = (scores) => {
     stroke: #0b0f17;
   }
 
+  /* 1-B. SECONDARY AWARD Minimal Styling (Radiant Violet / Amethyst Trophy) */
+  .artifact-minimal-btn.is-award-secondary {
+    background: rgba(168, 85, 247, 0.08);
+    border-color: rgba(168, 85, 247, 0.3);
+    color: #9333ea;
+  }
+  .artifact-minimal-btn.is-award-secondary .award-trophy {
+    stroke: #a855f7;
+  }
+  .artifact-minimal-btn.is-award-secondary:hover {
+    background: #a855f7;
+    border-color: #a855f7;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(168, 85, 247, 0.35);
+  }
+  .artifact-minimal-btn.is-award-secondary:hover .award-trophy {
+    stroke: #ffffff;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-award-secondary {
+    background: rgba(192, 132, 252, 0.08);
+    border-color: rgba(192, 132, 252, 0.35);
+    color: #c084fc;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-award-secondary .award-trophy {
+    stroke: #c084fc;
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-award-secondary:hover {
+    background: #c084fc;
+    border-color: #c084fc;
+    color: #0b0f17;
+    box-shadow: 0 4px 14px rgba(192, 132, 252, 0.4);
+  }
+  [data-theme="dark"] .artifact-minimal-btn.is-award-secondary:hover .award-trophy {
+    stroke: #0b0f17;
+  }
+
   /* 2. CERTIFICATE Minimal Styling (Mint / Emerald) */
   .artifact-minimal-btn.is-cert {
     background: rgba(16, 185, 129, 0.08);
@@ -2137,6 +2242,75 @@ const createCapabilityRadarChart = (scores) => {
   }
   .artifact-minimal-btn.is-video:hover .art-icon {
     fill: #ffffff;
+  }
+
+  /* 9. PENDING Minimal Locked Styling (Diagonal Striped / Lock Emblem) */
+  .artifact-minimal-btn.is-pending-locked {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 30px;
+    padding: 0 10px;
+    border-radius: 6px;
+    border: 1px dashed rgba(255, 255, 255, 0.16);
+    background: repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.02),
+      rgba(255, 255, 255, 0.02) 5px,
+      rgba(255, 255, 255, 0.06) 5px,
+      rgba(255, 255, 255, 0.06) 10px
+    );
+    color: var(--color-ink-muted, #94a3b8);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: default;
+    user-select: none;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+  .artifact-minimal-btn.is-pending-locked .pending-lock-icon {
+    width: 12px;
+    height: 12px;
+    stroke: currentColor;
+    opacity: 0.85;
+  }
+
+  .pending-stripes-pill {
+    display: inline-block;
+    padding: 1px 5px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: var(--color-ink-soft, #cbd5e1);
+  }
+
+  [data-theme="light"] .artifact-minimal-btn.is-pending-locked {
+    border-color: rgba(0, 0, 0, 0.14);
+    background: repeating-linear-gradient(
+      -45deg,
+      rgba(0, 0, 0, 0.02),
+      rgba(0, 0, 0, 0.02) 5px,
+      rgba(0, 0, 0, 0.05) 5px,
+      rgba(0, 0, 0, 0.05) 10px
+    );
+    color: #64748b;
+  }
+
+  [data-theme="light"] .pending-stripes-pill {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: #475569;
+  }
+
+  .artifact-minimal-btn.is-pending-locked:hover {
+    border-color: rgba(255, 255, 255, 0.35);
+    color: var(--color-ink);
   }
   [data-theme="dark"] .artifact-minimal-btn.is-video {
     background: rgba(251, 113, 133, 0.08);

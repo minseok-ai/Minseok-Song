@@ -1,5 +1,5 @@
 {
-  "title": "NNFC Semiconductor Fab AX Transformation",
+  "title": "Semiconductor Fab AX Transformation",
   "summary": "Architected a multi-LLM DAG harness and 183-tool spec database at KAIST NNFC to automate manual recipe formulation into verified engineer run-sheets.",
   "order": 4,
   "status": "published",
@@ -24,12 +24,12 @@
   "pdf": {
     "src": "/documents/projects/01-nnfc-recipe-system.mp4",
     "label": "팹 AX 시연영상 (MP4)",
-    "title": "NNFC Semiconductor Fab AX Transformation"
+    "title": "Semiconductor Fab AX Transformation"
   },
   "certificate": {
     "src": "/documents/projects/04-nnfc-fab-ax-portfolio.pdf",
     "label": "경력기술서 및 포트폴리오 (PDF)",
-    "title": "NNFC Fab AX Portfolio & Experience Deck"
+    "title": "Semiconductor Fab AX Portfolio & Experience Deck"
   },
   "ko": {
     "title": "나노종합기술원 반도체 제조 부문 레시피 제조 컨설팅 시스템 (AX 전환)",
