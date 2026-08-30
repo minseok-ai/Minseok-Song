@@ -700,16 +700,14 @@ const createCapabilityRadarChart = (scores) => {
     if (pdfjsPromise) return pdfjsPromise;
     pdfjsPromise = new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-      script.onload = async () => {
-        try {
-          const workerRes = await fetch('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js');
-          const workerBlob = await workerRes.blob();
-          window.pdfjsLib.GlobalWorkerOptions.workerSrc = URL.createObjectURL(workerBlob);
-        } catch (e) {
-          window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      script.src = '/vendor/pdfjs/pdf.min.js';
+      script.onload = () => {
+        if (window.pdfjsLib) {
+          window.pdfjsLib.GlobalWorkerOptions.workerSrc = '/vendor/pdfjs/pdf.worker.min.js';
+          resolve(window.pdfjsLib);
+        } else {
+          reject(new Error('PDF.js not available'));
         }
-        resolve(window.pdfjsLib);
       };
       script.onerror = reject;
       document.head.appendChild(script);
@@ -725,7 +723,10 @@ const createCapabilityRadarChart = (scores) => {
     try {
       const [pdfjs, fileRes] = await Promise.all([
         loadPdfJs(),
-        fetch(src).then(r => r.arrayBuffer())
+        fetch(src).then(r => {
+          if (!r.ok) throw new Error(`HTTP error ${r.status}`);
+          return r.arrayBuffer();
+        })
       ]);
       if (renderToken !== currentPdfRenderToken) return;
 

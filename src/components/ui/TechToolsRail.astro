@@ -523,14 +523,15 @@ const iconSvg = {
   }
 
   @media (max-width: 980px) {
-    .tech-tools {
+    .tech-tools__container {
       grid-template-columns: 1fr;
       gap: 32px;
     }
 
     .tech-tools__intro {
       position: static;
-      max-width: 620px;
+      top: auto;
+      max-width: 100%;
     }
     
     .tech-tools__powered {

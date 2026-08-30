@@ -855,11 +855,13 @@ html[data-theme="light"] .theme-icon-moon {
   .site-header {
     grid-template-columns: 1fr auto;
     gap: 12px;
-    width: min(calc(100% - 20px), var(--max-site));
-    top: 18px;
-    margin-top: 18px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    width: 100%;
+    top: 0;
+    margin-top: 0;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-radius: 0 0 16px 16px;
+    border-top: 0;
   }
 
   .numbered-nav {
@@ -927,8 +929,10 @@ html[data-theme="light"] .theme-icon-moon {
   }
 
   .site-header {
-    top: 12px;
-    margin-top: 12px;
+    top: 0;
+    margin-top: 0;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   .brand-wordmark {
