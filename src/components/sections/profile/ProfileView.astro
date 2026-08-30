@@ -399,8 +399,14 @@ const credentials = [
     pdfjsPromise = new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-      script.onload = () => {
-        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      script.onload = async () => {
+        try {
+          const workerRes = await fetch('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js');
+          const workerBlob = await workerRes.blob();
+          window.pdfjsLib.GlobalWorkerOptions.workerSrc = URL.createObjectURL(workerBlob);
+        } catch (e) {
+          window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
         resolve(window.pdfjsLib);
       };
       script.onerror = reject;
@@ -412,12 +418,16 @@ const credentials = [
   let currentPdfRenderToken = 0;
   async function renderPdfOnCanvas(src, container) {
     const renderToken = ++currentPdfRenderToken;
-    container.innerHTML = '<div class="pdf-loading-spinner"><div class="spinner"></div><span>문서 렌더링 중...</span></div>';
+    container.innerHTML = '<div class="pdf-loading-spinner"><div class="spinner"></div><span>문서 로딩 중...</span></div>';
     
     try {
-      const pdfjs = await loadPdfJs();
+      const [pdfjs, fileRes] = await Promise.all([
+        loadPdfJs(),
+        fetch(src).then(r => r.arrayBuffer())
+      ]);
       if (renderToken !== currentPdfRenderToken) return;
-      const loadingTask = pdfjs.getDocument(src);
+
+      const loadingTask = pdfjs.getDocument({ data: fileRes });
       const pdf = await loadingTask.promise;
       if (renderToken !== currentPdfRenderToken) return;
       
@@ -428,7 +438,7 @@ const credentials = [
         const unscaledViewport = page.getViewport({ scale: 1.0 });
         
         const containerWidth = Math.min(window.innerWidth - 32, 860);
-        const scale = Math.max(1.1, Math.min(2.2, (containerWidth / unscaledViewport.width) * (window.devicePixelRatio || 1.3)));
+        const scale = Math.max(1.0, Math.min(2.5, (containerWidth / unscaledViewport.width) * (window.devicePixelRatio || 1.2)));
         const viewport = page.getViewport({ scale });
         
         const pageWrap = document.createElement('div');
@@ -482,7 +492,7 @@ const credentials = [
 
     function openPdf(src, title) {
       const isVideo = src.toLowerCase().endsWith('.mp4') || src.toLowerCase().endsWith('.webm');
-      const isMobile = window.innerWidth <= 768 || ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+      const isMobile = window.innerWidth <= 768;
 
       if (titleEl) titleEl.textContent = title || (isVideo ? "Video Demonstration" : "Verified Credential Viewer");
       if (downloadLink) {
