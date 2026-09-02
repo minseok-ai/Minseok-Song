@@ -298,15 +298,20 @@ const jsonLd = {
           <span class="brand-wordmark">Minseok Song</span>
         </a>
 
-        <nav class="numbered-nav" aria-label="Primary navigation">
+        <nav
+          class="numbered-nav"
+          aria-label="Primary navigation"
+          data-active-index={Math.max(0, nav.findIndex((item) => (item.path.replace(/\/$/, "") || "/") === pathname))}
+        >
           <div class="nav-indicator-line" id="nav-indicator" aria-hidden="true"></div>
-          {nav.map((item) => {
+          {nav.map((item, idx) => {
             const itemPath = item.path.replace(/\/$/, "") || "/";
             const isCurrent = pathname === itemPath;
 
             return (
               <a
                 href={item.path}
+                data-nav-index={idx}
                 aria-current={isCurrent ? "page" : undefined}
               >
                 <span class="nav-label">{item.label}</span>
@@ -522,12 +527,46 @@ const jsonLd = {
 
         if (url.origin !== window.location.origin) return;
         if (url.pathname === window.location.pathname && url.hash) return;
+        if (url.pathname === window.location.pathname && !url.hash && !url.search) return;
 
         event.preventDefault();
+
+        // If clicking a main navigation item, immediately glide the indicator pill!
+        if (link.closest('.numbered-nav')) {
+          const nav = link.closest('.numbered-nav');
+          const indicator = document.getElementById('nav-indicator');
+          if (nav && indicator) {
+            const navRect = nav.getBoundingClientRect();
+            const isMobile = window.innerWidth <= 1100;
+            if (isMobile) {
+              const targetRect = link.getBoundingClientRect();
+              indicator.style.width = `${targetRect.width}px`;
+              indicator.style.height = `${targetRect.height}px`;
+              indicator.style.left = `${targetRect.left - navRect.left}px`;
+              indicator.style.top = `${targetRect.top - navRect.top}px`;
+              indicator.style.opacity = '1';
+            } else {
+              const label = link.querySelector('.nav-label');
+              if (label) {
+                const labelRect = label.getBoundingClientRect();
+                indicator.style.width = `${labelRect.width}px`;
+                indicator.style.left = `${labelRect.left - navRect.left}px`;
+                indicator.style.opacity = '1';
+              }
+            }
+            nav.querySelectorAll('a').forEach(i => i.removeAttribute('aria-current'));
+            link.setAttribute('aria-current', 'page');
+          }
+        }
+
         document.body.classList.add("is-exiting");
         window.setTimeout(() => {
           window.location.href = url.href;
         }, 180);
+      });
+
+      window.addEventListener("pageshow", () => {
+        document.body.classList.remove("is-exiting");
       });
 
       const themeToggle = document.getElementById('theme-toggle');
@@ -735,67 +774,87 @@ const jsonLd = {
         });
       }
 
-      // Nav Indicator sliding logic
+      // Nav Indicator sliding logic (Desktop Underline & Mobile Animated Pill)
       const initNavIndicator = () => {
         const nav = document.querySelector('.numbered-nav');
         const indicator = document.getElementById('nav-indicator');
         if (!nav || !indicator) return;
 
-        const items = nav.querySelectorAll('a');
-        const activeItem = nav.querySelector('a[aria-current="page"]');
+        const items = Array.from(nav.querySelectorAll('a'));
+        const getActiveItem = () => nav.querySelector('a[aria-current="page"]') || items[0];
 
-        const updateIndicator = (targetLink) => {
+        const updateIndicator = (targetLink, animate = true) => {
           if (!targetLink) {
-            indicator.style.opacity = '0';
-            return;
+            targetLink = getActiveItem();
           }
+          if (!targetLink) return;
           
-          const label = targetLink.querySelector('.nav-label');
-          if (!label) return;
-
+          const isMobile = window.innerWidth <= 1100;
           const navRect = nav.getBoundingClientRect();
-          const labelRect = label.getBoundingClientRect();
+          const targetRect = targetLink.getBoundingClientRect();
 
-          indicator.style.width = `${labelRect.width}px`;
-          indicator.style.left = `${labelRect.left - navRect.left}px`;
-          indicator.style.opacity = '1';
-        };
+          if (!animate) {
+            indicator.style.transition = 'none';
+          } else {
+            indicator.style.transition = '';
+          }
 
-        // Initialize position reliably without magic number delays
-        const initializePosition = () => {
-          if (!indicator) return;
-          
-          // Disable transition for initial placement to avoid sliding from 0
-          indicator.style.transition = 'none';
-          updateIndicator(activeItem);
-          
-          // Restore transition after the next frame when layout is committed
-          requestAnimationFrame(() => {
+          if (isMobile) {
+            indicator.style.width = `${targetRect.width}px`;
+            indicator.style.height = `${targetRect.height}px`;
+            indicator.style.left = `${targetRect.left - navRect.left}px`;
+            indicator.style.top = `${targetRect.top - navRect.top}px`;
+            indicator.style.opacity = '1';
+          } else {
+            const label = targetLink.querySelector('.nav-label');
+            if (!label) return;
+
+            const labelRect = label.getBoundingClientRect();
+            indicator.style.width = `${labelRect.width}px`;
+            indicator.style.height = '';
+            indicator.style.left = `${labelRect.left - navRect.left}px`;
+            indicator.style.top = '';
+            indicator.style.opacity = '1';
+          }
+
+          if (!animate) {
             requestAnimationFrame(() => {
-              indicator.style.transition = '';
+              requestAnimationFrame(() => {
+                indicator.style.transition = '';
+              });
             });
-          });
+          }
         };
+
+        // Initialize immediately
+        updateIndicator(getActiveItem(), false);
 
         if (document.fonts && document.fonts.ready) {
-          document.fonts.ready.then(initializePosition);
-        } else {
-          window.addEventListener('load', initializePosition);
+          document.fonts.ready.then(() => updateIndicator(getActiveItem(), false));
         }
+        window.addEventListener('load', () => updateIndicator(getActiveItem(), false));
 
-        // Dynamic hover bindings
+        // Dynamic hover & pointerdown bindings
         items.forEach(item => {
-          item.addEventListener('mouseenter', () => updateIndicator(item));
+          item.addEventListener('mouseenter', () => {
+            if (window.innerWidth > 1100) updateIndicator(item, true);
+          });
+          item.addEventListener('pointerdown', () => {
+            const navIndex = item.getAttribute('data-nav-index');
+            if (navIndex !== null) {
+              nav.setAttribute('data-active-index', navIndex);
+            }
+            updateIndicator(item, true);
+          });
         });
 
         nav.addEventListener('mouseleave', () => {
-          updateIndicator(activeItem);
+          if (window.innerWidth > 1100) updateIndicator(getActiveItem(), true);
         });
 
         // Update on window resize to keep position correct
         window.addEventListener('resize', () => {
-          const currentActive = nav.querySelector('a[aria-current="page"]');
-          updateIndicator(currentActive);
+          updateIndicator(getActiveItem(), false);
         });
       };
 
@@ -804,8 +863,8 @@ const jsonLd = {
       // Global Scroll Reveal Observer
       const observerOptions = {
         root: null,
-        rootMargin: '0px',
-        threshold: 0.15
+        rootMargin: '0px 0px -40px 0px',
+        threshold: 0.05
       };
       
       const scrollObserver = new IntersectionObserver((entries, observer) => {

@@ -32,6 +32,16 @@ type A1ChanRequestBody = {
     lastRouteId?: unknown;
     lastRecordId?: unknown;
     userHistory?: unknown;
+    affect?: {
+      octantId?: unknown;
+      octantCode?: unknown;
+      name?: unknown;
+      color?: unknown;
+      tone?: unknown;
+      valence?: unknown;
+      arousal?: unknown;
+      dominance?: unknown;
+    };
   };
 };
 
@@ -67,13 +77,26 @@ function cleanString(value: unknown, maxLength = 260) {
 
 function cleanContext(value: A1ChanRequestBody["context"] = {}) {
   const context = value && typeof value === "object" ? value : {};
+  const rawAffect = context.affect && typeof context.affect === "object" ? context.affect : undefined;
+  const affect = rawAffect ? {
+    octantId: typeof rawAffect.octantId === "number" ? rawAffect.octantId : undefined,
+    octantCode: cleanString(rawAffect.octantCode, 20) || undefined,
+    name: cleanString(rawAffect.name, 80) || undefined,
+    color: cleanString(rawAffect.color, 20) || undefined,
+    tone: cleanString(rawAffect.tone, 140) || undefined,
+    valence: typeof rawAffect.valence === "number" ? rawAffect.valence : undefined,
+    arousal: typeof rawAffect.arousal === "number" ? rawAffect.arousal : undefined,
+    dominance: typeof rawAffect.dominance === "number" ? rawAffect.dominance : undefined,
+  } : undefined;
+
   return {
     currentRouteId: cleanString(context.currentRouteId, 80) || undefined,
     lastRouteId: cleanString(context.lastRouteId, 80) || undefined,
     lastRecordId: cleanString(context.lastRecordId, 140) || undefined,
     userHistory: Array.isArray(context.userHistory)
       ? context.userHistory.map((item) => cleanString(item, 180)).filter(Boolean).slice(-4)
-      : []
+      : [],
+    affect
   };
 }
 

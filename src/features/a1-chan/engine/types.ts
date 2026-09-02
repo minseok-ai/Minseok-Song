@@ -9,6 +9,17 @@ export type A1ChanContext = {
   retrievalScores?: A1ChanRetrievalScore[];
   semanticHint?: A1ChanSemanticHint;
   source?: NavigatorResultSource;
+  affect?: {
+    valence?: number;
+    arousal?: number;
+    dominance?: number;
+    centroid?: [number, number, number];
+    octantId?: number;
+    octantCode?: string;
+    name?: string;
+    tone?: string;
+    color?: string;
+  };
 };
 
 export type A1ChanIntent =

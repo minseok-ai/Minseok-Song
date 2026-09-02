@@ -25,6 +25,7 @@ visual-checks/
 
 # Local environment and untracked extensions
 local/
+public/A1ntuitize/
 public/*-extension/
 public/3D Dodge/
 

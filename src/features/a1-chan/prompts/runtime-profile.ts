@@ -85,6 +85,26 @@ export function buildA1ChanSystemPrompt(profile = A1_CHAN_RUNTIME_PROFILE) {
   ].join("\n");
 }
 
+export function buildAffectToneDirective(affect?: {
+  octantId?: number;
+  octantCode?: string;
+  name?: string;
+  tone?: string;
+  valence?: number;
+  arousal?: number;
+  dominance?: number;
+}) {
+  if (!affect || !affect.octantId) {
+    return "Maintain a calm, poised, confident site-concierge tone.";
+  }
+
+  const v = typeof affect.valence === "number" ? affect.valence.toFixed(2) : "+0.50";
+  const a = typeof affect.arousal === "number" ? affect.arousal.toFixed(2) : "+0.50";
+  const d = typeof affect.dominance === "number" ? affect.dominance.toFixed(2) : "+0.50";
+
+  return `Current Affect State: Octant ${affect.octantId} ${affect.octantCode || ""} (${affect.name || "Affective"}) [PAD: V=${v}, A=${a}, D=${d}]. Tone directive: ${affect.tone || "Be natural and concise."} Express this mood subtly in conversational pacing, greetings, and choice of words while keeping all facts 100% grounded in site evidence.`;
+}
+
 export function buildA1ChanPromptContract(phase: "routing" | "semantic" | "answerPlan" | "conversation") {
   return {
     phase,

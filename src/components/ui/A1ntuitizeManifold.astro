@@ -1,0 +1,2175 @@
+---
+import { eq1Html, eq2Html, eq3Html, eq4Html } from "../../utils/mathFormulas";
+import "katex/dist/katex.min.css";
+---
+
+<!-- SECTION 02: A1NTUITIZE (SEALED R&D INITIATIVE) -->
+<section id="a1ntuitize-sealed" class="a1ntuitize-sealed-section" aria-label="A1ntuitize R&D Initiative">
+  <div class="sealed-banner-head">
+    <div class="product-kicker">
+      <span class="kicker-pill">02 / Emerging Initiative</span>
+      <strong class="kicker-title">A1ntuitize Vision Memory Engine</strong>
+    </div>
+  </div>
+
+  <div class="sealed-card-container">
+    <div class="sealed-header">
+      <div class="sealed-title-wrap">
+        <span class="micro-label">Cognitive Architecture Research · Topological Affect Engine</span>
+        <h2>3D PAD Topological Memory Accretion & Core Affect Synthesis Engine</h2>
+        <p>
+          An experimental intuition memory engine implementing psychological <strong>3D PAD (Pleasure-Arousal-Dominance) Emotional Space</strong> across 8 spatial octants. 
+          Visual scenes are embedded into continuous PAD tensors via <strong>Qwen 3.5 Vision</strong>. 
+          Sensory particles fire inward from these octants toward origin (0,0,0), undergoing <strong>inelastic collisions</strong> to stack physical memory mass ($M_k$) as discrete crystalline atoms on the central Calabi-Yau manifold. 
+          The real-time <strong>Projected Weighted Sum (Spherical Centroid P<sub>centroid</sub>)</strong> synthesizes blended emotions on S² to drive reactive AI facial expressions, while unreinforced sectors implode toward the origin via Ebbinghaus entropy half-life decay.
+        </p>
+      </div>
+
+      <div class="sealed-specs-widget" aria-label="A1ntuitize Architecture Specifications">
+        <div class="specs-widget-header">
+          <span class="spec-kicker">SYSTEM ARCHITECTURE</span>
+          <span class="spec-state"><span class="pulse-amber"></span> SEALED R&D SPEC</span>
+        </div>
+        <div class="specs-widget-grid">
+          <div class="spec-entry">
+            <span class="se-label">Vision Model</span>
+            <strong class="se-val">Qwen 3.5 Vision (Quantized)</strong>
+          </div>
+          <div class="spec-entry">
+            <span class="se-label">Local Runtime</span>
+            <strong class="se-val">LM Studio Inference Engine</strong>
+          </div>
+          <div class="spec-entry">
+            <span class="se-label">Coordinate Field</span>
+            <strong class="se-val">8-Octant 3D PAD Space</strong>
+          </div>
+          <div class="spec-entry">
+            <span class="se-label">Entropy Pruning</span>
+            <strong class="se-val">Ebbinghaus Half-Life (k = 0.16)</strong>
+          </div>
+          <div class="spec-entry">
+            <span class="se-label">Manifold Geometry</span>
+            <strong class="se-val">Calabi-Yau 6D Spatial Accretion</strong>
+          </div>
+          <div class="spec-entry">
+            <span class="se-label">Affect Synthesis</span>
+            <strong class="se-val">Projected Spherical Centroid (S²)</strong>
+          </div>
+        </div>
+        <div class="specs-widget-note">
+          <div class="swn-row">
+            <span class="swn-label">Architecture Pipeline:</span>
+            <span class="swn-val">Continuous Vision Tensor &rarr; Inelastic Voxel Collision &rarr; Zero-Crumb Accretion</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3D TOPOLOGICAL MANIFOLD VIEWPORT -->
+    <div class="manifold-3d-wrapper">
+      <div class="manifold-3d-hud-top">
+        <div class="hud-item hud-left">
+          <span class="hud-label">8-OCTANT PAD CELESTIAL TOPOLOGY</span>
+          <strong class="hud-val">POLYHEDRAL ACCRETION MANIFOLD & CENTROID</strong>
+        </div>
+
+        <div class="manifold-camera-controls" role="toolbar" aria-label="3D Camera Presets">
+          <button class="cam-btn is-active" data-view="orbit" title="Interactive Orbit Mode">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span>Orbit</span>
+          </button>
+          <button class="cam-btn" data-view="top" title="Top-Down (+Y Arousal) Pole">
+            <span>Top (+Y)</span>
+          </button>
+          <button class="cam-btn" data-view="front" title="Frontal (+Z Dominance) View">
+            <span>Front (+Z)</span>
+          </button>
+          <button class="cam-btn" data-view="side" title="Lateral (+X Pleasure) View">
+            <span>Side (+X)</span>
+          </button>
+          <button class="cam-btn pulse-fire-btn" id="fire-salvo-btn" title="Fire Multi-Octant Vision Particle Salvo">
+            <span class="pulse-icon">⚡</span>
+            <span>Salvo Pulse</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="manifold-canvas-box" id="manifold-box">
+        <canvas id="manifold-canvas" width="900" height="520" class="manifold-canvas"></canvas>
+        <div class="manifold-callouts" id="manifold-callouts" aria-hidden="true"></div>
+
+        <!-- TACTICAL NAVIGATION BADGE (BOTTOM-LEFT OF 3D CANVAS) -->
+        <div class="manifold-nav-guide-overlay">
+          <span class="mng-badge">3D NAV</span>
+          <span class="mng-text">Drag to Orbit · Scroll to Zoom</span>
+        </div>
+
+        <!-- TACTICAL FLOATING HOLOGRAM AI FACE: desktop absolute overlay -->
+        <div class="ai-expression-hud-overlay ai-hud-desktop" id="ai-expression-hud" aria-label="AI Personality Centroid">
+          <div class="ai-avatar-card">
+            <div class="ai-face-hologram" id="ai-face-holo" aria-label="AI Reactive Facial Expression Hologram">
+              <canvas id="ai-face-canvas" width="104" height="76" class="ai-face-canvas"></canvas>
+            </div>
+            <div class="ai-face-meta">
+              <div class="ai-meta-top">
+                <span class="hud-label">AI PERSONALITY CENTROID</span>
+                <span class="ai-spike-badge" id="ai-spike-badge">CORE AFFECT · O1 (+, +, +)</span>
+              </div>
+              <strong class="hud-val" id="hud-active-lobe">
+                <span class="pulse-dot"></span> <span class="lobe-name">JOY & EUPHORIA</span>
+              </strong>
+              <span class="ai-face-desc" id="ai-face-desc">Positive, high-energy & proactive situation mastery</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOBILE AI HUD ROW: shown below canvas on small screens -->
+      <div class="ai-hud-mobile-row">
+        <div class="ai-avatar-card">
+          <div class="ai-face-hologram ai-face-holo-mirror" aria-label="AI Reactive Facial Expression Hologram (mobile)">
+            <canvas id="ai-face-canvas-mobile" width="104" height="76" class="ai-face-canvas"></canvas>
+          </div>
+          <div class="ai-face-meta">
+            <div class="ai-meta-top">
+              <span class="hud-label">AI PERSONALITY CENTROID</span>
+              <span class="ai-spike-badge" id="ai-spike-badge-mobile">CORE AFFECT · O1 (+, +, +)</span>
+            </div>
+            <strong class="hud-val" id="hud-active-lobe-mobile">
+              <span class="pulse-dot"></span> <span class="lobe-name">JOY & EUPHORIA</span>
+            </strong>
+            <span class="ai-face-desc" id="ai-face-desc-mobile">Positive, high-energy & proactive situation mastery</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- High-Tech 8-Octant PAD Vector Synthesizer & Memory Mass Control Dashboard -->
+      <div class="manifold-spectrum-bar" id="manifold-spectrum" aria-label="8-Octant PAD Topological Synthesizer">
+        <div class="spectrum-bar-header">
+          <div class="sb-header-left">
+            <span class="sb-label">8-OCTANT TOPOLOGICAL PERSONALITY SYNTHESIZER</span>
+            <span class="sb-sub">Valence (X) · Arousal (Y) · Dominance (Z) | Continuous Topological Accretion Space</span>
+          </div>
+          <div class="origin-decay-badge" id="trigger-decay-btn" role="button" tabindex="0" title="Click to trigger radial Ebbinghaus entropy decay collapsing lobes toward (0,0,0) origin">
+            <span class="decay-icon">⚡</span>
+            <span class="decay-text">RADIAL ENTROPY PURGE</span>
+            <em>k = 0.16 day⁻¹</em>
+          </div>
+        </div>
+
+        <!-- 3-Axis Live Telemetry Faders -->
+        <div class="pad-telemetry-faders">
+          <div class="pad-fader-item">
+            <div class="pfi-label">
+              <span class="pfi-axis" style="color: #ef4444;">VALENCE (X)</span>
+              <strong class="pfi-val" id="pad-val-text">+0.58</strong>
+            </div>
+            <div class="pfi-track"><div class="pfi-fill" id="pad-val-gauge" style="background: #ef4444; width: 79%;"></div></div>
+            <div class="pfi-bounds"><span>-1 Hostile</span><span>+1 Positive</span></div>
+          </div>
+
+          <div class="pad-fader-item">
+            <div class="pfi-label">
+              <span class="pfi-axis" style="color: #3b82f6;">AROUSAL (Y)</span>
+              <strong class="pfi-val" id="pad-aro-text">+0.58</strong>
+            </div>
+            <div class="pfi-track"><div class="pfi-fill" id="pad-aro-gauge" style="background: #3b82f6; width: 79%;"></div></div>
+            <div class="pfi-bounds"><span>-1 Static</span><span>+1 Dynamic</span></div>
+          </div>
+
+          <div class="pad-fader-item">
+            <div class="pfi-label">
+              <span class="pfi-axis" style="color: #10b981;">DOMINANCE (Z)</span>
+              <strong class="pfi-val" id="pad-dom-text">+0.58</strong>
+            </div>
+            <div class="pfi-track"><div class="pfi-fill" id="pad-dom-gauge" style="background: #10b981; width: 79%;"></div></div>
+            <div class="pfi-bounds"><span>-1 Helpless</span><span>+1 Mastery</span></div>
+          </div>
+        </div>
+
+        <!-- 8 Interactive Enriched Segmented Ribbon Tiles (Ordered 1 to 8) -->
+        <div class="octant-segmented-ribbon" role="tablist" aria-label="8-Octant Quick Selector">
+          <!-- Octant 1 -->
+          <button class="oct-seg-btn is-active" data-octant="1" style="--btn-col: #ef4444;" title="Octant 1 · (+, +, +) · Joy & Euphoria">
+            <div class="osb-head">
+              <span class="osb-dot" style="background: #ef4444;"></span>
+              <strong class="osb-id">O1</strong>
+              <span class="osb-code">(+,+,+)</span>
+            </div>
+            <strong class="osb-name">Joy & Euphoria</strong>
+            <div class="osb-mass-wrap">
+              <div class="osb-mass-track"><div class="osb-mass-fill" id="mass-bar-1" style="background: #ef4444; width: 45%;"></div></div>
+              <span class="osb-mass-num" id="mass-val-1">45%</span>
+            </div>
+          </button>
+
+          <!-- Octant 2 -->
+          <button class="oct-seg-btn" data-octant="2" style="--btn-col: #f97316;" title="Octant 2 · (+, +, -) · Admiration & Trust">
+            <div class="osb-head">
+              <span class="osb-dot" style="background: #f97316;"></span>
+              <strong class="osb-id">O2</strong>
+              <span class="osb-code">(+,+,-)</span>
+            </div>
+            <strong class="osb-name">Admiration & Trust</strong>
+            <div class="osb-mass-wrap">
+              <div class="osb-mass-track"><div class="osb-mass-fill" id="mass-bar-2" style="background: #f97316; width: 38%;"></div></div>
+              <span class="osb-mass-num" id="mass-val-2">38%</span>
+            </div>
+          </button>
+
+          <!-- Octant 3 -->
+          <button class="oct-seg-btn" data-octant="3" style="--btn-col: #eab308;" title="Octant 3 · (+, -, +) · Serenity & Calm">
+            <div class="osb-head">
+              <span class="osb-dot" style="background: #eab308;"></span>
+              <strong class="osb-id">O3</strong>
+              <span class="osb-code">(+,-,+)</span>
+            </div>
+            <strong class="osb-name">Serenity & Calm</strong>
+            <div class="osb-mass-wrap">
+              <div class="osb-mass-track"><div class="osb-mass-fill" id="mass-bar-3" style="background: #eab308; width: 32%;"></div></div>
+              <span class="osb-mass-num" id="mass-val-3">32%</span>
+            </div>
+          </button>
+
+          <!-- Octant 4 -->
+          <button class="oct-seg-btn" data-octant="4" style="--btn-col: #10b981;" title="Octant 4 · (+, -, -) · Catharsis & Relief">
+            <div class="osb-head">
+              <span class="osb-dot" style="background: #10b981;"></span>
+              <strong class="osb-id">O4</strong>
+              <span class="osb-code">(+,-,-)</span>
+            </div>
+            <strong class="osb-name">Catharsis & Relief</strong>
+            <div class="osb-mass-wrap">
+              <div class="osb-mass-track"><div class="osb-mass-fill" id="mass-bar-4" style="background: #10b981; width: 28%;"></div></div>
+              <span class="osb-mass-num" id="mass-val-4">28%</span>
+            </div>
+          </button>
+
+          <!-- Octant 5 -->
+          <button class="oct-seg-btn" data-octant="5" style="--btn-col: #06b6d4;" title="Octant 5 · (-, +, +) · Anger & Shock">
+            <div class="osb-head">
+              <span class="osb-dot" style="background: #06b6d4;"></span>
+              <strong class="osb-id">O5</strong>
+              <span class="osb-code">(-,+,+)</span>
+            </div>
+            <strong class="osb-name">Anger & Shock</strong>
+            <div class="osb-mass-wrap">
+              <div class="osb-mass-track"><div class="osb-mass-fill" id="mass-bar-5" style="background: #06b6d4; width: 24%;"></div></div>
+              <span class="osb-mass-num" id="mass-val-5">24%</span>
+            </div>
+          </button>
+
+          <!-- Octant 6 -->
+          <button class="oct-seg-btn" data-octant="6" style="--btn-col: #3b82f6;" title="Octant 6 · (-, +, -) · Fear & Tension">
+            <div class="osb-head">
+              <span class="osb-dot" style="background: #3b82f6;"></span>
+              <strong class="osb-id">O6</strong>
+              <span class="osb-code">(-,+,-)</span>
+            </div>
+            <strong class="osb-name">Fear & Tension</strong>
+            <div class="osb-mass-wrap">
+              <div class="osb-mass-track"><div class="osb-mass-fill" id="mass-bar-6" style="background: #3b82f6; width: 22%;"></div></div>
+              <span class="osb-mass-num" id="mass-val-6">22%</span>
+            </div>
+          </button>
+
+          <!-- Octant 7 -->
+          <button class="oct-seg-btn" data-octant="7" style="--btn-col: #6366f1;" title="Octant 7 · (-, -, +) · Disgust & Contempt">
+            <div class="osb-head">
+              <span class="osb-dot" style="background: #6366f1;"></span>
+              <strong class="osb-id">O7</strong>
+              <span class="osb-code">(-,-,+)</span>
+            </div>
+            <strong class="osb-name">Disgust & Contempt</strong>
+            <div class="osb-mass-wrap">
+              <div class="osb-mass-track"><div class="osb-mass-fill" id="mass-bar-7" style="background: #6366f1; width: 18%;"></div></div>
+              <span class="osb-mass-num" id="mass-val-7">18%</span>
+            </div>
+          </button>
+
+          <!-- Octant 8 -->
+          <button class="oct-seg-btn" data-octant="8" style="--btn-col: #a855f7;" title="Octant 8 · (-, -, -) · Sadness & Despair">
+            <div class="osb-head">
+              <span class="osb-dot" style="background: #a855f7;"></span>
+              <strong class="osb-id">O8</strong>
+              <span class="osb-code">(-,-,-)</span>
+            </div>
+            <strong class="osb-name">Sadness & Despair</strong>
+            <div class="osb-mass-wrap">
+              <div class="osb-mass-track"><div class="osb-mass-fill" id="mass-bar-8" style="background: #a855f7; width: 15%;"></div></div>
+              <span class="osb-mass-num" id="mass-val-8">15%</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Dynamic Readout Detailed Command Strip -->
+        <div class="colormap-readout">
+          <div class="cm-left">
+            <span class="cm-angle-badge" id="cm-angle-badge">OCTANT 1 · (+, +, +)</span>
+            <span class="cm-coords" id="cm-coords">[P:+1.0 A:+1.0 D:+1.0]</span>
+          </div>
+          <div class="cm-center">
+            <strong class="cm-active-name" id="cm-active-name">Joy & Euphoria</strong>
+            <span class="cm-sub-emotions" id="cm-sub-emotions">Euphoria · Joy · Excitement · Passion · Triumph</span>
+          </div>
+          <div class="cm-right">
+            <button class="active-inject-btn" id="active-inject-btn" title="Inject Inward Particle Salvo into Selected Octant">
+              <span class="aib-icon">⚡</span>
+              <span>Inject Salvo</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="manifold-3d-hud-bottom">
+        <div class="hud-status-chip">
+          <span class="pulse-dot"></span>
+          <span class="hud-cue-text">3D 8-OCTANT PAD · <strong>DRAG ORBIT</strong> / <strong>CLICK OCTANT TO INJECT</strong></span>
+        </div>
+        <div class="hud-telemetry">
+          <div class="tele-item">
+            <span class="ti-label">VISION MODEL</span>
+            <strong class="ti-val">Qwen 3.5 Vision (LM Studio)</strong>
+          </div>
+          <div class="tele-item">
+            <span class="ti-label">PAD SYNTHESIS</span>
+            <strong class="ti-val">Projected Centroid (S²)</strong>
+          </div>
+          <div class="tele-item">
+            <span class="ti-label">TOPOLOGY</span>
+            <strong class="ti-val">Calabi-Yau Accretion</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 CORE SYSTEM SPECIFICATIONS -->
+    <div class="sealed-grid">
+      <article class="sealed-feature-box">
+        <span class="feature-idx">SPEC 01</span>
+        <h3>Trajectory & Spike Bias Field</h3>
+        <p>Sensory projectiles launched from the boundary sphere curve toward dominant memory clusters via a dynamic top-4 gravitational spike bias vector field.</p>
+        <div class="feature-tags">
+          <span>Spike Bias Field</span>
+          <span>Inward Vector</span>
+          <span>Quadrant Gating</span>
+        </div>
+      </article>
+
+      <article class="sealed-feature-box">
+        <span class="feature-idx">SPEC 02</span>
+        <h3>Discrete 3D Voxel Grid Accretion</h3>
+        <p>Upon physical collision or core contact, projectiles anchor into discrete 3D spatial voxel cells, accumulating spike height, base support, and memory mass.</p>
+        <div class="feature-tags">
+          <span>Voxel Accretion</span>
+          <span>Support Gain</span>
+          <span>Crystalline Spikes</span>
+        </div>
+      </article>
+
+      <article class="sealed-feature-box">
+        <span class="feature-idx">SPEC 03</span>
+        <h3>Center of Mass Drift & Dual Decay</h3>
+        <p>Tracks global 3D center of mass drift and cognitive stability, while unreinforced spikes undergo dual-factor decay with support floor collapse toward (0,0,0).</p>
+        <div class="feature-tags">
+          <span>Center of Mass</span>
+          <span>Stability Metric</span>
+          <span>Floor Collapse</span>
+        </div>
+      </article>
+    </div>
+
+    <!-- MATHEMATICAL FORMULA REFERENCE MATRIX -->
+    <div class="math-reference-section" aria-label="Mathematical Reference Formulas for A1ntuitize">
+      <div class="math-ref-header">
+        <div class="math-kicker">
+          <span class="kicker-pill kicker-pill-amber">Mathematical Architecture</span>
+          <strong class="kicker-title">Topological Personality Field Theoretical Formulations</strong>
+        </div>
+        <p>Formal mathematical formulations governing the trajectory spike bias field, discrete 3D voxel grid accretion, center-of-mass field drift, and dual-factor structural decay with support floor collapse.</p>
+      </div>
+
+      <div class="math-formula-grid">
+        <!-- Equation 01 -->
+        <div class="math-card">
+          <div class="math-card-top">
+            <span class="math-tag">EQ. 01 · TRAJECTORY VECTOR & SPIKE BIAS FIELD</span>
+            <button class="copy-latex-btn" data-eq="1" title="Copy LaTeX formula">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy TeX</span>
+            </button>
+          </div>
+          <div class="formula-katex-block" set:html={eq1Html}></div>
+          <p class="math-desc">Inward sensory projectiles launched from sphere radius R<sub>field</sub> curve toward dominant memory clusters via the top-4 weighted spike bias vector field.</p>
+          <details class="math-param-details">
+            <summary>
+              <span class="mp-toggle-label">Trajectory Vector Field Parameters</span>
+              <span class="mp-chevron">▾</span>
+            </summary>
+            <div class="mp-content">
+              <div class="mp-row"><code>v_step</code><span>Stepping unit vector combining radial inward impulse and gravitational spike bias.</span></div>
+              <div class="mp-row"><code>B_spike(S)</code><span>Gravitational bias synthesized across the top-4 highest/most-supported personality spikes.</span></div>
+              <div class="mp-row"><code>w_in, w_bias</code><span>Configurable blending weights balancing inward drive against memory cluster attraction.</span></div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Equation 02 -->
+        <div class="math-card">
+          <div class="math-card-top">
+            <span class="math-tag">EQ. 02 · DISCRETE VOXEL GRID ACCRETION</span>
+            <button class="copy-latex-btn" data-eq="2" title="Copy LaTeX formula">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy TeX</span>
+            </button>
+          </div>
+          <div class="formula-katex-block" set:html={eq2Html}></div>
+          <p class="math-desc">Upon collision contact or orthogonal gating, projectiles anchor into discrete 3D voxel coordinates (b<sub>x</sub>, b<sub>y</sub>, b<sub>z</sub>) to increment spike height, base support, and mass.</p>
+          <details class="math-param-details">
+            <summary>
+              <span class="mp-toggle-label">Voxel Accretion Mechanics</span>
+              <span class="mp-chevron">▾</span>
+            </summary>
+            <div class="mp-content">
+              <div class="mp-row"><code>(bx, by, bz)</code><span>Spatial grid quantization key hashing continuous 3D points into discrete voxel clusters.</span></div>
+              <div class="mp-row"><code>Δh_k, Δs_k</code><span>Spike height and structural base support gains scaled by impact and radius factor.</span></div>
+              <div class="mp-row"><code>ΔM_k</code><span>Physical memory mass increment accumulated into the local voxel cell.</span></div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Equation 03 -->
+        <div class="math-card">
+          <div class="math-card-top">
+            <span class="math-tag">EQ. 03 · CENTER OF MASS, DRIFT & STABILITY</span>
+            <button class="copy-latex-btn" data-eq="3" title="Copy LaTeX formula">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy TeX</span>
+            </button>
+          </div>
+          <div class="formula-katex-block" set:html={eq3Html}></div>
+          <p class="math-desc">Evaluates global 3D center of mass and drift vector across all active spikes to determine octant personality bias and evaluate cognitive stability index S<sub>stability</sub>.</p>
+          <details class="math-param-details">
+            <summary>
+              <span class="mp-toggle-label">Center of Mass & Stability Metrics</span>
+              <span class="mp-chevron">▾</span>
+            </summary>
+            <div class="mp-content">
+              <div class="mp-row"><code>C_mass</code><span>Global 3D center of mass weighted across all active memory spike masses.</span></div>
+              <div class="mp-row"><code>D_drift(t)</code><span>Inter-round spatial drift tracking velocity of personality state evolution.</span></div>
+              <div class="mp-row"><code>S_stability</code><span>Ratio of dominant spike height against top-6 total height measuring cognitive focus.</span></div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Equation 04 -->
+        <div class="math-card">
+          <div class="math-card-top">
+            <span class="math-tag">EQ. 04 · DUAL-FACTOR DECAY & FLOOR COLLAPSE</span>
+            <button class="copy-latex-btn" data-eq="4" title="Copy LaTeX code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy TeX</span>
+            </button>
+          </div>
+          <div class="formula-katex-block" set:html={eq4Html}></div>
+          <p class="math-desc">Simulates memory half-life through dual base/spike decay. When structural base support drops below critical floor s<sub>floor</sub>, spike height suffers accelerated collapse.</p>
+          <details class="math-param-details">
+            <summary>
+              <span class="mp-toggle-label">Entropy Pruning & Structural Decay</span>
+              <span class="mp-chevron">▾</span>
+            </summary>
+            <div class="mp-content">
+              <div class="mp-row"><code>δ_base, δ_spike</code><span>Discrete temporal decay coefficients reducing support and height per round.</span></div>
+              <div class="mp-row"><code>s_floor</code><span>Critical structural threshold triggering 8% per-round accelerated collapse when undermined.</span></div>
+              <div class="mp-row"><code>Origin Collapse</code><span>Unreinforced memory sectors organically dissolve toward (0,0,0) origin.</span></div>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initA1ntuitizeEngine } from "../../features/a1-firm/a1ntuitizeEngine";
+
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        initA1ntuitizeEngine();
+      });
+    } else {
+      initA1ntuitizeEngine();
+    }
+  }
+</script>
+
+<style>
+  /* SECTION 02: A1NTUITIZE SEALED R&D SECTION */
+  .a1ntuitize-sealed-section {
+    display: grid;
+    gap: 28px;
+    margin-top: 20px;
+    animation: sectionFadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes sectionFadeIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .sealed-banner-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .product-kicker {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .kicker-pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    color: #38bdf8;
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-family: var(--font-mono, monospace);
+  }
+
+  .kicker-pill-amber {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.25);
+    color: #f59e0b;
+  }
+
+  [data-theme="light"] .kicker-pill-amber {
+    color: #b45309;
+  }
+
+  .kicker-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--color-ink);
+    letter-spacing: -0.01em;
+  }
+
+  .sealed-card-container {
+    position: relative;
+    display: grid;
+    gap: 36px;
+    padding: 42px 38px;
+    border-radius: 20px;
+    background: var(--color-panel);
+    border: 1px solid var(--color-line);
+    box-shadow: var(--glass-shadow);
+    overflow: hidden;
+  }
+
+  .sealed-card-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: repeating-linear-gradient(
+      -45deg,
+      rgba(245, 158, 11, 0.6),
+      rgba(245, 158, 11, 0.6) 10px,
+      transparent 10px,
+      transparent 20px
+    );
+  }
+
+  .sealed-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.05fr);
+    gap: 32px;
+    align-items: stretch;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .sealed-title-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .micro-label {
+    font-size: 11.5px;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono, monospace);
+    margin-bottom: 6px;
+  }
+
+  .sealed-title-wrap h2 {
+    margin: 10px 0 14px;
+    font-size: clamp(22px, 3vw, 32px);
+    font-family: var(--font-serif);
+    font-weight: 600;
+    line-height: 1.3;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .sealed-title-wrap p {
+    color: var(--color-ink-soft);
+    font-size: 15px;
+    line-height: 1.65;
+    margin: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* R&D System Specs Widget (Full Height Harmonized) */
+  .sealed-specs-widget {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    height: 100%;
+    padding: 24px 26px;
+    border-radius: 14px;
+    background: rgba(10, 15, 26, 0.75);
+    border: 1px solid rgba(245, 158, 11, 0.28);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 8px 24px rgba(0, 0, 0, 0.35);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  [data-theme="light"] .sealed-specs-widget {
+    background: rgba(254, 243, 199, 0.35);
+    border-color: rgba(217, 119, 6, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  .specs-widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+  }
+
+  .spec-kicker {
+    font-size: 10px;
+    font-weight: 900;
+    font-family: var(--font-mono, monospace);
+    letter-spacing: 0.08em;
+    color: #f59e0b;
+    text-transform: uppercase;
+  }
+
+  [data-theme="light"] .spec-kicker {
+    color: #b45309;
+  }
+
+  .spec-state {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 850;
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono, monospace);
+  }
+
+  .pulse-amber {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #f59e0b;
+    box-shadow: 0 0 8px #f59e0b;
+    animation: corePulseDot 2s ease-in-out infinite;
+  }
+
+  .specs-widget-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 20px;
+  }
+
+  .spec-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .se-label {
+    font-size: 10px;
+    font-weight: 750;
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono, monospace);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .se-val {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--color-ink);
+    line-height: 1.35;
+    word-break: break-word;
+  }
+
+  .specs-widget-note {
+    padding-top: 14px;
+    border-top: 1px dashed rgba(245, 158, 11, 0.2);
+    min-width: 0;
+  }
+
+  .swn-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 10.5px;
+    font-family: var(--font-mono, monospace);
+    line-height: 1.45;
+  }
+
+  .swn-label {
+    font-size: 9.5px;
+    font-weight: 850;
+    color: #f59e0b;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  [data-theme="light"] .swn-label {
+    color: #b45309;
+  }
+
+  .swn-val {
+    color: var(--color-ink-muted);
+    word-break: break-word;
+  }
+
+  /* 3D MANIFOLD VIEWPORT */
+  .manifold-3d-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    background: radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.08) 0%, rgba(3, 4, 7, 0.95) 100%), #05070d;
+    border: 1px solid var(--color-line-strong);
+    overflow: hidden;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 16px 48px rgba(0, 0, 0, 0.55);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  [data-theme="light"] .manifold-3d-wrapper {
+    background: radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.08) 0%, rgba(241, 245, 249, 0.95) 100%), #ffffff;
+    border-color: rgba(0, 0, 0, 0.12);
+  }
+
+  .manifold-3d-hud-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 22px;
+    border-bottom: 1px solid var(--color-line);
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(14px);
+    z-index: 2;
+    min-width: 0;
+  }
+
+  [data-theme="light"] .manifold-3d-hud-top {
+    background: rgba(255, 255, 255, 0.7);
+  }
+
+  .hud-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .hud-label {
+    font-size: 9.5px;
+    font-weight: 850;
+    color: var(--color-ink-muted);
+    letter-spacing: 0.08em;
+    font-family: var(--font-mono, monospace);
+  }
+
+  .hud-val {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: var(--color-ink);
+    letter-spacing: 0.02em;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    word-break: break-word;
+  }
+
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #38bdf8;
+    box-shadow: 0 0 8px #38bdf8;
+    animation: corePulseDot 2s ease-in-out infinite;
+  }
+
+  @keyframes corePulseDot {
+    0%, 100% { opacity: 0.45; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+
+  .manifold-canvas-box {
+    position: relative;
+    width: 100%;
+    height: 520px;
+    background: radial-gradient(circle at center, rgba(3, 7, 18, 0.6) 0%, #010409 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  [data-theme="light"] .manifold-canvas-box {
+    background: radial-gradient(circle at center, #ffffff 0%, #f1f5f9 100%);
+  }
+
+  .manifold-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;
+  }
+
+  .manifold-callouts {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .manifold-callouts :global(.callout-pill) {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(10, 20, 35, 0.9);
+    border: 1px solid rgba(56, 189, 248, 0.6);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+    font-size: 10px;
+    font-family: var(--font-mono, monospace);
+    color: #ffffff;
+    pointer-events: none;
+    white-space: nowrap;
+    backdrop-filter: blur(10px);
+    transition: transform 0.1s ease-out;
+  }
+
+  .manifold-callouts :global(.callout-pill strong) {
+    color: #ffffff;
+    font-weight: 800;
+  }
+
+  .manifold-callouts :global(.callout-pill em) {
+    font-style: normal;
+    font-weight: 800;
+    color: #38bdf8;
+    font-family: var(--font-mono, monospace);
+  }
+
+  .manifold-callouts :global(.cp-indicator) {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+
+  /* TACTICAL NAVIGATION BADGE (BOTTOM-LEFT OF 3D CANVAS) */
+  .manifold-nav-guide-overlay {
+    position: absolute;
+    bottom: 18px;
+    left: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: rgba(6, 12, 24, 0.75);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    backdrop-filter: blur(10px);
+    z-index: 12;
+    pointer-events: none;
+  }
+
+  [data-theme="light"] .manifold-nav-guide-overlay {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(6, 182, 212, 0.3);
+  }
+
+  .mng-badge {
+    font-size: 8.5px;
+    font-weight: 850;
+    font-family: var(--font-mono, monospace);
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.15);
+    padding: 1px 5px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .mng-text {
+    font-size: 9.5px;
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono, monospace);
+  }
+
+  /* TACTICAL FLOATING HOLOGRAM AI FACE (BOTTOM-RIGHT OF 3D CANVAS) */
+  .ai-expression-hud-overlay {
+    position: absolute;
+    bottom: 18px;
+    right: 20px;
+    left: auto;
+    z-index: 12;
+    pointer-events: auto;
+    max-width: 440px;
+  }
+
+  /* Desktop: show absolute overlay, hide mobile row */
+  .ai-hud-desktop {
+    display: block;
+  }
+
+  .ai-hud-mobile-row {
+    display: none;
+    padding: 0 0 2px;
+  }
+
+  .ai-avatar-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 9px 18px;
+    border-radius: 12px;
+    background: rgba(6, 12, 24, 0.88);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(14px);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-theme="light"] .ai-avatar-card {
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(6, 182, 212, 0.45);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .ai-face-hologram {
+    width: 56px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.2) 0%, rgba(3, 7, 18, 0.95) 100%), #020617;
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-theme="light"] .ai-face-hologram {
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, #f8fafc 100%), #ffffff;
+    border-color: rgba(6, 182, 212, 0.35);
+  }
+
+  .ai-face-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .ai-face-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .ai-meta-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .ai-spike-badge {
+    font-size: 8.5px;
+    font-weight: 850;
+    font-family: var(--font-mono, monospace);
+    letter-spacing: 0.06em;
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: #38bdf8;
+  }
+
+  .ai-face-desc {
+    font-size: 10px;
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono, monospace);
+    line-height: 1.35;
+    max-width: 320px;
+    white-space: normal;
+  }
+
+  /* HIGH-TECH 8-OCTANT CONTROLLER DASHBOARD (CLEAN CONSOLIDATED STREAM) */
+  .manifold-spectrum-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px 24px;
+    background: rgba(0, 0, 0, 0.55);
+    border-top: 1px solid var(--color-line);
+    backdrop-filter: blur(16px);
+    z-index: 2;
+    min-width: 0;
+  }
+
+  [data-theme="light"] .manifold-spectrum-bar {
+    background: rgba(255, 255, 255, 0.88);
+  }
+
+  .spectrum-bar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    padding-bottom: 2px;
+  }
+
+  .sb-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .sb-label {
+    font-size: 10.5px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: var(--color-ink);
+    font-family: var(--font-mono, monospace);
+    text-transform: uppercase;
+  }
+
+  .sb-sub {
+    font-size: 10px;
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono, monospace);
+  }
+
+  .origin-decay-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.35);
+    font-size: 10.5px;
+    font-weight: 850;
+    font-family: var(--font-mono, monospace);
+    color: #38bdf8;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-theme="light"] .origin-decay-badge {
+    background: rgba(2, 132, 199, 0.08);
+    border-color: rgba(2, 132, 199, 0.3);
+    color: #0284c7;
+  }
+
+  .origin-decay-badge:hover,
+  .origin-decay-badge.is-decaying {
+    background: rgba(6, 182, 212, 0.25);
+    border-color: #38bdf8;
+    color: #ffffff;
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.45);
+    transform: scale(1.03);
+  }
+
+  .origin-decay-badge em {
+    font-style: normal;
+    color: #ffffff;
+    font-weight: 850;
+    background: rgba(255, 255, 255, 0.12);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  /* 3-Axis Live Telemetry Faders */
+  .pad-telemetry-faders {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.32);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  [data-theme="light"] .pad-telemetry-faders {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .pad-fader-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .pfi-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9.5px;
+    font-family: var(--font-mono, monospace);
+    font-weight: 850;
+  }
+
+  .pfi-val {
+    color: var(--color-ink);
+  }
+
+  .pfi-track {
+    width: 100%;
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+  }
+
+  [data-theme="light"] .pfi-track {
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  .pfi-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.15s ease-out;
+  }
+
+  .pfi-bounds {
+    display: flex;
+    justify-content: space-between;
+    font-size: 8px;
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono, monospace);
+  }
+
+  /* 8-Segmented Enriched Ribbon Tiles */
+  .octant-segmented-ribbon {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .oct-seg-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 10px 10px 8px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--color-ink);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    text-align: left;
+    box-sizing: border-box;
+  }
+
+  [data-theme="light"] .oct-seg-btn {
+    background: rgba(0, 0, 0, 0.025);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .oct-seg-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--btn-col);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  }
+
+  .oct-seg-btn.is-active {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--btn-col);
+    box-shadow: 0 0 16px var(--btn-col), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  .osb-head {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .osb-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .osb-id {
+    font-size: 10.5px;
+    font-weight: 900;
+    font-family: var(--font-mono, monospace);
+    color: var(--color-ink);
+  }
+
+  .osb-code {
+    font-size: 9px;
+    font-weight: 750;
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono, monospace);
+  }
+
+  .osb-name {
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.25;
+    color: var(--color-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .osb-mass-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+  }
+
+  .osb-mass-track {
+    flex-grow: 1;
+    height: 3.5px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+  }
+
+  [data-theme="light"] .osb-mass-track {
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  .osb-mass-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.15s ease-out;
+  }
+
+  .osb-mass-num {
+    font-size: 8.5px;
+    font-weight: 800;
+    font-family: var(--font-mono, monospace);
+    color: var(--color-ink-muted);
+    min-width: 22px;
+    text-align: right;
+  }
+
+  /* Dynamic Active Readout Command Strip */
+  .colormap-readout {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: rgba(10, 18, 32, 0.65);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    font-family: var(--font-mono, monospace);
+  }
+
+  [data-theme="light"] .colormap-readout {
+    background: rgba(241, 245, 249, 0.9);
+    border-color: rgba(6, 182, 212, 0.3);
+  }
+
+  .cm-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .cm-angle-badge {
+    font-size: 11px;
+    font-weight: 900;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.14);
+    padding: 3px 9px;
+    border-radius: 6px;
+    border: 1px solid rgba(56, 189, 248, 0.35);
+  }
+
+  .cm-coords {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: var(--color-ink-muted);
+  }
+
+  .cm-center {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex-grow: 1;
+    overflow: hidden;
+  }
+
+  .cm-active-name {
+    font-size: 13px;
+    font-weight: 850;
+    color: var(--color-ink);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .cm-sub-emotions {
+    font-size: 11px;
+    color: var(--color-ink-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cm-right {
+    flex-shrink: 0;
+  }
+
+  .active-inject-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 8px;
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.45);
+    color: #38bdf8;
+    font-size: 11px;
+    font-weight: 850;
+    font-family: var(--font-mono, monospace);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .active-inject-btn:hover,
+  .active-inject-btn.is-pulsing {
+    background: rgba(56, 189, 248, 0.3);
+    border-color: #38bdf8;
+    color: #ffffff;
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.45);
+    transform: translateY(-1px);
+  }
+
+  /* HUD Bottom Footer */
+  .manifold-3d-hud-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    border-top: 1px solid var(--color-line);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(14px);
+    z-index: 2;
+    min-width: 0;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  [data-theme="light"] .manifold-3d-hud-bottom {
+    background: rgba(255, 255, 255, 0.7);
+  }
+
+  .hud-status-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.22);
+  }
+
+  [data-theme="light"] .hud-status-chip {
+    background: rgba(6, 182, 212, 0.08);
+    border-color: rgba(6, 182, 212, 0.25);
+  }
+
+  .hud-cue-text {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono, monospace);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .hud-cue-text strong {
+    color: #38bdf8;
+  }
+
+  [data-theme="light"] .hud-cue-text strong {
+    color: #0284c7;
+  }
+
+  .hud-telemetry {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tele-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  [data-theme="light"] .tele-item {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .ti-label {
+    font-size: 9px;
+    font-weight: 800;
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono, monospace);
+    letter-spacing: 0.04em;
+  }
+
+  .ti-val {
+    font-size: 10.5px;
+    font-weight: 850;
+    color: #38bdf8;
+    font-family: var(--font-mono, monospace);
+  }
+
+  [data-theme="light"] .ti-val {
+    color: #0284c7;
+  }
+
+  .sealed-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .sealed-feature-box {
+    display: flex;
+    flex-direction: column;
+    padding: 26px;
+    border-radius: 14px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    word-break: break-word;
+  }
+
+  .sealed-feature-box:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-line-strong);
+    background: var(--color-panel-solid);
+  }
+
+  .feature-idx {
+    font-size: 11px;
+    font-weight: 900;
+    color: #f59e0b;
+    font-family: var(--font-mono, monospace);
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+
+  [data-theme="light"] .feature-idx {
+    color: #b45309;
+  }
+
+  .sealed-feature-box h3 {
+    margin: 0 0 10px;
+    font-size: 16.5px;
+    font-weight: 700;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+
+  .sealed-feature-box p {
+    color: var(--color-ink-muted);
+    font-size: 13.5px;
+    line-height: 1.6;
+    margin: 0 0 18px;
+    flex-grow: 1;
+    word-break: break-word;
+  }
+
+  .feature-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .feature-tags span {
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+    color: var(--color-ink-muted);
+    font-size: 10.5px;
+    font-weight: 700;
+  }
+
+  /* MATHEMATICAL FORMULA REFERENCE SECTION */
+  .math-reference-section {
+    display: grid;
+    gap: 24px;
+    margin-top: 14px;
+    padding-top: 28px;
+    border-top: 1px solid var(--color-line);
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .math-ref-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .math-kicker {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    font-size: 11.5px;
+    font-weight: 850;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #f59e0b;
+    word-break: break-word;
+  }
+
+  [data-theme="light"] .math-kicker {
+    color: #b45309;
+  }
+
+  .math-kicker i {
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--color-line-strong);
+    flex-shrink: 0;
+  }
+
+  .math-kicker strong {
+    color: var(--color-ink);
+  }
+
+  .math-ref-header p {
+    margin: 0;
+    color: var(--color-ink-muted);
+    font-size: 14.5px;
+    line-height: 1.6;
+    max-width: 860px;
+    word-break: break-word;
+  }
+
+  .math-formula-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .math-card {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    border-radius: 14px;
+    background: rgba(8, 12, 22, 0.65);
+    border: 1px solid rgba(56, 189, 248, 0.18);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  [data-theme="light"] .math-card {
+    background: rgba(248, 250, 252, 0.85);
+    border-color: rgba(6, 182, 212, 0.22);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  .math-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 12px 32px rgba(6, 182, 212, 0.12);
+  }
+
+  .math-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    margin-bottom: 14px;
+    min-width: 0;
+  }
+
+  .math-tag {
+    font-size: 10px;
+    font-weight: 900;
+    font-family: var(--font-mono, monospace);
+    color: #38bdf8;
+    letter-spacing: 0.06em;
+  }
+
+  [data-theme="light"] .math-tag {
+    color: #0284c7;
+  }
+
+  .formula-katex-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px 14px;
+    border-radius: 12px;
+    background: rgba(4, 7, 14, 0.9);
+    border: 1px solid rgba(56, 189, 248, 0.22);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 24px rgba(0, 0, 0, 0.35);
+    margin-bottom: 14px;
+    overflow-x: auto;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    color: #f8fafc;
+  }
+
+  .formula-katex-block::-webkit-scrollbar {
+    display: none;
+  }
+
+  [data-theme="light"] .formula-katex-block {
+    background: #ffffff;
+    border-color: rgba(6, 182, 212, 0.28);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 4px 16px rgba(0, 0, 0, 0.05);
+    color: #0f172a;
+  }
+
+  .formula-katex-block :global(.katex-display) {
+    margin: 0 auto !important;
+    text-align: center !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    max-width: 100%;
+    overflow: visible;
+  }
+
+  .formula-katex-block :global(.katex) {
+    font-size: clamp(0.72rem, 2.4vw, 0.94rem);
+    line-height: 1.6;
+    text-align: center !important;
+    margin: 0 auto !important;
+    display: inline-block !important;
+  }
+
+  .formula-katex-block :global(.katex-html) {
+    text-align: center !important;
+    margin: 0 auto !important;
+  }
+
+  .formula-katex-block :global(.katex .frac-line) {
+    border-bottom-width: 1.5px;
+  }
+
+  .math-desc {
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .copy-latex-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: 6px;
+    border: 1px solid var(--color-line);
+    background: var(--glass-bg);
+    color: var(--color-ink-muted);
+    font-size: 10.5px;
+    font-weight: 800;
+    font-family: var(--font-mono, monospace);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .copy-latex-btn:hover {
+    border-color: rgba(56, 189, 248, 0.45);
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
+    transform: translateY(-1px);
+  }
+
+  .copy-latex-btn.is-copied {
+    border-color: rgba(16, 185, 129, 0.5);
+    background: rgba(16, 185, 129, 0.15);
+  }
+
+  .math-param-details {
+    margin-top: 14px;
+    border-top: 1px dashed var(--color-line);
+    padding-top: 10px;
+  }
+
+  .math-param-details summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10.5px;
+    font-weight: 850;
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono, monospace);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    transition: color 0.2s ease;
+  }
+
+  .math-param-details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .math-param-details summary:hover {
+    color: #38bdf8;
+  }
+
+  [data-theme="light"] .math-param-details summary:hover {
+    color: #0284c7;
+  }
+
+  .mp-chevron {
+    font-size: 10px;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .math-param-details[open] .mp-chevron {
+    transform: rotate(180deg);
+  }
+
+  .mp-content {
+    display: grid;
+    gap: 7px;
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--color-line);
+  }
+
+  [data-theme="light"] .mp-content {
+    background: rgba(0, 0, 0, 0.03);
+  }
+
+  .mp-row {
+    display: grid;
+    grid-template-columns: 95px 1fr;
+    gap: 8px;
+    align-items: baseline;
+    font-size: 11.5px;
+    line-height: 1.45;
+  }
+
+  .mp-row code {
+    font-size: 10px;
+    font-weight: 850;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--font-mono, monospace);
+    width: fit-content;
+  }
+
+  [data-theme="light"] .mp-row code {
+    color: #0284c7;
+    background: rgba(6, 182, 212, 0.1);
+  }
+
+  .mp-row span {
+    color: var(--color-ink-muted);
+  }
+
+  /* 3D Camera Controls & Interactive Pulses */
+  .manifold-camera-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 6px;
+    border-radius: 999px;
+    background: rgba(10, 20, 35, 0.7);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    backdrop-filter: blur(10px);
+  }
+
+  [data-theme="light"] .manifold-camera-controls {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(6, 182, 212, 0.3);
+  }
+
+  .cam-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 9px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--color-ink-muted);
+    font-size: 10px;
+    font-weight: 750;
+    font-family: var(--font-mono, monospace);
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .cam-btn:hover {
+    color: var(--color-ink);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  [data-theme="light"] .cam-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  .cam-btn.is-active {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: rgba(56, 189, 248, 0.4);
+    color: #38bdf8;
+    font-weight: 850;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+  }
+
+  [data-theme="light"] .cam-btn.is-active {
+    background: rgba(6, 182, 212, 0.15);
+    border-color: rgba(6, 182, 212, 0.4);
+    color: #0284c7;
+  }
+
+  .pulse-fire-btn {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.35);
+    color: #f59e0b;
+  }
+
+  .pulse-fire-btn:hover,
+  .pulse-fire-btn.is-firing {
+    background: rgba(245, 158, 11, 0.25);
+    border-color: #f59e0b;
+    color: #fbbf24;
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+    transform: scale(1.04);
+  }
+
+  /* ── RESPONSIVE: TABLET (≤1024px) ── */
+  @media (max-width: 1024px) {
+    .sealed-header {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .sealed-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .math-formula-grid {
+      grid-template-columns: 1fr;
+    }
+    .octant-segmented-ribbon {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .colormap-readout {
+      flex-wrap: wrap;
+    }
+    .manifold-canvas-box {
+      height: 420px;
+    }
+  }
+
+  /* ── RESPONSIVE: MOBILE (≤768px) ── */
+  @media (max-width: 768px) {
+    /* Page container */
+    .sealed-card-container {
+      padding: 22px 16px 20px;
+      gap: 24px;
+    }
+
+    /* Header: single column */
+    .sealed-header {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    /* Specs widget */
+    .specs-widget-grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    /* Feature grid: single column */
+    .sealed-grid {
+      grid-template-columns: 1fr;
+    }
+
+    /* 3D Canvas: smaller height on mobile */
+    .manifold-canvas-box {
+      height: 340px;
+    }
+
+    /* HUD top: stack vertically */
+    .manifold-3d-hud-top {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 14px;
+    }
+
+    /* Camera controls: wrap */
+    .manifold-camera-controls {
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    /* Hide nav badge to free up canvas space */
+    .manifold-nav-guide-overlay {
+      display: none;
+    }
+
+    /* AI HUD: hide desktop absolute overlay, show mobile row below canvas */
+    .ai-hud-desktop {
+      display: none;
+    }
+
+    .ai-hud-mobile-row {
+      display: block;
+      padding: 0 14px 8px;
+    }
+
+    .ai-avatar-card {
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 10px;
+    }
+
+    /* Manifold canvas itself */
+    .manifold-canvas-box {
+      height: 300px;
+      min-height: 260px;
+    }
+
+    /* Spectrum bar */
+    .manifold-spectrum-bar {
+      padding: 14px 14px;
+      gap: 12px;
+    }
+
+    /* PAD Faders: single column */
+    .pad-telemetry-faders {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    /* Octant ribbon: 2 columns on mobile */
+    .octant-segmented-ribbon {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    /* HUD bottom: stack */
+    .manifold-3d-hud-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 10px 14px;
+    }
+
+    .hud-telemetry {
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    /* Colormap readout: vertical */
+    .colormap-readout {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 10px 12px;
+    }
+
+    .cm-center {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+      width: 100%;
+    }
+
+    .cm-right {
+      width: 100%;
+    }
+
+    .active-inject-btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .cm-sub-emotions {
+      white-space: normal;
+    }
+
+    /* Math formula grid: single column */
+    .math-formula-grid {
+      grid-template-columns: 1fr;
+    }
+
+    /* Math card formula block: allow scroll */
+    .formula-katex-block {
+      padding: 14px 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .formula-katex-block :global(.katex) {
+      font-size: clamp(0.65rem, 2.8vw, 0.82rem);
+    }
+
+    .formula-katex-block :global(.katex-display) {
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-bottom: 4px;
+    }
+  }
+
+  /* ── RESPONSIVE: SMALL MOBILE (≤480px) ── */
+  @media (max-width: 480px) {
+    .sealed-card-container {
+      padding: 16px 12px;
+      border-radius: 14px;
+    }
+
+    .sealed-title-wrap h2 {
+      font-size: clamp(18px, 5vw, 24px);
+    }
+
+    .manifold-canvas-box {
+      height: 260px;
+      min-height: 220px;
+    }
+
+    /* Octant ribbon: 2 columns compact */
+    .octant-segmented-ribbon {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 5px;
+    }
+
+    .oct-seg-btn {
+      padding: 8px 8px 6px;
+    }
+
+    .osb-name {
+      font-size: 10px;
+    }
+
+    .osb-code {
+      display: none;
+    }
+
+    /* Spectrum bar */
+    .spectrum-bar-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .origin-decay-badge {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* AI face meta: hide description on very small */
+    .ai-face-desc {
+      display: none;
+    }
+
+    /* Cam buttons: hide labels, show icons only */
+    .cam-btn span {
+      display: none;
+    }
+
+    .cam-btn {
+      padding: 4px 7px;
+    }
+
+    /* Math param row: stack */
+    .mp-row {
+      grid-template-columns: 1fr;
+      gap: 3px;
+    }
+  }
+</style>

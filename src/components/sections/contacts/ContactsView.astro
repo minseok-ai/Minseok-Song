@@ -100,29 +100,22 @@ const contactNodes = visibleChannels.map((channel, index) => ({
 
   @media (max-width: 760px) {
     .availability-strip {
-      padding: 14px 18px;
-      white-space: normal;
-      mask-image: none;
-      -webkit-mask-image: none;
+      padding: 12px 0;
+      mask-image: linear-gradient(90deg, transparent, black 4%, black 96%, transparent);
+      -webkit-mask-image: linear-gradient(90deg, transparent, black 4%, black 96%, transparent);
+      white-space: nowrap;
     }
 
     .marquee-track {
-      display: flex;
-      width: 100%;
-      animation: none;
+      display: inline-flex;
+      width: auto;
+      animation: marquee 18s linear infinite;
     }
 
     .marquee-track > span {
-      display: none;
-      padding-right: 0;
-    }
-
-    .marquee-track > span:first-child {
-      display: block;
-      width: 100%;
-      line-height: 1.6;
-      text-align: center;
-      white-space: normal;
+      display: inline-flex;
+      padding-right: 32px;
+      font-size: 11px;
     }
   }
 </style>

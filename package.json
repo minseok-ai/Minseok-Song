@@ -25,6 +25,7 @@
     "@vercel/speed-insights": "^2.0.0",
     "astro": "^6.4.4",
     "auth-astro": "^4.2.0",
+    "katex": "^0.18.5",
     "minisearch": "^7.2.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
