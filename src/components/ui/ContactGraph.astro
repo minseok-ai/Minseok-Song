@@ -138,14 +138,31 @@ const { contactNodes, visibleChannels } = Astro.props;
               <span class="channel-action-hint">
                 {channel.copyable ? "Click to copy address" : "Click to open connection"}
               </span>
-              <div class="action-icon-wrap">
-                <svg viewBox="0 0 24 24" class="action-svg" aria-hidden="true">
-                  {channel.copyable ? (
-                    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m-6 4h10m-5-5v10" />
-                  ) : (
-                    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3" />
-                  )}
-                </svg>
+              <div class="card-footer-actions">
+                {channel.copyable && channel.href && (
+                  <a
+                    href={channel.href}
+                    class="direct-action-btn"
+                    title={`Open ${channel.label} directly in app`}
+                    aria-label={`Open ${channel.label} directly`}
+                    target={channel.href.startsWith("http") ? "_blank" : undefined}
+                    rel={channel.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  >
+                    <span>Direct</span>
+                    <svg viewBox="0 0 24 24" class="action-svg" aria-hidden="true">
+                      <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3" />
+                    </svg>
+                  </a>
+                )}
+                <div class="action-icon-wrap">
+                  <svg viewBox="0 0 24 24" class="action-svg" aria-hidden="true">
+                    {channel.copyable ? (
+                      <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m-6 4h10m-5-5v10" />
+                    ) : (
+                      <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3" />
+                    )}
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
@@ -214,6 +231,26 @@ const { contactNodes, visibleChannels } = Astro.props;
       card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
       card.style.transition = 'none';
     });
+
+    const copyValue = card.getAttribute('data-copy');
+    if (copyValue) {
+      card.addEventListener('click', async (e) => {
+        if (e.target.closest('.direct-action-btn')) return;
+        try {
+          await navigator.clipboard.writeText(copyValue);
+          card.setAttribute('data-copied', 'true');
+          const hint = card.querySelector('.channel-action-hint');
+          const originalText = hint ? hint.textContent : '';
+          if (hint) hint.textContent = '✓ Copied to clipboard!';
+          setTimeout(() => {
+            card.removeAttribute('data-copied');
+            if (hint) hint.textContent = originalText;
+          }, 1800);
+        } catch (err) {
+          console.warn('Clipboard copy error:', err);
+        }
+      });
+    }
   });
 
 </script>
@@ -576,6 +613,35 @@ const { contactNodes, visibleChannels } = Astro.props;
     align-items: center;
     border-top: 1px solid var(--color-line);
     padding-top: 18px;
+    gap: 12px;
+  }
+
+  .card-footer-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .direct-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--color-ink-muted);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--color-line);
+    text-decoration: none;
+    transition: all var(--motion-fast) ease;
+  }
+
+  .direct-action-btn:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    background: rgba(var(--rgb-accent), 0.08);
   }
 
   .channel-action-hint {

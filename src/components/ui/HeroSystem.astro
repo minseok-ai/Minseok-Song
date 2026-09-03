@@ -877,63 +877,72 @@ const ecosystemDimensions = [
     }
 
     .telemetry-bar {
-      padding: 14px 12px;
-      border-radius: 14px;
+      padding: 16px 14px;
+      border-radius: 16px;
     }
 
     .telemetry-pipeline {
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
+      gap: 10px;
     }
 
     .telemetry-pipeline .telemetry-node {
       width: 100%;
       min-width: 0;
-      padding: 9px 6px;
-      gap: 5px;
+      padding: 10px 8px;
+      gap: 6px;
+      border-radius: 10px;
     }
 
     .telemetry-pipeline .telemetry-label {
       min-width: 0;
-      font-size: 8.5px;
-      letter-spacing: 0.02em;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
     .telemetry-log {
-      font-size: 7.5px;
+      font-size: 9.5px;
       gap: 6px;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.04em;
     }
 
     .hero-actions {
       flex-direction: column;
       width: 100%;
+      gap: 12px;
     }
     
     .primary-action,
     .secondary-action {
       width: 100%;
+      min-height: 50px;
+      font-size: 15px;
+      border-radius: 12px;
+      justify-content: center;
     }
 
     .pillar-row {
       flex-direction: column;
       align-items: flex-start;
-      gap: 3px;
-      padding: 8px 0;
+      gap: 4px;
+      padding: 10px 0;
     }
 
     .pillar-label {
-      font-size: 9.5px;
-      letter-spacing: 0.1em;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
     }
 
     .pillar-value {
-      font-size: 13.5px;
+      font-size: 14px;
+      font-weight: 600;
       text-align: left;
-      line-height: 1.35;
+      line-height: 1.4;
     }
   }
 

@@ -1,4 +1,4 @@
-// A1-Chan Mini PiP 3D Affect HUD Renderer (1/10 Scale YouTube-Style Manifold)
+// A1-Chan Mini PiP Reactive AI Expression Renderer (Replaces wireframe globe with live A1ntuitize Face)
 import {
   subscribeToAffectState,
   type AffectState
@@ -16,16 +16,23 @@ export function initA1ChanPiPHud() {
   const ctx = pipCanvas.getContext("2d");
   if (!ctx) return;
 
-  let currentAffect: AffectState | null = null;
-  let rotY = 0;
-  let rotX = 0.28;
   let animId: number | null = null;
+  let startTime = performance.now();
 
-  const width = pipCanvas.width || 56;
-  const height = pipCanvas.height || 56;
-  const cx = width / 2;
-  const cy = height / 2;
-  const sphereR = width * 0.36; // 1/10 scale sphere radius
+  const width = pipCanvas.width || 48;
+  const height = pipCanvas.height || 48;
+
+  // Face Affect Target & Current Smooth State
+  const faceState = {
+    eyeOpen: 1.0,
+    targetEyeOpen: 1.0,
+    brow: 0.0,
+    targetBrow: 0.0,
+    smile: 0.7,
+    targetSmile: 0.7,
+    rgb: [245, 158, 11] as [number, number, number],
+    targetRgb: [245, 158, 11] as [number, number, number]
+  };
 
   // Update DOM Telemetry Elements
   function updateDomLabels(affect: AffectState) {
@@ -52,142 +59,129 @@ export function initA1ChanPiPHud() {
     if (pipEmotionName) {
       pipEmotionName.textContent = affect.name;
     }
+
+    // Map Affect PAD to Face Features
+    if (affect.rgb) {
+      faceState.targetRgb = [...affect.rgb];
+    }
+    faceState.targetSmile = Math.max(-1, Math.min(1, affect.valence * 1.3));
+    faceState.targetBrow = Math.max(-1, Math.min(1, affect.dominance * 0.9));
+    faceState.targetEyeOpen = Math.max(0.4, Math.min(1.2, 0.8 + affect.arousal * 0.35));
   }
 
-  // Subscribe to Global Affect State
+  // Subscribe to Global Affect State from A1ntuitize
   subscribeToAffectState((state) => {
-    currentAffect = state;
     updateDomLabels(state);
   });
 
-  // 3D Mini Wireframe Sphere Projection
-  function project3D(x: number, y: number, z: number) {
-    // Rotate Y
-    const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
-    const x1 = x * cosY - z * sinY;
-    const z1 = x * sinY + z * cosY;
+  function renderPiPFace(now: number) {
+    const elapsed = (now - startTime) * 0.003;
 
-    // Rotate X
-    const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
-    const y2 = y * cosX - z1 * sinX;
-    const z2 = y * sinX + z1 * cosX;
+    // Smoothly interpolate face parameters
+    faceState.eyeOpen += (faceState.targetEyeOpen - faceState.eyeOpen) * 0.08;
+    faceState.brow += (faceState.targetBrow - faceState.brow) * 0.08;
+    faceState.smile += (faceState.targetSmile - faceState.smile) * 0.08;
+    faceState.rgb[0] += (faceState.targetRgb[0] - faceState.rgb[0]) * 0.08;
+    faceState.rgb[1] += (faceState.targetRgb[1] - faceState.rgb[1]) * 0.08;
+    faceState.rgb[2] += (faceState.targetRgb[2] - faceState.rgb[2]) * 0.08;
 
-    const focal = 140;
-    const scale = focal / (focal + z2);
+    const r = Math.round(faceState.rgb[0]);
+    const g = Math.round(faceState.rgb[1]);
+    const b = Math.round(faceState.rgb[2]);
+    const colStr = `rgb(${r}, ${g}, ${b})`;
 
-    return {
-      px: cx + x1 * scale,
-      py: cy - y2 * scale,
-      z: z2,
-      scale
-    };
-  }
-
-  function renderPiP() {
-    rotY += 0.015;
     ctx!.clearRect(0, 0, width, height);
 
-    const rgb = currentAffect?.rgb || [56, 189, 248];
-    const colStr = `rgb(${rgb.join(",")})`;
+    const isLight = document.documentElement.getAttribute("data-theme") === "light";
 
-    // Mini Outer Glow Ring
+    // Ambient Hologram Glow Behind Face
     ctx!.save();
-    const grad = ctx!.createRadialGradient(cx, cy, 2, cx, cy, sphereR * 1.15);
-    grad.addColorStop(0, `rgba(${rgb.join(",")}, 0.18)`);
-    grad.addColorStop(1, "transparent");
-    ctx!.fillStyle = grad;
+    const glowGrad = ctx!.createRadialGradient(width / 2, height / 2, 2, width / 2, height / 2, width * 0.5);
+    glowGrad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${isLight ? 0.12 : 0.22})`);
+    glowGrad.addColorStop(1, "transparent");
+    ctx!.fillStyle = glowGrad;
     ctx!.beginPath();
-    ctx!.arc(cx, cy, sphereR * 1.15, 0, Math.PI * 2);
+    ctx!.arc(width / 2, height / 2, width * 0.48, 0, Math.PI * 2);
     ctx!.fill();
     ctx!.restore();
 
-    // Mini 3D Wireframe Lat/Long Rings
-    ctx!.lineWidth = 0.9;
-    ctx!.strokeStyle = `rgba(${rgb.join(",")}, 0.3)`;
+    // Natural Blinking Cycle
+    const blink = Math.sin(elapsed * 1.7);
+    const blinkFactor = blink > 0.95 ? Math.max(0.06, (1 - blink) * 20) : 1.0;
+    const eyeH = Math.max(1.2, 8.5 * faceState.eyeOpen * blinkFactor);
 
-    const latitudes = [-0.6, 0, 0.6];
-    latitudes.forEach((lat) => {
-      const rRing = Math.cos(lat) * sphereR;
-      const yRing = Math.sin(lat) * sphereR;
-      ctx!.beginPath();
-      for (let step = 0; step <= 24; step++) {
-        const theta = (step / 24) * Math.PI * 2;
-        const pt = project3D(Math.cos(theta) * rRing, yRing, Math.sin(theta) * rRing);
-        if (step === 0) ctx!.moveTo(pt.px, pt.py);
-        else ctx!.lineTo(pt.px, pt.py);
-      }
-      ctx!.stroke();
-    });
+    // Subtle Breathing Bob
+    const bob = Math.sin(elapsed * 1.4) * 0.8;
 
-    const longitudes = [0, Math.PI / 3, (2 * Math.PI) / 3];
-    longitudes.forEach((lon) => {
-      ctx!.beginPath();
-      for (let step = 0; step <= 24; step++) {
-        const phi = (step / 24) * Math.PI * 2;
-        const pt = project3D(
-          Math.sin(phi) * Math.cos(lon) * sphereR,
-          Math.cos(phi) * sphereR,
-          Math.sin(phi) * Math.sin(lon) * sphereR
-        );
-        if (step === 0) ctx!.moveTo(pt.px, pt.py);
-        else ctx!.lineTo(pt.px, pt.py);
-      }
-      ctx!.stroke();
-    });
+    ctx!.save();
+    // Center and scale from reference 104x76 face layout to canvas dimensions
+    ctx!.translate(width / 2, height / 2 + bob);
+    ctx!.scale(0.42, 0.42);
+    ctx!.translate(-52, -38);
 
-    // 3D Principal Axis Crosshairs
-    const axisLen = sphereR * 1.18;
-    const axX = project3D(axisLen, 0, 0);
-    const axY = project3D(0, axisLen, 0);
-    const axZ = project3D(0, 0, axisLen);
-    const origin = project3D(0, 0, 0);
+    ctx!.lineWidth = 2.4;
+    ctx!.strokeStyle = colStr;
+    ctx!.shadowColor = colStr;
+    ctx!.shadowBlur = isLight ? 3 : 8;
+    ctx!.lineCap = "round";
 
-    ctx!.lineWidth = 0.8;
-    // X Axis (Red)
-    ctx!.strokeStyle = "rgba(239, 68, 68, 0.5)";
-    ctx!.beginPath(); ctx!.moveTo(origin.px, origin.py); ctx!.lineTo(axX.px, axX.py); ctx!.stroke();
-    // Y Axis (Cyan/Blue)
-    ctx!.strokeStyle = "rgba(56, 189, 248, 0.5)";
-    ctx!.beginPath(); ctx!.moveTo(origin.px, origin.py); ctx!.lineTo(axY.px, axY.py); ctx!.stroke();
-    // Z Axis (Green)
-    ctx!.strokeStyle = "rgba(16, 185, 129, 0.5)";
-    ctx!.beginPath(); ctx!.moveTo(origin.px, origin.py); ctx!.lineTo(axZ.px, axZ.py); ctx!.stroke();
+    // Left Eyebrow
+    ctx!.beginPath();
+    const leftBrowY1 = 19 - faceState.brow * 4.5;
+    const leftBrowY2 = 20 + faceState.brow * 2.5;
+    ctx!.moveTo(18, leftBrowY1);
+    ctx!.quadraticCurveTo(30, 14 - faceState.brow * 3.5, 42, leftBrowY2);
+    ctx!.stroke();
 
-    // Centroid Vector & Glowing Reticle
-    if (currentAffect) {
-      const cx3d = currentAffect.centroid[0] * sphereR;
-      const cy3d = currentAffect.centroid[1] * sphereR;
-      const cz3d = currentAffect.centroid[2] * sphereR;
+    // Right Eyebrow
+    ctx!.beginPath();
+    const rightBrowY1 = 20 + faceState.brow * 2.5;
+    const rightBrowY2 = 19 - faceState.brow * 4.5;
+    ctx!.moveTo(62, rightBrowY1);
+    ctx!.quadraticCurveTo(74, 14 - faceState.brow * 3.5, 86, rightBrowY2);
+    ctx!.stroke();
 
-      const cPt = project3D(cx3d, cy3d, cz3d);
+    // Left Hologram Eye
+    ctx!.fillStyle = `rgba(${r}, ${g}, ${b}, ${isLight ? 0.18 : 0.28})`;
+    ctx!.beginPath();
+    ctx!.ellipse(30, 34, 8.5, eyeH, 0, 0, Math.PI * 2);
+    ctx!.fill();
+    ctx!.stroke();
 
-      // Centroid Vector Line
-      ctx!.beginPath();
-      ctx!.moveTo(origin.px, origin.py);
-      ctx!.lineTo(cPt.px, cPt.py);
-      ctx!.strokeStyle = colStr;
-      ctx!.lineWidth = 1.4;
-      ctx!.stroke();
+    // Left Pupil (Dark ink in light mode, luminous white in dark mode)
+    ctx!.fillStyle = isLight ? "#2A2722" : "#ffffff";
+    ctx!.beginPath();
+    ctx!.arc(30, 34, Math.min(3.0, eyeH * 0.55), 0, Math.PI * 2);
+    ctx!.fill();
 
-      // Centroid Surface Reticle
-      ctx!.beginPath();
-      ctx!.arc(cPt.px, cPt.py, 3.2 * cPt.scale, 0, Math.PI * 2);
-      ctx!.fillStyle = "#ffffff";
-      ctx!.shadowColor = colStr;
-      ctx!.shadowBlur = 8;
-      ctx!.fill();
-      ctx!.shadowBlur = 0;
+    // Right Hologram Eye
+    ctx!.fillStyle = `rgba(${r}, ${g}, ${b}, ${isLight ? 0.18 : 0.28})`;
+    ctx!.beginPath();
+    ctx!.ellipse(74, 34, 8.5, eyeH, 0, 0, Math.PI * 2);
+    ctx!.fill();
+    ctx!.stroke();
 
-      ctx!.beginPath();
-      ctx!.arc(cPt.px, cPt.py, 1.8 * cPt.scale, 0, Math.PI * 2);
-      ctx!.fillStyle = colStr;
-      ctx!.fill();
-    }
+    // Right Pupil
+    ctx!.fillStyle = isLight ? "#2A2722" : "#ffffff";
+    ctx!.beginPath();
+    ctx!.arc(74, 34, Math.min(3.0, eyeH * 0.55), 0, Math.PI * 2);
+    ctx!.fill();
 
-    animId = requestAnimationFrame(renderPiP);
+    // Expressive Mouth
+    ctx!.beginPath();
+    const mouthY = 57;
+    const mouthCurve = faceState.smile * 7;
+    ctx!.moveTo(37, mouthY);
+    ctx!.quadraticCurveTo(52, mouthY + mouthCurve, 67, mouthY);
+    ctx!.stroke();
+
+    ctx!.shadowBlur = 0;
+    ctx!.restore();
+
+    animId = requestAnimationFrame(renderPiPFace);
   }
 
-  renderPiP();
+  animId = requestAnimationFrame(renderPiPFace);
 
   return () => {
     if (animId !== null) cancelAnimationFrame(animId);

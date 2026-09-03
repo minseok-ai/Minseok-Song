@@ -72,11 +72,7 @@ const jsonLd = {
         const resolvedTheme = savedTheme || systemTheme;
         root.dataset.themeMode = savedTheme ? "manual" : "system";
         root.dataset.resolvedTheme = resolvedTheme;
-        if (savedTheme) {
-          root.setAttribute("data-theme", resolvedTheme);
-        } else {
-          root.removeAttribute("data-theme");
-        }
+        root.setAttribute("data-theme", resolvedTheme);
         root.style.colorScheme = resolvedTheme === "dark" ? "only dark" : "only light";
 
         const metaThemeColor = document.getElementById("theme-color");
@@ -643,13 +639,7 @@ const jsonLd = {
       const applyTheme = (theme, mode) => {
         root.dataset.themeMode = mode;
         root.dataset.resolvedTheme = theme;
-
-        if (mode === 'manual') {
-          root.setAttribute('data-theme', theme);
-        } else {
-          root.removeAttribute('data-theme');
-        }
-
+        root.setAttribute('data-theme', theme);
         root.style.colorScheme = theme === 'dark' ? 'only dark' : 'only light';
         updateThemeChrome(theme);
         publishThemeChange(theme);

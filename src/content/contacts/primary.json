@@ -5,6 +5,7 @@
       "label": "Email",
       "value": "minseoksong.ai@gmail.com",
       "href": "mailto:minseoksong.ai@gmail.com",
+      "copyable": true,
       "visible": true
     },
     {

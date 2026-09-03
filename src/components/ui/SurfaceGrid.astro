@@ -180,7 +180,7 @@ const { sectionCards } = Astro.props;
     z-index: 0;
   }
 
-  [data-theme="light"] .surface-card::before {
+  :global(html:global(html[data-theme="light"])) .surface-card::before {
     background: radial-gradient(
       350px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
       rgba(var(--rgb-accent), 0.12),
@@ -205,7 +205,7 @@ const { sectionCards } = Astro.props;
     z-index: 1;
   }
 
-  [data-theme="light"] .surface-card::after {
+  :global(html:global(html[data-theme="light"])) .surface-card::after {
     background: 
       radial-gradient(
         250px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
@@ -261,7 +261,7 @@ const { sectionCards } = Astro.props;
     pointer-events: none;
   }
 
-  [data-theme="light"] .surface-glyph {
+  :global(html:global(html[data-theme="light"])) .surface-glyph {
     opacity: 0.18;
   }
 
@@ -390,7 +390,7 @@ const { sectionCards } = Astro.props;
     border-color: rgba(var(--rgb-accent), 0.25);
   }
 
-  [data-theme="light"] .surface-card:hover {
+  :global(html:global(html[data-theme="light"])) .surface-card:hover {
     box-shadow: 
       inset 0 1px 0 var(--color-line-strong), 
       0 24px 60px var(--glass-shadow),
@@ -425,7 +425,7 @@ const { sectionCards } = Astro.props;
     filter: drop-shadow(0 8px 16px rgba(var(--rgb-accent), 0.2));
   }
 
-  [data-theme="light"] .surface-card:hover .surface-glyph {
+  :global(html:global(html[data-theme="light"])) .surface-card:hover .surface-glyph {
     opacity: 0.3;
   }
 

@@ -639,7 +639,8 @@ export function initA1ntuitizeEngine() {
     fctx.fill();
     fctx.stroke();
 
-    fctx.fillStyle = '#ffffff';
+    const isLightFace = document.documentElement.getAttribute('data-theme') === 'light';
+    fctx.fillStyle = isLightFace ? '#2A2722' : '#ffffff';
     fctx.beginPath();
     fctx.arc(30, 34, Math.min(3.2, eyeH * 0.55), 0, Math.PI * 2);
     fctx.fill();
@@ -650,7 +651,7 @@ export function initA1ntuitizeEngine() {
     fctx.fill();
     fctx.stroke();
 
-    fctx.fillStyle = '#ffffff';
+    fctx.fillStyle = isLightFace ? '#2A2722' : '#ffffff';
     fctx.beginPath();
     fctx.arc(74, 34, Math.min(3.2, eyeH * 0.55), 0, Math.PI * 2);
     fctx.fill();
@@ -922,21 +923,20 @@ export function initA1ntuitizeEngine() {
           ctx!.arc(polePr.x, polePr.y, (8.5 + Math.sin(time * 3) * 2) * polePr.scale, 0, Math.PI * 2);
           ctx!.stroke();
 
-          // Backdrop badge for dominant pole
-          const txt = `O${p.octantId} ${p.octantCode} ${p.name.toUpperCase()}`;
-          ctx!.font = 'bold 9.5px monospace';
-          const tw = ctx!.measureText(txt).width;
-          ctx!.fillStyle = 'rgba(5, 10, 20, 0.85)';
-          ctx!.fillRect(polePr.x + 6, polePr.y - 8, tw + 8, 14);
-          ctx!.strokeStyle = color;
+          ctx!.beginPath();
+          ctx!.arc(polePr.x, polePr.y, (12 + Math.sin(time * 3 + 1) * 2.5) * polePr.scale, 0, Math.PI * 2);
+          ctx!.strokeStyle = `${color}55`;
           ctx!.lineWidth = 0.8;
-          ctx!.strokeRect(polePr.x + 6, polePr.y - 8, tw + 8, 14);
+          ctx!.stroke();
 
-          ctx!.fillStyle = '#ffffff';
-          ctx!.fillText(txt, polePr.x + 10, polePr.y + 3);
+          // Discrete indicator tag next to node
+          ctx!.font = 'bold 8.5px monospace';
+          ctx!.fillStyle = color;
+          ctx!.fillText(`O${p.octantId}`, polePr.x + 8, polePr.y + 3);
         } else {
           ctx!.font = '8px monospace';
-          ctx!.fillStyle = `rgba(255, 255, 255, ${nodeAlpha * 0.55})`;
+          const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+          ctx!.fillStyle = isLight ? `rgba(30, 41, 59, ${Math.max(0.65, nodeAlpha)})` : `rgba(255, 255, 255, ${nodeAlpha * 0.55})`;
           ctx!.fillText(`O${p.octantId}`, polePr.x + 5, polePr.y + 3);
         }
       }
@@ -948,6 +948,8 @@ export function initA1ntuitizeEngine() {
     const posX = project(axisLen, 0, 0, cosX, sinX, cosY, sinY, cx, cy);
     const negX = project(-axisLen, 0, 0, cosX, sinX, cosY, sinY, cx, cy);
 
+    const isLightCanvas = document.documentElement.getAttribute('data-theme') === 'light';
+
     ctx!.lineWidth = 1.2;
     ctx!.strokeStyle = 'rgba(244, 63, 94, 0.65)';
     ctx!.beginPath();
@@ -955,10 +957,17 @@ export function initA1ntuitizeEngine() {
     ctx!.lineTo(posX.x, posX.y);
     ctx!.stroke();
 
-    ctx!.font = 'bold 8.5px monospace';
-    ctx!.fillStyle = 'rgba(244, 63, 94, 0.95)';
-    ctx!.fillText('+X (Pleasure+)', posX.x + 4, posX.y + 3);
-    ctx!.fillText('-X (Pleasure-)', negX.x - 68, negX.y + 3);
+    const drawAxisBadge = (txt: string, x: number, y: number, col: string) => {
+      ctx!.font = 'bold 8.5px monospace';
+      const tw = ctx!.measureText(txt).width;
+      ctx!.fillStyle = isLightCanvas ? 'rgba(252, 250, 246, 0.92)' : 'rgba(3, 7, 18, 0.75)';
+      ctx!.fillRect(x - 2, y - 9, tw + 4, 12);
+      ctx!.fillStyle = col;
+      ctx!.fillText(txt, x, y);
+    };
+
+    drawAxisBadge('+X (Pleasure+)', posX.x + 4, posX.y + 3, 'rgba(225, 29, 72, 1)');
+    drawAxisBadge('-X (Pleasure-)', negX.x - 68, negX.y + 3, 'rgba(225, 29, 72, 1)');
 
     const posY = project(0, axisLen, 0, cosX, sinX, cosY, sinY, cx, cy);
     const negY = project(0, -axisLen, 0, cosX, sinX, cosY, sinY, cx, cy);
@@ -969,9 +978,8 @@ export function initA1ntuitizeEngine() {
     ctx!.lineTo(posY.x, posY.y);
     ctx!.stroke();
 
-    ctx!.fillStyle = 'rgba(56, 189, 248, 0.95)';
-    ctx!.fillText('+Y (Arousal+)', posY.x + 4, posY.y - 4);
-    ctx!.fillText('-Y (Arousal-)', negY.x + 4, negY.y + 11);
+    drawAxisBadge('+Y (Arousal+)', posY.x + 4, posY.y - 4, 'rgba(2, 132, 199, 1)');
+    drawAxisBadge('-Y (Arousal-)', negY.x + 4, negY.y + 11, 'rgba(2, 132, 199, 1)');
 
     const posZ = project(0, 0, axisLen, cosX, sinX, cosY, sinY, cx, cy);
     const negZ = project(0, 0, -axisLen, cosX, sinX, cosY, sinY, cx, cy);
@@ -982,15 +990,14 @@ export function initA1ntuitizeEngine() {
     ctx!.lineTo(posZ.x, posZ.y);
     ctx!.stroke();
 
-    ctx!.fillStyle = 'rgba(16, 185, 129, 0.95)';
-    ctx!.fillText('+Z (Dominance+)', posZ.x + 4, posZ.y + 8);
-    ctx!.fillText('-Z (Dominance-)', negZ.x - 76, negZ.y - 4);
+    drawAxisBadge('+Z (Dominance+)', posZ.x + 4, posZ.y + 8, 'rgba(5, 150, 105, 1)');
+    drawAxisBadge('-Z (Dominance-)', negZ.x - 76, negZ.y - 4, 'rgba(5, 150, 105, 1)');
 
     // Origin Zero-Point Sink (0,0,0)
     ctx!.beginPath();
     ctx!.arc(originPr.x, originPr.y, 4.0 * originPr.scale, 0, Math.PI * 2);
-    ctx!.fillStyle = '#06b6d4';
-    ctx!.shadowColor = '#06b6d4';
+    ctx!.fillStyle = isLightCanvas ? '#B38A4D' : '#06b6d4';
+    ctx!.shadowColor = isLightCanvas ? 'rgba(179, 138, 77, 0.5)' : '#06b6d4';
     ctx!.shadowBlur = 10;
     ctx!.fill();
     ctx!.shadowBlur = 0;
@@ -1136,7 +1143,8 @@ export function initA1ntuitizeEngine() {
 
       ctx!.beginPath();
       ctx!.arc(prHead.x, prHead.y, (p.isBurst ? 3.0 : 1.8) * prHead.scale, 0, Math.PI * 2);
-      ctx!.fillStyle = '#ffffff';
+      const isLightEngine = document.documentElement.getAttribute('data-theme') === 'light';
+      ctx!.fillStyle = isLightEngine ? '#0f172a' : '#ffffff';
       ctx!.fill();
     }
 
@@ -1145,9 +1153,10 @@ export function initA1ntuitizeEngine() {
       const pos = evalSolidManifold(g.u, g.v, time);
       const pr = project(pos[0], pos[1], pos[2], cosX, sinX, cosY, sinY, cx, cy);
 
+      const isLightEngine = document.documentElement.getAttribute('data-theme') === 'light';
       ctx!.beginPath();
       ctx!.arc(pr.x, pr.y, g.size * pr.scale, 0, Math.PI * 2);
-      ctx!.fillStyle = `rgba(255, 255, 255, ${g.brightness * 0.85})`;
+      ctx!.fillStyle = isLightEngine ? `rgba(15, 23, 42, ${g.brightness * 0.75})` : `rgba(255, 255, 255, ${g.brightness * 0.85})`;
       ctx!.fill();
     });
 
@@ -1191,9 +1200,10 @@ export function initA1ntuitizeEngine() {
     };
     const centroidPr = project(centroid3D.x, centroid3D.y, centroid3D.z, cosX, sinX, cosY, sinY, cx, cy);
 
+    const isLightCentroid = document.documentElement.getAttribute('data-theme') === 'light';
     ctx!.lineWidth = 2.4;
-    ctx!.strokeStyle = '#38bdf8';
-    ctx!.shadowColor = '#38bdf8';
+    ctx!.strokeStyle = isLightCentroid ? '#B38A4D' : '#38bdf8';
+    ctx!.shadowColor = isLightCentroid ? 'rgba(179, 138, 77, 0.45)' : '#38bdf8';
     ctx!.shadowBlur = 12;
     ctx!.beginPath();
     ctx!.moveTo(originPr.x, originPr.y);
@@ -1204,15 +1214,15 @@ export function initA1ntuitizeEngine() {
     // Centroid Surface Reticle
     ctx!.beginPath();
     ctx!.arc(centroidPr.x, centroidPr.y, 6.0 * centroidPr.scale, 0, Math.PI * 2);
-    ctx!.fillStyle = '#ffffff';
-    ctx!.shadowColor = '#38bdf8';
+    ctx!.fillStyle = isLightCentroid ? '#FAF8F5' : '#ffffff';
+    ctx!.shadowColor = isLightCentroid ? 'rgba(179, 138, 77, 0.5)' : '#38bdf8';
     ctx!.shadowBlur = 14;
     ctx!.fill();
     ctx!.shadowBlur = 0;
 
     ctx!.beginPath();
     ctx!.arc(centroidPr.x, centroidPr.y, 3.0 * centroidPr.scale, 0, Math.PI * 2);
-    ctx!.fillStyle = '#0284c7';
+    ctx!.fillStyle = isLightCentroid ? '#8F6932' : '#0284c7';
     ctx!.fill();
 
     // Update HUD Meta (desktop + mobile mirror)

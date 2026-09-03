@@ -88,6 +88,27 @@ const createCapabilityRadarChart = (scores) => {
   </aside>
 </section>
 
+<!-- Category Filter Sticky Bar -->
+<div class="project-filter-sticky-bar reveal-up">
+  <nav class="project-category-filter" aria-label="Project categories">
+    <button type="button" class="filter-chip active" data-filter="all">
+      <span class="chip-dot"></span>
+      <span>All</span>
+      <span class="chip-count">{visibleProjects.length}</span>
+    </button>
+    <button type="button" class="filter-chip" data-filter="product">
+      <span class="chip-dot"></span>
+      <span>Products & Systems</span>
+      <span class="chip-count">{productProjects.length}</span>
+    </button>
+    <button type="button" class="filter-chip" data-filter="research">
+      <span class="chip-dot"></span>
+      <span>Research & Deep Tech</span>
+      <span class="chip-count">{researchProjects.length}</span>
+    </button>
+  </nav>
+</div>
+
 {visibleProjects.length === 0 && (
   <section class="empty-projects">
     <span class="micro-label">Projects pending</span>
@@ -1045,15 +1066,141 @@ const createCapabilityRadarChart = (scores) => {
     }
   }
 
+  function initProjectFilters() {
+    const filterChips = document.querySelectorAll('.project-category-filter .filter-chip');
+    const productSection = document.getElementById('product-projects');
+    const researchSection = document.getElementById('research-projects');
+    if (!filterChips.length) return;
+
+    filterChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const filter = chip.dataset.filter;
+        filterChips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+
+        if (filter === 'all') {
+          if (productSection) productSection.style.display = '';
+          if (researchSection) researchSection.style.display = '';
+        } else if (filter === 'product') {
+          if (productSection) productSection.style.display = '';
+          if (researchSection) researchSection.style.display = 'none';
+        } else if (filter === 'research') {
+          if (productSection) productSection.style.display = 'none';
+          if (researchSection) researchSection.style.display = '';
+        }
+      });
+    });
+  }
+
   initProjectCards();
+  initProjectFilters();
   if (!window.__projectPreviewResizeBound) {
     window.addEventListener('resize', fitAppPreviewFrames);
     window.__projectPreviewResizeBound = true;
   }
-  document.addEventListener('astro:page-load', initProjectCards);
+  document.addEventListener('astro:page-load', () => {
+    initProjectCards();
+    initProjectFilters();
+  });
 </script>
 
 <style>
+  /* Category Filter Sticky Bar */
+  .project-filter-sticky-bar {
+    position: sticky;
+    top: 68px;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    padding: 8px 0;
+    margin: 8px auto 32px;
+    width: 100%;
+    pointer-events: none;
+  }
+
+  .project-category-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 999px;
+    background: var(--color-field);
+    border: 1px solid var(--color-line-strong);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: 0 4px 20px var(--glass-shadow);
+    pointer-events: auto;
+    overflow-x: auto;
+    max-width: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .project-category-filter::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--color-ink-muted);
+    font-size: 11.5px;
+    font-weight: 750;
+    font-family: var(--font-mono, monospace);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .filter-chip:hover {
+    color: var(--color-ink);
+    background: rgba(var(--rgb-warm), 0.1);
+  }
+
+  .filter-chip.active {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    border-color: var(--color-line-strong);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .filter-chip .chip-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.4;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .filter-chip.active .chip-dot {
+    opacity: 1;
+    transform: scale(1.2);
+    background: var(--color-accent);
+  }
+
+  .filter-chip .chip-count {
+    font-size: 10px;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: rgba(var(--rgb-warm), 0.1);
+    color: var(--color-ink-muted);
+  }
+
+  .filter-chip.active .chip-count {
+    background: rgba(var(--rgb-warm), 0.2);
+    color: var(--color-accent-ink);
+  }
+
   .card-actions-row {
     display: flex;
     flex-wrap: wrap;
@@ -2290,7 +2437,7 @@ const createCapabilityRadarChart = (scores) => {
     color: var(--color-ink-soft, #cbd5e1);
   }
 
-  [data-theme="light"] .artifact-minimal-btn.is-pending-locked {
+  :global(html:global(html[data-theme="light"])) .artifact-minimal-btn.is-pending-locked {
     border-color: rgba(0, 0, 0, 0.14);
     background: repeating-linear-gradient(
       -45deg,
@@ -2302,7 +2449,7 @@ const createCapabilityRadarChart = (scores) => {
     color: #64748b;
   }
 
-  [data-theme="light"] .pending-stripes-pill {
+  :global(html:global(html[data-theme="light"])) .pending-stripes-pill {
     background: rgba(0, 0, 0, 0.05);
     border-color: rgba(0, 0, 0, 0.1);
     color: #475569;
@@ -2726,6 +2873,52 @@ const createCapabilityRadarChart = (scores) => {
 
     .card-meta {
       flex-wrap: wrap;
+    }
+
+    .project-filter-sticky-bar {
+      top: 56px;
+      margin-bottom: 20px;
+      padding: 6px 12px;
+    }
+
+    .project-category-filter {
+      width: 100%;
+      justify-content: flex-start;
+      padding: 3px;
+      border-radius: 999px;
+      gap: 3px;
+    }
+
+    .filter-chip {
+      padding: 6px 10px;
+      font-size: 10.5px;
+      border-radius: 999px;
+      flex: 1;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .filter-chip .chip-count {
+      font-size: 9.5px;
+      padding: 1px 5px;
+    }
+
+    .artifact-minimal-btn {
+      min-height: 38px;
+      font-size: 11px;
+      padding: 0 12px;
+      border-radius: 8px;
+    }
+
+    .card-actions-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      width: 100%;
+    }
+
+    .card-actions-row .artifact-minimal-btn {
+      width: 100%;
     }
   }
 </style>
