@@ -9,15 +9,13 @@ const expectedPages = [
   ["about", "01", "About", "/about", "profile"],
   ["a1-firms", "02", "A1 Firms", "/A1-Firm", "product"],
   ["projects", "03", "Projects", "/projects", "projectIndex"],
-  ["writings", "04", "Writings", "/writings", "writingIndex"],
-  ["contacts", "05", "Contacts", "/contacts", "contact"]
+  ["contacts", "04", "Contacts", "/contacts", "contact"]
 ];
 
 const allowedLayoutTypes = new Set([
   "profile",
   "product",
   "projectIndex",
-  "writingIndex",
   "contact",
   "blank"
 ]);
@@ -27,19 +25,11 @@ const allowedBlockTypes = new Set([
   "text",
   "callout",
   "timeline",
+  "education",
   "deckEmbed",
   "gallery",
   "link",
   "stats"
-]);
-const allowedWritingBlockTypes = new Set([
-  "paragraph",
-  "heading",
-  "image",
-  "code",
-  "embed",
-  "quote",
-  "divider"
 ]);
 const allowedProjectVisuals = new Set(["graph", "deck", "console", "paper", "blank"]);
 
@@ -52,6 +42,7 @@ function assert(condition, message) {
 }
 
 function listJsonFiles(dirPath) {
+  if (!fs.existsSync(dirPath)) return [];
   return fs.readdirSync(dirPath).filter((fileName) => fileName.endsWith(".json"));
 }
 
@@ -59,22 +50,30 @@ function assertUnique(values, message) {
   const seen = new Set();
 
   for (const value of values) {
-    assert(!seen.has(value), `${message}: duplicate "${value}"`);
+    if (seen.has(value)) throw new Error(`${message}: ${value}`);
     seen.add(value);
   }
 }
 
-function assertBlockIds(blocks = [], label) {
-  assertUnique(blocks.map((block) => block.id), `${label}: block ids must be unique`);
+function assertHref(href, context) {
+  assert(typeof href === "string" && href.length > 0, `${context}: href must be non-empty string`);
+  assert(
+    href.startsWith("/") ||
+      href.startsWith("http://") ||
+      href.startsWith("https://") ||
+      href.startsWith("mailto:") ||
+      href.startsWith("tel:") ||
+      href.startsWith("#"),
+    `${context}: invalid href format "${href}"`
+  );
 }
 
-function assertHref(href, label) {
-  assert(
-    href === "#" ||
-      href.startsWith("/") ||
-      /^https?:\/\//.test(href) ||
-      /^mailto:[^@\s]+@[^@\s]+\.[^@\s]+$/.test(href),
-    `${label}: invalid href "${href}"`
+function assertBlockIds(blocks, context) {
+  if (!blocks) return;
+  assert(Array.isArray(blocks), `${context}: blocks must be an array`);
+  assertUnique(
+    blocks.map((block) => block.id),
+    `${context}: block ids must be unique`
   );
 }
 
@@ -163,23 +162,6 @@ function main() {
   for (const [index, channel] of contacts.channels.entries()) {
     assert(typeof channel.value === "string" && channel.value.length > 0, `contacts.channels[${index}].value is required`);
     if (channel.href) assertHref(channel.href, `contacts.channels[${index}]`);
-  }
-
-  for (const fileName of listJsonFiles(path.join(contentRoot, "writings"))) {
-    const writing = readJson(path.join(contentRoot, "writings", fileName));
-    assert(allowedStatuses.has(writing.status), `${fileName}: invalid status`);
-    assertBlockIds(writing.blocks, `${fileName}`);
-
-    for (const block of writing.blocks ?? []) {
-      assert(allowedWritingBlockTypes.has(block.type), `${fileName}: invalid writing block type "${block.type}"`);
-      assert(typeof block.id === "string" && block.id.length > 0, `${fileName}: block id is required`);
-
-      if (block.type === "embed") {
-        assert(["canva", "googleSlides", "figma", "pdf", "generic"].includes(block.provider), `${fileName}: invalid embed provider`);
-        assert(/^https?:\/\//.test(block.src), `${fileName}: embed src must be absolute URL`);
-        assert(/^\d+\/\d+$/.test(block.aspectRatio), `${fileName}: embed aspectRatio must look like 16/9`);
-      }
-    }
   }
 
   console.log(JSON.stringify({ ok: true, pages }, null, 2));

@@ -1,15 +1,12 @@
 ---
 import ProfileView from "./sections/profile/ProfileView.astro";
 import GridView from "./sections/projects/GridView.astro";
-import NewsletterView from "./sections/writings/NewsletterView.astro";
 import ContactsView from "./sections/contacts/ContactsView.astro";
-import DefaultView from "./sections/default/DefaultView.astro";
 
 const {
   page,
   navItem,
   projects = [],
-  writings = [],
   contactEntries = []
 } = Astro.props;
 
@@ -29,16 +26,8 @@ const hero = page.hero ?? {
     <GridView page={page} navItem={navItem} hero={hero} projects={projects} />
   )}
 
-  {page.layoutType === "writingIndex" && (
-    <NewsletterView page={page} navItem={navItem} hero={hero} writings={writings} />
-  )}
-
   {page.layoutType === "contact" && (
     <ContactsView page={page} navItem={navItem} hero={hero} contactEntries={contactEntries} />
-  )}
-
-  {page.layoutType === "product" && (
-    <DefaultView page={page} navItem={navItem} hero={hero} />
   )}
 </section>
 

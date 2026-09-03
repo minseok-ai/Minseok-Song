@@ -45,7 +45,6 @@ function concreteKindWeight(card: A1ChanKnowledgeCard) {
   if (card.kind === "project") return 4;
   if (card.kind === "person") return 4;
   if (card.kind === "contact") return 4;
-  if (card.kind === "writing") return 3;
   if (card.kind === "section") return 2;
   return 1;
 }

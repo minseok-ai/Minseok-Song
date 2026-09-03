@@ -569,7 +569,16 @@ export function initA1ntuitizeEngine() {
   const faceCanvasMobile = document.getElementById('ai-face-canvas-mobile') as HTMLCanvasElement | null;
   const fctxMobile = faceCanvasMobile ? faceCanvasMobile.getContext('2d') : null;
 
-  const faceState = {
+  const faceState: {
+    eyeOpen: number;
+    brow: number;
+    smile: number;
+    rgb: [number, number, number];
+    targetEyeOpen: number;
+    targetBrow: number;
+    targetSmile: number;
+    targetRgb: [number, number, number];
+  } = {
     eyeOpen: 0.8,
     brow: 0.3,
     smile: 0.6,
@@ -1255,7 +1264,7 @@ export function initA1ntuitizeEngine() {
       octantId: currentPeakLobe.octantId,
       octantCode: currentPeakLobe.octantCode,
       name: currentPeakLobe.name,
-      color: currentPeakLobe.color,
+      color: currentPeakLobe.hex,
       rgb: currentPeakLobe.rgb,
       tone: octantDef?.tone || currentPeakLobe.name,
       subEmotions: currentPeakLobe.subEmotions,

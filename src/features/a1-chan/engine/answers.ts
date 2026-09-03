@@ -87,7 +87,6 @@ function actionLabel(card: A1ChanKnowledgeCard) {
   if (card.kind === "project") return `${card.title.replace(/\s+(Strategy|Vision|Control|System|Architecture|Engine|Platform|Analysis|AI)$/i, "")} 보기`;
   if (card.kind === "contact") return "Contacts 보기";
   if (card.kind === "person") return "About 보기";
-  if (card.kind === "writing") return "글 읽기";
   return `${card.title} 보기`;
 }
 

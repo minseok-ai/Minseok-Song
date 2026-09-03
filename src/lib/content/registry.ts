@@ -1,8 +1,7 @@
 import type {
   ContactContent,
   PageContent,
-  ProjectContent,
-  WritingContent
+  ProjectContent
 } from "../schemas/content";
 
 export type PageEntry = {
@@ -13,11 +12,6 @@ export type PageEntry = {
 export type ProjectEntry = {
   id: string;
   data: ProjectContent;
-};
-
-export type WritingEntry = {
-  id: string;
-  data: WritingContent;
 };
 
 export type ContactEntry = {
@@ -34,11 +28,6 @@ const projectModules = import.meta.glob("../../content/projects/*.json", {
   eager: true,
   import: "default"
 }) as Record<string, ProjectContent>;
-
-const writingModules = import.meta.glob("../../content/writings/*.json", {
-  eager: true,
-  import: "default"
-}) as Record<string, WritingContent>;
 
 const contactModules = import.meta.glob("../../content/contacts/*.json", {
   eager: true,
@@ -63,7 +52,5 @@ export const pageEntriesById = new Map(
 );
 
 export const projectEntries: ProjectEntry[] = entriesFromModules(projectModules);
-
-export const writingEntries: WritingEntry[] = entriesFromModules(writingModules);
 
 export const contactEntries: ContactEntry[] = entriesFromModules(contactModules);

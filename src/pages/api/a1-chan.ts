@@ -4,12 +4,12 @@ import {
   contactEntries,
   pageEntries,
   pageEntriesById,
-  projectEntries,
-  writingEntries
+  projectEntries
 } from "../../lib/content/registry";
 import { createNavigatorRoutes } from "../../features/a1-chan/route-engine";
 import { createA1ChanKnowledge } from "../../features/a1-chan/site-knowledge";
 import { createStaticA1ChanResponse } from "../../features/a1-chan/conversation-engine";
+import type { A1ChanSemanticHint } from "../../features/a1-chan/shared";
 import { createRateLimiter, createRateLimitHeaders, getClientIdentifier } from "../../lib/rate-limiter";
 
 const rateLimiter = createRateLimiter({
@@ -60,7 +60,6 @@ function getA1ChanStaticContext() {
     routes,
     pages: pageEntries,
     projects: projectEntries,
-    writings: writingEntries,
     contacts: contactEntries
   });
 
@@ -100,7 +99,7 @@ function cleanContext(value: A1ChanRequestBody["context"] = {}) {
   };
 }
 
-function cleanSemanticHint(value: A1ChanRequestBody["semanticHint"]) {
+function cleanSemanticHint(value: A1ChanRequestBody["semanticHint"]): A1ChanSemanticHint | undefined {
   if (!value || typeof value !== "object") return undefined;
 
   const language = value.language === "ko" || value.language === "en" || value.language === "ja" || value.language === "unknown"

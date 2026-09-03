@@ -9,6 +9,7 @@ dist/
 # Local environment and secrets
 .env
 .env.*
+!.env.example
 
 # Logs and diagnostics
 logs/
@@ -20,19 +21,30 @@ pnpm-debug.log*
 lerna-debug.log*
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
-# Local visual QA artifacts
+# Visual QA and scratch artifacts
 visual-checks/
+scratch/
+tmp/
+temp/
+*.tmp
 
-# Local environment and untracked extensions
+# Local workspace and untracked external components
 local/
-public/A1ntuitize/
 public/*-extension/
-public/3D Dodge/
+
+# Python virtual environments and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
 
 # Package manager caches
 .npm/
 .pnpm-store/
-.venv/
 .yarn/*
 !.yarn/releases/
 !.yarn/plugins/
@@ -49,14 +61,14 @@ coverage/
 # Editor and OS files
 .DS_Store
 Thumbs.db
-Desktop.ini
+ehthumbs.db
+[Dd]esktop.ini
+*.swp
+*.swo
+*~
+*.bak
 .idea/
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
-
-# Temporary files
-scratch/
-tmp/
-temp/
-*.tmp
+!.vscode/launch.json

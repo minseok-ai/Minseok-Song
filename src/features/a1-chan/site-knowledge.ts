@@ -1,8 +1,7 @@
 import type {
   ContactEntry,
   PageEntry,
-  ProjectEntry,
-  WritingEntry
+  ProjectEntry
 } from "../../lib/content/registry";
 import type { NavigatorRoute } from "./route-engine";
 import { compactText, completeA1ChanCard, unique } from "./knowledge/card-utils";
@@ -14,7 +13,6 @@ export type A1ChanKnowledgeKind =
   | "page"
   | "section"
   | "project"
-  | "writing"
   | "contact";
 
 export type A1ChanKnowledgeCard = {
@@ -45,7 +43,6 @@ type CreateKnowledgeOptions = {
   routes: NavigatorRoute[];
   pages: PageEntry[];
   projects: ProjectEntry[];
-  writings: WritingEntry[];
   contacts: ContactEntry[];
 };
 
@@ -91,7 +88,7 @@ function blockText(block: BlockLike) {
   return compactText([block.title, block.body]);
 }
 
-export function createA1ChanKnowledge({ routes, pages, projects, writings, contacts }: CreateKnowledgeOptions) {
+export function createA1ChanKnowledge({ routes, pages, projects, contacts }: CreateKnowledgeOptions) {
   const cards: A1ChanKnowledgeCard[] = [];
   const publishedPages = pages.filter((entry) => entry.data.status === "published" && !entry.data.hidden);
   const publishedProjects = projects
@@ -231,29 +228,6 @@ export function createA1ChanKnowledge({ routes, pages, projects, writings, conta
         : undefined
     };
     cards.push(completeA1ChanCard(projectCardBase));
-  }
-
-  for (const entry of writings.filter((item) => item.data.status === "published" && !item.data.hidden)) {
-    const writingCardBase = {
-      id: `writing-${entry.id}`,
-      kind: "writing" as const,
-      locale: "ko" as const,
-      title: entry.data.title,
-      aliases: unique([entry.data.title, entry.id, "글", "아티클", "뉴스레터"]),
-      summary: entry.data.summary,
-      shortAnswer: `${entry.data.title} 글은 ${entry.data.summary}`,
-      detailAnswer: compactText([entry.data.summary, entry.data.body]).slice(0, 520),
-      facts: unique([entry.data.summary, entry.data.body]).slice(0, 4),
-      proofPoints: unique([entry.data.date, ...entry.data.tags, entry.data.summary]).slice(0, 5),
-      nextQuestions: ["이 글 요약해줘", "다른 글은 어디서 봐?", "관련 프로젝트가 있어?"],
-      keywords: unique([...entry.data.tags, "writing", "article", "글", "뉴스레터"]),
-      href: `/writings/${entry.id}`,
-      routeId: "writings",
-      tags: entry.data.tags,
-      priority: 54,
-      source: `content/writings/${entry.id}.json`
-    };
-    cards.push(completeA1ChanCard(writingCardBase));
   }
 
   for (const entry of contacts) {

@@ -85,11 +85,11 @@ const jsonLd = {
         }
       })();
     </script>
-    <link rel="icon" type="image/png" href={`/A1Firm-logo_light.png?v=${faviconVersion}`} media="(prefers-color-scheme: light)" />
-    <link rel="icon" type="image/png" href={`/A1Firm-logo.png?v=${faviconVersion}`} media="(prefers-color-scheme: dark)" />
-    <link rel="apple-touch-icon" href={`/A1Firm-logo.png?v=${faviconVersion}`} />
+    <link rel="icon" type="image/png" href={`/A1Firm-logo-light.png?v=${faviconVersion}`} media="(prefers-color-scheme: light)" />
+    <link rel="icon" type="image/png" href={`/A1Firm-logo-dark.png?v=${faviconVersion}`} media="(prefers-color-scheme: dark)" />
+    <link rel="apple-touch-icon" href={`/A1Firm-logo-dark.png?v=${faviconVersion}`} />
     <link rel="canonical" href={canonicalUrl} />
-    <link rel="alternate" type="application/rss+xml" title={`${siteConfig.name} writings`} href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${siteConfig.name} Updates`} href="/rss.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <meta name="description" content={description} />
@@ -345,12 +345,12 @@ const jsonLd = {
           </button>
           <div class="login-link" aria-label="Client greeting">
             <picture class="logo-dark">
-              <source srcset="/A1Firm-logo.webp" type="image/webp" />
-              <img class="utility-logo" src="/A1Firm-logo.png" alt="" width="16" height="16" />
+              <source srcset="/A1Firm-logo-dark.webp" type="image/webp" />
+              <img class="utility-logo" src="/A1Firm-logo-dark.png" alt="" width="16" height="16" />
             </picture>
             <picture class="logo-light">
-              <source srcset="/A1Firm-logo_light.webp" type="image/webp" />
-              <img class="utility-logo" src="/A1Firm-logo_light.png" alt="" width="16" height="16" />
+              <source srcset="/A1Firm-logo-light.webp" type="image/webp" />
+              <img class="utility-logo" src="/A1Firm-logo-light.png" alt="" width="16" height="16" />
             </picture>
             <span>{session ? `Hi, ${session.user?.name || 'Minseok'}!` : 'Hi, Client!'}</span>
           </div>

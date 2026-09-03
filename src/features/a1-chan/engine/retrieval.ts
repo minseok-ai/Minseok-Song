@@ -182,10 +182,6 @@ function contextBoost(query: string, card: A1ChanKnowledgeCard, context: A1ChanC
     score += 62;
     reasons.push("site-intent");
   }
-  if (intent === "writing" && (card.kind === "writing" || card.routeId === "writings")) {
-    score += 95;
-    reasons.push("writing-intent");
-  }
   if ((intent === "projectCollection" || intent === "recommendation") && card.id === "projects-collection") {
     score += 100;
     reasons.push("project-collection");

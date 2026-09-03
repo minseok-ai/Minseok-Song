@@ -6,8 +6,7 @@ import { siteConfig } from "../config/site";
 import {
   contactEntries,
   pageEntriesById,
-  projectEntries,
-  writingEntries
+  projectEntries
 } from "../lib/content/registry";
 
 const section = Astro.params.section ?? "";
@@ -35,7 +34,6 @@ if (!page) {
     page={page}
     navItem={navItem}
     projects={projectEntries}
-    writings={writingEntries}
     contactEntries={contactEntries}
   />
 </Layout>

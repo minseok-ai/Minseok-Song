@@ -1,15 +1,4 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import { siteConfig } from "../../config/site";
-import { projectEntries } from "../../lib/content/registry";
-
-export function getStaticPaths() {
-  return projectEntries.map((project) => ({
-    params: { slug: project.id },
-    props: { project }
-  }));
-}
-
 const { slug } = Astro.params;
 
 // Direct redirect to the project card on the /projects page with smooth scroll

@@ -28,12 +28,12 @@ const routeJson = JSON.stringify(routes);
     <span class="a1-navigator__status" aria-hidden="true"></span>
     <span class="a1-pip-trigger-aura" id="a1-pip-trigger-aura" aria-hidden="true"></span>
     <picture class="logo-dark">
-      <source srcset="/A1Firm-logo.webp" type="image/webp" />
-      <img src="/A1Firm-logo.png" alt="" width="34" height="34" loading="lazy" />
+      <source srcset="/A1Firm-logo-dark.webp" type="image/webp" />
+      <img src="/A1Firm-logo-dark.png" alt="" width="34" height="34" loading="lazy" />
     </picture>
     <picture class="logo-light">
-      <source srcset="/A1Firm-logo_light.webp" type="image/webp" />
-      <img src="/A1Firm-logo_light.png" alt="" width="34" height="34" loading="lazy" />
+      <source srcset="/A1Firm-logo-light.webp" type="image/webp" />
+      <img src="/A1Firm-logo-light.png" alt="" width="34" height="34" loading="lazy" />
     </picture>
   </button>
 
@@ -85,12 +85,12 @@ const routeJson = JSON.stringify(routes);
           <span>
             <div class="a1-message__logo">
               <picture class="logo-dark">
-                <source srcset="/A1Firm-logo.webp" type="image/webp" />
-                <img src="/A1Firm-logo.png" alt="" width="20" height="20" loading="lazy" />
+                <source srcset="/A1Firm-logo-dark.webp" type="image/webp" />
+                <img src="/A1Firm-logo-dark.png" alt="" width="20" height="20" loading="lazy" />
               </picture>
               <picture class="logo-light">
-                <source srcset="/A1Firm-logo_light.webp" type="image/webp" />
-                <img src="/A1Firm-logo_light.png" alt="" width="20" height="20" loading="lazy" />
+                <source srcset="/A1Firm-logo-light.webp" type="image/webp" />
+                <img src="/A1Firm-logo-light.png" alt="" width="20" height="20" loading="lazy" />
               </picture>
             </div>
           </span>
@@ -306,15 +306,15 @@ const routeJson = JSON.stringify(routes);
     const logoDark = document.createElement("picture");
     logoDark.className = "logo-dark";
     logoDark.innerHTML = `
-      <source srcset="/A1Firm-logo.webp" type="image/webp" />
-      <img src="/A1Firm-logo.png" alt="" width="20" height="20" loading="lazy" />
+      <source srcset="/A1Firm-logo-dark.webp" type="image/webp" />
+      <img src="/A1Firm-logo-dark.png" alt="" width="20" height="20" loading="lazy" />
     `;
 
     const logoLight = document.createElement("picture");
     logoLight.className = "logo-light";
     logoLight.innerHTML = `
-      <source srcset="/A1Firm-logo_light.webp" type="image/webp" />
-      <img src="/A1Firm-logo_light.png" alt="" width="20" height="20" loading="lazy" />
+      <source srcset="/A1Firm-logo-light.webp" type="image/webp" />
+      <img src="/A1Firm-logo-light.png" alt="" width="20" height="20" loading="lazy" />
     `;
 
     logoContainer.append(logoDark, logoLight);
