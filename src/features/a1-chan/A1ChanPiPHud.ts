@@ -93,17 +93,8 @@ export function initA1ChanPiPHud() {
     ctx!.clearRect(0, 0, width, height);
 
     const isLight = document.documentElement.getAttribute("data-theme") === "light";
-
-    // Ambient Hologram Glow Behind Face
-    ctx!.save();
-    const glowGrad = ctx!.createRadialGradient(width / 2, height / 2, 2, width / 2, height / 2, width * 0.5);
-    glowGrad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${isLight ? 0.12 : 0.22})`);
-    glowGrad.addColorStop(1, "transparent");
-    ctx!.fillStyle = glowGrad;
-    ctx!.beginPath();
-    ctx!.arc(width / 2, height / 2, width * 0.48, 0, Math.PI * 2);
-    ctx!.fill();
-    ctx!.restore();
+    const strokeCol = isLight ? "#2A2722" : colStr;
+    const accentCol = colStr;
 
     // Natural Blinking Cycle
     const blink = Math.sin(elapsed * 1.7);
@@ -120,9 +111,9 @@ export function initA1ChanPiPHud() {
     ctx!.translate(-52, -38);
 
     ctx!.lineWidth = 2.4;
-    ctx!.strokeStyle = colStr;
-    ctx!.shadowColor = colStr;
-    ctx!.shadowBlur = isLight ? 3 : 8;
+    ctx!.strokeStyle = strokeCol;
+    ctx!.shadowColor = accentCol;
+    ctx!.shadowBlur = isLight ? 0 : 6;
     ctx!.lineCap = "round";
 
     // Left Eyebrow
@@ -142,7 +133,8 @@ export function initA1ChanPiPHud() {
     ctx!.stroke();
 
     // Left Hologram Eye
-    ctx!.fillStyle = `rgba(${r}, ${g}, ${b}, ${isLight ? 0.18 : 0.28})`;
+    ctx!.fillStyle = `rgba(${r}, ${g}, ${b}, ${isLight ? 0.22 : 0.28})`;
+    ctx!.strokeStyle = accentCol;
     ctx!.beginPath();
     ctx!.ellipse(30, 34, 8.5, eyeH, 0, 0, Math.PI * 2);
     ctx!.fill();
@@ -151,11 +143,12 @@ export function initA1ChanPiPHud() {
     // Left Pupil (Dark ink in light mode, luminous white in dark mode)
     ctx!.fillStyle = isLight ? "#2A2722" : "#ffffff";
     ctx!.beginPath();
-    ctx!.arc(30, 34, Math.min(3.0, eyeH * 0.55), 0, Math.PI * 2);
+    ctx!.arc(30, 34, Math.min(3.2, eyeH * 0.55), 0, Math.PI * 2);
     ctx!.fill();
 
     // Right Hologram Eye
-    ctx!.fillStyle = `rgba(${r}, ${g}, ${b}, ${isLight ? 0.18 : 0.28})`;
+    ctx!.fillStyle = `rgba(${r}, ${g}, ${b}, ${isLight ? 0.22 : 0.28})`;
+    ctx!.strokeStyle = accentCol;
     ctx!.beginPath();
     ctx!.ellipse(74, 34, 8.5, eyeH, 0, 0, Math.PI * 2);
     ctx!.fill();
@@ -164,16 +157,28 @@ export function initA1ChanPiPHud() {
     // Right Pupil
     ctx!.fillStyle = isLight ? "#2A2722" : "#ffffff";
     ctx!.beginPath();
-    ctx!.arc(74, 34, Math.min(3.0, eyeH * 0.55), 0, Math.PI * 2);
+    ctx!.arc(74, 34, Math.min(3.2, eyeH * 0.55), 0, Math.PI * 2);
     ctx!.fill();
 
     // Expressive Mouth
     ctx!.beginPath();
+    ctx!.strokeStyle = strokeCol;
     const mouthY = 57;
     const mouthCurve = faceState.smile * 7;
     ctx!.moveTo(37, mouthY);
     ctx!.quadraticCurveTo(52, mouthY + mouthCurve, 67, mouthY);
     ctx!.stroke();
+
+    // Subtle Cybernetic Cheek Blush
+    if (faceState.smile > 0.15) {
+      ctx!.fillStyle = `rgba(${r}, ${g}, ${b}, ${isLight ? 0.24 : 0.32})`;
+      ctx!.beginPath();
+      ctx!.arc(22, 46, 3.8, 0, Math.PI * 2);
+      ctx!.fill();
+      ctx!.beginPath();
+      ctx!.arc(82, 46, 3.8, 0, Math.PI * 2);
+      ctx!.fill();
+    }
 
     ctx!.shadowBlur = 0;
     ctx!.restore();

@@ -7,16 +7,32 @@ import { createNavigatorRoutes } from "./route-engine";
 
 const routes = createNavigatorRoutes(visibleNavigationItems(), pageEntriesById);
 const routeJson = JSON.stringify(routes);
+
+// Security Note: Scramble route payload using cyclic XOR mask & Base64 during SSR
+// to prevent sensitive routing aliases and response templates from being inspected
+// in plaintext via DevTools (F12 Elements panel). Reconstituted in client memory only.
+// Canonical source files remain 100% plaintext in src/features/a1-chan/route-engine.ts.
+const maskKey = [0x41, 0x31, 0x43, 0x68, 0x61, 0x6e]; // "A1Chan"
+const rawBytes = new TextEncoder().encode(routeJson);
+const maskedBytes = new Uint8Array(rawBytes.length);
+for (let i = 0; i < rawBytes.length; i++) {
+  maskedBytes[i] = rawBytes[i] ^ maskKey[i % maskKey.length];
+}
+let binary = "";
+for (let i = 0; i < maskedBytes.length; i++) {
+  binary += String.fromCharCode(maskedBytes[i]);
+}
+const encodedPayload = btoa(binary);
 ---
 
 <aside
   class="a1-navigator"
   data-a1-navigator
-  data-routes={routeJson}
   data-ai-status="unsupported"
   data-agent="chan"
   aria-label="A1 Chan site assistant"
 >
+  <div id="a1-vault" data-payload={encodedPayload} style="display:none" hidden></div>
   <button
     class="a1-navigator__trigger"
     type="button"
@@ -176,7 +192,43 @@ const routeJson = JSON.stringify(routes);
   const routeLinks = Array.from(widget.querySelectorAll<HTMLAnchorElement>("[data-route-id]"));
   const loadingIndicator = widget.querySelector<HTMLElement>("[data-a1-loading]");
   const actionsPanel = widget.querySelector<HTMLElement>("[data-a1-actions]");
-  const routes = JSON.parse(widget.getAttribute("data-routes") || "[]") as NavigatorRoute[];
+  // Deobfuscate route catalog from memory blob and instantly detach from DOM
+  let routes: NavigatorRoute[] = [];
+  try {
+    const vaultEl = document.getElementById("a1-vault");
+    const encodedPayload = vaultEl ? vaultEl.getAttribute("data-payload") || "" : "";
+    if (vaultEl) vaultEl.remove();
+    widget.removeAttribute("data-routes");
+
+    if (encodedPayload) {
+      const maskKey = [0x41, 0x31, 0x43, 0x68, 0x61, 0x6e]; // "A1Chan"
+      const binary = atob(encodedPayload);
+      const len = binary.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binary.charCodeAt(i) ^ maskKey[i % maskKey.length];
+      }
+      routes = JSON.parse(new TextDecoder("utf-8").decode(bytes)) as NavigatorRoute[];
+    }
+  } catch (e) {
+    console.warn("A1 Chan: Failed to load route catalog", e);
+  }
+
+  if (!routes || routes.length === 0) {
+    routes = [
+      {
+        id: "home",
+        label: "Home",
+        path: "/",
+        num: "00",
+        description: "Home",
+        aliases: ["home"],
+        response: "사이트 시작 화면입니다.",
+        prompt: "site overview",
+        deepLinks: []
+      }
+    ];
+  }
 
   type ConversationItem = {
     kind: "bot" | "user";

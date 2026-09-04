@@ -211,6 +211,14 @@
     visibility 0s ease;
 }
 
+.a1-navigator.is-open .a1-navigator__trigger {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: scale(0.6);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+
 .a1-navigator__header {
   display: flex;
   align-items: center;
@@ -895,8 +903,8 @@ html[data-theme="light"] .a1-pip-hud-strip,
 .a1-pip-canvas-wrap {
   position: relative;
   width: 44px;
-  height: 44px;
-  border-radius: 50%;
+  height: 40px;
+  border-radius: 10px;
   background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, #020617 100%);
   border: 1px solid rgba(56, 189, 248, 0.35);
   overflow: hidden;
@@ -909,14 +917,14 @@ html[data-theme="light"] .a1-pip-hud-strip,
 
 html[data-theme="light"] .a1-pip-canvas-wrap,
 [data-theme="light"] .a1-pip-canvas-wrap {
-  background: radial-gradient(circle, rgba(179, 138, 77, 0.15) 0%, #FAF8F5 100%);
+  background: radial-gradient(circle, rgba(179, 138, 77, 0.12) 0%, #FAF8F5 100%);
   border-color: rgba(198, 164, 104, 0.35);
-  box-shadow: inset 0 1px 4px rgba(179, 138, 77, 0.1);
+  box-shadow: inset 0 1px 3px rgba(179, 138, 77, 0.08);
 }
 
 .a1-chan-pip-canvas {
   width: 44px;
-  height: 44px;
+  height: 40px;
   display: block;
 }
 
@@ -981,18 +989,57 @@ html[data-theme="light"] .a1-pip-canvas-wrap,
 
 @media (max-width: 640px) {
   .a1-navigator {
-    right: 14px;
-    bottom: 14px;
+    right: 10px;
+    bottom: 10px;
   }
   .a1-navigator__trigger {
-    width: 48px;
-    height: 48px;
+    width: 42px;
+    height: 42px;
+  }
+  .a1-navigator__trigger img {
+    width: 22px;
+    height: 22px;
   }
   .a1-avatar-brand {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
   }
   .a1-pulse-ring {
+    inset: -2px;
+  }
+  .a1-pip-trigger-aura {
     inset: -3px;
+    filter: blur(6px);
+  }
+
+  .a1-navigator__panel {
+    position: fixed;
+    right: 10px;
+    left: 10px;
+    bottom: 10px;
+    width: auto;
+    max-width: none;
+    max-height: min(580px, calc(100svh - 30px));
+    border-radius: 16px;
+    transform-origin: bottom center;
+  }
+
+  .a1-header-viewing {
+    display: none;
+  }
+
+  .a1-navigator__routes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding-top: 4px;
+  }
+
+  .a1-navigator__routes a {
+    flex: 1 1 auto;
+    justify-content: center;
+    min-height: 26px;
+    padding: 2px 8px;
+    font-size: 8.5px;
   }
 }
 

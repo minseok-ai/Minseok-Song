@@ -75,21 +75,24 @@ import "katex/dist/katex.min.css";
 
         <div class="manifold-camera-controls" role="toolbar" aria-label="3D Camera Presets">
           <button class="cam-btn is-active" data-view="orbit" title="Interactive Orbit Mode">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
             <span>Orbit</span>
           </button>
           <button class="cam-btn" data-view="top" title="Top-Down (+Y Arousal) Pole">
-            <span>Top (+Y)</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            <span>Top</span>
           </button>
           <button class="cam-btn" data-view="front" title="Frontal (+Z Dominance) View">
-            <span>Front (+Z)</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+            <span>Front</span>
           </button>
           <button class="cam-btn" data-view="side" title="Lateral (+X Pleasure) View">
-            <span>Side (+X)</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <span>Side</span>
           </button>
           <button class="cam-btn pulse-fire-btn" id="fire-salvo-btn" title="Fire Multi-Octant Vision Particle Salvo">
-            <span class="pulse-icon">⚡</span>
-            <span>Salvo Pulse</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            <span>Pulse</span>
           </button>
         </div>
       </div>
@@ -2057,7 +2060,11 @@ import "katex/dist/katex.min.css";
   @media (max-width: 768px) {
     /* Page container */
     .sealed-card-container {
-      padding: 22px 16px 20px;
+      /* bleed out of the page's side padding, then self-pad */
+      margin-left: -16px;
+      margin-right: -16px;
+      padding: 22px 20px 20px;
+      border-radius: 0;
       gap: 24px;
     }
 
@@ -2078,23 +2085,40 @@ import "katex/dist/katex.min.css";
       grid-template-columns: 1fr;
     }
 
-    /* 3D Canvas: smaller height on mobile */
+    /* 3D Canvas: comfortable height on mobile */
     .manifold-canvas-box {
-      height: 340px;
+      height: 330px;
+      min-height: 290px;
     }
 
-    /* HUD top: stack vertically */
+    /* HUD top: clean vertical stack */
     .manifold-3d-hud-top {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: stretch;
       gap: 10px;
       padding: 12px 14px;
     }
 
-    /* Camera controls: wrap */
+    /* Camera controls: evenly distributed row */
     .manifold-camera-controls {
-      flex-wrap: wrap;
-      gap: 4px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 3px;
+      padding: 3px 4px;
+      box-sizing: border-box;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .cam-btn {
+      flex: 1;
+      justify-content: center;
+      padding: 5px 6px;
+      font-size: 9.5px;
+      gap: 3px;
+      white-space: nowrap;
     }
 
     /* Hide nav badge to free up canvas space */
@@ -2109,24 +2133,45 @@ import "katex/dist/katex.min.css";
 
     .ai-hud-mobile-row {
       display: block;
-      padding: 0 14px 8px;
+      padding: 0 0 10px;
     }
 
     .ai-avatar-card {
       width: 100%;
       box-sizing: border-box;
-      border-radius: 10px;
+      border-radius: 12px;
+      padding: 10px 14px;
+      gap: 12px;
     }
 
-    /* Manifold canvas itself */
-    .manifold-canvas-box {
-      height: 300px;
-      min-height: 260px;
+    .ai-face-hologram {
+      width: 52px;
+      height: 40px;
+    }
+
+    .ai-meta-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 6px;
+    }
+
+    .ai-spike-badge {
+      font-size: 8px;
+      padding: 1px 6px;
+      white-space: nowrap;
+    }
+
+    .hud-val {
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: 0.02em;
     }
 
     /* Spectrum bar */
     .manifold-spectrum-bar {
-      padding: 14px 14px;
+      padding: 14px 14px 40px;
       gap: 12px;
     }
 
@@ -2188,6 +2233,31 @@ import "katex/dist/katex.min.css";
       grid-template-columns: 1fr;
     }
 
+    /* Math card: comfortable padding on mobile */
+    .math-card {
+      padding: 18px 16px;
+      border-radius: 12px;
+    }
+
+    /* Keep button always on the right — truncate long tag text */
+    .math-card-top {
+      flex-wrap: nowrap;
+      align-items: center;
+    }
+
+    .math-tag {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .math-desc {
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
     /* Math card formula block: allow scroll */
     .formula-katex-block {
       padding: 14px 10px;
@@ -2209,8 +2279,12 @@ import "katex/dist/katex.min.css";
   /* ── RESPONSIVE: SMALL MOBILE (≤480px) ── */
   @media (max-width: 480px) {
     .sealed-card-container {
-      padding: 16px 12px;
-      border-radius: 14px;
+      /* bleed out of the page's 24px side padding, self-pad */
+      margin-left: -24px;
+      margin-right: -24px;
+      padding: 16px 20px 48px;
+      border-radius: 0;
+      gap: 16px;
     }
 
     .sealed-title-wrap h2 {
@@ -2218,22 +2292,76 @@ import "katex/dist/katex.min.css";
     }
 
     .manifold-canvas-box {
-      height: 260px;
-      min-height: 220px;
+      height: 320px;
+      min-height: 280px;
+    }
+
+    .manifold-spectrum-bar {
+      padding: 14px 14px 48px;
+      gap: 12px;
+      border-radius: 0 0 14px 14px;
+    }
+
+    /* AI HUD: compact & balanced */
+    .ai-hud-mobile-row {
+      display: block;
+      padding: 0 0 8px;
+    }
+
+    .ai-avatar-card {
+      padding: 9px 12px;
+      gap: 10px;
+      border-radius: 10px;
+    }
+
+    .ai-face-hologram {
+      width: 48px;
+      height: 38px;
+    }
+
+    .ai-meta-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .ai-spike-badge {
+      font-size: 7.5px;
+      padding: 1px 5px;
+    }
+
+    .hud-val {
+      font-size: 12px;
+      font-weight: 850;
     }
 
     /* Octant ribbon: 2 columns compact */
     .octant-segmented-ribbon {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 5px;
+      gap: 6px;
+      margin-bottom: 24px;
     }
 
     .oct-seg-btn {
-      padding: 8px 8px 6px;
+      padding: 9px 9px 7px;
+      border-radius: 8px;
+    }
+
+    :global(html[data-theme="light"]) .oct-seg-btn {
+      background: var(--color-paper);
+      border-color: rgba(198, 164, 104, 0.28);
+    }
+
+    :global(html[data-theme="light"]) .oct-seg-btn:hover {
+      border-color: rgba(179, 138, 77, 0.55);
+      box-shadow: 0 4px 14px rgba(179, 138, 77, 0.12);
     }
 
     .osb-name {
-      font-size: 10px;
+      font-size: 10.5px;
+      font-weight: 750;
     }
 
     .osb-code {
@@ -2250,6 +2378,10 @@ import "katex/dist/katex.min.css";
     .origin-decay-badge {
       width: 100%;
       justify-content: center;
+      min-height: 34px;
+      padding: 6px 12px;
+      font-size: 10px;
+      box-sizing: border-box;
     }
 
     /* AI face meta: hide description on very small */
@@ -2257,19 +2389,72 @@ import "katex/dist/katex.min.css";
       display: none;
     }
 
-    /* Cam buttons: hide labels, show icons only */
-    .cam-btn span {
-      display: none;
+    /* Cam buttons: fit all 5 presets cleanly with icon and label */
+    .manifold-camera-controls {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2px;
+      padding: 2px;
+      box-sizing: border-box;
+      overflow-x: auto;
     }
 
     .cam-btn {
-      padding: 4px 7px;
+      padding: 4px 4px;
+      font-size: 8.5px;
+      gap: 2px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .cam-btn svg {
+      width: 10px;
+      height: 10px;
+      flex-shrink: 0;
     }
 
     /* Math param row: stack */
     .mp-row {
       grid-template-columns: 1fr;
       gap: 3px;
+    }
+
+    /* Math card: compact on very small screens */
+    .math-card {
+      padding: 16px 14px;
+      border-radius: 11px;
+    }
+
+    /* Button always right, tag truncates */
+    .math-card-top {
+      flex-wrap: nowrap;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 4px 8px;
+    }
+
+    .math-tag {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 9px;
+    }
+
+    .math-desc {
+      font-size: 12.5px;
+      line-height: 1.55;
+    }
+
+    .formula-katex-block {
+      padding: 12px 10px;
+    }
+
+    .math-param-details {
+      margin-top: 10px;
     }
   }
 </style>

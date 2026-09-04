@@ -32,7 +32,7 @@ export function initA1ntuitizeEngine() {
     const rect = manifoldBox.getBoundingClientRect();
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     width = Math.max(280, Math.floor(rect.width));
-    height = Math.max(320, Math.floor(rect.height)) || (width < 600 ? 380 : 520);
+    height = Math.max(280, Math.floor(rect.height)) || (width < 600 ? 330 : 520);
 
     canvas.width = Math.floor(width * dpr);
     canvas.height = Math.floor(height * dpr);
@@ -42,12 +42,12 @@ export function initA1ntuitizeEngine() {
     // Reset matrix to avoid compounding DPR scale transforms
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    // Fit cosmic celestial sphere within the canvas viewport
+    // Fit cosmic celestial sphere within the canvas viewport with comfortable padding
     const minDim = Math.min(width, height);
-    curScaleRatio = Math.min(1.0, Math.max(0.45, minDim / 520));
-    universeR = 175 * curScaleRatio;
-    baseScale = 48 * curScaleRatio;
-    axisLen = universeR + 22 * curScaleRatio;
+    curScaleRatio = Math.min(1.0, Math.max(0.42, minDim / 540));
+    universeR = 158 * curScaleRatio;
+    baseScale = 46 * curScaleRatio;
+    axisLen = universeR + 18 * curScaleRatio;
     focal = 520 * curScaleRatio;
   };
 
@@ -1235,7 +1235,7 @@ export function initA1ntuitizeEngine() {
     const colStr = `rgb(${currentPeakLobe.rgb.join(',')})`;
     const descText = `${currentPeakLobe.desc} (${currentPeakLobe.subEmotions})`;
     const badgeText = `CORE AFFECT · O${currentPeakLobe.octantId} ${currentPeakLobe.octantCode}`;
-    const lobeHtml = `<span class="pulse-dot" style="background:${colStr}; box-shadow:0 0 8px ${colStr};"></span> <span class="lobe-name">${currentPeakLobe.name.toUpperCase()}</span> <em>[${currentPeakLobe.octantCode}]</em>`;
+    const lobeHtml = `<span class="pulse-dot" style="background:${colStr}; box-shadow:0 0 8px ${colStr};"></span> <span class="lobe-name">${currentPeakLobe.name.toUpperCase()}</span>`;
 
     if (aiFaceDesc) aiFaceDesc.textContent = descText;
     if (aiFaceDescMobile) aiFaceDescMobile.textContent = descText;

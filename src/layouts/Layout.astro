@@ -24,7 +24,7 @@ const siteUrl = (import.meta.env.SITE_URL || siteConfig.url).replace(/\/$/, "");
 const canonicalUrl = new URL(Astro.url.pathname, `${siteUrl}/`).toString();
 const imageUrl = new URL(image, `${siteUrl}/`).toString();
 const shouldNoindex = noindex || pathname.startsWith("/admin");
-const contentProtectionEnabled = !pathname.startsWith("/admin");
+const contentProtectionEnabled = false;
 const locale = siteConfig.defaultLocale === "ko" ? "ko_KR" : siteConfig.defaultLocale;
 const currentYear = new Date().getFullYear();
 const faviconVersion = "20260612";
@@ -369,86 +369,6 @@ const jsonLd = {
     </div>
     <A1Chan />
     <script is:inline>
-      (() => {
-        if (document.body?.dataset.contentProtection !== "enabled") return;
-
-        const selectableSelector = [
-          "input",
-          "textarea",
-          "select",
-          "[contenteditable]",
-          ".allow-select",
-          "[data-allow-selection]"
-        ].join(",");
-
-        const getElement = (target) => {
-          if (target instanceof Element) return target;
-          if (target instanceof Node) return target.parentElement;
-          return null;
-        };
-
-        const isSelectableTarget = (target) => Boolean(getElement(target)?.closest(selectableSelector));
-        const hasCoarsePointer = window.matchMedia?.("(hover: none), (pointer: coarse)").matches ?? false;
-        const selectionGuardEnabled = !hasCoarsePointer;
-
-        const blockDefault = (event) => {
-          if (isSelectableTarget(event.target)) return;
-          event.preventDefault();
-          event.stopPropagation();
-        };
-
-        const blockSecondaryPointer = (event) => {
-          if (isSelectableTarget(event.target)) return;
-          if (event.button === 1 || event.button === 2) {
-            event.preventDefault();
-            event.stopPropagation();
-          }
-        };
-
-        const defaultBlockedEvents = selectionGuardEnabled
-          ? ["contextmenu", "selectstart", "dragstart", "drop", "copy", "cut"]
-          : ["contextmenu", "dragstart", "drop", "copy", "cut"];
-
-        defaultBlockedEvents.forEach((eventName) => {
-          document.addEventListener(eventName, blockDefault, { capture: true });
-        });
-
-        const pointerBlockedEvents = hasCoarsePointer ? ["auxclick"] : ["mousedown", "pointerdown", "auxclick"];
-        pointerBlockedEvents.forEach((eventName) => {
-          document.addEventListener(eventName, blockSecondaryPointer, { capture: true });
-        });
-
-        if (selectionGuardEnabled) {
-          document.addEventListener("selectionchange", () => {
-            const selection = document.getSelection();
-            if (!selection || selection.isCollapsed) return;
-            if (isSelectableTarget(selection.anchorNode) || isSelectableTarget(selection.focusNode)) return;
-            selection.removeAllRanges();
-          });
-        }
-
-        document.addEventListener("keydown", (event) => {
-          if (isSelectableTarget(event.target)) return;
-
-          const key = event.key.toLowerCase();
-          const usesCommand = event.ctrlKey || event.metaKey;
-          const blockedShortcut =
-            key === "f12" ||
-            key === "printscreen" ||
-            (usesCommand && ["a", "c", "x", "s", "p", "u"].includes(key)) ||
-            (usesCommand && event.shiftKey && ["c", "i", "j"].includes(key));
-
-          if (blockedShortcut) {
-            event.preventDefault();
-            event.stopPropagation();
-          }
-        }, { capture: true });
-
-        document.querySelectorAll("img, svg, canvas, video").forEach((element) => {
-          element.setAttribute("draggable", "false");
-        });
-      })();
-
       (() => {
         if (!/SamsungBrowser/i.test(navigator.userAgent)) return;
 
