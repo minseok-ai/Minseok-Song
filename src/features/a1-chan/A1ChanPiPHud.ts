@@ -30,23 +30,29 @@ export function initA1ChanPiPHud() {
     targetBrow: 0.0,
     smile: 0.7,
     targetSmile: 0.7,
-    rgb: [245, 158, 11] as [number, number, number],
-    targetRgb: [245, 158, 11] as [number, number, number]
+    rgb: [212, 175, 55] as [number, number, number],
+    targetRgb: [212, 175, 55] as [number, number, number]
   };
+
+  let lastAffect: AffectState | null = null;
 
   // Update DOM Telemetry Elements
   function updateDomLabels(affect: AffectState) {
+    lastAffect = affect;
     const col = affect.color;
+    const isLight = document.documentElement.getAttribute("data-theme") === "light";
 
     if (pipTriggerAura) {
-      pipTriggerAura.style.borderColor = `${col}80`;
-      pipTriggerAura.style.boxShadow = `0 0 12px ${col}60`;
+      // Elegant, restrained champagne gold breathing ring, no rainbow flashing
+      const auraColor = isLight ? "rgba(179, 138, 77, 0.25)" : "rgba(212, 175, 55, 0.30)";
+      pipTriggerAura.style.borderColor = auraColor;
+      pipTriggerAura.style.boxShadow = `0 0 12px ${auraColor}`;
     }
 
     if (pipOctantBadge) {
       pipOctantBadge.textContent = `O${affect.octantId} ${affect.octantCode}`;
-      pipOctantBadge.style.color = col;
-      pipOctantBadge.style.borderColor = `${col}70`;
+      pipOctantBadge.style.color = isLight ? "#8F6932" : "#D4AF37";
+      pipOctantBadge.style.borderColor = isLight ? "rgba(179, 138, 77, 0.35)" : "rgba(212, 175, 55, 0.35)";
     }
 
     if (pipPadCoords) {
@@ -72,6 +78,17 @@ export function initA1ChanPiPHud() {
   // Subscribe to Global Affect State from A1ntuitize
   subscribeToAffectState((state) => {
     updateDomLabels(state);
+  });
+
+  // Watch for light/dark theme switches to re-sync telemetry colors
+  const themeObserver = new MutationObserver(() => {
+    if (lastAffect) {
+      updateDomLabels(lastAffect);
+    }
+  });
+  themeObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"]
   });
 
   function renderPiPFace(now: number) {
@@ -190,5 +207,6 @@ export function initA1ChanPiPHud() {
 
   return () => {
     if (animId !== null) cancelAnimationFrame(animId);
+    themeObserver.disconnect();
   };
 }

@@ -59,14 +59,17 @@ const encodedPayload = btoa(binary);
         <a class="a1-navigator__brand" href={siteConfig.a1FirmsPath}>
           <strong data-a1-agent-name>A1 Chan</strong>
         </a>
+        <span class="a1-header-viewing">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true" class="a1-viewing-radar"><circle cx="12" cy="12" r="10"></circle><polygon points="12 8 8 12 12 16 16 12 12 8"></polygon></svg>
+          Viewing <strong data-a1-current-route>Home</strong>
+        </span>
+      </div>
+
+      <div class="a1-navigator__header-right">
         <div class="a1-header-status-pill">
           <span class="a1-navigator__state-dot" aria-hidden="true"></span>
           <span data-a1-ai-status data-status="unsupported">Site mode</span>
         </div>
-      </div>
-
-      <div class="a1-navigator__header-right">
-        <span class="a1-header-viewing">Viewing <strong data-a1-current-route>Home</strong></span>
         <button class="a1-navigator__close" type="button" aria-label="Close A1 Chan" data-a1-close>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M6 6l12 12M18 6 6 18"></path>
@@ -331,7 +334,7 @@ const encodedPayload = btoa(binary);
     if (aiPrepareStarted) return;
     aiPrepareStarted = true;
     const nav = await getAiNavigator();
-    void nav.prepare();
+    void nav.prepare(true);
   };
 
   const getRecentUserHistory = () =>
@@ -459,6 +462,7 @@ const encodedPayload = btoa(binary);
   const setActiveRoute = (routeId?: string) => {
     routeLinks.forEach((link) => {
       const active = Boolean(routeId) && link.getAttribute("data-route-id") === routeId;
+      link.classList.toggle("is-active", active);
       link.classList.toggle("is-suggested", active);
       if (active) {
         link.setAttribute("aria-current", "page");
@@ -602,7 +606,10 @@ const encodedPayload = btoa(binary);
     greeting.textContent = `A1 Chan입니다. 현재 ${currentRoute.label} 화면을 보고 있어요. 사이트의 공개 내용과 현재 페이지 맥락을 기준으로 답합니다.`;
   }
 
-  trigger?.addEventListener("click", () => setOpen(!widget.classList.contains("is-open")));
+  trigger?.addEventListener("click", () => {
+    prepareAiAfterUserAction();
+    setOpen(!widget.classList.contains("is-open"));
+  });
   closeButton?.addEventListener("click", () => setOpen(false));
 
   document.addEventListener("click", (event) => {
@@ -663,16 +670,19 @@ const encodedPayload = btoa(binary);
 
   const cleanupPiP = initA1ChanPiPHud();
 
-  // Proactively prepare Chrome Built-in AI immediately on connection
-  const prepareAiImmediately = async () => {
+  // Proactively probe Chrome Built-in AI availability on connection
+  const probeAiAvailabilityOnLoad = async () => {
     try {
       const nav = await getAiNavigator();
-      void nav.prepare();
+      const status = await nav.checkAvailability();
+      if (status === "available") {
+        void nav.prepare(false);
+      }
     } catch (e) {
-      console.warn("Chrome AI auto-prepare:", e);
+      console.warn("Chrome AI availability probe:", e);
     }
   };
-  prepareAiImmediately();
+  probeAiAvailabilityOnLoad();
 
   // PiP HUD Click: smooth scroll to A1ntuitize section if on A1-Firm page
   const pipStripLink = document.getElementById("a1-pip-hud-strip");

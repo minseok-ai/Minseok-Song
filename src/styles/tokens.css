@@ -578,7 +578,7 @@ body[data-content-protection="enabled"] [data-allow-selection] *::selection {
   display: flex;
   justify-self: center;
   align-items: center;
-  gap: clamp(18px, 2.2vw, 32px);
+  gap: clamp(8px, 1.4vw, 20px);
   width: auto;
 }
 
@@ -587,11 +587,12 @@ body[data-content-protection="enabled"] [data-allow-selection] *::selection {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: auto;
-  padding: 8px 6px;
+  min-width: 82px;
+  padding: 8px 12px;
   color: var(--color-ink-muted);
   text-decoration: none;
   transition: color var(--motion-fast) ease, transform var(--motion-fast) ease;
+  box-sizing: border-box;
 }
 
 
@@ -1036,7 +1037,7 @@ html[data-theme="light"] .theme-icon-moon {
   }
 
   .numbered-nav .nav-label {
-    font-size: 11px;
+    font-size: clamp(10px, 2.9vw, 11.5px);
     line-height: 1;
   }
 

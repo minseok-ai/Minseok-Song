@@ -67,9 +67,9 @@ const ecosystemDimensions = [
     </div>
     <h1 class="hero-title">
       Hello, I bridge<br/>
-      <span class="nowrap">cognitive&nbsp;strategy</span>
+      <span class="hero-line-1">cognitive strategy</span>
       <span class="ampersand-wrap">&amp;</span>
-      <span class="h1-highlight nowrap">proactive&nbsp;execution.</span>
+      <span class="h1-highlight hero-line-2">proactive execution.</span>
     </h1>
     <p class="hero-desc">
       I absorb deep tech domains and translate engineering feasibility into business strategy, IP roadmaps, and commercial solutions.
@@ -180,6 +180,15 @@ const ecosystemDimensions = [
     overflow: hidden;
   }
 
+  .hero-dots-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .hero-kicker-row {
     display: inline-flex;
     align-items: center;
@@ -226,7 +235,7 @@ const ecosystemDimensions = [
 
   .hero-copy-panel .hero-title {
     margin: 10px 0 22px;
-    font-size: clamp(2.4rem, 4.3vw, 3.85rem);
+    font-size: clamp(1.85rem, 4.3vw, 3.85rem);
     font-weight: 400;
     font-style: normal;
     letter-spacing: -0.02em;
@@ -237,8 +246,16 @@ const ecosystemDimensions = [
     text-wrap: balance;
   }
 
-  .nowrap {
-    white-space: nowrap;
+  .hero-line-1,
+  .hero-line-2 {
+    display: inline;
+  }
+
+  @media (min-width: 641px) {
+    .hero-line-1,
+    .hero-line-2 {
+      white-space: nowrap;
+    }
   }
 
   .ampersand-wrap {
@@ -858,13 +875,24 @@ const ecosystemDimensions = [
       grid-template-columns: minmax(0, 1fr);
       width: 100%;
       min-width: 0;
+      padding-top: clamp(28px, 4vw, 36px);
       padding-right: 18px;
+      padding-bottom: clamp(16px, 2.5vw, 22px);
       padding-left: 18px;
+      gap: 24px;
     }
 
-    .hero-copy-panel h1 {
-      font-size: 2.46rem;
-      line-height: 1.12;
+    .hero-copy-panel .hero-title {
+      font-size: clamp(1.8rem, 7.2vw, 2.35rem);
+      line-height: 1.16;
+      overflow-wrap: break-word;
+      word-break: keep-all;
+    }
+
+    .hero-line-1,
+    .hero-line-2 {
+      white-space: normal;
+      word-break: keep-all;
     }
 
     .hero-copy-panel p.hero-desc {

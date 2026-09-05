@@ -82,8 +82,8 @@ export function initA1ntuitizeEngine() {
       octantCode: "(+, +, +)",
       name: "Joy & Euphoria",
       padCoords: [1, 1, 1],
-      rgb: [239, 68, 68],
-      hex: "#ef4444",
+      rgb: [212, 175, 55],
+      hex: "#D4AF37",
       mass: 1.0,
       targetMass: 1.0,
       phase: 0.0,
@@ -99,8 +99,8 @@ export function initA1ntuitizeEngine() {
       octantCode: "(+, +, -)",
       name: "Admiration & Trust",
       padCoords: [1, 1, -1],
-      rgb: [249, 115, 22],
-      hex: "#f97316",
+      rgb: [229, 195, 120],
+      hex: "#E5C378",
       mass: 0.85,
       targetMass: 0.85,
       phase: 0.8,
@@ -116,8 +116,8 @@ export function initA1ntuitizeEngine() {
       octantCode: "(+, -, +)",
       name: "Serenity & Calm",
       padCoords: [1, -1, 1],
-      rgb: [234, 179, 8],
-      hex: "#eab308",
+      rgb: [197, 160, 89],
+      hex: "#C5A059",
       mass: 0.75,
       targetMass: 0.75,
       phase: 1.6,
@@ -133,8 +133,8 @@ export function initA1ntuitizeEngine() {
       octantCode: "(+, -, -)",
       name: "Catharsis & Relief",
       padCoords: [1, -1, -1],
-      rgb: [16, 185, 129],
-      hex: "#10b981",
+      rgb: [179, 152, 104],
+      hex: "#B39868",
       mass: 0.70,
       targetMass: 0.70,
       phase: 2.4,
@@ -150,8 +150,8 @@ export function initA1ntuitizeEngine() {
       octantCode: "(-, +, +)",
       name: "Anger & Shock",
       padCoords: [-1, 1, 1],
-      rgb: [6, 182, 212],
-      hex: "#06b6d4",
+      rgb: [203, 213, 225],
+      hex: "#CBD5E1",
       mass: 0.60,
       targetMass: 0.60,
       phase: 3.2,
@@ -167,8 +167,8 @@ export function initA1ntuitizeEngine() {
       octantCode: "(-, +, -)",
       name: "Fear & Tension",
       padCoords: [-1, 1, -1],
-      rgb: [59, 130, 246],
-      hex: "#3b82f6",
+      rgb: [148, 163, 184],
+      hex: "#94A3B8",
       mass: 0.55,
       targetMass: 0.55,
       phase: 4.0,
@@ -184,8 +184,8 @@ export function initA1ntuitizeEngine() {
       octantCode: "(-, -, +)",
       name: "Disgust & Contempt",
       padCoords: [-1, -1, 1],
-      rgb: [99, 102, 241],
-      hex: "#6366f1",
+      rgb: [120, 130, 146],
+      hex: "#788292",
       mass: 0.45,
       targetMass: 0.45,
       phase: 4.8,
@@ -201,8 +201,8 @@ export function initA1ntuitizeEngine() {
       octantCode: "(-, -, -)",
       name: "Sadness & Despair",
       padCoords: [-1, -1, -1],
-      rgb: [168, 85, 247],
-      hex: "#a855f7",
+      rgb: [100, 116, 139],
+      hex: "#64748B",
       mass: 0.40,
       targetMass: 0.40,
       phase: 5.6,
@@ -242,7 +242,7 @@ export function initA1ntuitizeEngine() {
       const b = Math.min(255, Math.floor(bTotal / weightSum));
       return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     }
-    return `rgba(56, 189, 248, ${alpha})`;
+    return `rgba(212, 175, 55, ${alpha})`;
   }
 
   // Inward Shooting Sensory Particles undergoing Inelastic Collisions
@@ -304,12 +304,13 @@ export function initA1ntuitizeEngine() {
     };
   });
 
-  // 3D Perspective Orbit Transformation
+  // 3D Perspective Orbit Transformation & Direct Canvas Sector Probing
   let rotX = -0.28, rotY = 0.65;
   let targetRotX = -0.28, targetRotY = 0.65;
   let isDragging = false;
   let isAutoOrbit = true;
   let lastX = 0, lastY = 0;
+  let startPointerX = 0, startPointerY = 0;
   let activePointerId: number | null = null;
 
   manifoldBox.style.cursor = 'grab';
@@ -319,6 +320,8 @@ export function initA1ntuitizeEngine() {
     activePointerId = e.pointerId;
     lastX = e.clientX;
     lastY = e.clientY;
+    startPointerX = e.clientX;
+    startPointerY = e.clientY;
     manifoldBox.style.cursor = 'grabbing';
     manifoldBox.setPointerCapture?.(e.pointerId);
     e.preventDefault();
@@ -339,10 +342,35 @@ export function initA1ntuitizeEngine() {
 
   const onUp = (e: PointerEvent) => {
     if (activePointerId !== null && e.pointerId !== activePointerId) return;
+    const moved = Math.hypot(e.clientX - startPointerX, e.clientY - startPointerY);
     isDragging = false;
     activePointerId = null;
     manifoldBox.style.cursor = 'grab';
     manifoldBox.releasePointerCapture?.(e.pointerId);
+
+    // If clean tap/click on canvas (moved < 7px), project and steer to nearest octant sector
+    if (moved < 7) {
+      const rect = canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+      const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+      const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+      const cx = width / 2, cy = height / 2;
+
+      let closestOctId = 1;
+      let minDist = 9999;
+      octantSectors.forEach(p => {
+        const pr = project(p.dir[0] * universeR, p.dir[1] * universeR, p.dir[2] * universeR, cosX, sinX, cosY, sinY, cx, cy);
+        const d = Math.hypot(clickX - pr.x, clickY - pr.y);
+        if (d < minDist) {
+          minDist = d;
+          closestOctId = p.octantId;
+        }
+      });
+      if (minDist < 120) {
+        steerPersonalityToSector(closestOctId);
+      }
+    }
   };
 
   manifoldBox.addEventListener('pointerdown', onDown);
@@ -377,23 +405,28 @@ export function initA1ntuitizeEngine() {
     });
   });
 
-  // Sensory Salvo Inelastic Pulse Burst Engine
-  function fireSensorySalvo(octantId: number | null = null) {
-    let targetSector = octantSectors[0];
-    if (typeof octantId === 'number') {
-      const match = octantSectors.find(p => p.octantId === octantId);
-      if (match) targetSector = match;
-    } else {
-      targetSector = octantSectors[Math.floor(Math.random() * octantSectors.length)];
-    }
+  // Dynamic Inelastic Accretion Steering & Gradient Emotion Morphing Engine
+  let userOverrideTime = 0;
+  let activeSelectedOctantId = 1;
 
-    // Accumulate physical memory mass in target octant
-    targetSector.targetMass = Math.min(3.2, targetSector.targetMass + 0.85);
+  function steerPersonalityToSector(octantId: number) {
+    activeSelectedOctantId = octantId;
+    userOverrideTime = performance.now();
+    const targetSector = octantSectors.find(p => p.octantId === octantId) || octantSectors[0];
 
-    // Visual feedback on active octant segment
-    updateActiveOctantUI(targetSector.octantId);
+    // Accretion Mass Target Reallocation:
+    // Boost targetMass of selected octant, smoothly decay other sectors toward resting baseline
+    octantSectors.forEach(s => {
+      if (s.octantId === octantId) {
+        s.targetMass = 2.5; // High memory accretion target
+      } else {
+        // Ebbinghaus entropy half-life decay toward resting baseline
+        s.targetMass = Math.max(0.30, s.targetMass * 0.68);
+      }
+    });
 
-    for (let i = 0; i < 8; i++) {
+    // Inflow Particle Accretion Stream: launch inward sensory particles along selected sector trajectory
+    for (let i = 0; i < 10; i++) {
       const spread = 0.16;
       const nx = targetSector.dir[0] + (Math.random() - 0.5) * spread;
       const ny = targetSector.dir[1] + (Math.random() - 0.5) * spread;
@@ -404,62 +437,50 @@ export function initA1ntuitizeEngine() {
         startY: (ny / len) * universeR,
         startZ: (nz / len) * universeR,
         dir: [nx / len, ny / len, nz / len],
-        progress: -i * 0.04,
-        speed: 0.028 + Math.random() * 0.015,
+        progress: -i * 0.045,
+        speed: 0.026 + Math.random() * 0.012,
         isBurst: true,
         octantId: targetSector.octantId
       });
     }
 
+    // Inelastic contact impact flash on manifold facet
     impactFlashes.push({
-      x: targetSector.dir[0] * 35 * curScaleRatio,
-      y: targetSector.dir[1] * 35 * curScaleRatio,
-      z: targetSector.dir[2] * 35 * curScaleRatio,
-      radius: 4 * curScaleRatio,
-      maxRadius: 30 * curScaleRatio,
+      x: targetSector.dir[0] * 38 * curScaleRatio,
+      y: targetSector.dir[1] * 38 * curScaleRatio,
+      z: targetSector.dir[2] * 38 * curScaleRatio,
+      radius: 5 * curScaleRatio,
+      maxRadius: 34 * curScaleRatio,
       alpha: 1.0,
       color: `rgb(${targetSector.rgb.join(',')})`
     });
+
+    updateActiveOctantUI(octantId);
   }
 
-  const fireSalvoBtn = document.getElementById('fire-salvo-btn');
-  if (fireSalvoBtn) {
-    fireSalvoBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      fireSensorySalvo();
-      fireSalvoBtn.classList.add('is-firing');
-      setTimeout(() => fireSalvoBtn.classList.remove('is-firing'), 400);
-    });
-  }
-
-  // Radial Origin Entropy Decay Function (Ebbinghaus Forgetting -> 0,0,0)
-  function triggerOriginEntropyDecay() {
-    octantSectors.forEach(p => {
-      p.targetMass = Math.max(0.12, p.targetMass * 0.48);
-    });
-
-    for (let i = 0; i < 4; i++) {
-      setTimeout(() => {
-        impactFlashes.push({
-          x: 0, y: 0, z: 0,
-          radius: 38 * curScaleRatio,
-          maxRadius: 2 * curScaleRatio,
-          alpha: 1.0,
-          color: '#06b6d4',
-          isInward: true
-        });
-      }, i * 120);
+  // Sensory Salvo Inelastic Pulse Burst Engine (Backward-compatible alias)
+  function fireSensorySalvo(octantId: number | null = null) {
+    if (typeof octantId === 'number') {
+      steerPersonalityToSector(octantId);
+    } else {
+      const randomOct = octantSectors[Math.floor(Math.random() * octantSectors.length)];
+      steerPersonalityToSector(randomOct.octantId);
     }
   }
 
-  const triggerDecayBtn = document.getElementById('trigger-decay-btn');
-  if (triggerDecayBtn) {
-    triggerDecayBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      triggerOriginEntropyDecay();
-      triggerDecayBtn.classList.add('is-decaying');
-      setTimeout(() => triggerDecayBtn.classList.remove('is-decaying'), 600);
+  // Autonomous Sensory Assimilation Bridge (stimulates inelastic collision from real conversational/vision input)
+  function stimulateTopologicalAccretion(v: number, a: number, d: number) {
+    let closestSector = octantSectors[0];
+    let maxSimilarity = -999;
+    octantSectors.forEach(s => {
+      const dot = v * s.dir[0] + a * s.dir[1] + d * s.dir[2];
+      if (dot > maxSimilarity) {
+        maxSimilarity = dot;
+        closestSector = s;
+      }
     });
+
+    steerPersonalityToSector(closestSector.octantId);
   }
 
   // UI Active Octant State Updater
@@ -473,8 +494,6 @@ export function initA1ntuitizeEngine() {
   const padValenceText = document.getElementById('pad-val-text');
   const padArousalText = document.getElementById('pad-aro-text');
   const padDominanceText = document.getElementById('pad-dom-text');
-
-  let activeSelectedOctantId = 1;
 
   function updateActiveOctantUI(octantId: number) {
     activeSelectedOctantId = octantId;
@@ -497,26 +516,22 @@ export function initA1ntuitizeEngine() {
     if (cmCoords) {
       cmCoords.textContent = `[P:${targetSector.padCoords[0] > 0 ? '+' : ''}${targetSector.padCoords[0]} A:${targetSector.padCoords[1] > 0 ? '+' : ''}${targetSector.padCoords[1]} D:${targetSector.padCoords[2] > 0 ? '+' : ''}${targetSector.padCoords[2]}]`;
     }
+
+    const cmResonanceVal = document.getElementById('cm-resonance-val');
+    if (cmResonanceVal) {
+      const pct = Math.min(100, Math.max(10, Math.round((targetSector.mass / 2.8) * 100)));
+      cmResonanceVal.textContent = `ACCRETION: ${pct}% · ACTIVE`;
+    }
   }
 
-  // 8 Interactive Segmented Buttons
+  // 8 Interactive Segmented Sector Telemetry Probes - Direct Interactive Steering
   document.querySelectorAll('.oct-seg-btn[data-octant]').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
       const octantId = parseInt(btn.getAttribute('data-octant') || '1', 10);
-      fireSensorySalvo(octantId);
+      steerPersonalityToSector(octantId);
     });
   });
-
-  // Dedicated Active Inject Salvo Button in Command Readout Strip
-  const activeInjectBtn = document.getElementById('active-inject-btn');
-  if (activeInjectBtn) {
-    activeInjectBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      fireSensorySalvo(activeSelectedOctantId);
-      activeInjectBtn.classList.add('is-pulsing');
-      setTimeout(() => activeInjectBtn.classList.remove('is-pulsing'), 450);
-    });
-  }
 
   // LaTeX Clipboard Copy Handlers (Topological Personality Field Mathematics)
   const latexMap: Record<string, string> = {
@@ -582,11 +597,11 @@ export function initA1ntuitizeEngine() {
     eyeOpen: 0.8,
     brow: 0.3,
     smile: 0.6,
-    rgb: [6, 182, 212],
+    rgb: [212, 175, 55],
     targetEyeOpen: 0.8,
     targetBrow: 0.3,
     targetSmile: 0.6,
-    targetRgb: [6, 182, 212]
+    targetRgb: [212, 175, 55]
   };
 
   function updateAndDrawAIFace(time: number) {
@@ -666,48 +681,52 @@ export function initA1ntuitizeEngine() {
     fctx.shadowBlur = 0;
   }
 
-  // Parametric Solid Polyhedral Faceted Manifold Equation with Accretion Mass Growth
+  // Inelastic Polyhedral Accretion Core:
+  // An 8-octant faceted crystalline polyhedron where each sector's radial accretion
+  // grows outward proportionally to accumulated mass M_k via inelastic collision.
   function evalSolidManifold(u: number, v: number, t: number): [number, number, number] {
     const cosU = Math.cos(u), sinU = Math.sin(u);
     const cosV = Math.cos(v), sinV = Math.sin(v);
 
-    // Discrete polyhedral facet quantization for crystalline particle look
-    const quantU = Math.round(u * 5.0) / 5.0;
-    const quantV = Math.round(v * 4.0) / 4.0;
-    const harmonicR = 1.0 + 0.18 * Math.cos(3 * quantU + t * 0.2) + 0.14 * Math.sin(2 * quantV + t * 0.15);
+    // Direction vector on unit sphere S²
+    const nx = cosU * cosV;
+    const ny = sinV;
+    const nz = sinU * cosV;
 
-    let x = harmonicR * cosU * cosV;
-    let z = harmonicR * sinU * cosV;
-    let y = harmonicR * sinV + 0.20 * harmonicR * Math.sin(2 * quantU + t * 0.18) * cosV;
+    // Discrete crystalline polyhedral facet base profile (geodesic crystal core)
+    const ax = Math.abs(nx);
+    const ay = Math.abs(ny);
+    const az = Math.abs(nz);
+    // Smooth polyhedral facet metric: transitions between octahedral and cubic facet boundaries
+    const facetMetric = Math.pow(Math.pow(ax, 3.2) + Math.pow(ay, 3.2) + Math.pow(az, 3.2), 1.0 / 3.2);
+    const baseCoreR = 1.0 / (facetMetric || 1);
+    const polyR = 0.72 + 0.28 * baseCoreR;
 
-    const dirLen = Math.hypot(x, y, z);
-    if (dirLen > 0.001) {
-      const nx = x / dirLen, ny = y / dirLen, nz = z / dirLen;
-      let spikeBoost = 0;
-      for (let k = 0; k < octantSectors.length; k++) {
-        const p = octantSectors[k];
-        const dot = nx * p.dir[0] + ny * p.dir[1] + nz * p.dir[2];
-        if (dot > 0) {
-          const power = Math.pow(dot, 5.0);
-          spikeBoost += p.mass * power * 2.2;
-        }
+    // Physical Inelastic Collision Accretion along 8 Octant Poles:
+    // When sensory particles impact sector k, mass M_k accumulates,
+    // causing an anisotropic crystalline facet accretion protrusion.
+    let accretionGrowth = 0;
+    for (let k = 0; k < octantSectors.length; k++) {
+      const p = octantSectors[k];
+      const dot = nx * p.dir[0] + ny * p.dir[1] + nz * p.dir[2];
+      if (dot > 0.0) {
+        // High-order directional lobe concentrating on the octant pole
+        const lobe = Math.pow(dot, 3.8);
+        accretionGrowth += p.mass * lobe * 0.95;
       }
-      x *= (1 + spikeBoost);
-      y *= (1 + spikeBoost);
-      z *= (1 + spikeBoost);
     }
 
-    // Strictly bounded inside celestial sphere globe (R <= 0.93 R_globe)
-    const maxAllowedR = (universeR * 0.93) / (baseScale || 1);
-    const totalR = Math.hypot(x, y, z);
-    if (totalR > maxAllowedR) {
-      const clampRatio = maxAllowedR / totalR;
-      x *= clampRatio;
-      y *= clampRatio;
-      z *= clampRatio;
-    }
+    const totalR = polyR * (0.82 + accretionGrowth);
 
-    return [x * baseScale, y * baseScale, z * baseScale];
+    // Strict boundary confinement inside celestial sphere
+    const maxAllowedR = (universeR * 0.90) / (baseScale || 1);
+    const clampedR = Math.min(maxAllowedR, totalR);
+
+    return [
+      nx * clampedR * baseScale,
+      ny * clampedR * baseScale,
+      nz * clampedR * baseScale
+    ];
   }
 
   const NU = 32;
@@ -720,6 +739,7 @@ export function initA1ntuitizeEngine() {
   let currentPeakLobe = octantSectors[0];
 
   let time = 0;
+  let lastAffectBroadcastTime = 0;
   function render() {
     time += 0.004;
 
@@ -738,13 +758,32 @@ export function initA1ntuitizeEngine() {
 
     ctx!.clearRect(0, 0, width, height);
 
-    // Ebbinghaus half-life decay & Projected Weighted Sum Centroid Synthesis
+    // Autonomous Organic Cognitive Drift (when user has not clicked recently, >14s)
+    const nowMs = performance.now();
+    const isUserOverriding = (nowMs - userOverrideTime) < 14000;
+
+    if (!isUserOverriding) {
+      // Very smooth, graceful harmonic drift across adjacent affective regions
+      // (Period ~ 42 seconds)
+      const driftCycle = time * 0.032;
+      const waveX = Math.cos(driftCycle) * 0.72 + 0.28 * Math.cos(driftCycle * 0.5);
+      const waveY = Math.sin(driftCycle * 0.85) * 0.68;
+      const waveZ = Math.cos(driftCycle * 0.65 + 1.2) * 0.65;
+
+      octantSectors.forEach(s => {
+        const dot = waveX * s.dir[0] + waveY * s.dir[1] + waveZ * s.dir[2];
+        const target = Math.max(0.28, 0.40 + 1.5 * Math.max(0, dot));
+        s.targetMass += (target - s.targetMass) * 0.015;
+      });
+    }
+
+    // Continuous Inelastic Mass Integration:
+    // dM_k/dt = lambda * (targetMass - M_k)
     let sumVx = 0, sumVy = 0, sumVz = 0;
     octantSectors.forEach((p, idx) => {
-      // Smooth decay toward target mass
-      p.mass += (p.targetMass - p.mass) * 0.04;
-      const wave = 0.55 + 0.35 * Math.sin(time * 0.35 + p.phase) + 0.06 * Math.cos(time * 0.8 + idx);
-      p.targetMass += (wave - p.targetMass) * 0.006;
+      // Gentle cognitive pulse
+      const cognitivePulse = 0.03 * Math.sin(time * 0.05 + p.phase);
+      p.mass += (p.targetMass + cognitivePulse - p.mass) * 0.024;
 
       sumVx += p.mass * p.dir[0];
       sumVy += p.mass * p.dir[1];
@@ -754,7 +793,7 @@ export function initA1ntuitizeEngine() {
       const massBar = document.getElementById(`mass-bar-${p.octantId}`);
       const massVal = document.getElementById(`mass-val-${p.octantId}`);
       if (massBar) {
-        const pct = Math.min(100, Math.max(12, Math.round((p.mass / 2.8) * 100)));
+        const pct = Math.min(100, Math.max(10, Math.round((p.mass / 2.8) * 100)));
         massBar.style.width = `${pct}%`;
         if (massVal) massVal.textContent = `${pct}%`;
       }
@@ -762,22 +801,62 @@ export function initA1ntuitizeEngine() {
 
     const centroidMag = Math.hypot(sumVx, sumVy, sumVz);
     if (centroidMag > 0.001) {
-      sphericalCentroid.x = sumVx / centroidMag;
-      sphericalCentroid.y = sumVy / centroidMag;
-      sphericalCentroid.z = sumVz / centroidMag;
+      const targetCx = sumVx / centroidMag;
+      const targetCy = sumVy / centroidMag;
+      const targetCz = sumVz / centroidMag;
+
+      // Heavy physical inertia for smooth continuous gradient glide (tau ~ 1.8s)
+      sphericalCentroid.x += (targetCx - sphericalCentroid.x) * 0.022;
+      sphericalCentroid.y += (targetCy - sphericalCentroid.y) * 0.022;
+      sphericalCentroid.z += (targetCz - sphericalCentroid.z) * 0.022;
+
+      const normC = Math.hypot(sphericalCentroid.x, sphericalCentroid.y, sphericalCentroid.z) || 1;
+      sphericalCentroid.x /= normC;
+      sphericalCentroid.y /= normC;
+      sphericalCentroid.z /= normC;
     }
 
-    // Match closest 8-Octant Pole via Cosine Similarity
-    let maxDot = -999;
-    let closestOctant = octantSectors[0];
+    // Continuous 8-Octant Softmax Weight Distribution (Gradient Blending)
+    let totalWeight = 0;
+    const weights: number[] = [];
     octantSectors.forEach(p => {
       const dot = sphericalCentroid.x * p.dir[0] + sphericalCentroid.y * p.dir[1] + sphericalCentroid.z * p.dir[2];
-      if (dot > maxDot) {
-        maxDot = dot;
-        closestOctant = p;
-      }
+      const w = Math.exp(3.2 * dot) * p.mass;
+      weights.push(w);
+      totalWeight += w;
     });
-    currentPeakLobe = closestOctant;
+
+    let blendedR = 0, blendedG = 0, blendedB = 0;
+    let blendedSmile = 0, blendedBrow = 0, blendedEyeOpen = 0;
+    let maxWeightIdx = 0, maxW = -1;
+
+    for (let k = 0; k < octantSectors.length; k++) {
+      const nw = weights[k] / (totalWeight || 1);
+      const p = octantSectors[k];
+      blendedR += p.rgb[0] * nw;
+      blendedG += p.rgb[1] * nw;
+      blendedB += p.rgb[2] * nw;
+      blendedSmile += p.smile * nw;
+      blendedBrow += p.brow * nw;
+      blendedEyeOpen += p.eyeOpen * nw;
+
+      if (weights[k] > maxW) {
+        maxW = weights[k];
+        maxWeightIdx = k;
+      }
+    }
+
+    // Hysteresis on discrete Peak Lobe identification
+    const currentIdx = octantSectors.indexOf(currentPeakLobe);
+    const currentWeight = currentIdx >= 0 ? weights[currentIdx] : 0;
+    if (octantSectors[maxWeightIdx] !== currentPeakLobe) {
+      if (maxW > currentWeight * 1.15) {
+        currentPeakLobe = octantSectors[maxWeightIdx];
+        if (!isUserOverriding) {
+          updateActiveOctantUI(currentPeakLobe.octantId);
+        }
+      }
+    }
 
     // Update 3-Axis Live Telemetry Faders
     if (padValenceGauge && padValenceText) {
@@ -796,11 +875,11 @@ export function initA1ntuitizeEngine() {
       padDominanceText.textContent = `${sphericalCentroid.z >= 0 ? '+' : ''}${sphericalCentroid.z.toFixed(2)}`;
     }
 
-    // Smooth Morph AI Cybernetic Face Avatar
-    faceState.targetEyeOpen = currentPeakLobe.eyeOpen;
-    faceState.targetBrow = currentPeakLobe.brow;
-    faceState.targetSmile = currentPeakLobe.smile;
-    faceState.targetRgb = currentPeakLobe.rgb;
+    // Continuous gradient morphing on AI Cybernetic Face Avatar
+    faceState.targetEyeOpen = blendedEyeOpen;
+    faceState.targetBrow = blendedBrow;
+    faceState.targetSmile = blendedSmile;
+    faceState.targetRgb = [Math.round(blendedR), Math.round(blendedG), Math.round(blendedB)];
 
     updateAndDrawAIFace(time);
     // Mirror face canvas to mobile HUD
@@ -942,63 +1021,53 @@ export function initA1ntuitizeEngine() {
       }
     });
 
-    // Render 3D PAD Coordinate Axes with Clean Badges
+    // Render 3D PAD Coordinate Axes - Elegant Hairline Platinum & Titanium Guides
     const originPr = project(0, 0, 0, cosX, sinX, cosY, sinY, cx, cy);
+    const isLightCanvas = document.documentElement.getAttribute('data-theme') === 'light';
+    const axisStroke = isLightCanvas ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)';
+    const labelColor = isLightCanvas ? 'rgba(71, 85, 105, 0.85)' : 'rgba(203, 213, 225, 0.75)';
 
+    ctx!.lineWidth = 0.8;
+    ctx!.strokeStyle = axisStroke;
+    ctx!.font = '600 8.5px "JetBrains Mono", monospace';
+    ctx!.fillStyle = labelColor;
+
+    // X Axis (Valence)
     const posX = project(axisLen, 0, 0, cosX, sinX, cosY, sinY, cx, cy);
     const negX = project(-axisLen, 0, 0, cosX, sinX, cosY, sinY, cx, cy);
-
-    const isLightCanvas = document.documentElement.getAttribute('data-theme') === 'light';
-
-    ctx!.lineWidth = 1.2;
-    ctx!.strokeStyle = 'rgba(244, 63, 94, 0.65)';
     ctx!.beginPath();
     ctx!.moveTo(negX.x, negX.y);
     ctx!.lineTo(posX.x, posX.y);
     ctx!.stroke();
+    ctx!.fillText('+X', posX.x + 4, posX.y + 3);
+    ctx!.fillText('-X', negX.x - 16, negX.y + 3);
 
-    const drawAxisBadge = (txt: string, x: number, y: number, col: string) => {
-      ctx!.font = 'bold 8.5px monospace';
-      const tw = ctx!.measureText(txt).width;
-      ctx!.fillStyle = isLightCanvas ? 'rgba(252, 250, 246, 0.92)' : 'rgba(3, 7, 18, 0.75)';
-      ctx!.fillRect(x - 2, y - 9, tw + 4, 12);
-      ctx!.fillStyle = col;
-      ctx!.fillText(txt, x, y);
-    };
-
-    drawAxisBadge('+X (Pleasure+)', posX.x + 4, posX.y + 3, 'rgba(225, 29, 72, 1)');
-    drawAxisBadge('-X (Pleasure-)', negX.x - 68, negX.y + 3, 'rgba(225, 29, 72, 1)');
-
+    // Y Axis (Arousal)
     const posY = project(0, axisLen, 0, cosX, sinX, cosY, sinY, cx, cy);
     const negY = project(0, -axisLen, 0, cosX, sinX, cosY, sinY, cx, cy);
-
-    ctx!.strokeStyle = 'rgba(56, 189, 248, 0.75)';
     ctx!.beginPath();
     ctx!.moveTo(negY.x, negY.y);
     ctx!.lineTo(posY.x, posY.y);
     ctx!.stroke();
+    ctx!.fillText('+Y', posY.x + 4, posY.y - 3);
+    ctx!.fillText('-Y', negY.x + 4, negY.y + 10);
 
-    drawAxisBadge('+Y (Arousal+)', posY.x + 4, posY.y - 4, 'rgba(2, 132, 199, 1)');
-    drawAxisBadge('-Y (Arousal-)', negY.x + 4, negY.y + 11, 'rgba(2, 132, 199, 1)');
-
+    // Z Axis (Dominance)
     const posZ = project(0, 0, axisLen, cosX, sinX, cosY, sinY, cx, cy);
     const negZ = project(0, 0, -axisLen, cosX, sinX, cosY, sinY, cx, cy);
-
-    ctx!.strokeStyle = 'rgba(16, 185, 129, 0.65)';
     ctx!.beginPath();
     ctx!.moveTo(negZ.x, negZ.y);
     ctx!.lineTo(posZ.x, posZ.y);
     ctx!.stroke();
+    ctx!.fillText('+Z', posZ.x + 4, posZ.y + 8);
+    ctx!.fillText('-Z', negZ.x - 16, negZ.y - 4);
 
-    drawAxisBadge('+Z (Dominance+)', posZ.x + 4, posZ.y + 8, 'rgba(5, 150, 105, 1)');
-    drawAxisBadge('-Z (Dominance-)', negZ.x - 76, negZ.y - 4, 'rgba(5, 150, 105, 1)');
-
-    // Origin Zero-Point Sink (0,0,0)
+    // Origin Zero-Point Sink (0,0,0) - Champagne Gold
     ctx!.beginPath();
-    ctx!.arc(originPr.x, originPr.y, 4.0 * originPr.scale, 0, Math.PI * 2);
-    ctx!.fillStyle = isLightCanvas ? '#B38A4D' : '#06b6d4';
-    ctx!.shadowColor = isLightCanvas ? 'rgba(179, 138, 77, 0.5)' : '#06b6d4';
-    ctx!.shadowBlur = 10;
+    ctx!.arc(originPr.x, originPr.y, 3.2 * originPr.scale, 0, Math.PI * 2);
+    ctx!.fillStyle = isLightCanvas ? '#8F6932' : '#D4AF37';
+    ctx!.shadowColor = isLightCanvas ? 'rgba(179, 138, 77, 0.4)' : 'rgba(212, 175, 55, 0.4)';
+    ctx!.shadowBlur = 8;
     ctx!.fill();
     ctx!.shadowBlur = 0;
 
@@ -1107,8 +1176,9 @@ export function initA1ntuitizeEngine() {
           continue;
         } else {
           p.progress = 0;
-          const targetOct = octantSectors[Math.floor(Math.random() * octantSectors.length)];
-          const spread = 0.22;
+          const activeTarget = octantSectors.find(s => s.octantId === (activeSelectedOctantId || currentPeakLobe.octantId)) || currentPeakLobe;
+          const targetOct = (Math.random() < 0.65) ? activeTarget : octantSectors[Math.floor(Math.random() * octantSectors.length)];
+          const spread = 0.18;
           const nx = targetOct.dir[0] + (Math.random() - 0.5) * spread;
           const ny = targetOct.dir[1] + (Math.random() - 0.5) * spread;
           const nz = targetOct.dir[2] + (Math.random() - 0.5) * spread;
@@ -1117,6 +1187,7 @@ export function initA1ntuitizeEngine() {
           p.startX = p.dir[0] * universeR;
           p.startY = p.dir[1] * universeR;
           p.startZ = p.dir[2] * universeR;
+          p.octantId = targetOct.octantId;
         }
       }
 
@@ -1201,10 +1272,10 @@ export function initA1ntuitizeEngine() {
     const centroidPr = project(centroid3D.x, centroid3D.y, centroid3D.z, cosX, sinX, cosY, sinY, cx, cy);
 
     const isLightCentroid = document.documentElement.getAttribute('data-theme') === 'light';
-    ctx!.lineWidth = 2.4;
-    ctx!.strokeStyle = isLightCentroid ? '#B38A4D' : '#38bdf8';
-    ctx!.shadowColor = isLightCentroid ? 'rgba(179, 138, 77, 0.45)' : '#38bdf8';
-    ctx!.shadowBlur = 12;
+    ctx!.lineWidth = 1.6;
+    ctx!.strokeStyle = isLightCentroid ? '#B38A4D' : '#D4AF37';
+    ctx!.shadowColor = isLightCentroid ? 'rgba(179, 138, 77, 0.45)' : 'rgba(212, 175, 55, 0.45)';
+    ctx!.shadowBlur = 10;
     ctx!.beginPath();
     ctx!.moveTo(originPr.x, originPr.y);
     ctx!.lineTo(centroidPr.x, centroidPr.y);
@@ -1213,16 +1284,16 @@ export function initA1ntuitizeEngine() {
 
     // Centroid Surface Reticle
     ctx!.beginPath();
-    ctx!.arc(centroidPr.x, centroidPr.y, 6.0 * centroidPr.scale, 0, Math.PI * 2);
+    ctx!.arc(centroidPr.x, centroidPr.y, 5.0 * centroidPr.scale, 0, Math.PI * 2);
     ctx!.fillStyle = isLightCentroid ? '#FAF8F5' : '#ffffff';
-    ctx!.shadowColor = isLightCentroid ? 'rgba(179, 138, 77, 0.5)' : '#38bdf8';
-    ctx!.shadowBlur = 14;
+    ctx!.shadowColor = isLightCentroid ? 'rgba(179, 138, 77, 0.45)' : 'rgba(212, 175, 55, 0.5)';
+    ctx!.shadowBlur = 10;
     ctx!.fill();
     ctx!.shadowBlur = 0;
 
     ctx!.beginPath();
-    ctx!.arc(centroidPr.x, centroidPr.y, 3.0 * centroidPr.scale, 0, Math.PI * 2);
-    ctx!.fillStyle = isLightCentroid ? '#8F6932' : '#0284c7';
+    ctx!.arc(centroidPr.x, centroidPr.y, 2.4 * centroidPr.scale, 0, Math.PI * 2);
+    ctx!.fillStyle = isLightCentroid ? '#8F6932' : '#C5A059';
     ctx!.fill();
 
     // Update HUD Meta (desktop + mobile mirror)
@@ -1232,7 +1303,7 @@ export function initA1ntuitizeEngine() {
     const aiSpikeBadgeMobile = document.getElementById('ai-spike-badge-mobile');
     const hudActiveLobeMobile = document.getElementById('hud-active-lobe-mobile');
 
-    const colStr = `rgb(${currentPeakLobe.rgb.join(',')})`;
+    const colStr = `rgb(${faceState.rgb[0]}, ${faceState.rgb[1]}, ${faceState.rgb[2]})`;
     const descText = `${currentPeakLobe.desc} (${currentPeakLobe.subEmotions})`;
     const badgeText = `CORE AFFECT · O${currentPeakLobe.octantId} ${currentPeakLobe.octantCode}`;
     const lobeHtml = `<span class="pulse-dot" style="background:${colStr}; box-shadow:0 0 8px ${colStr};"></span> <span class="lobe-name">${currentPeakLobe.name.toUpperCase()}</span>`;
@@ -1255,36 +1326,34 @@ export function initA1ntuitizeEngine() {
     if (hudActiveLobeMobile) hudActiveLobeMobile.innerHTML = lobeHtml;
 
     if (calloutsContainer) {
-      calloutsContainer.innerHTML = `
-        <div class="callout-pill" style="left: ${centroidPr.x}px; top: ${centroidPr.y}px; transform: translate(-50%, -130%) scale(${centroidPr.scale}); border-color: ${colStr}80;">
-          <span class="cp-indicator" style="background: ${colStr}; box-shadow: 0 0 10px ${colStr};"></span>
-          <strong>✦ CENTROID · OCTANT ${currentPeakLobe.octantId} (${currentPeakLobe.octantCode})</strong>
-          <em>${currentPeakLobe.name}</em>
-        </div>
-      `;
+      calloutsContainer.innerHTML = '';
     }
 
-    // Broadcast Real-time 3D PAD Affect State to Global Bus
-    const octantDef = OCTANT_AFFECT_DEFINITIONS[currentPeakLobe.octantId];
-    updateGlobalAffectState({
-      valence: sphericalCentroid.x,
-      arousal: sphericalCentroid.y,
-      dominance: sphericalCentroid.z,
-      centroid: [sphericalCentroid.x, sphericalCentroid.y, sphericalCentroid.z],
-      octantId: currentPeakLobe.octantId,
-      octantCode: currentPeakLobe.octantCode,
-      name: currentPeakLobe.name,
-      color: currentPeakLobe.hex,
-      rgb: currentPeakLobe.rgb,
-      tone: octantDef?.tone || currentPeakLobe.name,
-      subEmotions: currentPeakLobe.subEmotions,
-      face: {
-        eyeOpen: faceState.eyeOpen,
-        brow: faceState.brow,
-        smile: faceState.smile,
-        rgb: faceState.rgb
-      }
-    });
+    // Broadcast Real-time 3D PAD Affect State to Global Bus (throttled to 10Hz)
+    const nowTime = performance.now();
+    if (nowTime - lastAffectBroadcastTime > 100) {
+      lastAffectBroadcastTime = nowTime;
+      const octantDef = OCTANT_AFFECT_DEFINITIONS[currentPeakLobe.octantId];
+      updateGlobalAffectState({
+        valence: sphericalCentroid.x,
+        arousal: sphericalCentroid.y,
+        dominance: sphericalCentroid.z,
+        centroid: [sphericalCentroid.x, sphericalCentroid.y, sphericalCentroid.z],
+        octantId: currentPeakLobe.octantId,
+        octantCode: currentPeakLobe.octantCode,
+        name: currentPeakLobe.name,
+        color: colStr,
+        rgb: [...faceState.rgb],
+        tone: octantDef?.tone || currentPeakLobe.name,
+        subEmotions: currentPeakLobe.subEmotions,
+        face: {
+          eyeOpen: faceState.eyeOpen,
+          brow: faceState.brow,
+          smile: faceState.smile,
+          rgb: [...faceState.rgb]
+        }
+      });
+    }
 
     requestAnimationFrame(render);
   }

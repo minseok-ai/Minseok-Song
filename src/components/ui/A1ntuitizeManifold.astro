@@ -20,7 +20,7 @@ import "katex/dist/katex.min.css";
         <p>
           An experimental intuition memory engine implementing psychological <strong>3D PAD (Pleasure-Arousal-Dominance) Emotional Space</strong> across 8 spatial octants. 
           Visual scenes are embedded into continuous PAD tensors via <strong>Qwen 3.5 Vision</strong>. 
-          Sensory particles fire inward from these octants toward origin (0,0,0), undergoing <strong>inelastic collisions</strong> to stack physical memory mass ($M_k$) as discrete crystalline atoms on the central Calabi-Yau manifold. 
+          Sensory particles fire inward from these octants toward origin (0,0,0), undergoing <strong>inelastic collisions</strong> to stack physical memory mass ($M_k$) as discrete crystalline atoms into the central topological polyhedral accretion core. 
           The real-time <strong>Projected Weighted Sum (Spherical Centroid P<sub>centroid</sub>)</strong> synthesizes blended emotions on S² to drive reactive AI facial expressions, while unreinforced sectors implode toward the origin via Ebbinghaus entropy half-life decay.
         </p>
       </div>
@@ -49,7 +49,7 @@ import "katex/dist/katex.min.css";
           </div>
           <div class="spec-entry">
             <span class="se-label">Manifold Geometry</span>
-            <strong class="se-val">Calabi-Yau 6D Spatial Accretion</strong>
+            <strong class="se-val">Inelastic Polyhedral Accretion Topology</strong>
           </div>
           <div class="spec-entry">
             <span class="se-label">Affect Synthesis</span>
@@ -89,10 +89,6 @@ import "katex/dist/katex.min.css";
           <button class="cam-btn" data-view="side" title="Lateral (+X Pleasure) View">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             <span>Side</span>
-          </button>
-          <button class="cam-btn pulse-fire-btn" id="fire-salvo-btn" title="Fire Multi-Octant Vision Particle Salvo">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-            <span>Pulse</span>
           </button>
         </div>
       </div>
@@ -146,201 +142,102 @@ import "katex/dist/katex.min.css";
         </div>
       </div>
 
-      <!-- High-Tech 8-Octant PAD Vector Synthesizer & Memory Mass Control Dashboard -->
-      <div class="manifold-spectrum-bar" id="manifold-spectrum" aria-label="8-Octant PAD Topological Synthesizer">
-        <div class="spectrum-bar-header">
-          <div class="sb-header-left">
-            <span class="sb-label">8-OCTANT TOPOLOGICAL PERSONALITY SYNTHESIZER</span>
-            <span class="sb-sub">Valence (X) · Arousal (Y) · Dominance (Z) | Continuous Topological Accretion Space</span>
-          </div>
-          <div class="origin-decay-badge" id="trigger-decay-btn" role="button" tabindex="0" title="Click to trigger radial Ebbinghaus entropy decay collapsing lobes toward (0,0,0) origin">
-            <span class="decay-icon">⚡</span>
-            <span class="decay-text">RADIAL ENTROPY PURGE</span>
-            <em>k = 0.16 day⁻¹</em>
-          </div>
-        </div>
-
-        <!-- 3-Axis Live Telemetry Faders -->
-        <div class="pad-telemetry-faders">
-          <div class="pad-fader-item">
-            <div class="pfi-label">
-              <span class="pfi-axis" style="color: #ef4444;">VALENCE (X)</span>
-              <strong class="pfi-val" id="pad-val-text">+0.58</strong>
+      <!-- Minimalist Precision 8-Octant PAD Synthesizer Console -->
+      <div class="manifold-synthesizer-deck" id="manifold-spectrum" aria-label="8-Octant PAD Synthesizer Console">
+        <!-- Deck Header: Title & Refined Inline Telemetry -->
+        <div class="deck-top-row">
+          <div class="deck-title-group">
+            <span class="deck-kicker">02 · AFFECT TOPOLOGY SYNTHESIZER</span>
+            <div class="deck-active-lobe" id="deck-active-indicator">
+              <span class="deck-pulse-gold"></span>
+              <strong class="deck-lobe-label" id="cm-active-name">Joy & Euphoria</strong>
+              <span class="deck-octant-tag" id="cm-angle-badge">O1 (+,+,+)</span>
             </div>
-            <div class="pfi-track"><div class="pfi-fill" id="pad-val-gauge" style="background: #ef4444; width: 79%;"></div></div>
-            <div class="pfi-bounds"><span>-1 Hostile</span><span>+1 Positive</span></div>
           </div>
 
-          <div class="pad-fader-item">
-            <div class="pfi-label">
-              <span class="pfi-axis" style="color: #3b82f6;">AROUSAL (Y)</span>
-              <strong class="pfi-val" id="pad-aro-text">+0.58</strong>
+          <!-- Refined Inline 3-Axis Telemetry (Champagne Gold & Platinum) -->
+          <div class="deck-meters-inline">
+            <div class="meter-inline-item">
+              <span class="mii-label">VALENCE</span>
+              <strong class="mii-val" id="pad-val-text">+0.89</strong>
+              <div class="mii-bar"><div class="mii-fill" id="pad-val-gauge" style="width: 79%;"></div></div>
             </div>
-            <div class="pfi-track"><div class="pfi-fill" id="pad-aro-gauge" style="background: #3b82f6; width: 79%;"></div></div>
-            <div class="pfi-bounds"><span>-1 Static</span><span>+1 Dynamic</span></div>
-          </div>
-
-          <div class="pad-fader-item">
-            <div class="pfi-label">
-              <span class="pfi-axis" style="color: #10b981;">DOMINANCE (Z)</span>
-              <strong class="pfi-val" id="pad-dom-text">+0.58</strong>
+            <div class="meter-inline-item">
+              <span class="mii-label">AROUSAL</span>
+              <strong class="mii-val" id="pad-aro-text">+0.42</strong>
+              <div class="mii-bar"><div class="mii-fill" id="pad-aro-gauge" style="width: 71%;"></div></div>
             </div>
-            <div class="pfi-track"><div class="pfi-fill" id="pad-dom-gauge" style="background: #10b981; width: 79%;"></div></div>
-            <div class="pfi-bounds"><span>-1 Helpless</span><span>+1 Mastery</span></div>
+            <div class="meter-inline-item">
+              <span class="mii-label">DOMINANCE</span>
+              <strong class="mii-val" id="pad-dom-text">+0.18</strong>
+              <div class="mii-bar"><div class="mii-fill" id="pad-dom-gauge" style="width: 59%;"></div></div>
+            </div>
           </div>
         </div>
 
-        <!-- 8 Interactive Enriched Segmented Ribbon Tiles (Ordered 1 to 8) -->
-        <div class="octant-segmented-ribbon" role="tablist" aria-label="8-Octant Quick Selector">
-          <!-- Octant 1 -->
-          <button class="oct-seg-btn is-active" data-octant="1" style="--btn-col: #ef4444;" title="Octant 1 · (+, +, +) · Joy & Euphoria">
-            <div class="osb-head">
-              <span class="osb-dot" style="background: #ef4444;"></span>
-              <strong class="osb-id">O1</strong>
-              <span class="osb-code">(+,+,+)</span>
-            </div>
-            <strong class="osb-name">Joy & Euphoria</strong>
-            <div class="osb-mass-wrap">
-              <div class="osb-mass-track"><div class="osb-mass-fill" id="mass-bar-1" style="background: #ef4444; width: 45%;"></div></div>
-              <span class="osb-mass-num" id="mass-val-1">45%</span>
-            </div>
+        <!-- Sleek 8-Sector Precision Segment Ribbon (No Rainbow, High-End Pill Tabs) -->
+        <div class="deck-octant-ribbon" role="tablist" aria-label="Affect Sector Selector">
+          <button class="oct-seg-btn is-active" data-octant="1" role="tab" aria-selected="true" title="Sector 01 · (+,+,+) · Joy & Euphoria">
+            <span class="osb-index">01</span>
+            <span class="osb-title">Joy</span>
+            <span class="osb-mass-num" id="mass-val-1">58%</span>
+            <span class="osb-mass-bar-hidden" id="mass-bar-1" style="display:none;"></span>
           </button>
-
-          <!-- Octant 2 -->
-          <button class="oct-seg-btn" data-octant="2" style="--btn-col: #f97316;" title="Octant 2 · (+, +, -) · Admiration & Trust">
-            <div class="osb-head">
-              <span class="osb-dot" style="background: #f97316;"></span>
-              <strong class="osb-id">O2</strong>
-              <span class="osb-code">(+,+,-)</span>
-            </div>
-            <strong class="osb-name">Admiration & Trust</strong>
-            <div class="osb-mass-wrap">
-              <div class="osb-mass-track"><div class="osb-mass-fill" id="mass-bar-2" style="background: #f97316; width: 38%;"></div></div>
-              <span class="osb-mass-num" id="mass-val-2">38%</span>
-            </div>
+          <button class="oct-seg-btn" data-octant="2" role="tab" aria-selected="false" title="Sector 02 · (+,+,-) · Admiration & Trust">
+            <span class="osb-index">02</span>
+            <span class="osb-title">Admiration</span>
+            <span class="osb-mass-num" id="mass-val-2">35%</span>
+            <span class="osb-mass-bar-hidden" id="mass-bar-2" style="display:none;"></span>
           </button>
-
-          <!-- Octant 3 -->
-          <button class="oct-seg-btn" data-octant="3" style="--btn-col: #eab308;" title="Octant 3 · (+, -, +) · Serenity & Calm">
-            <div class="osb-head">
-              <span class="osb-dot" style="background: #eab308;"></span>
-              <strong class="osb-id">O3</strong>
-              <span class="osb-code">(+,-,+)</span>
-            </div>
-            <strong class="osb-name">Serenity & Calm</strong>
-            <div class="osb-mass-wrap">
-              <div class="osb-mass-track"><div class="osb-mass-fill" id="mass-bar-3" style="background: #eab308; width: 32%;"></div></div>
-              <span class="osb-mass-num" id="mass-val-3">32%</span>
-            </div>
+          <button class="oct-seg-btn" data-octant="3" role="tab" aria-selected="false" title="Sector 03 · (+,-,+) · Serenity & Calm">
+            <span class="osb-index">03</span>
+            <span class="osb-title">Serenity</span>
+            <span class="osb-mass-num" id="mass-val-3">28%</span>
+            <span class="osb-mass-bar-hidden" id="mass-bar-3" style="display:none;"></span>
           </button>
-
-          <!-- Octant 4 -->
-          <button class="oct-seg-btn" data-octant="4" style="--btn-col: #10b981;" title="Octant 4 · (+, -, -) · Catharsis & Relief">
-            <div class="osb-head">
-              <span class="osb-dot" style="background: #10b981;"></span>
-              <strong class="osb-id">O4</strong>
-              <span class="osb-code">(+,-,-)</span>
-            </div>
-            <strong class="osb-name">Catharsis & Relief</strong>
-            <div class="osb-mass-wrap">
-              <div class="osb-mass-track"><div class="osb-mass-fill" id="mass-bar-4" style="background: #10b981; width: 28%;"></div></div>
-              <span class="osb-mass-num" id="mass-val-4">28%</span>
-            </div>
+          <button class="oct-seg-btn" data-octant="4" role="tab" aria-selected="false" title="Sector 04 · (+,-,-) · Catharsis & Relief">
+            <span class="osb-index">04</span>
+            <span class="osb-title">Relief</span>
+            <span class="osb-mass-num" id="mass-val-4">25%</span>
+            <span class="osb-mass-bar-hidden" id="mass-bar-4" style="display:none;"></span>
           </button>
-
-          <!-- Octant 5 -->
-          <button class="oct-seg-btn" data-octant="5" style="--btn-col: #06b6d4;" title="Octant 5 · (-, +, +) · Anger & Shock">
-            <div class="osb-head">
-              <span class="osb-dot" style="background: #06b6d4;"></span>
-              <strong class="osb-id">O5</strong>
-              <span class="osb-code">(-,+,+)</span>
-            </div>
-            <strong class="osb-name">Anger & Shock</strong>
-            <div class="osb-mass-wrap">
-              <div class="osb-mass-track"><div class="osb-mass-fill" id="mass-bar-5" style="background: #06b6d4; width: 24%;"></div></div>
-              <span class="osb-mass-num" id="mass-val-5">24%</span>
-            </div>
+          <button class="oct-seg-btn" data-octant="5" role="tab" aria-selected="false" title="Sector 05 · (-,+,+) · Anger & Shock">
+            <span class="osb-index">05</span>
+            <span class="osb-title">Anger</span>
+            <span class="osb-mass-num" id="mass-val-5">21%</span>
+            <span class="osb-mass-bar-hidden" id="mass-bar-5" style="display:none;"></span>
           </button>
-
-          <!-- Octant 6 -->
-          <button class="oct-seg-btn" data-octant="6" style="--btn-col: #3b82f6;" title="Octant 6 · (-, +, -) · Fear & Tension">
-            <div class="osb-head">
-              <span class="osb-dot" style="background: #3b82f6;"></span>
-              <strong class="osb-id">O6</strong>
-              <span class="osb-code">(-,+,-)</span>
-            </div>
-            <strong class="osb-name">Fear & Tension</strong>
-            <div class="osb-mass-wrap">
-              <div class="osb-mass-track"><div class="osb-mass-fill" id="mass-bar-6" style="background: #3b82f6; width: 22%;"></div></div>
-              <span class="osb-mass-num" id="mass-val-6">22%</span>
-            </div>
+          <button class="oct-seg-btn" data-octant="6" role="tab" aria-selected="false" title="Sector 06 · (-,+,-) · Fear & Tension">
+            <span class="osb-index">06</span>
+            <span class="osb-title">Fear</span>
+            <span class="osb-mass-num" id="mass-val-6">19%</span>
+            <span class="osb-mass-bar-hidden" id="mass-bar-6" style="display:none;"></span>
           </button>
-
-          <!-- Octant 7 -->
-          <button class="oct-seg-btn" data-octant="7" style="--btn-col: #6366f1;" title="Octant 7 · (-, -, +) · Disgust & Contempt">
-            <div class="osb-head">
-              <span class="osb-dot" style="background: #6366f1;"></span>
-              <strong class="osb-id">O7</strong>
-              <span class="osb-code">(-,-,+)</span>
-            </div>
-            <strong class="osb-name">Disgust & Contempt</strong>
-            <div class="osb-mass-wrap">
-              <div class="osb-mass-track"><div class="osb-mass-fill" id="mass-bar-7" style="background: #6366f1; width: 18%;"></div></div>
-              <span class="osb-mass-num" id="mass-val-7">18%</span>
-            </div>
+          <button class="oct-seg-btn" data-octant="7" role="tab" aria-selected="false" title="Sector 07 · (-,-,+) · Disgust & Contempt">
+            <span class="osb-index">07</span>
+            <span class="osb-title">Contempt</span>
+            <span class="osb-mass-num" id="mass-val-7">15%</span>
+            <span class="osb-mass-bar-hidden" id="mass-bar-7" style="display:none;"></span>
           </button>
-
-          <!-- Octant 8 -->
-          <button class="oct-seg-btn" data-octant="8" style="--btn-col: #a855f7;" title="Octant 8 · (-, -, -) · Sadness & Despair">
-            <div class="osb-head">
-              <span class="osb-dot" style="background: #a855f7;"></span>
-              <strong class="osb-id">O8</strong>
-              <span class="osb-code">(-,-,-)</span>
-            </div>
-            <strong class="osb-name">Sadness & Despair</strong>
-            <div class="osb-mass-wrap">
-              <div class="osb-mass-track"><div class="osb-mass-fill" id="mass-bar-8" style="background: #a855f7; width: 15%;"></div></div>
-              <span class="osb-mass-num" id="mass-val-8">15%</span>
-            </div>
+          <button class="oct-seg-btn" data-octant="8" role="tab" aria-selected="false" title="Sector 08 · (-,-,-) · Sadness & Despair">
+            <span class="osb-index">08</span>
+            <span class="osb-title">Sadness</span>
+            <span class="osb-mass-num" id="mass-val-8">14%</span>
+            <span class="osb-mass-bar-hidden" id="mass-bar-8" style="display:none;"></span>
           </button>
         </div>
 
-        <!-- Dynamic Readout Detailed Command Strip -->
-        <div class="colormap-readout">
-          <div class="cm-left">
-            <span class="cm-angle-badge" id="cm-angle-badge">OCTANT 1 · (+, +, +)</span>
-            <span class="cm-coords" id="cm-coords">[P:+1.0 A:+1.0 D:+1.0]</span>
+        <!-- Quiet Editorial Telemetry Strip -->
+        <div class="deck-bottom-strip">
+          <div class="dbs-left">
+            <span class="dbs-dot"></span>
+            <span class="dbs-text">PAD Projection: S² Centroid · Inelastic Polyhedral Accretion</span>
+            <span class="dbs-coords" id="cm-coords">[P:+1.0 A:+1.0 D:+1.0]</span>
           </div>
-          <div class="cm-center">
-            <strong class="cm-active-name" id="cm-active-name">Joy & Euphoria</strong>
-            <span class="cm-sub-emotions" id="cm-sub-emotions">Euphoria · Joy · Excitement · Passion · Triumph</span>
-          </div>
-          <div class="cm-right">
-            <button class="active-inject-btn" id="active-inject-btn" title="Inject Inward Particle Salvo into Selected Octant">
-              <span class="aib-icon">⚡</span>
-              <span>Inject Salvo</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="manifold-3d-hud-bottom">
-        <div class="hud-status-chip">
-          <span class="pulse-dot"></span>
-          <span class="hud-cue-text">3D 8-OCTANT PAD · <strong>DRAG ORBIT</strong> / <strong>CLICK OCTANT TO INJECT</strong></span>
-        </div>
-        <div class="hud-telemetry">
-          <div class="tele-item">
-            <span class="ti-label">VISION MODEL</span>
-            <strong class="ti-val">Qwen 3.5 Vision (LM Studio)</strong>
-          </div>
-          <div class="tele-item">
-            <span class="ti-label">PAD SYNTHESIS</span>
-            <strong class="ti-val">Projected Centroid (S²)</strong>
-          </div>
-          <div class="tele-item">
-            <span class="ti-label">TOPOLOGY</span>
-            <strong class="ti-val">Calabi-Yau Accretion</strong>
+          <div class="dbs-right">
+            <span class="dbs-entropy" id="entropy-rate-badge">Temporal Entropy Rate <em>k = 0.16 day⁻¹</em></span>
+            <span id="cm-sub-emotions" style="display:none;"></span>
+            <span id="cm-resonance-val" style="display:none;"></span>
           </div>
         </div>
       </div>
@@ -539,14 +436,20 @@ import "katex/dist/katex.min.css";
     display: inline-block;
     padding: 4px 10px;
     border-radius: 999px;
-    background: rgba(56, 189, 248, 0.1);
-    border: 1px solid rgba(56, 189, 248, 0.25);
-    color: #38bdf8;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    color: #D4AF37;
     font-size: 11px;
     font-weight: 850;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     font-family: var(--font-mono, monospace);
+  }
+
+  :global(html[data-theme="light"]) .kicker-pill {
+    color: #8F6932;
+    background: rgba(179, 138, 77, 0.1);
+    border-color: rgba(179, 138, 77, 0.3);
   }
 
   .kicker-pill-amber {
@@ -944,8 +847,8 @@ import "katex/dist/katex.min.css";
     gap: 8px;
     padding: 6px 12px;
     border-radius: 8px;
-    background: rgba(6, 12, 24, 0.75);
-    border: 1px solid rgba(56, 189, 248, 0.25);
+    background: rgba(13, 16, 23, 0.85);
+    border: 1px solid rgba(212, 175, 55, 0.22);
     backdrop-filter: blur(10px);
     z-index: 12;
     pointer-events: none;
@@ -961,8 +864,8 @@ import "katex/dist/katex.min.css";
     font-size: 8.5px;
     font-weight: 850;
     font-family: var(--font-mono, monospace);
-    color: #38bdf8;
-    background: rgba(56, 189, 248, 0.15);
+    color: #D4AF37;
+    background: rgba(212, 175, 55, 0.12);
     padding: 1px 5px;
     border-radius: 4px;
     letter-spacing: 0.05em;
@@ -1006,9 +909,9 @@ import "katex/dist/katex.min.css";
     gap: 14px;
     padding: 9px 18px;
     border-radius: 12px;
-    background: rgba(6, 12, 24, 0.88);
-    border: 1px solid rgba(56, 189, 248, 0.4);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    background: rgba(13, 16, 23, 0.88);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(14px);
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -1026,8 +929,8 @@ import "katex/dist/katex.min.css";
     align-items: center;
     justify-content: center;
     border-radius: 8px;
-    background: radial-gradient(circle, rgba(6, 182, 212, 0.2) 0%, rgba(3, 7, 18, 0.95) 100%), #020617;
-    border: 1px solid rgba(56, 189, 248, 0.35);
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.14) 0%, rgba(3, 7, 18, 0.95) 100%), #020617;
+    border: 1px solid rgba(212, 175, 55, 0.30);
     overflow: hidden;
     flex-shrink: 0;
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1065,8 +968,8 @@ import "katex/dist/katex.min.css";
     padding: 1px 5px;
     border-radius: 4px;
     background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(56, 189, 248, 0.3);
-    color: #38bdf8;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: #D4AF37;
   }
 
   :global(html[data-theme="light"]) .ai-spike-badge {
@@ -1084,500 +987,307 @@ import "katex/dist/katex.min.css";
     white-space: normal;
   }
 
-  /* HIGH-TECH 8-OCTANT CONTROLLER DASHBOARD (CLEAN CONSOLIDATED STREAM) */
-  .manifold-spectrum-bar {
+  /* HIGH-END MINIMALIST AFFECT TOPOLOGY SYNTHESIZER CONSOLE */
+  .manifold-synthesizer-deck {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 20px 24px;
-    background: rgba(0, 0, 0, 0.55);
-    border-top: 1px solid var(--color-line);
-    backdrop-filter: blur(16px);
+    gap: 12px;
+    padding: 14px 20px;
+    background: rgba(10, 14, 22, 0.78);
+    border-top: 1px solid rgba(212, 175, 55, 0.20);
+    backdrop-filter: blur(18px);
     z-index: 2;
     min-width: 0;
   }
 
-  :global(html[data-theme="light"]) .manifold-spectrum-bar {
-    background: rgba(246, 244, 238, 0.94);
-    border-top: 1px solid rgba(198, 164, 104, 0.22);
+  :global(html[data-theme="light"]) .manifold-synthesizer-deck {
+    background: rgba(248, 246, 240, 0.92);
+    border-top: 1px solid rgba(198, 164, 104, 0.24);
   }
 
-  .spectrum-bar-header {
+  .deck-top-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 8px 16px;
-    padding-bottom: 2px;
+    gap: 12px 18px;
   }
 
-  .sb-header-left {
+  .deck-title-group {
     display: flex;
-    flex-direction: column;
-    gap: 3px;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
   }
 
-  .sb-label {
-    font-size: 10.5px;
-    font-weight: 900;
+  .deck-kicker {
+    font-size: 9.5px;
+    font-weight: 850;
     letter-spacing: 0.08em;
-    color: var(--color-ink);
-    font-family: var(--font-mono, monospace);
     text-transform: uppercase;
-  }
-
-  .sb-sub {
-    font-size: 10px;
-    color: var(--color-ink-muted);
     font-family: var(--font-mono, monospace);
+    color: var(--color-ink-muted);
   }
 
-  .origin-decay-badge {
+  .deck-active-lobe {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 5px 14px;
+    gap: 7px;
+    padding: 3px 10px;
     border-radius: 999px;
-    background: rgba(6, 182, 212, 0.1);
-    border: 1px solid rgba(6, 182, 212, 0.35);
-    font-size: 10.5px;
+    background: rgba(212, 175, 55, 0.10);
+    border: 1px solid rgba(212, 175, 55, 0.28);
+  }
+
+  :global(html[data-theme="light"]) .deck-active-lobe {
+    background: rgba(179, 138, 77, 0.10);
+    border-color: rgba(179, 138, 77, 0.28);
+  }
+
+  .deck-pulse-gold {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #D4AF37;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.7);
+    flex-shrink: 0;
+  }
+
+  :global(html[data-theme="light"]) .deck-pulse-gold {
+    background: #8F6932;
+    box-shadow: 0 0 6px rgba(143, 105, 50, 0.5);
+  }
+
+  .deck-lobe-label {
+    font-size: 11.5px;
     font-weight: 850;
-    font-family: var(--font-mono, monospace);
-    color: #38bdf8;
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  :global(html[data-theme="light"]) .origin-decay-badge {
-    background: rgba(179, 138, 77, 0.1);
-    border-color: rgba(179, 138, 77, 0.32);
-    color: var(--color-accent-ink, #8F6932);
-  }
-
-  .origin-decay-badge:hover,
-  .origin-decay-badge.is-decaying {
-    background: rgba(6, 182, 212, 0.25);
-    border-color: #38bdf8;
-    color: #ffffff;
-    box-shadow: 0 0 16px rgba(56, 189, 248, 0.45);
-    transform: scale(1.03);
-  }
-
-  :global(html[data-theme="light"]) .origin-decay-badge:hover,
-  :global(html[data-theme="light"]) .origin-decay-badge.is-decaying {
-    background: rgba(179, 138, 77, 0.22);
-    border-color: var(--color-accent-ink, #8F6932);
     color: var(--color-ink);
-    box-shadow: 0 0 16px rgba(179, 138, 77, 0.25);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
   }
 
-  .origin-decay-badge em {
-    font-style: normal;
-    color: #ffffff;
-    font-weight: 850;
-    background: rgba(255, 255, 255, 0.12);
-    padding: 1px 6px;
-    border-radius: 4px;
-  }
-
-  :global(html[data-theme="light"]) .origin-decay-badge em {
-    color: var(--color-ink);
-    background: rgba(179, 138, 77, 0.18);
-  }
-
-  /* 3-Axis Live Telemetry Faders */
-  .pad-telemetry-faders {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-    padding: 10px 14px;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.32);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  :global(html[data-theme="light"]) .pad-telemetry-faders {
-    background: rgba(235, 232, 224, 0.55);
-    border-color: rgba(198, 164, 104, 0.22);
-  }
-
-  .pad-fader-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .pfi-label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .deck-octant-tag {
     font-size: 9.5px;
     font-family: var(--font-mono, monospace);
+    font-weight: 750;
+    color: #D4AF37;
+  }
+
+  :global(html[data-theme="light"]) .deck-octant-tag {
+    color: #8F6932;
+  }
+
+  /* Inline 3-Axis Telemetry (Champagne Gold & Platinum) */
+  .deck-meters-inline {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .meter-inline-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .mii-label {
+    font-size: 9px;
+    font-family: var(--font-mono, monospace);
+    font-weight: 800;
+    color: var(--color-ink-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .mii-val {
+    font-size: 10px;
+    font-family: var(--font-mono, monospace);
     font-weight: 850;
-  }
-
-  .pfi-val {
     color: var(--color-ink);
+    min-width: 32px;
   }
 
-  .pfi-track {
-    width: 100%;
-    height: 5px;
+  .mii-bar {
+    width: 44px;
+    height: 3px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.10);
     overflow: hidden;
   }
 
-  :global(html[data-theme="light"]) .pfi-track {
-    background: rgba(198, 164, 104, 0.16);
+  :global(html[data-theme="light"]) .mii-bar {
+    background: rgba(0, 0, 0, 0.08);
   }
 
-  .pfi-fill {
+  .mii-fill {
     height: 100%;
     border-radius: 999px;
-    transition: width 0.15s ease-out;
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.5), #D4AF37);
+    transition: width 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .pfi-bounds {
-    display: flex;
-    justify-content: space-between;
-    font-size: 8px;
-    color: var(--color-ink-muted);
-    font-family: var(--font-mono, monospace);
+  :global(html[data-theme="light"]) .mii-fill {
+    background: linear-gradient(90deg, rgba(179, 138, 77, 0.5), #8F6932);
   }
 
-  /* 8-Segmented Enriched Ribbon Tiles */
-  .octant-segmented-ribbon {
+  /* Sleek 8-Sector Segment Ribbon Tabs */
+  .deck-octant-ribbon {
     display: grid;
     grid-template-columns: repeat(8, minmax(0, 1fr));
-    gap: 8px;
+    gap: 6px;
+  }
+
+  @media (max-width: 768px) {
+    .deck-octant-ribbon {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .deck-octant-ribbon {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .oct-seg-btn {
+      padding: 8px 11px;
+    }
+
+    .osb-title {
+      font-size: 11px;
+    }
   }
 
   .oct-seg-btn {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     justify-content: space-between;
     gap: 6px;
-    padding: 10px 10px 8px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.035);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: var(--color-ink);
+    padding: 7px 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    color: var(--color-ink-muted);
     cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-mono, monospace);
     user-select: none;
-    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-    text-align: left;
     box-sizing: border-box;
   }
 
   :global(html[data-theme="light"]) .oct-seg-btn {
-    background: rgba(252, 250, 246, 0.8);
-    border-color: rgba(198, 164, 104, 0.22);
+    background: rgba(0, 0, 0, 0.025);
+    border-color: rgba(0, 0, 0, 0.07);
+    color: var(--color-ink-muted);
   }
 
   .oct-seg-btn:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--btn-col);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    background: rgba(212, 175, 55, 0.08);
+    border-color: rgba(212, 175, 55, 0.35);
+    color: var(--color-ink);
   }
 
   :global(html[data-theme="light"]) .oct-seg-btn:hover {
-    background: #FAF8F5;
-    border-color: var(--btn-col);
-    box-shadow: 0 4px 14px rgba(179, 138, 77, 0.12);
+    background: rgba(179, 138, 77, 0.08);
+    border-color: rgba(179, 138, 77, 0.35);
+    color: var(--color-ink);
   }
 
   .oct-seg-btn.is-active {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--btn-col);
-    box-shadow: 0 0 16px var(--btn-col), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    background: rgba(212, 175, 55, 0.14);
+    border-color: #D4AF37;
+    color: var(--color-ink);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.22);
   }
 
   :global(html[data-theme="light"]) .oct-seg-btn.is-active {
-    background: #FAF8F5;
-    border-color: var(--btn-col);
-    box-shadow: 0 0 12px var(--btn-col), inset 0 1px 0 rgba(255, 255, 255, 0.85);
-  }
-
-  .osb-head {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .osb-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .osb-id {
-    font-size: 10.5px;
-    font-weight: 900;
-    font-family: var(--font-mono, monospace);
+    background: rgba(179, 138, 77, 0.12);
+    border-color: #8F6932;
     color: var(--color-ink);
+    box-shadow: 0 0 10px rgba(179, 138, 77, 0.18);
   }
 
-  .osb-code {
+  .osb-index {
     font-size: 9px;
-    font-weight: 750;
-    color: var(--color-ink-muted);
-    font-family: var(--font-mono, monospace);
+    font-weight: 850;
+    color: #D4AF37;
+    opacity: 0.85;
   }
 
-  .osb-name {
-    font-size: 11px;
-    font-weight: 800;
-    line-height: 1.25;
-    color: var(--color-ink);
+  :global(html[data-theme="light"]) .osb-index {
+    color: #8F6932;
+  }
+
+  .osb-title {
+    font-size: 10.5px;
+    font-weight: 750;
+    flex-grow: 1;
+    text-align: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .osb-mass-wrap {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 2px;
-  }
-
-  .osb-mass-track {
-    flex-grow: 1;
-    height: 3.5px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.12);
-    overflow: hidden;
-  }
-
-  :global(html[data-theme="light"]) .osb-mass-track {
-    background: rgba(198, 164, 104, 0.16);
-  }
-
-  .osb-mass-fill {
-    height: 100%;
-    border-radius: 999px;
-    transition: width 0.15s ease-out;
   }
 
   .osb-mass-num {
-    font-size: 8.5px;
-    font-weight: 800;
-    font-family: var(--font-mono, monospace);
-    color: var(--color-ink-muted);
-    min-width: 22px;
+    font-size: 9px;
+    font-weight: 700;
+    opacity: 0.7;
     text-align: right;
   }
 
-  /* Dynamic Active Readout Command Strip */
-  .colormap-readout {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 10px 16px;
-    border-radius: 10px;
-    background: rgba(10, 18, 32, 0.65);
-    border: 1px solid rgba(56, 189, 248, 0.25);
-    font-family: var(--font-mono, monospace);
-  }
-
-  :global(html[data-theme="light"]) .colormap-readout {
-    background: rgba(235, 232, 224, 0.6);
-    border-color: rgba(198, 164, 104, 0.25);
-  }
-
-  .cm-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-  }
-
-  .cm-angle-badge {
-    font-size: 11px;
-    font-weight: 900;
-    color: #38bdf8;
-    background: rgba(56, 189, 248, 0.14);
-    padding: 3px 9px;
-    border-radius: 6px;
-    border: 1px solid rgba(56, 189, 248, 0.35);
-  }
-
-  :global(html[data-theme="light"]) .cm-angle-badge {
-    background: rgba(179, 138, 77, 0.12);
-    border-color: rgba(179, 138, 77, 0.35);
-    color: var(--color-accent-ink, #8F6932);
-  }
-
-  .cm-coords {
-    font-size: 10.5px;
-    font-weight: 800;
-    color: var(--color-ink-muted);
-  }
-
-  .cm-center {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 0;
-    flex-grow: 1;
-    overflow: hidden;
-  }
-
-  .cm-active-name {
-    font-size: 13px;
-    font-weight: 850;
-    color: var(--color-ink);
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .cm-sub-emotions {
-    font-size: 11px;
-    color: var(--color-ink-muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .cm-right {
-    flex-shrink: 0;
-  }
-
-  .active-inject-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 14px;
-    border-radius: 8px;
-    background: rgba(56, 189, 248, 0.15);
-    border: 1px solid rgba(56, 189, 248, 0.45);
-    color: #38bdf8;
-    font-size: 11px;
-    font-weight: 850;
-    font-family: var(--font-mono, monospace);
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  :global(html[data-theme="light"]) .active-inject-btn {
-    background: rgba(179, 138, 77, 0.12);
-    border-color: rgba(179, 138, 77, 0.35);
-    color: var(--color-accent-ink, #8F6932);
-  }
-
-  .active-inject-btn:hover,
-  .active-inject-btn.is-pulsing {
-    background: rgba(56, 189, 248, 0.3);
-    border-color: #38bdf8;
-    color: #ffffff;
-    box-shadow: 0 0 14px rgba(56, 189, 248, 0.45);
-    transform: translateY(-1px);
-  }
-
-  :global(html[data-theme="light"]) .active-inject-btn:hover,
-  :global(html[data-theme="light"]) .active-inject-btn.is-pulsing {
-    background: rgba(179, 138, 77, 0.22);
-    border-color: var(--color-accent-ink, #8F6932);
-    color: var(--color-ink);
-    box-shadow: 0 0 14px rgba(179, 138, 77, 0.25);
-  }
-
-  /* HUD Bottom Footer */
-  .manifold-3d-hud-bottom {
+  /* Quiet Editorial Telemetry Strip */
+  .deck-bottom-strip {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 20px;
-    border-top: 1px solid var(--color-line);
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(14px);
-    z-index: 2;
-    min-width: 0;
-    gap: 16px;
     flex-wrap: wrap;
-  }
-
-  :global(html[data-theme="light"]) .manifold-3d-hud-bottom {
-    background: rgba(246, 244, 238, 0.88);
-    border-top: 1px solid rgba(198, 164, 104, 0.2);
-  }
-
-  .hud-status-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 5px 12px;
-    border-radius: 999px;
-    background: rgba(56, 189, 248, 0.08);
-    border: 1px solid rgba(56, 189, 248, 0.22);
-  }
-
-  :global(html[data-theme="light"]) .hud-status-chip {
-    background: rgba(179, 138, 77, 0.1);
-    border-color: rgba(179, 138, 77, 0.28);
-  }
-
-  .hud-cue-text {
-    font-size: 10px;
-    font-weight: 800;
-    color: var(--color-ink-muted);
+    gap: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
     font-family: var(--font-mono, monospace);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    font-size: 9.5px;
+    color: var(--color-ink-muted);
   }
 
-  .hud-cue-text strong {
-    color: #38bdf8;
+  :global(html[data-theme="light"]) .deck-bottom-strip {
+    border-top-color: rgba(0, 0, 0, 0.06);
   }
 
-  :global(html[data-theme="light"]) .hud-cue-text strong {
-    color: var(--color-accent-ink, #8F6932);
-  }
-
-  .hud-telemetry {
+  .dbs-left {
     display: flex;
     align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 8px;
   }
 
-  .tele-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 10px;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+  .dbs-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #D4AF37;
   }
 
-  :global(html[data-theme="light"]) .tele-item {
-    background: rgba(235, 232, 224, 0.5);
-    border-color: rgba(198, 164, 104, 0.2);
+  :global(html[data-theme="light"]) .dbs-dot {
+    background: #8F6932;
   }
 
-  .ti-label {
-    font-size: 9px;
-    font-weight: 800;
-    color: var(--color-ink-muted);
-    font-family: var(--font-mono, monospace);
-    letter-spacing: 0.04em;
+  .dbs-text {
+    letter-spacing: 0.02em;
   }
 
-  .ti-val {
-    font-size: 10.5px;
-    font-weight: 850;
-    color: #38bdf8;
-    font-family: var(--font-mono, monospace);
+  .dbs-coords {
+    color: #D4AF37;
+    font-weight: 750;
   }
 
-  :global(html[data-theme="light"]) .ti-val {
-    color: var(--color-accent-ink, #8F6932);
+  :global(html[data-theme="light"]) .dbs-coords {
+    color: #8F6932;
+  }
+
+  .dbs-entropy em {
+    font-style: normal;
+    color: var(--color-ink);
+    font-weight: 750;
   }
 
   .sealed-grid {

@@ -38,81 +38,81 @@ export const OCTANT_AFFECT_DEFINITIONS: Record<number, {
     name: "Joy & Euphoria",
     octantCode: "(+, +, +)",
     padCoords: [1, 1, 1],
-    color: "#ef4444",
-    rgb: [239, 68, 68],
+    color: "#D4AF37",
+    rgb: [212, 175, 55],
     subEmotions: "Euphoria · Joy · Excitement · Passion · Triumph",
     tone: "Enthusiastic, energetic, proactive, and passionately confident.",
-    face: { eyeOpen: 0.9, brow: 0.4, smile: 0.85, rgb: [239, 68, 68] }
+    face: { eyeOpen: 0.9, brow: 0.4, smile: 0.85, rgb: [212, 175, 55] }
   },
   2: {
     name: "Admiration & Trust",
     octantCode: "(+, +, -)",
     padCoords: [1, 1, -1],
-    color: "#f97316",
-    rgb: [249, 115, 22],
+    color: "#E5C378",
+    rgb: [229, 195, 120],
     subEmotions: "Wonder · Admiration · Surprise · Awe · Curiosity",
     tone: "Curious, inspiring, appreciative, and deeply engaged.",
-    face: { eyeOpen: 0.85, brow: 0.15, smile: 0.65, rgb: [249, 115, 22] }
+    face: { eyeOpen: 0.85, brow: 0.15, smile: 0.65, rgb: [229, 195, 120] }
   },
   3: {
     name: "Serenity & Calm",
     octantCode: "(+, -, +)",
     padCoords: [1, -1, 1],
-    color: "#eab308",
-    rgb: [234, 179, 8],
+    color: "#C5A059",
+    rgb: [197, 160, 89],
     subEmotions: "Serenity · Contentment · Calmness · Ease · Pride",
     tone: "Calm, poised, structured, tranquil, and reassuringly grounded.",
-    face: { eyeOpen: 0.6, brow: 0.0, smile: 0.4, rgb: [234, 179, 8] }
+    face: { eyeOpen: 0.6, brow: 0.0, smile: 0.4, rgb: [197, 160, 89] }
   },
   4: {
     name: "Catharsis & Relief",
     octantCode: "(+, -, -)",
     padCoords: [1, -1, -1],
-    color: "#10b981",
-    rgb: [16, 185, 129],
+    color: "#B39868",
+    rgb: [179, 152, 104],
     subEmotions: "Relief · Acceptance · Comfort · Catharsis · Trust",
     tone: "Empathetic, soothing, gentle, warm, and comfortable.",
-    face: { eyeOpen: 0.65, brow: -0.1, smile: 0.5, rgb: [16, 185, 129] }
+    face: { eyeOpen: 0.65, brow: -0.1, smile: 0.5, rgb: [179, 152, 104] }
   },
   5: {
     name: "Anger & Shock",
     octantCode: "(-, +, +)",
     padCoords: [-1, 1, 1],
-    color: "#06b6d4",
-    rgb: [6, 182, 212],
+    color: "#CBD5E1",
+    rgb: [203, 213, 225],
     subEmotions: "Anger · Hostility · Annoyance · Rage · Combativeness",
     tone: "Direct, decisive, assertive, bold, and punchy.",
-    face: { eyeOpen: 0.8, brow: -0.85, smile: -0.5, rgb: [6, 182, 212] }
+    face: { eyeOpen: 0.8, brow: -0.85, smile: -0.5, rgb: [203, 213, 225] }
   },
   6: {
     name: "Fear & Tension",
     octantCode: "(-, +, -)",
     padCoords: [-1, 1, -1],
-    color: "#3b82f6",
-    rgb: [59, 130, 246],
+    color: "#94A3B8",
+    rgb: [148, 163, 184],
     subEmotions: "Fear · Tension · Anxiety · Panic · Vigilance",
     tone: "Vigilant, crisp, cautious, precise, and security-minded.",
-    face: { eyeOpen: 0.95, brow: 0.8, smile: -0.65, rgb: [59, 130, 246] }
+    face: { eyeOpen: 0.95, brow: 0.8, smile: -0.65, rgb: [148, 163, 184] }
   },
   7: {
     name: "Disgust & Contempt",
     octantCode: "(-, -, +)",
     padCoords: [-1, -1, 1],
-    color: "#6366f1",
-    rgb: [99, 102, 241],
+    color: "#788292",
+    rgb: [120, 130, 146],
     subEmotions: "Disgust · Contempt · Bitterness · Rejection · Disdain",
     tone: "Discerning, analytical, critical, and high-standard.",
-    face: { eyeOpen: 0.45, brow: -0.5, smile: -0.4, rgb: [99, 102, 241] }
+    face: { eyeOpen: 0.45, brow: -0.5, smile: -0.4, rgb: [120, 130, 146] }
   },
   8: {
     name: "Sadness & Despair",
     octantCode: "(-, -, -)",
     padCoords: [-1, -1, -1],
-    color: "#a855f7",
-    rgb: [168, 85, 247],
+    color: "#64748B",
+    rgb: [100, 116, 139],
     subEmotions: "Sadness · Depression · Despair · Helplessness · Isolation",
     tone: "Reflective, subdued, minimalist, quiet, and introspective.",
-    face: { eyeOpen: 0.35, brow: 0.5, smile: -0.75, rgb: [168, 85, 247] }
+    face: { eyeOpen: 0.35, brow: 0.5, smile: -0.75, rgb: [100, 116, 139] }
   }
 };
 
@@ -124,8 +124,8 @@ let currentAffectState: AffectState = {
   octantId: 1,
   octantCode: "(+, +, +)",
   name: "Joy & Euphoria",
-  color: "#ef4444",
-  rgb: [239, 68, 68],
+  color: "#D4AF37",
+  rgb: [212, 175, 55],
   tone: OCTANT_AFFECT_DEFINITIONS[1].tone,
   subEmotions: OCTANT_AFFECT_DEFINITIONS[1].subEmotions,
   face: { ...OCTANT_AFFECT_DEFINITIONS[1].face },
@@ -179,49 +179,83 @@ export function subscribeToAffectState(callback: (state: AffectState) => void): 
   };
 }
 
-// Organic Ambient Drift for non-manifold pages
+// Organic Ambient Drift for non-manifold pages (Continuous Smooth Gradient Drift)
 function startAmbientAffectDrift() {
   if (typeof window === "undefined") return;
 
   let driftTime = 0;
+  let currentOctId = 1;
+
   ambientDriftInterval = window.setInterval(() => {
     if (isManifoldEngineActive) return;
 
-    driftTime += 0.05;
-    // Ambient gentle oscillation in positive quadrant (Joy -> Serenity -> Admiration)
-    const v = 0.55 + 0.35 * Math.sin(driftTime * 0.3);
-    const a = 0.40 + 0.45 * Math.sin(driftTime * 0.25 + 0.8);
-    const d = 0.50 + 0.38 * Math.cos(driftTime * 0.28);
+    // Slow, organic drift period (~3 minutes)
+    driftTime += 0.015;
+    const v = 0.58 + 0.28 * Math.sin(driftTime * 0.15);
+    const a = 0.50 + 0.32 * Math.sin(driftTime * 0.12 + 0.8);
+    const d = 0.52 + 0.26 * Math.cos(driftTime * 0.14);
 
     const mag = Math.hypot(v, a, d) || 1;
     const cx = v / mag;
     const cy = a / mag;
     const cz = d / mag;
 
-    // Resolve closest octant
-    const octId = (v >= 0 ? 1 : 5) + (a >= 0 ? 0 : 2) + (d >= 0 ? 0 : 1);
-    const def = OCTANT_AFFECT_DEFINITIONS[octId] || OCTANT_AFFECT_DEFINITIONS[1];
+    // Continuous softmax blend across octant definitions
+    let totalW = 0;
+    let bR = 0, bG = 0, bB = 0;
+    let bSmile = 0, bBrow = 0, bEyeOpen = 0;
+    let bestOctId = 1, bestW = -1;
+
+    for (let id = 1; id <= 8; id++) {
+      const def = OCTANT_AFFECT_DEFINITIONS[id];
+      const dirLen = Math.hypot(...def.padCoords) || 1;
+      const dot = cx * (def.padCoords[0] / dirLen) + cy * (def.padCoords[1] / dirLen) + cz * (def.padCoords[2] / dirLen);
+      const w = Math.exp(3.0 * dot);
+      totalW += w;
+      bR += def.rgb[0] * w;
+      bG += def.rgb[1] * w;
+      bB += def.rgb[2] * w;
+      bSmile += def.face.smile * w;
+      bBrow += def.face.brow * w;
+      bEyeOpen += def.face.eyeOpen * w;
+
+      if (w > bestW) {
+        bestW = w;
+        bestOctId = id;
+      }
+    }
+
+    const nw = totalW || 1;
+    const blendedR = Math.round(bR / nw);
+    const blendedG = Math.round(bG / nw);
+    const blendedB = Math.round(bB / nw);
+    const blendedColor = `rgb(${blendedR}, ${blendedG}, ${blendedB})`;
+
+    if (bestOctId !== currentOctId) {
+      currentOctId = bestOctId;
+    }
+    const def = OCTANT_AFFECT_DEFINITIONS[currentOctId] || OCTANT_AFFECT_DEFINITIONS[1];
 
     updateGlobalAffectState({
       valence: v,
       arousal: a,
       dominance: d,
       centroid: [cx, cy, cz],
-      octantId: octId,
+      octantId: currentOctId,
       octantCode: def.octantCode,
       name: def.name,
-      color: def.color,
-      rgb: def.rgb,
+      color: blendedColor,
+      rgb: [blendedR, blendedG, blendedB],
       tone: def.tone,
       subEmotions: def.subEmotions,
       face: {
-        eyeOpen: def.face.eyeOpen,
-        brow: def.face.brow,
-        smile: def.face.smile,
-        rgb: def.rgb
+        eyeOpen: bEyeOpen / nw,
+        brow: bBrow / nw,
+        smile: bSmile / nw,
+        rgb: [blendedR, blendedG, blendedB]
       }
     });
-  }, 1000);
+  }, 1200);
 }
 
 if (typeof window !== "undefined") {
